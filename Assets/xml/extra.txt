@@ -1,0 +1,145 @@
+		<Feature id="51" data="Oriental Pearl TV Tower">
+			<speak value="The Oriental Pearl Radio and TV Tower is a TV tower in Shanghai, China. Its location at the tip of Lujiazui in the Pudong district by the side of Huangpu River, opposite The Bund, makes it a distinct landmark in the area."/>
+		</Feature>
+		<Feature id="52" data="World Financial Center">
+			<neighbors/>
+			<speak value="The Shanghai World Financial Center is a supertall skyscraper located in the Pudong district of Shanghai, China."/>
+		</Feature>
+		<Feature id="53" data="People's Square">
+			<neighbors/>
+			<speak value="People's Square is a large public square in the Huangpu District of Shanghai, China. It is south of Nanjing Road (West) and north of Huaihai Road (East)."/>
+		</Feature>
+		<Feature id="54" data="Zhujiajiao">
+			<neighbors/>
+			<speak value="Zhujiajiao is an ancient town located in the Qingpu District of Shanghai."/>
+		</Feature>
+		<Feature id="55" data="Jing'an Temple">
+			<neighbors/>
+			<speak value="Jing'an Temple is a Buddhist temple on the West Nanjing Road in Shanghai, China."/>
+		</Feature>
+		<Feature id="56" data="Longhua Pagoda and Longhua Temple">
+			<neighbors/>
+			<speak value="The Longhua Temple is a Buddhist Temple dedicated to the Maitreya Buddha located in Shanghai, China."/>
+		</Feature>
+		<Feature id="57" data="Shanghai Old Street">
+			<neighbors/>
+			<speak value="Shanghai Old Street, historically called Miaoqian Dajie, is an old business street that has a combination of tourist attractions, shops, entertainment and cultural exhibits. It owes its special social attractions and rich commercial background to the fact that the earliest bank, gold shop, jeweler's store, wine shop and tea house of the city were all to be found here."/>
+		</Feature>
+		<Feature id="58" data="The Bund and Huangpu River">
+			<neighbors/>
+			<speak value="Huangpu River is a branch of the lower reaches of the Yangtze River. It lies in Shanghai City, formerly known as Huangxiepu or Chunshen River."/>
+		</Feature>
+		<Feature id="59" data="Nanjing Road">
+			<neighbors/>
+			<speak value="China's premier shopping street, 3.4-mile-long Nanjing Road, starts at the Bund in the east and ends in the west at the junction of Jing'an Temple and Yan'an West Street. Today it is a must-see metropolitan destination attracting thousands of fashion-seeking shoppers from all over the world."/>
+		</Feature>
+		<Feature id="60" data="Yuyuan Garden">
+			<neighbors/>
+			<speak value="Yuyuan Garden is a famous classical garden located in Anren Jie, Shanghai."/>
+		</Feature>
+		<Feature id="61" data="Xin Tian Di">
+			<neighbors/>
+			<speak value="Located in the center of Shanghai City south of Huaihai Zhong Lu, Shanghai Xin Tian Di has become an urban attraction that holds the historical and cultural legacies of the city."/>
+		</Feature>
+		<Feature id="62" data="Jade Buddha Temple">
+			<neighbors/>
+			<speak value="In the western part of Shanghai, a very modern and flourishing city, there is a venerable and famous Buddhist temple, Jade Buddha Temple."/>
+		</Feature>
+		<Feature id="63" data="Lingshan Buddhist Scenic Spot">
+			<speak value="Located at the southwest tip of Wuxi and on the Majishan Peninsula stretching from the northern Bank of Taihu Lake, the Mt. Lingshan Scenic Area is a Buddhist wonderland in the Taihu Lake National Tourist Resort."/>
+		</Feature>
+		<Feature id="64" data="Taihu Yuantouzhu Scenic">
+			<neighbors/>
+			<speak value="Yuantouzhu is a peninsula which lies on the northwestern shore of Lake Tai, near Wuxi in China's Jiangsu province."/>
+		</Feature>
+		<Feature id="65" data="Vatican Palace Sacred Site">
+			<neighbors/>
+			<speak value=""/>
+		</Feature>
+		<Feature id="66" data="Tai Hu Lake">
+			<neighbors/>
+			<speak value="Located in the southern part of the Yangtze River delta, Taihu Lake is the third largest freshwater lake in China. With a surface area of about 2,338 square kilometers (about 902 square miles), it is a famous scenic spot in China and is famed for its lake, hills and splendid man-made scenery."/>
+		</Feature>
+		<Feature id="67" data="San'guo City">
+			<neighbors/>
+			<speak value=""/>
+		</Feature>
+		<Feature id="68" data="Jichang Garden">
+			<neighbors/>
+			<speak value="Jichang Garden is located inside Xihui Park, east side of Hui Shan, east side of western suburban of Wuxi, Jiangsu province, China."/>
+		</Feature>
+		<Feature id="69" data="Nanchan Temple of Wuxi">
+			<speak value="Nanchan Temple was built during the Southern Dynasty (549 A.D.) and was originally called Huguo Temple."/>
+		</Feature>
+		<Feature id="70" data="Liyuan Garden">
+			<neighbors/>
+			<speak value="Liyuan garden is a garden on the shore of Li Lake. It was named after Fan Li, a senior official of the state of Yue who retired to his hometown after defeating the state of Wu."/>
+		</Feature>
+		<Feature id="71" data="International Council of Shopping Center (Renmin road)">
+			<neighbors/>
+			<speak value=""/>
+		</Feature>
+		<Feature id="72" data="Poly Plaza">
+			<neighbors/>
+			<speak value=""/>
+		</Feature>
+		<Feature id="73" data="Huangyaguan Great Wall">
+			<neighbors/>
+			<speak value="Huangyaguan (Yellow Cliff Pass) lies on a steep and abrupt mountain ridge, and got its name from the yellowish hills and rocks nearby."/>
+		</Feature>
+		<Feature id="74" data="Jinmen Guli">
+			<neighbors/>
+			<speak value="Jinmen Guli means old place in Tianjin for the reason that Jinmen is another name for Tianjin and Guli implies old place."/>
+		</Feature>
+		<Feature id="75" data="Dule Temple">
+			<neighbors/>
+			<speak value="First built in the Tang Dynasty,  Dule Temple is located on  West Street in Ji County, about 113km from Tianjin City. With a history of over 1,000 years, it is one of the oldest still-standing timber constructions in China."/>
+		</Feature>
+		<Feature id="76" data="Haihe River">
+			<neighbors/>
+			<speak value="The Hai River, previously called Bai He, is a river in the People's Republic of China which flows through Beijing and Tianjin before emptying into the Yellow Sea at the Bohai Gulf."/>
+		</Feature>
+		<Feature id="77" data="Water Park">
+			<neighbors/>
+			<speak value="Tianjin Water Park, located in the southwest of Nankai District, is the largest park in Tianjin where the water and the sky are of one hue."/>
+		</Feature>
+		<Feature id="78" data="Mt. Panshan Scenic Area">
+			<neighbors/>
+			<speak value="Covering an area of 106 square kilometers, Mt. Panshan Scenic Area is located in Jixian County, 110 kilometers away from Tianjin, 88 kilometers away from Beijing."/>
+		</Feature>
+		<Feature id="79" data="Zhonghuan Cailian (Charming Middle Beltway)">
+			<neighbors/>
+			<speak value=""/>
+		</Feature>
+		<Feature id="80" data="Hotel Street and Food Street">
+			<neighbors/>
+			<speak value=""/>
+		</Feature>
+		<Feature id="81" data="Tianjin Radio and Television Tower">
+			<neighbors/>
+			<speak value="The Tianjin Radio and Television Tower is a 415.2 metres tower in Tianjin, China used primarily for communication."/>
+		</Feature>
+		<Feature id="82" data="Hanshan Temple">
+			<neighbors/>
+			<speak value="Hanshan Temple is a Buddhist temple and monastery in Suzhou, China. It is located at the town of Fengqiao, about 5 kilometres west of the old city of Suzhou."/>
+		</Feature>
+		<Feature id="83" data="Panmen Scenic Area">
+			<neighbors/>
+			<speak value="Lying to the southwest of Suzhou, Jiangsu Province, Panmen Scenery Area was built on the base of some historic sites by using the architectural structure of classical gardens."/>
+		</Feature>
+		<Feature id="84" data="Guangfu Ancient Town">
+			<neighbors/>
+			<speak value="Guangfu Ancient Town is located about 25 kilometers west of Suzhou's urban area, on a peninsula of the beautiful Taihu Lake, and at the foot of Mt. Dengwei."/>
+		</Feature>
+		<Feature id="85" data="Shantang Street">
+			<neighbors/>
+			<speak value="Shantang Street, also called Seven-mile Shantang, is located in the northwest of Gusu District, Suzhou. The street connected Changmen in the east with Huqiu in the west, and the total length of it is about seven li (3.5 kilometers)."/>
+		</Feature>
+		<Feature id="86" data="Xuanmiao Taoist Temple">
+			<neighbors/>
+			<speak value="Xuanmiao Temple is a prominent Taoist temple with a long history, located at the center of old Suzhou City."/>
+		</Feature>
+		<Feature id="87" data="Suzhou Silk Museum">
+			<neighbors/>
+			<speak value="The Suzhou Silk Museum is a museum in Suzhou, China. It documents the history of silk production and Suzhou embroidery from around 2000 BC."/>
+		</Feature>

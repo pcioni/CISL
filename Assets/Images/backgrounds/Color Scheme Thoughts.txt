@@ -1,0 +1,8 @@
+GENERAL CHANGES TO MAKE
+Make the Central Node RED with maybe a dark brown outline instead of that pure 
+black color
+Add Shadows? Nah..
+
+MY TASKS
+Download new copy of the Unity project and see if you can make the background always 
+scale to the view.

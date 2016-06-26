@@ -1,0 +1,21 @@
+fileFormatVersion: 2
+guid: 866b5f30125a9ae459cd70a7557e776c
+timeCreated: 1433880354
+licenseType: Free
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences:
+  - node_prefab: {fileID: 100000, guid: c06c101333e824442994a37d7cfa48af, type: 2}
+  - message_passer: {instanceID: 0}
+  - node_text_prefab: {instanceID: 0}
+  - text_box_object: {instanceID: 0}
+  - additional_info_text_box_object: {instanceID: 0}
+  - query_field: {instanceID: 0}
+  - focus_node: {instanceID: 0}
+  - main_camera: {instanceID: 0}
+  - system_skin: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
