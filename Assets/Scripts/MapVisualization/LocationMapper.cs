@@ -26,12 +26,21 @@ public class LocationMapper : MonoBehaviour {
 		w = rt.rect.width;
 		h = rt.rect.height;
 	}
-	
+
 	public Vector2 pix2coord(Vector2 pix) {
-		return new Vector2(pix.x * 360 / w, pix.y * 180 / h);
+
+		float cxt = Mathf.InverseLerp(referencePix1.x, referencePix2.x, pix.x);
+		float cyt = Mathf.InverseLerp(referencePix1.y, referencePix2.y, pix.y);
+
+		return new Vector2(Mathf.Lerp(referenceCoord1.x,referenceCoord2.x, cxt), Mathf.Lerp(referenceCoord1.y, referenceCoord2.y, cyt));
+
 	}
 
 	public Vector2 coord2pix(Vector2 coord) {
-		return new Vector2(coord.y * w / 360, coord.x * h / 180);
+
+		float pxt = Mathf.InverseLerp(referenceCoord1.x, referenceCoord2.x, coord.x);
+		float pyt = Mathf.InverseLerp(referenceCoord1.y, referenceCoord2.y, coord.y);
+
+		return new Vector2(Mathf.Lerp(referencePix1.x, referencePix2.x, pxt), Mathf.Lerp(referencePix1.y, referencePix2.y, pyt));
 	}
 }
