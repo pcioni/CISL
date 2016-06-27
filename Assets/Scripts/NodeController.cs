@@ -200,13 +200,35 @@ public class NodeController : MonoBehaviour
 
 
 		//temporary -- initialize date and location
+		string tmpdate = "1";
+		try {
+			foreach (Timeobj to in initial_feature.timedata) {
+				if (to.relationship == "birth date" || to.relationship == "years" || to.relationship == "date") {
+					tmpdate = to.value;
+					break;
+				}
+			}
+		}
+		catch {
+
+		}
 
 		try {
+			//try converting to datetime
 			date = Convert.ToDateTime(initial_feature.timedata[0].value);
 		}
 		catch {
-			date = new DateTime();
+			//else extract digits
+			int year;
+			if (!int.TryParse(System.Text.RegularExpressions.Regex.Match(tmpdate, @"\d+").Value, out year)){
+				date = new DateTime();
+			}else {
+				print(year);
+				date = new DateTime(year,1,1);
+			}
+			
 		}
+
 		try {
 			location = new Vector2(initial_feature.geodata[0].lat, initial_feature.geodata[0].lon);
 		}
