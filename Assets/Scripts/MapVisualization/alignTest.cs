@@ -9,7 +9,7 @@ public class alignTest : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		//align map to location
-		transform.position = Camera.main.ScreenToWorldPoint(lm.coord2pix(coordinates));
+		transform.position = lm.coord2world(coordinates);
 	}
 	
 }

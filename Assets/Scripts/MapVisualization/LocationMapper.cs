@@ -45,7 +45,14 @@ public class LocationMapper : MonoBehaviour {
 
 	public Vector2 coord2world(Vector2 coord) {
 		//convert coordinate point to world position
-		return coord2pix(coord) + new Vector2(w/2,h/2) + (Vector2)transform.position;
+
+		Vector2 tmp = coord2pix(coord);
+		tmp.x -= w/2;
+		tmp.y -= h/2;
+		tmp.y *= -1; // something went wrong somewhere?
+
+		return transform.TransformPoint(tmp);
+
 	}
 
 	public void alignToCoordinates() {
