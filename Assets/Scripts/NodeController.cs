@@ -36,8 +36,8 @@ public class NodeController : MonoBehaviour
 
 	//Save this node's text so it can be interacted with.
 	public GameObject node_text_object;
-    //Node also has a text object for its relationship.
-    public GameObject relationship_text_object;
+	//Node also has a text object for its relationship.
+	public GameObject relationship_text_object;
 	//Save this node's string of additional values, used to
 	//show a piece of the calculations from the backend.
 	public string calculation_text = "";
@@ -61,8 +61,8 @@ public class NodeController : MonoBehaviour
 	//temporary position or not.
 	public bool position_temporary;
 
-    // Whether or not this node should be disabled at the end of its movement.
-    public bool to_disable;
+	// Whether or not this node should be disabled at the end of its movement.
+	public bool to_disable;
 
 	//	Whether the node is currently fading in
 	private bool fade_in;
@@ -78,22 +78,30 @@ public class NodeController : MonoBehaviour
 
 	public bool is_held;
 
-    //If we are drawing a line, this is the target node
-    private GameObject line_target_node;
+	//If we are drawing a line, this is the target node
+	private GameObject line_target_node;
 
 	private bool is_graph;
+
+
+	//temporary -- use one date
+	public DateTime date;
+
+	//temporary -- use one coordinate
+	public Vector2 location;
+
 
 	// Use this for initialization
 	void Start () 
 	{
 
-    }
+	}
 
 	//Initialization function (not called automatically)
 	public void Initialize()
 	{
-        to_disable = false;
-        is_held = false;
+		to_disable = false;
+		is_held = false;
 		is_graph = false;
 		//Get the loader
 		GameObject[] temp_array = GameObject.FindGameObjectsWithTag ("loader");
@@ -125,9 +133,9 @@ public class NodeController : MonoBehaviour
 		node_feature = new Feature ();
 		display = true;
 
-        this.GetComponent<GUIText>().enabled = false;
+		this.GetComponent<GUIText>().enabled = false;
 
-        original_size = gameObject.GetComponent<RectTransform> ().localScale;
+		original_size = gameObject.GetComponent<RectTransform> ().localScale;
 		base_size = original_size;
 		//gameObject.GetComponent<Text> ().enabled = true;
 
@@ -139,84 +147,112 @@ public class NodeController : MonoBehaviour
 		//gameObject.GetComponent<BoxCollider2D> ().size = original_size;
 		gameObject.GetComponent<BoxCollider2D> ().size = new Vector2 (4.0f, 4.0f);
 	}//end method Initialize
-    public void Initialize(Feature initial_feature)
-    {
-        to_disable = false;
-        is_held = false;
-        is_graph = false;
-        //Get the loader
-        GameObject[] temp_array = GameObject.FindGameObjectsWithTag("loader");
-        loader_object = temp_array[0];
-
-        SetFeature(initial_feature);
-        //The node's id is the feature's id.
-        id = initial_feature.id;
-        //The node's name is the feature's name ("data" field).
-        node_name = initial_feature.data;
-        //The game object's name is "node_<id number>".
-        gameObject.name = "node_" + initial_feature.id.ToString();
-
-        end_position = new Vector3(0, 50, 0);
-        move_to_new = false;
-        approaching_target = false;
-        fade_in = false;
-        tolerance = 3.5f;
-        speed = 0.0f;
-        maximum_speed = 10.0f;
-        slow_radius = 0.0f;
-        approach_speed = 0.0f;
-        approach_acceleration = 0.0f;
-        fade_speed = 1.0f;
-        //Constant acceleration
-        acceleration = 0.05f;
-        is_focus_node = false;
-        adjacency_list = new List<GameObject>();
-        relationship_list = new List<string>();
-        //node_feature = new Feature();
-        display = true;
-        text_to_display = "";
-
-        original_size = gameObject.GetComponent<RectTransform>().localScale;
-        base_size = original_size;
-        //gameObject.GetComponent<Text> ().enabled = true;
-
-        //Set this game object's collision box bounds according
-        //to its renderer's bounds.
-        //This ensures that mousing over/clicking the image also
-        //triggers the collision box.
-        //gameObject.GetComponent<BoxCollider2D> ().size = gameObject.GetComponent<Renderer> ().bounds.size;
-        //gameObject.GetComponent<BoxCollider2D> ().size = original_size;
-        gameObject.GetComponent<BoxCollider2D>().size = new Vector2(4.0f, 4.0f);
-    }//end method Initialize
-
-    //Start disabling the node. The node will be fully disabled
-    //once it reaches the center of the screen.
-    public void StartDisableNode()
+	public void Initialize(Feature initial_feature)
 	{
-        to_disable = true;
-        //Move to the center of the screen
-        SetEndPosition (new Vector3 (0, 0, loader_object.GetComponent<Loader>().y_bias));
+		to_disable = false;
+		is_held = false;
+		is_graph = false;
+		//Get the loader
+		GameObject[] temp_array = GameObject.FindGameObjectsWithTag("loader");
+		loader_object = temp_array[0];
+
+		SetFeature(initial_feature);
+		//The node's id is the feature's id.
+		id = initial_feature.id;
+		//The node's name is the feature's name ("data" field).
+		node_name = initial_feature.data;
+		//The game object's name is "node_<id number>".
+		gameObject.name = "node_" + initial_feature.id.ToString();
+
+		end_position = new Vector3(0, 50, 0);
+		move_to_new = false;
+		approaching_target = false;
+		fade_in = false;
+		tolerance = 3.5f;
+		speed = 0.0f;
+		maximum_speed = 10.0f;
+		slow_radius = 0.0f;
+		approach_speed = 0.0f;
+		approach_acceleration = 0.0f;
+		fade_speed = 1.0f;
+		//Constant acceleration
+		acceleration = 0.05f;
+		is_focus_node = false;
+		adjacency_list = new List<GameObject>();
+		relationship_list = new List<string>();
+		//node_feature = new Feature();
+		display = true;
+		text_to_display = "";
+
+		original_size = gameObject.GetComponent<RectTransform>().localScale;
+		base_size = original_size;
+		//gameObject.GetComponent<Text> ().enabled = true;
+
+		//Set this game object's collision box bounds according
+		//to its renderer's bounds.
+		//This ensures that mousing over/clicking the image also
+		//triggers the collision box.
+		//gameObject.GetComponent<BoxCollider2D> ().size = gameObject.GetComponent<Renderer> ().bounds.size;
+		//gameObject.GetComponent<BoxCollider2D> ().size = original_size;
+		gameObject.GetComponent<BoxCollider2D>().size = new Vector2(4.0f, 4.0f);
+
+
+
+
+		//temporary -- initialize date and location
+
+		try {
+			date = Convert.ToDateTime(initial_feature.timedata[0].value);
+		}
+		catch {
+			date = new DateTime();
+		}
+		try {
+			location = new Vector2(initial_feature.geodata[0].lat, initial_feature.geodata[0].lon);
+		}
+		catch {
+			location = new Vector2();
+		}
+
+		//initial_feature.geodata
+
+
+
+
+
+
+
+
+	}//end method Initialize
+
+	//Start disabling the node. The node will be fully disabled
+	//once it reaches the center of the screen.
+	public void StartDisableNode()
+	{
+		to_disable = true;
+		//Move to the center of the screen
+		SetEndPosition (new Vector3 (0, 0, loader_object.GetComponent<Loader>().y_bias));
 		//Remove all lines from the node
 		RemoveLines ();
 		//Reduce the node to its original size.
 		ChangeSize (original_size, true);
-    }//end method StartDisableNode
+	}//end method StartDisableNode
 
 	public void EnableNode()
 	{
-        to_disable = false;
-        gameObject.SetActive (true);
+		to_disable = false;
+		gameObject.SetActive (true);
 		gameObject.GetComponent<SpriteRenderer> ().enabled = true;
-        display = true;
-        gameObject.layer = LayerMask.NameToLayer ("Default");
+		display = true;
+		gameObject.layer = LayerMask.NameToLayer ("Default");
 		ShowText ();
 	}//end method EnableNode
 	public void DisableNode()
 	{
-        to_disable = false;
-        //Disable the sprite renderer.
-        gameObject.GetComponent<SpriteRenderer>().enabled = false;
-        display = false;
+		to_disable = false;
+		//Disable the sprite renderer.
+		gameObject.GetComponent<SpriteRenderer>().enabled = false;
+		display = false;
 		//Make sure the node ignores raycasts so we don't activate its mouse-over
 		gameObject.layer = LayerMask.NameToLayer ("Ignore Raycast");
 		//Hide the node's text
@@ -224,16 +260,16 @@ public class NodeController : MonoBehaviour
 		//Set the node's calculation text to nothing.
 		calculation_text = "";
 
-        //Set the size to its original size
-        gameObject.GetComponent<RectTransform>().localScale = new Vector3(
-            original_size.x, original_size.y, original_size.z);
-        //Set its position to the center (but maintain z value)
-        gameObject.transform.position = new Vector3(
-            0, 0, gameObject.transform.position.z);
-        move_to_new = false;
+		//Set the size to its original size
+		gameObject.GetComponent<RectTransform>().localScale = new Vector3(
+			original_size.x, original_size.y, original_size.z);
+		//Set its position to the center (but maintain z value)
+		gameObject.transform.position = new Vector3(
+			0, 0, gameObject.transform.position.z);
+		move_to_new = false;
 
-        //Completely deactivate the node.
-        gameObject.SetActive (false);
+		//Completely deactivate the node.
+		gameObject.SetActive (false);
 	}//end method DisableNode
 
 	//The node will move to the given temporary position. Later,
@@ -245,8 +281,8 @@ public class NodeController : MonoBehaviour
 		//threshold of its current position or its end position.
 		//Also check that this node does not already have a temporary position.
 		if ((!move_to_new && Vector3.Distance (input_position, gameObject.transform.position) < tolerance)
-		    || (move_to_new && Vector3.Distance (input_position, end_position) < tolerance)
-		    || position_temporary)
+			|| (move_to_new && Vector3.Distance (input_position, end_position) < tolerance)
+			|| position_temporary)
 		{
 			return;
 		}//end if
@@ -279,44 +315,44 @@ public class NodeController : MonoBehaviour
 
 	public void HideText()
 	{
-        //node_text_object.GetComponent<MeshRenderer> ().enabled = false;
-        //gameObject.GetComponent<Text> ().text = "";
-        print("Hiding text for " + gameObject.name);
-        node_text_object.GetComponent<GUIText>().text = " ";
-        //node_text_object.GetComponent<GUIText>().enabled = false;
-        text_to_display = "";
+		//node_text_object.GetComponent<MeshRenderer> ().enabled = false;
+		//gameObject.GetComponent<Text> ().text = "";
+		print("Hiding text for " + gameObject.name);
+		node_text_object.GetComponent<GUIText>().text = " ";
+		//node_text_object.GetComponent<GUIText>().enabled = false;
+		text_to_display = "";
 	}//end method HideText
 	public void ShowText()
 	{
-        //node_text_object.GetComponent<MeshRenderer> ().enabled = true;
-        //node_text_object.GetComponent<TextController> ().setText (node_feature.getData ());
-        //gameObject.GetComponent<Text> ().text = node_feature.getData ();
-        //node_text_object.GetComponent<GUIText>().text = node_feature.getData();
-        
-        //Set the node text to its feature's data
-        node_text_object.GetComponent<GUIText>().text = NodeLabel();
-        
-        //node_text_object.GetComponent<GUIText>().text = node_text_object.name;
-        //node_text_object.GetComponent<GUIText>().enabled = true;
-        text_to_display = node_feature.getData ();
+		//node_text_object.GetComponent<MeshRenderer> ().enabled = true;
+		//node_text_object.GetComponent<TextController> ().setText (node_feature.getData ());
+		//gameObject.GetComponent<Text> ().text = node_feature.getData ();
+		//node_text_object.GetComponent<GUIText>().text = node_feature.getData();
+		
+		//Set the node text to its feature's data
+		node_text_object.GetComponent<GUIText>().text = NodeLabel();
+		
+		//node_text_object.GetComponent<GUIText>().text = node_text_object.name;
+		//node_text_object.GetComponent<GUIText>().enabled = true;
+		text_to_display = node_feature.getData ();
 	}//end method ShowText
 
-    //Gets the label that should be displayed on this node whenever it is active.
-    private String NodeLabel()
-    {
-        string return_string = "";
-        return_string = node_feature.getData();
-        //Check for the double hash separator, which indicates that it is a multi-lingual name.
-        if (return_string.Contains("##"))
-        {
-            if (loader_object.GetComponent<Loader>().language_text_mode == 0)
-                return_string = node_feature.getData().Split(new string[] { "##" }, StringSplitOptions.None)[0];
-            else if (loader_object.GetComponent<Loader>().language_text_mode == 1)
-                return_string = node_feature.getData().Split(new string[] { "##" }, StringSplitOptions.None)[1];
-        }//end if
+	//Gets the label that should be displayed on this node whenever it is active.
+	private String NodeLabel()
+	{
+		string return_string = "";
+		return_string = node_feature.getData();
+		//Check for the double hash separator, which indicates that it is a multi-lingual name.
+		if (return_string.Contains("##"))
+		{
+			if (loader_object.GetComponent<Loader>().language_text_mode == 0)
+				return_string = node_feature.getData().Split(new string[] { "##" }, StringSplitOptions.None)[0];
+			else if (loader_object.GetComponent<Loader>().language_text_mode == 1)
+				return_string = node_feature.getData().Split(new string[] { "##" }, StringSplitOptions.None)[1];
+		}//end if
 
-        return return_string;
-    }//end method NodeLabel
+		return return_string;
+	}//end method NodeLabel
 
 	public string text_to_display = "";
 	void OnGUI()
@@ -334,8 +370,8 @@ public class NodeController : MonoBehaviour
 
 			current_radius = loader_object.GetComponent<Loader>().current_radius;
 
-            //Vector3 adjusted_mouse_position = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            Vector3 adjusted_mouse_position = Input.mousePosition;
+			//Vector3 adjusted_mouse_position = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+			Vector3 adjusted_mouse_position = Input.mousePosition;
 			if (mouseover)
 			{
 				string output_text = "";
@@ -355,7 +391,7 @@ public class NodeController : MonoBehaviour
 					GUI.TextArea(new Rect(adjusted_mouse_position.x, -adjusted_mouse_position.y + Camera.main.pixelHeight + 25, 200, 30), output_text, 1000);
 				else
 					GUI.TextArea(new Rect(adjusted_mouse_position.x, -adjusted_mouse_position.y + Camera.main.pixelHeight + 25, 200, 150), output_text + "\n" + calculation_text, 1000);
-            }//end if
+			}//end if
 
 			if (is_graph)
 				DrawLineToNeighbors();
@@ -365,7 +401,7 @@ public class NodeController : MonoBehaviour
 	public void SetFeature(Feature f)
 	{
 		node_feature = f;
-    }//end method SetFeature
+	}//end method SetFeature
 	public Feature GetFeature()
 	{
 		return node_feature;
@@ -405,9 +441,9 @@ public class NodeController : MonoBehaviour
 	}//end method DrawLineToNeighbors
 	public void DrawLineToNode(GameObject other_node, string relationship)
 	{
-        //TODO: Do different colors
-        line_target_node = other_node;
-        Color line_color = new Color (0, 0, 0);
+		//TODO: Do different colors
+		line_target_node = other_node;
+		Color line_color = new Color (0, 0, 0);
 		int line_type = 0;
 		if (relationship.Equals ("hosted"))
 			line_type = 0;
@@ -466,33 +502,33 @@ public class NodeController : MonoBehaviour
 		node_text_object.GetComponent<LineRenderer> ().SetColors (line_color, line_color);
 		node_text_object.GetComponent<LineRenderer> ().SetPosition (0, gameObject.transform.position);
 		node_text_object.GetComponent<LineRenderer> ().SetPosition (1, other_node.transform.position);
-        //Show the relationship between this node and the other node.
-        //Relationship here is relationship FROM other node TO this node
-        string relationship_text = relationship;// this.relationship_list[adjacency_list.IndexOf(other_node)];
-        //Relationship here is relationship FROM this node TO the other node
-        /*foreach (Neighbor temp_neighbor in other_node.GetComponent<Feature>().neighbors)
-        {
-            if (temp_neighbor.dest == this.node_feature.getId())
-            {
-                relationship_text = temp_neighbor.relationship;
-            }//end if
-        }//end foreach*/
-        //Check for the double hash separator, which indicates that it is a multi-lingual name.
-        if (relationship_text.Contains("##"))
-        {
-            if (loader_object.GetComponent<Loader>().language_text_mode == 0)
-                relationship_text = relationship_text.Split(new string[] { "##" }, StringSplitOptions.None)[0];
-            else if (loader_object.GetComponent<Loader>().language_text_mode == 1)
-                relationship_text = relationship_text.Split(new string[] { "##" }, StringSplitOptions.None)[1];
-        }//end if
-        relationship_text_object.GetComponent<GUIText>().text = relationship_text;
-    }//end method DrawLineToNode
+		//Show the relationship between this node and the other node.
+		//Relationship here is relationship FROM other node TO this node
+		string relationship_text = relationship;// this.relationship_list[adjacency_list.IndexOf(other_node)];
+		//Relationship here is relationship FROM this node TO the other node
+		/*foreach (Neighbor temp_neighbor in other_node.GetComponent<Feature>().neighbors)
+		{
+			if (temp_neighbor.dest == this.node_feature.getId())
+			{
+				relationship_text = temp_neighbor.relationship;
+			}//end if
+		}//end foreach*/
+		//Check for the double hash separator, which indicates that it is a multi-lingual name.
+		if (relationship_text.Contains("##"))
+		{
+			if (loader_object.GetComponent<Loader>().language_text_mode == 0)
+				relationship_text = relationship_text.Split(new string[] { "##" }, StringSplitOptions.None)[0];
+			else if (loader_object.GetComponent<Loader>().language_text_mode == 1)
+				relationship_text = relationship_text.Split(new string[] { "##" }, StringSplitOptions.None)[1];
+		}//end if
+		relationship_text_object.GetComponent<GUIText>().text = relationship_text;
+	}//end method DrawLineToNode
 	public void RemoveLines()
 	{
 		node_text_object.GetComponent<LineRenderer> ().SetPosition (0, new Vector3(100, 100, 0));
 		node_text_object.GetComponent<LineRenderer> ().SetPosition (1, new Vector3(100, 100, 0));
-        relationship_text_object.GetComponent<GUIText>().text = "";
-    }//end method RemoveLines
+		relationship_text_object.GetComponent<GUIText>().text = "";
+	}//end method RemoveLines
 
 	// Update is called once per frame
 	void Update () 
@@ -541,12 +577,12 @@ public class NodeController : MonoBehaviour
 					, gameObject.transform.position.z);*/
 				//Dsiable it if it's going to the origin
 				/*if (Vector3.Distance(end_position, new Vector3(0, loader_object.GetComponent<Loader>().y_bias, 0)) < 0.01f 
-				    && !is_focus_node)*/
-                if (to_disable)
+					&& !is_focus_node)*/
+				if (to_disable)
 					DisableNode();
-                else
-				    //FIX: Show node text
-				    ShowText();
+				else
+					//FIX: Show node text
+					ShowText();
 			}//end if
 			else
 			{
@@ -593,44 +629,44 @@ public class NodeController : MonoBehaviour
 					, gameObject.transform.position.z);*/
 			}//end else
 		}//end if
-         /*else
-         {
-             //If the node is not moving, but is at the origin and is not the focus node, then disable it.
-             if (Vector3.Distance(end_position, new Vector3(0, loader_object.GetComponent<Loader>().y_bias, 0)) < 0.01f 
-                 && !is_focus_node)
-                 DisableNode();
-         }//end else*/
-         //Node text should be in the same position as this node
-        node_text_object.transform.position = new Vector3(
-            gameObject.transform.position.x
-            , gameObject.transform.position.y
-            , gameObject.transform.position.z - 1);
+		 /*else
+		 {
+			 //If the node is not moving, but is at the origin and is not the focus node, then disable it.
+			 if (Vector3.Distance(end_position, new Vector3(0, loader_object.GetComponent<Loader>().y_bias, 0)) < 0.01f 
+				 && !is_focus_node)
+				 DisableNode();
+		 }//end else*/
+		 //Node text should be in the same position as this node
+		node_text_object.transform.position = new Vector3(
+			gameObject.transform.position.x
+			, gameObject.transform.position.y
+			, gameObject.transform.position.z - 1);
 
-        Vector3 node_screen_point = Camera.main.WorldToViewportPoint(new Vector3(
-            gameObject.transform.position.x
-            , gameObject.transform.position.y
-            , gameObject.transform.position.z));
+		Vector3 node_screen_point = Camera.main.WorldToViewportPoint(new Vector3(
+			gameObject.transform.position.x
+			, gameObject.transform.position.y
+			, gameObject.transform.position.z));
 
-        node_text_object.GetComponent<RectTransform>().position = new Vector3(
-            node_screen_point.x
-            , node_screen_point.y
-            , 0);
+		node_text_object.GetComponent<RectTransform>().position = new Vector3(
+			node_screen_point.x
+			, node_screen_point.y
+			, 0);
 
-        if (line_target_node != null)
-        {
-            Vector3 target_screen_point = Camera.main.WorldToViewportPoint(new Vector3(
-                line_target_node.transform.position.x
-                , line_target_node.transform.position.y
-                , line_target_node.transform.position.z));
+		if (line_target_node != null)
+		{
+			Vector3 target_screen_point = Camera.main.WorldToViewportPoint(new Vector3(
+				line_target_node.transform.position.x
+				, line_target_node.transform.position.y
+				, line_target_node.transform.position.z));
 
-            relationship_text_object.transform.position = new Vector3(
-                node_screen_point.x - (node_screen_point.x - target_screen_point.x) / 2
-                , node_screen_point.y - (node_screen_point.y - target_screen_point.y) / 2
-                , node_screen_point.z - (node_screen_point.z - target_screen_point.z) / 2);
-        }//end if
+			relationship_text_object.transform.position = new Vector3(
+				node_screen_point.x - (node_screen_point.x - target_screen_point.x) / 2
+				, node_screen_point.y - (node_screen_point.y - target_screen_point.y) / 2
+				, node_screen_point.z - (node_screen_point.z - target_screen_point.z) / 2);
+		}//end if
 
-        //If we are performing a fade-in animation
-        if (fade_in)
+		//If we are performing a fade-in animation
+		if (fade_in)
 		{
 			//Set the node at its end position if it is still distant
 			if (Mathf.Abs (Vector3.Distance (gameObject.transform.position, end_position)) > 0.01f)
@@ -669,8 +705,8 @@ public class NodeController : MonoBehaviour
 			float desired_collider_radius = Mathf.Min (new_width, new_height);
 			gameObject.GetComponent<CircleCollider2D> ().radius = desired_collider_radius*0.75f;
 			//Begin the co-routine to change the node size.
-            if (gameObject.active)
-			    StartCoroutine("ChangeNodeSize");
+			if (gameObject.active)
+				StartCoroutine("ChangeNodeSize");
 		}//end if
 	}//end method ChangeNodeSize
 
@@ -712,13 +748,13 @@ public class NodeController : MonoBehaviour
 
 		/*
 		 * public class ExampleClass : MonoBehaviour {
-    public Transform target;
-    public float smoothTime = 0.3F;
-    private float yVelocity = 0.0F;
-    void Update() {
-        float newPosition = Mathf.SmoothDamp(transform.position.y, target.position.y, ref yVelocity, smoothTime);
-        transform.position = new Vector3(transform.position.x, newPosition, transform.position.z);
-    }
+	public Transform target;
+	public float smoothTime = 0.3F;
+	private float yVelocity = 0.0F;
+	void Update() {
+		float newPosition = Mathf.SmoothDamp(transform.position.y, target.position.y, ref yVelocity, smoothTime);
+		transform.position = new Vector3(transform.position.x, newPosition, transform.position.z);
+	}
 }*/
 	}//end method GrowNode
 
@@ -746,7 +782,7 @@ public class NodeController : MonoBehaviour
 				base_size.x * 1.5f
 				, base_size.y * 1.5f
 				, base_size.z)
-			    , false);
+				, false);
 
 	}//end method OnMouseOver
 	void OnMouseExit()
@@ -761,7 +797,7 @@ public class NodeController : MonoBehaviour
 				base_size.x
 				, base_size.y
 				, base_size.z)
-			    , false);
+				, false);
 
 	}//end method OnMouseExit
 

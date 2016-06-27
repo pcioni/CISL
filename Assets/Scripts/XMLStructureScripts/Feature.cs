@@ -20,6 +20,18 @@ public class Feature {
 	[XmlArray("neighbors")]
 	[XmlArrayItem("neighbor")]
 	public List<Neighbor> neighbors = new List<Neighbor>();
+	
+	//spatio-temporal stuff
+	
+	[XmlArray("timedata")]
+	[XmlArrayItem("timeobj")]
+	public List<Timeobj> timedata = new List<Timeobj>();
+	
+	[XmlArray("geodata")]
+	[XmlArrayItem("coordinates")]
+	public List<Coordinates> geodata = new List<Coordinates>();
+	
+	//end
 
 	[XmlArray("parents")]
 	[XmlArrayItem("parent")]

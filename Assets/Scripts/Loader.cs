@@ -133,7 +133,7 @@ public class Loader : MonoBehaviour {
 			organizational_frames.Add (temp_frame);
 		}//end foreach
 
-        //Go through each node already in the scene
+		//Go through each node already in the scene
 		foreach (GameObject initial_node in initial_nodes)
 		{
 			//Initialize the node
@@ -224,16 +224,16 @@ public class Loader : MonoBehaviour {
 
 			//Draw next best node label
 			GUI.DrawTexture (new Rect (radius_screen_point_1.x + ((radius_screen_point_2.x - radius_screen_point_1.x) - 200) / 2
-			                          , 0 //Camera.main.pixelHeight
-			                          , 200
-			                          , 50)
-			                 , next_best_label_texture);*/
+									  , 0 //Camera.main.pixelHeight
+									  , 200
+									  , 50)
+							 , next_best_label_texture);*/
 			//Draw the most novel node label
 			GUI.DrawTexture (new Rect (radius_screen_point_2.x + ((radius_screen_point_2.x - radius_screen_point_1.x) - 200) / 2
-			                           , 0 //Camera.main.pixelHeight
-			                           , 200
-			                           , 50)
-			                 , most_novel_label_texture);
+									   , 0 //Camera.main.pixelHeight
+									   , 200
+									   , 50)
+							 , most_novel_label_texture);
 
 			//hSliderValue = GUI.HorizontalSlider(new Rect(25, 25, 100, 30), hSliderValue, 0.0F, 10.0F);
 			for (int i = 0; i < weight_slider_values.Length; i++)
@@ -347,7 +347,7 @@ public class Loader : MonoBehaviour {
 			male_voice = false;
 			female_voice = true;
 		}*/
-    /*
+	/*
 		// Speech to text
 		if (GUI.Button (new Rect (95, 280, 120, 20), "Start Speaking")) {
 			print ("pressed start speaking button");
@@ -388,7 +388,7 @@ public class Loader : MonoBehaviour {
 			message_passer.GetComponent<SocketListener>().sendMessageToServer(tts_info);
 			message_passer.GetComponent<SocketListener>().ReceiveDataFromServer();
 		}*/
-    
+	
 	}//end OnGUI
 	
 	IEnumerator TextToSpeech (string tts_text = "")
@@ -548,38 +548,38 @@ public class Loader : MonoBehaviour {
 				//print ("neighbor dest: " + n.dest + " weight: " + n.weight);
 			}//end foreach
 
-            bool existing_node_found = false;
-            //Look for an existing node that shares this feature's id
-            foreach (GameObject temp_node in nodes)
+			bool existing_node_found = false;
+			//Look for an existing node that shares this feature's id
+			foreach (GameObject temp_node in nodes)
 			{
 				if (f.id == temp_node.GetComponent<NodeController>().id)
 				{
 					//Set the node's feature to be this feature.
 					temp_node.GetComponent<NodeController>().SetFeature (f);
-                    existing_node_found = true;
-                }//end if
+					existing_node_found = true;
+				}//end if
 			}//end foreach
-            //If no existing node is found, make a new node with this feature's id and information.
-            if (!existing_node_found)
-            {
-                new_node = Instantiate(node_prefab);
-                new_node.GetComponent<NodeController>().Initialize(f);
-                new_node.SetActive(false);
-                nodes.Add(new_node);
-            }//end if
-        }//end foreach
+			//If no existing node is found, make a new node with this feature's id and information.
+			if (!existing_node_found)
+			{
+				new_node = Instantiate(node_prefab);
+				new_node.GetComponent<NodeController>().Initialize(f);
+				new_node.SetActive(false);
+				nodes.Add(new_node);
+			}//end if
+		}//end foreach
 
 		//Compile the adjacency lists for each node and create the node text for each node.
 		foreach (GameObject temp_node in nodes)
 		{
 			//Create a new node text game object
 			GameObject new_node_text = (GameObject)Instantiate (node_text_prefab, new Vector3(0, 0, 0), Quaternion.identity);
-            GameObject new_relationship_text = (GameObject)Instantiate(node_text_prefab, new Vector3(0, 0, 0), Quaternion.identity);
-            new_node_text.name = temp_node.name + "_text";
-            new_relationship_text.name = temp_node.name + "_relationship_text";
-            //Give it to this node
-            temp_node.GetComponent<NodeController>().node_text_object = new_node_text;
-            temp_node.GetComponent<NodeController>().relationship_text_object = new_relationship_text;
+			GameObject new_relationship_text = (GameObject)Instantiate(node_text_prefab, new Vector3(0, 0, 0), Quaternion.identity);
+			new_node_text.name = temp_node.name + "_text";
+			new_relationship_text.name = temp_node.name + "_relationship_text";
+			//Give it to this node
+			temp_node.GetComponent<NodeController>().node_text_object = new_node_text;
+			temp_node.GetComponent<NodeController>().relationship_text_object = new_relationship_text;
 
 			Feature temp_feature = temp_node.GetComponent<NodeController>().GetFeature();
 			List<int> neighbor_ids = new List<int>();
@@ -592,11 +592,11 @@ public class Loader : MonoBehaviour {
 				{
 					if (potential_neighbor.GetComponent<NodeController>().id == temp_neighbor.dest)
 					{
-                        //Add this node's id to the neighbor id list
-                        neighbor_ids.Add(temp_neighbor.dest);
+						//Add this node's id to the neighbor id list
+						neighbor_ids.Add(temp_neighbor.dest);
 						//Add this potential neighbor to the node's adjacency list.
 						temp_node.GetComponent<NodeController>().AddAdjacentNode(potential_neighbor
-						                                                         , temp_neighbor.relationship);
+																				 , temp_neighbor.relationship);
 					}//end if
 				}//end foreach
 			}//end foreach
@@ -619,7 +619,7 @@ public class Loader : MonoBehaviour {
 						print ("Adding parent " + potential_parent.GetComponent<NodeController>().name);
 						//Add this potential neighbor to the node's adjacency list.
 						temp_node.GetComponent<NodeController>().AddAdjacentNode(potential_parent
-						                                                         ,temp_parent.relationship);
+																				 ,temp_parent.relationship);
 					}//end if
 				}//end foreach
 			}//end foreach
@@ -663,7 +663,7 @@ public class Loader : MonoBehaviour {
 				print ("Reponse to set weight: " + return_message);
 				weight_string = ParseMessageWeights(return_message, false);
 
-                //ZEV: Put this back in later! 5/25/2016
+				//ZEV: Put this back in later! 5/25/2016
 				SetSidePanelNodes(false);
 			}//end if
 
@@ -1128,7 +1128,7 @@ public class Loader : MonoBehaviour {
 	
 		stringToEdit = "Please continue.";
 
-        
+		
 		if (!single_node_mode)
 			//From the message, find what nodes belong in the side panel and set them there.
 			SetSidePanelNodes (true);
@@ -1151,7 +1151,7 @@ public class Loader : MonoBehaviour {
 			{
 				print ("Exception: " + e);
 			}//end catch
-            //FIX: Python keeps crashing, enable this call later.
+			//FIX: Python keeps crashing, enable this call later.
 			//StartCoroutine (TextToSpeech(return_message_tts));
 		}//end else if
 	}//end method SetFocusNode
@@ -1188,15 +1188,15 @@ public class Loader : MonoBehaviour {
 				//don't disable the node. Instead, try to send it back to its
 				//temporary position and return it to its original size.
 				if (//focus_node.GetComponent<NodeController>().GetAdjacencyList().Contains(temp_node)
-				    active_nodes.Contains (temp_node)
-				    && !focus_changed)
+					active_nodes.Contains (temp_node)
+					&& !focus_changed)
 				{
 					temp_node.GetComponent<NodeController>().ReturnFromTemporaryPosition();
 					temp_node.GetComponent<NodeController>().ChangeSize (new Vector3(
 						temp_node.GetComponent<NodeController>().original_size.x
 						, temp_node.GetComponent<NodeController>().original_size.y
 						, temp_node.GetComponent<NodeController>().original_size.z)
-					                                                     , true);
+																		 , true);
 				}//end if
 				//Don't disable it if it's a current active node (focus node or a neighbor)
 				else if (!active_nodes.Contains (temp_node))
@@ -1245,7 +1245,7 @@ public class Loader : MonoBehaviour {
 							temp_node.GetComponent<NodeController>().original_size.x * target_camera_size / 40
 							, temp_node.GetComponent<NodeController>().original_size.y * target_camera_size / 40
 							, temp_node.GetComponent<NodeController>().original_size.z)
-						                                                     , true);
+																			 , true);
 						//Increase the y spacing such that they are evenly spaced
 						//down the length of the screen
 						side_panel_y -= (target_camera_size- (current_radius * 1.25f - current_radius * 1.0f)) * 2 / 5;
@@ -1257,8 +1257,8 @@ public class Loader : MonoBehaviour {
 			}//end foreach
 		}//end if
 
-        //ZEV:Put this back later! 5/25/2016
-        /*
+		//ZEV:Put this back later! 5/25/2016
+		/*
 		side_panel_x = current_radius * 2.0f;
 		side_panel_y = current_radius * 1.0f;
 		//Check proximal nodes.
@@ -1293,7 +1293,7 @@ public class Loader : MonoBehaviour {
 							temp_node.GetComponent<NodeController>().original_size.x * target_camera_size / 40
 							, temp_node.GetComponent<NodeController>().original_size.y * target_camera_size / 40
 							, temp_node.GetComponent<NodeController>().original_size.z)
-						                                                     , true);
+																			 , true);
 						//Increase the y spacing such that they are evenly spaced
 						//down the length of the screen
 						side_panel_y -= (target_camera_size - (current_radius * 1.25f - current_radius * 1.0f)) * 2 / 5;
@@ -1304,7 +1304,7 @@ public class Loader : MonoBehaviour {
 				}//end foreach
 			}//end foreach
 		}//end if
-        */
+		*/
 		foreach (GameObject temp_node in side_panel_nodes) 
 		{
 			if (!active_nodes.Contains(temp_node))
@@ -1422,27 +1422,27 @@ public class Loader : MonoBehaviour {
 				neighbor_counter += 1;
 			}//end foreach
 
-            //ZEV: Put this back in later! 5/25/2016
+			//ZEV: Put this back in later! 5/25/2016
 			SetSidePanelNodes (false);
 		}//end if
 	}//end method ResetNodes
 
-    public void DisableNonActiveNodes()
-    {
-        //Go through all nodes
-        foreach (GameObject temp_node in nodes)
-        {
-            //Check each node to see if it's on the active list.
-            if (active_nodes.Contains(temp_node))
-            {
-                //If so, don't disable it
-                continue;
-            }//end if
-            //Otherwise, disable it.
-            else
-            {
-                temp_node.GetComponent<NodeController>().DisableNode();
-            }//end else
-        }//end foreach
-    }//end method ClearnOnActiveNodes
+	public void DisableNonActiveNodes()
+	{
+		//Go through all nodes
+		foreach (GameObject temp_node in nodes)
+		{
+			//Check each node to see if it's on the active list.
+			if (active_nodes.Contains(temp_node))
+			{
+				//If so, don't disable it
+				continue;
+			}//end if
+			//Otherwise, disable it.
+			else
+			{
+				temp_node.GetComponent<NodeController>().DisableNode();
+			}//end else
+		}//end foreach
+	}//end method ClearnOnActiveNodes
 }
