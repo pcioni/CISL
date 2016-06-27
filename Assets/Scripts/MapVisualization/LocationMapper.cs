@@ -17,10 +17,12 @@ public class LocationMapper : MonoBehaviour {
 	public Vector2 referenceCoord2;
 
 	private float w, h;
+	private Image img;
 
 
 	// Use this for initialization
 	void Awake () {
+		img = GetComponent<Image>();
 		RectTransform rt = transform as RectTransform;
 		w = rt.rect.width;
 		h = rt.rect.height;
@@ -55,7 +57,37 @@ public class LocationMapper : MonoBehaviour {
 
 	}
 
-	public void alignToCoordinates() {
-		//align the map to specified coordinates
+	public void alignCoordinatesToWorldPosition(Vector2 worldpoint, Vector2 coordinates) {
+		//align a point on the map to a point in the world
+
+		Vector2 offset = worldpoint - coord2world(coordinates);
+		transform.position += (Vector3)offset;
 	}
+
+	public void fadeIn() {
+		StartCoroutine(_fadein());
+	}
+
+	public void fadeOut() {
+		StartCoroutine(_fadeout());
+	}
+
+	private IEnumerator _fadein() {
+		while(img.color.a < 255) {
+			Color tmp = img.color;
+			tmp.a += 0.01f;
+			img.color = tmp;
+			yield return null;
+		}
+	}
+
+	private IEnumerator _fadeout() {
+		while (img.color.a > 0) {
+			Color tmp = img.color;
+			tmp.a -= 0.01f;
+			img.color = tmp;
+			yield return null;
+		}
+	}
+
 }

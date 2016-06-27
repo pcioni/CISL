@@ -9,7 +9,9 @@ public class alignTest : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		//align map to location
-		transform.position = lm.coord2world(coordinates);
+		//transform.position = lm.coord2world(coordinates);
+
+		lm.alignCoordinatesToWorldPosition(transform.position, coordinates);
 	}
 	
 }
