@@ -63,20 +63,23 @@ public class LoadXML : MonoBehaviour {
 			catch {
 				tn.location = new Vector2();
 			}
-
+			tn.datevalue = tn.date.ToShortDateString();
+			tn.dateticks = tn.date.Ticks;
 			nodeList.Add(tmp_obj);
 			nodeDict[f.data] = tmp_obj;
 		}
-		long maxticks = long.MinValue;
-		long minticks = long.MaxValue;
-		foreach (GameObject tn in nodeList) {
-			long ticks = tn.GetComponent<timelineNode>().date.Ticks;
-			if (ticks > maxticks) maxticks = ticks;
-			if (ticks < minticks) minticks = ticks;
+		long maxdays = int.MinValue;
+		long mindays = int.MaxValue;
+		foreach (GameObject node in nodeList) {
+			timelineNode tn = node.GetComponent<timelineNode>();
+			int totaldays = 365 * tn.date.Year + tn.date.DayOfYear;
+			if (totaldays > maxdays) maxdays = totaldays;
+			if (totaldays < mindays) mindays = totaldays;
 		}
-		foreach (GameObject tn in nodeList) {
-			long ticks = tn.GetComponent<timelineNode>().date.Ticks;
-			tn.transform.position = new Vector3(map(ticks,minticks,maxticks,0,100), 0, 0);
+		foreach (GameObject node in nodeList) {
+			timelineNode tn = node.GetComponent<timelineNode>();
+			int totaldays = 365 * tn.date.Year + tn.date.DayOfYear;
+			tn.transform.position = new Vector3(map(totaldays,mindays,maxdays,0,100), 0, 0);
 		}
 	}
 
