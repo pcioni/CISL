@@ -14,8 +14,9 @@ public class Feature {
 	[XmlAttribute("data")]
 	public string data;
 
-	[XmlElement("speak")]
-	public Speak speak;
+    /*[XmlElement("speak")]
+	public Speak speak;*/
+    public string speak;
 
 	[XmlArray("neighbors")]
 	[XmlArrayItem("neighbor")]
