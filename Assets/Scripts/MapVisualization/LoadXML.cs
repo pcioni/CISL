@@ -25,8 +25,10 @@ public class LoadXML : MonoBehaviour {
 			GameObject tmp_obj = new GameObject(f.data);
 			timelineNode tn = tmp_obj.AddComponent<timelineNode>();
 			tmp_obj.AddComponent<SpriteRenderer>().sprite = node_sprite;
+            tmp_obj.AddComponent<RectTransform>();
+            tmp_obj.AddComponent<CircleCollider2D>();
 
-			if (f.speak != null) {
+            if (f.speak != null) {
 				tn.text = f.speak.value;
 			}
 
