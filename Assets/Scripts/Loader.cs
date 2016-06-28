@@ -541,7 +541,7 @@ public class Loader : MonoBehaviour {
 		foreach (Feature f in container.features) 
 		{
 			if (f.speak != null)
-				if (f.speak.value != null)
+				//if (f.speak.value != null)
 					//print ("speak: " + f.speak.value);
 			foreach (Neighbor n in f.neighbors)
 			{
