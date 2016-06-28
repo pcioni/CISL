@@ -29,8 +29,13 @@ public class LoadXML : MonoBehaviour {
             tmp_obj.AddComponent<RectTransform>();
             tmp_obj.AddComponent<CircleCollider2D>();
 
-            if (f.speak != null) {
+<<<<<<< HEAD
+			if (f.speak != null) {
 				tn.text = f.speak;
+=======
+            if (f.speak != null) {
+				tn.text = f.speak.value;
+>>>>>>> refs/remotes/origin/master
 			}
 
 			string tmpdate = "1";
