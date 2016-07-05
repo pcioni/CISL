@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 
 public class timelineNode : MonoBehaviour
 {
@@ -13,7 +14,7 @@ public class timelineNode : MonoBehaviour
     public Vector3 baseSize;
     private float zeroRef = 0.0f;
     private Color baseColor;
-    public timelineNode neighbour; //TODO: add this feature
+    public List<KeyValuePair<string,timelineNode>> neighbors = new List<KeyValuePair<string, timelineNode>>();//use kvp because no tuple support in unity
 
     public void Start()
     {
