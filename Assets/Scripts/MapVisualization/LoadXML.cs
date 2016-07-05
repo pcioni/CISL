@@ -8,12 +8,12 @@ using System;
 public class LoadXML : MonoBehaviour {
 
 	public string xml_location = "Assets/xml/roman_empire_500_geospatial.xml";
-
 	public Dictionary<string, GameObject> nodeDict = new Dictionary<string, GameObject>();
-
 	public Sprite node_sprite;
-
 	private List<GameObject> nodeList = new List<GameObject>();
+    private float nodeSpriteWidth;
+    private float cameraWidth;
+    private float nodeDistanceIncrement;
 
 	// Use this for initialization
 	void Awake() {
@@ -22,12 +22,16 @@ public class LoadXML : MonoBehaviour {
 		AIMind container = (AIMind)serializer.Deserialize(stream);
 		stream.Close();
 
+	    nodeSpriteWidth = node_sprite.bounds.size.x;
+	    cameraWidth = 2f * Camera.main.orthographicSize * Camera.main.aspect;
+
 		foreach (Feature f in container.features) {
 			GameObject tmp_obj = new GameObject(f.data);
 			timelineNode tn = tmp_obj.AddComponent<timelineNode>();
 			tmp_obj.AddComponent<SpriteRenderer>().sprite = node_sprite;
             tmp_obj.AddComponent<RectTransform>();
             tmp_obj.AddComponent<CircleCollider2D>();
+		    tmp_obj.AddComponent<LineRenderer>();
 
             if (f.speak != null) {
 				tn.text = f.speak;
@@ -71,6 +75,9 @@ public class LoadXML : MonoBehaviour {
 			nodeList.Add(tmp_obj);
 			nodeDict[f.data] = tmp_obj;
 		}
+
+	    nodeDistanceIncrement = nodeList.Count;
+
 		long maxdays = int.MinValue;
 		long mindays = int.MaxValue;
 		foreach (GameObject node in nodeList) {
@@ -79,10 +86,15 @@ public class LoadXML : MonoBehaviour {
 			if (totaldays > maxdays) maxdays = totaldays;
 			if (totaldays < mindays) mindays = totaldays;
 		}
+
+	    float mover = 0;
 		foreach (GameObject node in nodeList) {
 			timelineNode tn = node.GetComponent<timelineNode>();
 			int totaldays = 365 * tn.date.Year + tn.date.DayOfYear;
-			tn.transform.position = new Vector3(map(totaldays,mindays,maxdays,0,100), 0, 0);
+
+            //TODO: use nodeDistanceIncrement
+            tn.transform.position = new Vector3(map(totaldays,mindays,maxdays,0,100) + mover, UnityEngine.Random.Range(-15, 15) , 0);
+		    mover += .1f;
 		}
 
         //Begin narration
@@ -139,6 +151,9 @@ public class LoadXML : MonoBehaviour {
             //Add it to the history
             node_history.Add(node_to_present);
             //Wait for spacebar before presenting the next.
+
+
+
             yield return StartCoroutine(WaitForKeyDown(KeyCode.Space));
         }//end foreach
     }//end method Traverse

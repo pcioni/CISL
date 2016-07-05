@@ -10,20 +10,20 @@ public class timelineNode : MonoBehaviour {
 	public Vector2 location;
 	public string text;
     public Vector3 baseSize;
+    private float zeroRef = 0.0f;
+    private Color baseColor;
+    public timelineNode neighbour; //TODO: add this feature
 
     public void Start()
     {
+        baseColor = GetComponent<SpriteRenderer>().color;
         baseSize = gameObject.GetComponent<RectTransform>().localScale;
     }
 
-    public void ChangeSize(Vector3 final_size, bool change_base_size)
+    public void ChangeSize(Vector3 final_size)
     {
-        //Set the end_size to the final_size, too.
         end_size = final_size;
-        //Initialize smooth time, x velocity, y velocity
         smooth_time = 0.2f;
-        x_velocity = 0.0f;
-        y_velocity = 0.0f;
 
         //Change Collider accordingly
         //DEBUG
@@ -42,8 +42,6 @@ public class timelineNode : MonoBehaviour {
     }//end method ChangeNodeSize
 
     private float smooth_time;
-    private float x_velocity;
-    private float y_velocity;
     private Vector3 end_size;
     IEnumerator ChangeNodeSize()
     {
@@ -57,18 +55,9 @@ public class timelineNode : MonoBehaviour {
                 break;
             }
 
-            gameObject.GetComponent<RectTransform>().localScale = new Vector3(
-                Mathf.SmoothDamp(
-                    gameObject.GetComponent<RectTransform>().localScale.x
-                    , end_size.x
-                    , ref x_velocity
-                    , smooth_time)
-                , Mathf.SmoothDamp(
-                    gameObject.GetComponent<RectTransform>().localScale.y
-                    , end_size.y
-                    , ref y_velocity
-                    , smooth_time)
-                , gameObject.GetComponent<RectTransform>().localScale.z);
+            gameObject.GetComponent<RectTransform>().localScale = new Vector3(Mathf.SmoothDamp(gameObject.GetComponent<RectTransform>().localScale.x, end_size.x, ref zeroRef, smooth_time)
+                                                                            , Mathf.SmoothDamp(gameObject.GetComponent<RectTransform>().localScale.y, end_size.y, ref zeroRef, smooth_time)
+                                                                            , gameObject.GetComponent<RectTransform>().localScale.z);
             yield return null;
         }
     }
@@ -78,26 +67,31 @@ public class timelineNode : MonoBehaviour {
     public string text_to_display = "";
     void OnGUI()
     {
-        if (display_info)
-        {
-            Vector3 transform_vector = new Vector3(
-                gameObject.transform.position.x
-                , -gameObject.transform.position.y
-                , gameObject.transform.position.z);
-            Vector3 screen_pos = Camera.main.WorldToScreenPoint(transform_vector);
+        // GUI box that follows the mouse; Display-info on right, mouseover info on left
+        if (display_info) {
+            GUI.TextArea(new Rect(Input.mousePosition.x + 15, Screen.height - Input.mousePosition.y, 200, 100), text, 1000);
+        }
+        else if (mouseOver) { 
+            GUI.TextArea(new Rect(Input.mousePosition.x - 203, Screen.height - Input.mousePosition.y, 200, 100), text, 1000);
+        }
+    }
 
-            string output_text = text;
-            //Show a floating text area with the node's information.
-            GUI.TextArea(new Rect(screen_pos.x, screen_pos.y, 200, 100), output_text, 1000);
-        }//end if
-    }//end method onGUI
-
+    private bool mouseOver = false;
     public void OnMouseEnter()
     {
-            ChangeSize(new Vector3(baseSize.x * 1.5f, baseSize.y * 1.5f, baseSize.z), false);
+        mouseOver = true;
+        ChangeSize(new Vector3(baseSize.x * 2f, baseSize.y * 2f, baseSize.z));
+        ChangeColor(Color.cyan);
     }
     public void OnMouseExit()
     {
-            ChangeSize(new Vector3(baseSize.x, baseSize.y, baseSize.z), false);
+        mouseOver = false;
+        ChangeSize(new Vector3(baseSize.x, baseSize.y, baseSize.z));
+        ChangeColor(baseColor);
+    }
+
+    public void ChangeColor(Color newColor)
+    {
+        GetComponent<SpriteRenderer>().color = newColor;
     }
 }
