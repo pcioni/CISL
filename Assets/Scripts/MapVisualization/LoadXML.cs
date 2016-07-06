@@ -79,10 +79,14 @@ public class LoadXML : MonoBehaviour {
 			idMap[f.id] = tn;//map id to node
 
 		}
+        //TODO pass this a reference to the list so we dont have to manuall assign it afterwards
+	    foreach (GameObject n in nodeList) {
+	        n.GetComponent<timelineNode>().allNodes = nodeList;
+	    }
 
-		//second pass for assigning neighbors
+        //second pass for assigning neighbors
 
-		foreach (Feature f in container.features) {
+        foreach (Feature f in container.features) {
 			timelineNode tn = idMap[f.id];
 			foreach(Neighbor n in f.neighbors) {
 				tn.neighbors.Add(new KeyValuePair<string, timelineNode>(n.relationship,idMap[n.dest]));

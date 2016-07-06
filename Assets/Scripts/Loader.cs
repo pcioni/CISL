@@ -261,13 +261,6 @@ public class Loader : MonoBehaviour {
 			}//end if
 		}//end if
 
-		//Input text area for user.
-		float response_area_width = Camera.main.pixelWidth / 4;
-		float response_area_x = Camera.main.pixelWidth / 2 - response_area_width;
-
-		float response_area_height = Camera.main.pixelHeight / 4;
-		float response_area_y = Camera.main.pixelHeight - response_area_height;
-
 		//if (stringToEdit.Equals (""))
 		//	stringToEdit = "Please continue.";
 		stringToEdit = GUI.TextArea(new Rect(25, 225, 225, 50), stringToEdit, 1000);

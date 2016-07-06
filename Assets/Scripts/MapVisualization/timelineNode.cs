@@ -15,11 +15,35 @@ public class timelineNode : MonoBehaviour
     private float zeroRef = 0.0f;
     private Color baseColor;
     public List<KeyValuePair<string,timelineNode>> neighbors = new List<KeyValuePair<string, timelineNode>>();//use kvp because no tuple support in unity
+    public List<GameObject> allNodes;
+
 
     public void Start()
     {
         baseColor = GetComponent<SpriteRenderer>().color;
         baseSize = gameObject.GetComponent<RectTransform>().localScale;
+        drawLines();
+    }
+
+    public void Update() {
+
+    }
+
+    private void drawLines() {
+        Vector3 centralNodePos = transform.position;
+        Vector3[] points = new Vector3[neighbors.Count * 2 + 1];
+        points[0] = centralNodePos;
+        int nCount = 0;
+        for (int i = 1; i < neighbors.Count; i += 2) {
+            points[i] = neighbors[nCount].Value.transform.position;
+            points[i + 1] = centralNodePos;
+            nCount++;
+        }
+        LineRenderer lr = GetComponent<LineRenderer>();
+        lr.SetPositions(points);
+        lr.SetColors(Color.blue, Color.blue);
+        lr.SetWidth(0.05f, 0.05f);
+        lr.material = new Material(Shader.Find("Particles/Additive"));
     }
 
     public void ChangeSize(Vector3 final_size)
@@ -91,27 +115,28 @@ public class timelineNode : MonoBehaviour
 
     private bool mouseOver = false;
 
-    public void OnMouseEnter()
-    {
+    public void OnMouseEnter() {
         mouseOver = true;
         ChangeSize(new Vector3(baseSize.x*2f, baseSize.y*2f, baseSize.z));
         ChangeColor(Color.cyan);
     }
 
-    public void OnMouseExit()
-    {
+    public void OnMouseExit() {
         mouseOver = false;
         ChangeSize(new Vector3(baseSize.x, baseSize.y, baseSize.z));
         ChangeColor(baseColor);
     }
 
-    public void ChangeColor(Color newColor)
-    {
+    public void ChangeColor(Color newColor) {
         GetComponent<SpriteRenderer>().color = newColor;
     }
 
-    public void OnMouseDrag()
-    {
+    public void OnMouseDrag() {
+        drawLines();
+        //TODO: MAKE EACH NODE ONLY REDRAW THE LINE TO THIS NODE
+        foreach (GameObject node in allNodes) {
+            node.GetComponent<timelineNode>().drawLines();
+        }
         transform.position = Camera.main.ScreenToWorldPoint((new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10)));
     }
 }
