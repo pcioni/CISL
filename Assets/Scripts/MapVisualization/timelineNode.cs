@@ -6,44 +6,65 @@ using System.Collections.Generic;
 public class timelineNode : MonoBehaviour
 {
 
-    public DateTime date;
-    public string datevalue;
-    public long dateticks;
-    public Vector2 location;
-    public string text;
-    public Vector3 baseSize;
-    private float zeroRef = 0.0f;
-    private Color baseColor;
-    public List<KeyValuePair<string,timelineNode>> neighbors = new List<KeyValuePair<string, timelineNode>>();//use kvp because no tuple support in unity
-    public List<GameObject> allNodes;
+	public DateTime date;
+	public string datevalue;
+	public long dateticks;
+	public bool known_location = false;
+	public Vector2 location;
+	public string text;
+	public Vector3 baseSize;
+	private float zeroRef = 0.0f;
+	private Color baseColor;
+	public List<KeyValuePair<string,timelineNode>> neighbors = new List<KeyValuePair<string, timelineNode>>();//use kvp because no tuple support in unity
+	public List<timelineNode> allNodes;
 	public bool active = false;	//Whether this node is active and interactable.
-	public int state = 0;	//What the state of this node is.
+	public int state = 0;   //What the state of this node is.
 							//0 = Out of focus. Node does not respond to mouse, is transparent, and does not draw lines to neighboring nodes.
 							//1 = In focus. Node responds to mouse, is the focus color (red), always displays information, and draws lines to neighboring nodes.
 							//2 = Half-Focus. Node responds to mouse, is the half-focus color (white), displays information on mouse-over, and does not draw lines to neighboring nodes.
 							//3 = Past-focus. Node responds to mouse, is the past-focus color (blue), displays information on mouse-over, and draws lines to neighboring nodes.
 
-    public void Start()
-    {
+
+	public Vector3 timelinePosition; //where the node should be on the timeline
+	public Vector3 mapPosition; //where the node should be on the map
+
+	private IEnumerator moveCoroutine;//reference to movement
+
+	public void Start()
+	{
 		//active = false;
-        baseColor = GetComponent<SpriteRenderer>().color;
-        baseSize = gameObject.GetComponent<RectTransform>().localScale;
-        //drawLines();
-    }
+		baseColor = GetComponent<SpriteRenderer>().color;
+		baseSize = gameObject.GetComponent<RectTransform>().localScale;
+		//drawLines();
+	}
+
+	public void moveToPosition(Vector3 position) {
+		if(moveCoroutine != null) StopCoroutine(moveCoroutine);
+		moveCoroutine = _move(position, 1.5f);
+		StartCoroutine(moveCoroutine);
+	}
+	private IEnumerator _move(Vector3 position, float movetime) {
+		float movespeed = 1.0f / movetime;
+		while (Vector3.Distance(transform.position, position) > 0.1f) {
+			transform.position = Vector3.MoveTowards(transform.position, position, movespeed);
+			yield return null;
+		}
+	}
 
 	//Frame-independant update
-    void FixedUpdate() {
+	void FixedUpdate() {
 		if (Input.GetKeyDown ("return") && mouseOver) {
 			//If this node is moused over and enter is pressed, focus on it.
 			//If any other node is the focus, make it a past-focus
-			foreach (GameObject node in allNodes) {
-				if (node.GetComponent<timelineNode>().state == 1)
-					node.GetComponent<timelineNode> ().PastFocus();
+			foreach (timelineNode tn in allNodes) {
+				if (tn.state == 1){
+					tn.PastFocus();
+				}
 			}//end foreach
 			//Focus on this node.
 			Focus();
 		}//end if
-    }
+	}
 
 	//Bring this node into focus.
 	public void Focus() {
@@ -122,25 +143,25 @@ public class timelineNode : MonoBehaviour
 			, gameObject.transform.position.z + 5);
 	}//end method Unfocus
 
-    private void drawLines() {
-        Vector3 centralNodePos = transform.position;
+	private void drawLines() {
+		Vector3 centralNodePos = transform.position;
 		Vector3[] points = new Vector3[Math.Max(neighbors.Count * 2, 1)];
-        points[0] = centralNodePos;
-        int nCount = 0;
+		points[0] = centralNodePos;
+		int nCount = 0;
 		for (int i = 1; i < points.Length; i += 2) {
 			points[i - 1] = centralNodePos;
-            points[i] = neighbors[nCount].Value.transform.position;
-            nCount++;
-        }
-        LineRenderer lr = GetComponent<LineRenderer>();
+			points[i] = neighbors[nCount].Value.transform.position;
+			nCount++;
+		}
+		LineRenderer lr = GetComponent<LineRenderer>();
 
 		lr.SetVertexCount(points.Length);
-    	lr.SetPositions(points);
+		lr.SetPositions(points);
 
-        lr.SetColors(Color.blue, Color.blue);
-        lr.SetWidth(0.05f, 0.05f);
-        lr.material = new Material(Shader.Find("Particles/Additive"));
-    }
+		lr.SetColors(Color.blue, Color.blue);
+		lr.SetWidth(0.05f, 0.05f);
+		lr.material = new Material(Shader.Find("Particles/Additive"));
+	}
 
 	//Remove all lines going out of this node
 	private void eraseLines() {
@@ -148,109 +169,110 @@ public class timelineNode : MonoBehaviour
 		//lr.SetVertexCount (0);
 	}//end method eraseLines
 
-    public void ChangeSize(Vector3 final_size)
-    {
-        end_size = final_size;
-        smooth_time = 0.2f;
+	public void ChangeSize(Vector3 final_size)
+	{
+		end_size = final_size;
+		smooth_time = 0.2f;
 
-        //Change Collider accordingly
-        //DEBUG
-        //print ("Changing node size for " + this.node_name);
-        //END DEBUG
-        if (gameObject.GetComponent<SpriteRenderer>().sprite != null)
-        {
-            float new_width = gameObject.GetComponent<SpriteRenderer>().sprite.bounds.size.x; //base_size.x;
-            float new_height = gameObject.GetComponent<SpriteRenderer>().sprite.bounds.size.y; //base_size.y;
-            float desired_collider_radius = Mathf.Min(new_width, new_height);
-            gameObject.GetComponent<CircleCollider2D>().radius = desired_collider_radius*0.75f;
-            //Begin the co-routine to change the node size.
-            if (gameObject.active)
-                StartCoroutine("ChangeNodeSize");
-        } //end if
-    } //end method ChangeNodeSize
+		//Change Collider accordingly
+		//DEBUG
+		//print ("Changing node size for " + this.node_name);
+		//END DEBUG
+		if (gameObject.GetComponent<SpriteRenderer>().sprite != null)
+		{
+			float new_width = gameObject.GetComponent<SpriteRenderer>().sprite.bounds.size.x; //base_size.x;
+			float new_height = gameObject.GetComponent<SpriteRenderer>().sprite.bounds.size.y; //base_size.y;
+			float desired_collider_radius = Mathf.Min(new_width, new_height);
+			gameObject.GetComponent<CircleCollider2D>().radius = desired_collider_radius*0.75f;
+			//Begin the co-routine to change the node size.
+			if (gameObject.active)
+				StartCoroutine("ChangeNodeSize");
+		} //end if
+	} //end method ChangeNodeSize
 
-    private float smooth_time;
-    private Vector3 end_size;
+	private float smooth_time;
+	private Vector3 end_size;
 
-    IEnumerator ChangeNodeSize()
-    {
-        float distance_to_final = Vector3.Distance(gameObject.GetComponent<RectTransform>().localScale, end_size);
-        while (distance_to_final > 0.01f)
-        {
-            distance_to_final = Vector3.Distance(gameObject.GetComponent<RectTransform>().localScale, end_size);
-            if (distance_to_final <= 0.01f)
-            {
-                gameObject.GetComponent<RectTransform>().localScale = end_size;
-                break;
-            }
+	IEnumerator ChangeNodeSize()
+	{
+		float distance_to_final = Vector3.Distance(gameObject.GetComponent<RectTransform>().localScale, end_size);
+		while (distance_to_final > 0.01f)
+		{
+			distance_to_final = Vector3.Distance(gameObject.GetComponent<RectTransform>().localScale, end_size);
+			if (distance_to_final <= 0.01f)
+			{
+				gameObject.GetComponent<RectTransform>().localScale = end_size;
+				break;
+			}
 
-            gameObject.GetComponent<RectTransform>().localScale =
-                new Vector3(
-                    Mathf.SmoothDamp(gameObject.GetComponent<RectTransform>().localScale.x, end_size.x, ref zeroRef,
-                        smooth_time)
-                    ,
-                    Mathf.SmoothDamp(gameObject.GetComponent<RectTransform>().localScale.y, end_size.y, ref zeroRef,
-                        smooth_time)
-                    , gameObject.GetComponent<RectTransform>().localScale.z);
-            yield return null;
-        }
-    }
+			gameObject.GetComponent<RectTransform>().localScale =
+				new Vector3(
+					Mathf.SmoothDamp(gameObject.GetComponent<RectTransform>().localScale.x, end_size.x, ref zeroRef,
+						smooth_time)
+					,
+					Mathf.SmoothDamp(gameObject.GetComponent<RectTransform>().localScale.y, end_size.y, ref zeroRef,
+						smooth_time)
+					, gameObject.GetComponent<RectTransform>().localScale.z);
+			yield return null;
+		}
+	}
 
-    public bool display_info = false;
-    private bool mouseover = false;
-    public string text_to_display = "";
+	public bool display_info = false;
+	private bool mouseover = false;
+	public string text_to_display = "";
 
-    void OnGUI()
-    {
-        // GUI box that follows the mouse; Display-info on right, mouseover info on left
-        if (display_info)
-        {
-            GUI.TextArea(new Rect(Input.mousePosition.x + 15, Screen.height - Input.mousePosition.y, 200, 100), text,
-                1000);
-        }
-        else if (mouseOver)
-        {
-            GUI.TextArea(new Rect(Input.mousePosition.x - 203, Screen.height - Input.mousePosition.y, 200, 100), text,
-                1000);
-        }
-    }
+	void OnGUI()
+	{
+		// GUI box that follows the mouse; Display-info on right, mouseover info on left
+		if (display_info)
+		{
+			GUI.TextArea(new Rect(Input.mousePosition.x + 15, Screen.height - Input.mousePosition.y, 200, 100), text,
+				1000);
+		}
+		else if (mouseOver)
+		{
+			GUI.TextArea(new Rect(Input.mousePosition.x - 203, Screen.height - Input.mousePosition.y, 200, 100), text,
+				1000);
+		}
+	}
 
-    private bool mouseOver = false;
+	private bool mouseOver = false;
 
-    public void OnMouseEnter() {
+	public void OnMouseEnter() {
 		//Only trigger mouse effects if this node is active
 		if (active) {
 			mouseOver = true;
 			ChangeSize (new Vector3 (baseSize.x * 2f, baseSize.y * 2f, baseSize.z));
 			ChangeColor (Color.cyan);
 		}//end if
-    }
+	}
 
-    public void OnMouseExit() {
+	public void OnMouseExit() {
 		//Only trigger mouse effects if this node is active
 		if (active) {
 			mouseOver = false;
 			ChangeSize (new Vector3 (baseSize.x, baseSize.y, baseSize.z));
 			ChangeColor (baseColor);
 		}//end if
-    }
+	}
 
-    public void ChangeColor(Color newColor) {
-        GetComponent<SpriteRenderer>().color = newColor;
-    }
+	public void ChangeColor(Color newColor) {
+		GetComponent<SpriteRenderer>().color = newColor;
+	}
 
-    public void OnMouseDrag() {
+	public void OnMouseDrag() {
 		//Only trigger mouse effects if this node is active
 		if (active) {
 			if (state == 1 || state == 3)
 				drawLines ();
 			//TODO: MAKE EACH NODE ONLY REDRAW THE LINE TO THIS NODE
-			foreach (GameObject node in allNodes) {
+			foreach (timelineNode tn in allNodes) {
 				//Only redraw if the other node is a focus or past-focus node (states 1 or 3)
-				if (node.GetComponent<timelineNode>().state == 1 || node.GetComponent<timelineNode>().state == 3)
-					node.GetComponent<timelineNode> ().drawLines ();
+				if (tn.state == 1 || tn.state == 3) {
+					tn.drawLines();
+				}
 			}
 			transform.position = Camera.main.ScreenToWorldPoint ((new Vector3 (Input.mousePosition.x, Input.mousePosition.y, 10)));
 		}//end if
-    }
+	}
 }

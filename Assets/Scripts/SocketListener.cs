@@ -20,7 +20,7 @@ public class SocketListener : MonoBehaviour {
 	
 	//public GameObject loader_object;
 	// Use this for initialization
-	void Start () 
+	void Awake () 
 	{
 		//Find the loader game object.
 		//Find the game object with name "loader"

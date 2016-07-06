@@ -73,18 +73,23 @@ public class LocationMapper : MonoBehaviour {
 	}
 
 	private IEnumerator _fadein() {
-		while(img.color.a < 255) {
+		float fadetime = 1.5f;
+		float fadespeed = 1.0f / fadetime;
+
+		while (img.color.a < 1) {
 			Color tmp = img.color;
-			tmp.a += 0.01f;
+			tmp.a += Time.deltaTime * fadespeed;
 			img.color = tmp;
 			yield return null;
 		}
 	}
 
 	private IEnumerator _fadeout() {
+		float fadetime = 1.5f;
+		float fadespeed = 1.0f / fadetime;
 		while (img.color.a > 0) {
 			Color tmp = img.color;
-			tmp.a -= 0.01f;
+			tmp.a -= Time.deltaTime * fadespeed;
 			img.color = tmp;
 			yield return null;
 		}

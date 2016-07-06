@@ -11,12 +11,10 @@ public class LoadXML : MonoBehaviour {
 	public Dictionary<string, GameObject> nodeDict = new Dictionary<string, GameObject>();
 	public Dictionary<int, timelineNode> idMap = new Dictionary<int, timelineNode>();
 	public Sprite node_sprite;
-	private List<GameObject> nodeList = new List<GameObject>();
+	public List<timelineNode> nodeList = new List<timelineNode>();
 	private float nodeSpriteWidth;
 	private float cameraWidth;
 	private float nodeDistanceIncrement;
-
-
 
 	// Use this for initialization
 	public void Initialize() {
@@ -63,32 +61,41 @@ public class LoadXML : MonoBehaviour {
 					tn.date = new DateTime();
 				}
 				else {
-					tn.date = new DateTime(year, 1, 1);
+					if(year != 0) {
+						tn.date = new DateTime(year, 1, 1);
+					}else {
+						tn.date = new DateTime();
+					}
+					
 				}
 
 			}
 			try {
+				//check if node has geodata associated with it
 				tn.location = new Vector2(f.geodata[0].lat, f.geodata[0].lon);
+				tn.known_location = true;
 			}
 			catch {
+				//otherwise set location to unknown
 				tn.location = new Vector2();
+				tn.known_location = false;
 			}
 			tn.datevalue = tn.date.ToShortDateString();
 			tn.dateticks = tn.date.Ticks;
-			nodeList.Add(tmp_obj);
+			nodeList.Add(tn);
 			nodeDict[f.data] = tmp_obj;
 
 			idMap[f.id] = tn;//map id to node
 
 		}
-        //TODO pass this a reference to the list so we dont have to manuall assign it afterwards
-	    foreach (GameObject n in nodeList) {
-	        n.GetComponent<timelineNode>().allNodes = nodeList;
-	    }
+		//TODO pass this a reference to the list so we dont have to manuall assign it afterwards
+		foreach (timelineNode tn in nodeList) {
+			tn.allNodes = nodeList;
+		}
 
-        //second pass for assigning neighbors
+		//second pass for assigning neighbors
 
-        foreach (Feature f in container.features) {
+		foreach (Feature f in container.features) {
 			timelineNode tn = idMap[f.id];
 			foreach(Neighbor n in f.neighbors) {
 				tn.neighbors.Add(new KeyValuePair<string, timelineNode>(n.relationship,idMap[n.dest]));
@@ -101,20 +108,19 @@ public class LoadXML : MonoBehaviour {
 
 		long maxdays = int.MinValue;
 		long mindays = int.MaxValue;
-		foreach (GameObject node in nodeList) {
-			timelineNode tn = node.GetComponent<timelineNode>();
+		foreach (timelineNode tn in nodeList) {
 			int totaldays = 365 * tn.date.Year + tn.date.DayOfYear;
 			if (totaldays > maxdays) maxdays = totaldays;
 			if (totaldays < mindays) mindays = totaldays;
 		}
 
 		float mover = 0;
-		foreach (GameObject node in nodeList) {
-			timelineNode tn = node.GetComponent<timelineNode>();
+		foreach (timelineNode tn in nodeList) {
 			int totaldays = 365 * tn.date.Year + tn.date.DayOfYear;
 
 			//TODO: use nodeDistanceIncrement
-			tn.transform.position = new Vector3(map(totaldays,mindays,maxdays,0,100) + mover, UnityEngine.Random.Range(-15, 15) , 0);
+			tn.timelinePosition = new Vector3(map(totaldays, mindays, maxdays, 0, 100) + mover, UnityEngine.Random.Range(-15, 15), 0);
+			tn.moveToPosition(tn.timelinePosition);
 			mover += .1f;
 		}
 
@@ -169,13 +175,13 @@ public class LoadXML : MonoBehaviour {
 		}//end foreach
 
 		//Bring each node out of focus.
-		foreach (GameObject temp in nodeList)
+		foreach (timelineNode tn in nodeList)
 		{
 			//Change its color
 			//temp.GetComponent<SpriteRenderer>().color = new Color(0.5f, 0.5f, 0.5f, 0.2f);
 			//Set it to not display information on mouseover
 			//temp.GetComponent<timelineNode>().display_info = false;
-			temp.GetComponent<timelineNode>().Unfocus();
+			tn.Unfocus();
 		}//end foreach
 
 		List<GameObject> node_history = new List<GameObject>();
