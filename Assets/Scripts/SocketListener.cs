@@ -18,22 +18,15 @@ public class SocketListener : MonoBehaviour {
 	
 	byte[] bytes = new byte[1024]; 
 	
-	public GameObject loader_object;
+	//public GameObject loader_object;
 	// Use this for initialization
 	void Start () 
 	{
 		//Find the loader game object.
 		//Find the game object with name "loader"
-		loader_object = GameObject.Find ("loader");
+		//loader_object = GameObject.Find ("loader");
 		initializeConnection ();	
 
-		//establish if the node prefab should use NodeControllerForSingle
-		if (running_single) {
-			nodeprefab.GetComponent<NodeController>().enabled=false;
-		}
-		else {
-			nodeprefab.GetComponent<NodeController>().enabled=true;
-		}
 	}
 
 	public void initializeConnection()
@@ -76,11 +69,13 @@ public class SocketListener : MonoBehaviour {
 
 		//Start loader now that connection is made.
 
-		loader_object.GetComponent<Loader> ().Initialize ();
+		//loader_object.GetComponent<Loader> ().Initialize ();
+		gameObject.GetComponent<LoadXML>().Initialize();
 	}//end method initializeConnection
 
 	public void sendMessageToServer(String messageToSend)
 	{
+		print ("Sending message " + messageToSend + " to server");
 		byte[] message = Encoding.Unicode.GetBytes (messageToSend + "<EOF>");
 		int bytes_sent = 0;
 		if (senderSock != null)

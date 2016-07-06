@@ -7,7 +7,7 @@ using System;
 
 public class LoadXML : MonoBehaviour {
 
-	public string xml_location = "Assets/xml/roman_empire_500_geospatial.xml";
+	public string xml_location = "Assets/xml/roman_empire_1000.xml";
 	public Dictionary<string, GameObject> nodeDict = new Dictionary<string, GameObject>();
 	public Dictionary<int, timelineNode> idMap = new Dictionary<int, timelineNode>();
 	public Sprite node_sprite;
@@ -16,8 +16,10 @@ public class LoadXML : MonoBehaviour {
 	private float cameraWidth;
 	private float nodeDistanceIncrement;
 
+
+
 	// Use this for initialization
-	void Awake() {
+	public void Initialize() {
 		XmlSerializer serializer = new XmlSerializer(typeof(AIMind));
 		FileStream stream = new FileStream(xml_location, FileMode.Open);
 		AIMind container = (AIMind)serializer.Deserialize(stream);
@@ -125,19 +127,36 @@ public class LoadXML : MonoBehaviour {
 		return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
 	}
 
+	void FixedUpdate() {
+		
+	}//end method FixedUpdate
+
 	//Narrate a sequence of nodes
 	IEnumerator Narrate()
 	{
 		//The sequence of nodes we want to narrate, by name
 		List<string> sequence_by_name = new List<string>();
-		sequence_by_name.Add("Roman Empire");
+
+		//Ask the backend for a node sequence
+		gameObject.GetComponent<SocketListener>().sendMessageToServer("CHRONOLOGY:13:10");
+		string return_message = gameObject.GetComponent<SocketListener> ().ReceiveDataFromServer ();
+		print ("Backend response: " + return_message);
+
+		//Separate the response by double-colon
+		string[] delimiters = {"::"};
+		string[] return_message_split = return_message.Split(delimiters, StringSplitOptions.None);
+		foreach (string message_part in return_message_split) {
+			sequence_by_name.Add (message_part);
+		}//end foreach
+
+		/*sequence_by_name.Add("Roman Empire");
 		sequence_by_name.Add("Rome");
 		sequence_by_name.Add("Italy");
 		sequence_by_name.Add("Constantinople");
 		sequence_by_name.Add("Byzantine Empire");
 		sequence_by_name.Add("Istanbul");
 		sequence_by_name.Add("Turkey");
-		sequence_by_name.Add("Ankara");
+		sequence_by_name.Add("Ankara");*/
 
 		//The nodes themselves
 		List<GameObject> sequence_by_node = new List<GameObject>();
@@ -153,25 +172,32 @@ public class LoadXML : MonoBehaviour {
 		foreach (GameObject temp in nodeList)
 		{
 			//Change its color
-			temp.GetComponent<SpriteRenderer>().color = new Color(0.5f, 0.5f, 0.5f, 0.2f);
+			//temp.GetComponent<SpriteRenderer>().color = new Color(0.5f, 0.5f, 0.5f, 0.2f);
 			//Set it to not display information on mouseover
-			temp.GetComponent<timelineNode>().display_info = false;
-			//FOR_PHIL: Other effects?
+			//temp.GetComponent<timelineNode>().display_info = false;
+			temp.GetComponent<timelineNode>().Unfocus();
 		}//end foreach
 
 		List<GameObject> node_history = new List<GameObject>();
 		foreach (GameObject node_to_present in sequence_by_node)
 		{
-			//Have the previous node stop displaying information
+			//Bring the previous node into past-focus
 			if (node_history.Count >= 1)
-				node_history[node_history.Count - 1].GetComponent<timelineNode>().display_info = false;
+				node_history [node_history.Count - 1].GetComponent<timelineNode> ().PastFocus ();
 			//Present this node
 			Present(node_to_present, node_history);
 			//Add it to the history
 			node_history.Add(node_to_present);
 			//Wait for spacebar before presenting the next.
 
-
+			/*bool space_bar_pressed = false;
+			while (!space_bar_pressed) {
+				if (Input.GetKeyDown(KeyCode.Space)) {
+					space_bar_pressed = true;
+					break;
+				}//end if
+				yield return null;
+			}//end while*/
 
 			yield return StartCoroutine(WaitForKeyDown(KeyCode.Space));
 		}//end foreach
@@ -180,18 +206,11 @@ public class LoadXML : MonoBehaviour {
 	//Present the given node given the previous nodes presented
 	void Present(GameObject node_to_present, List<GameObject> node_history)
 	{
+		print ("Current node: " + node_to_present.GetComponent<timelineNode>().text);
 		//Bring this node into focus
-		//Change its color
-		node_to_present.GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, 1f);
-		//Set it to display information on mouseover
-		node_to_present.GetComponent<timelineNode>().display_info = true;
-		//Bring it to the front by changing its Z
-		node_to_present.transform.position = new Vector3(node_to_present.transform.position.x
-			, node_to_present.transform.position.y
-			, node_to_present.transform.position.z - 5);
-		//FOR_PHIL: Other effects, such as bringing the map up?
+		node_to_present.GetComponent<timelineNode>().Focus();
 
-		//Some nodes may be layered on top of each other. Displace this node in the y if any other
+		/*//Some nodes may be layered on top of each other. Displace this node in the y if any other
 		//nodes in the history share a position with it.
 		bool layered = true;
 		while (layered)
@@ -211,7 +230,7 @@ public class LoadXML : MonoBehaviour {
 				node_to_present.transform.position = new Vector3(node_to_present.transform.position.x
 					, node_to_present.transform.position.y + 1
 					, node_to_present.transform.position.z);
-		}//end while
+		}//end while*/
 
 	}//end method Present
 
@@ -224,4 +243,10 @@ public class LoadXML : MonoBehaviour {
 		} while (!Input.GetKeyDown(keyCode));
 	}
 
+	void OnApplicationQuit()
+	{
+		//When the application quits, send a QUIT message to the backend.
+		//This allows the backend to shut down its server gracefully.
+		gameObject.GetComponent<SocketListener> ().sendMessageToServer ("QUIT");
+	}//end method OnApplicationQuit
 }

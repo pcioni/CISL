@@ -16,35 +16,137 @@ public class timelineNode : MonoBehaviour
     private Color baseColor;
     public List<KeyValuePair<string,timelineNode>> neighbors = new List<KeyValuePair<string, timelineNode>>();//use kvp because no tuple support in unity
     public List<GameObject> allNodes;
-
+	public bool active = false;	//Whether this node is active and interactable.
+	public int state = 0;	//What the state of this node is.
+							//0 = Out of focus. Node does not respond to mouse, is transparent, and does not draw lines to neighboring nodes.
+							//1 = In focus. Node responds to mouse, is the focus color (red), always displays information, and draws lines to neighboring nodes.
+							//2 = Half-Focus. Node responds to mouse, is the half-focus color (white), displays information on mouse-over, and does not draw lines to neighboring nodes.
+							//3 = Past-focus. Node responds to mouse, is the past-focus color (blue), displays information on mouse-over, and draws lines to neighboring nodes.
 
     public void Start()
     {
+		//active = false;
         baseColor = GetComponent<SpriteRenderer>().color;
         baseSize = gameObject.GetComponent<RectTransform>().localScale;
-        drawLines();
+        //drawLines();
     }
 
-    public void Update() {
-
+	//Frame-independant update
+    void FixedUpdate() {
+		if (Input.GetKeyDown ("return") && mouseOver) {
+			//If this node is moused over and enter is pressed, focus on it.
+			//If any other node is the focus, make it a past-focus
+			foreach (GameObject node in allNodes) {
+				if (node.GetComponent<timelineNode>().state == 1)
+					node.GetComponent<timelineNode> ().PastFocus();
+			}//end foreach
+			//Focus on this node.
+			Focus();
+		}//end if
     }
+
+	//Bring this node into focus.
+	public void Focus() {
+		//Mark this node as active
+		active = true;
+		state = 1;
+		//Draw lines from this node to its neighbors
+		drawLines();
+		//Have it always display information
+		display_info = true;
+		//Change its color
+		Color focus_color = Color.red; //new Color(1f, 1f, 1f, 1f);
+		baseColor = focus_color;
+		ChangeColor (focus_color);
+		//Bring it to the front by changing its Z
+		gameObject.transform.position = new Vector3(gameObject.transform.position.x
+			, gameObject.transform.position.y
+			, gameObject.transform.position.z - 5);
+
+		//Bring its neighbors into half-focus if they aren't a past-focus or a focus.
+		foreach (KeyValuePair<string,timelineNode> neighbor_node in this.neighbors) {
+			if (neighbor_node.Value.state != 3 && neighbor_node.Value.state != 1)
+				neighbor_node.Value.HalfFocus ();
+		}//end foreach
+	}//end method Focus
+
+	//Half-focus this node.
+	public void HalfFocus() {
+		//Mark this node as active
+		active = true;
+		state = 2;
+		//Do not have it always display information
+		display_info = false;
+		//Change its color
+		Color half_focus_color = Color.white;
+		baseColor = half_focus_color;
+		ChangeColor (half_focus_color);
+		//Bring it forward by changing its Z
+		gameObject.transform.position = new Vector3(gameObject.transform.position.x
+			, gameObject.transform.position.y
+			, gameObject.transform.position.z - 3);
+	}//end method HalfFocus
+
+	//Bring this node out of full focus, but remember it used to be the focus.
+	public void PastFocus() {
+		//Mark this node as active
+		active = true;
+		state = 3;
+		//Do not have it always display information
+		display_info = false;
+		//Change its color
+		Color past_focus_color = Color.blue;
+		baseColor = past_focus_color;
+		ChangeColor (past_focus_color);
+		//Bring it forward by changing its Z
+		gameObject.transform.position = new Vector3(gameObject.transform.position.x
+			, gameObject.transform.position.y
+			, gameObject.transform.position.z - 3);
+	}//end method PastFocus
+
+	//Bring this node out of focus
+	public void Unfocus() {
+		//Mark this node as inactive
+		active = false;
+		state = 0;
+		display_info = false;
+		//Remove lines from this node to its neighbors
+		eraseLines();
+		//Change its color
+		Color unfocus_color = new Color(0.5f, 0.5f, 0.5f, 0.2f);
+		baseColor = unfocus_color;
+		ChangeColor (unfocus_color);
+		//Bring it to the back by changing its Z
+		gameObject.transform.position = new Vector3(gameObject.transform.position.x
+			, gameObject.transform.position.y
+			, gameObject.transform.position.z + 5);
+	}//end method Unfocus
 
     private void drawLines() {
         Vector3 centralNodePos = transform.position;
-        Vector3[] points = new Vector3[neighbors.Count * 2 + 1];
+		Vector3[] points = new Vector3[Math.Max(neighbors.Count * 2, 1)];
         points[0] = centralNodePos;
         int nCount = 0;
-        for (int i = 1; i < neighbors.Count; i += 2) {
+		for (int i = 1; i < points.Length; i += 2) {
+			points[i - 1] = centralNodePos;
             points[i] = neighbors[nCount].Value.transform.position;
-            points[i + 1] = centralNodePos;
             nCount++;
         }
         LineRenderer lr = GetComponent<LineRenderer>();
-        lr.SetPositions(points);
+
+		lr.SetVertexCount(points.Length);
+    	lr.SetPositions(points);
+
         lr.SetColors(Color.blue, Color.blue);
         lr.SetWidth(0.05f, 0.05f);
         lr.material = new Material(Shader.Find("Particles/Additive"));
     }
+
+	//Remove all lines going out of this node
+	private void eraseLines() {
+		//LineRenderer lr = GetComponent<LineRenderer> ();
+		//lr.SetVertexCount (0);
+	}//end method eraseLines
 
     public void ChangeSize(Vector3 final_size)
     {
@@ -116,15 +218,21 @@ public class timelineNode : MonoBehaviour
     private bool mouseOver = false;
 
     public void OnMouseEnter() {
-        mouseOver = true;
-        ChangeSize(new Vector3(baseSize.x*2f, baseSize.y*2f, baseSize.z));
-        ChangeColor(Color.cyan);
+		//Only trigger mouse effects if this node is active
+		if (active) {
+			mouseOver = true;
+			ChangeSize (new Vector3 (baseSize.x * 2f, baseSize.y * 2f, baseSize.z));
+			ChangeColor (Color.cyan);
+		}//end if
     }
 
     public void OnMouseExit() {
-        mouseOver = false;
-        ChangeSize(new Vector3(baseSize.x, baseSize.y, baseSize.z));
-        ChangeColor(baseColor);
+		//Only trigger mouse effects if this node is active
+		if (active) {
+			mouseOver = false;
+			ChangeSize (new Vector3 (baseSize.x, baseSize.y, baseSize.z));
+			ChangeColor (baseColor);
+		}//end if
     }
 
     public void ChangeColor(Color newColor) {
@@ -132,11 +240,17 @@ public class timelineNode : MonoBehaviour
     }
 
     public void OnMouseDrag() {
-        drawLines();
-        //TODO: MAKE EACH NODE ONLY REDRAW THE LINE TO THIS NODE
-        foreach (GameObject node in allNodes) {
-            node.GetComponent<timelineNode>().drawLines();
-        }
-        transform.position = Camera.main.ScreenToWorldPoint((new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10)));
+		//Only trigger mouse effects if this node is active
+		if (active) {
+			if (state == 1 || state == 3)
+				drawLines ();
+			//TODO: MAKE EACH NODE ONLY REDRAW THE LINE TO THIS NODE
+			foreach (GameObject node in allNodes) {
+				//Only redraw if the other node is a focus or past-focus node (states 1 or 3)
+				if (node.GetComponent<timelineNode>().state == 1 || node.GetComponent<timelineNode>().state == 3)
+					node.GetComponent<timelineNode> ().drawLines ();
+			}
+			transform.position = Camera.main.ScreenToWorldPoint ((new Vector3 (Input.mousePosition.x, Input.mousePosition.y, 10)));
+		}//end if
     }
 }
