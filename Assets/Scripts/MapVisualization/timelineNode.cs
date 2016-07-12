@@ -18,7 +18,7 @@ public class timelineNode : MonoBehaviour
 	public List<KeyValuePair<string,timelineNode>> neighbors = new List<KeyValuePair<string, timelineNode>>();//use kvp because no tuple support in unity
 	public List<timelineNode> allNodes;
 	public bool active = false;	//Whether this node is active and interactable.
-	public int state = 0;   //What the state of this node is.
+	public float state = 0;   //What the state of this node is.
 							//0 = Out of focus. Node does not respond to mouse, is transparent, and does not draw lines to neighboring nodes.
 							//1 = In focus. Node responds to mouse, is the focus color (red), always displays information, and draws lines to neighboring nodes.
 							//2 = Half-Focus. Node responds to mouse, is the half-focus color (white), displays information on mouse-over, and does not draw lines to neighboring nodes.
@@ -27,15 +27,20 @@ public class timelineNode : MonoBehaviour
 
 	public Vector3 timelinePosition; //where the node should be on the timeline
 	public Vector3 mapPosition; //where the node should be on the map
+    private Vector3 startPosition;
+    private float floatOffset;
+    private bool Moveable;
 
 	private IEnumerator moveCoroutine;//reference to movement
 
-	public void Start()
-	{
-		//active = false;
+	public void Start() {
+	    Moveable = false;
+        transform.Rotate(Vector3.forward * UnityEngine.Random.Range(0f, 80f)); //add some random initial rotation to offset angle from other nodes
+	    floatOffset = UnityEngine.Random.Range(0f, 3f);
+	    startPosition = transform.position;
 		baseColor = GetComponent<SpriteRenderer>().color;
 		baseSize = gameObject.GetComponent<RectTransform>().localScale;
-		//drawLines();
+		//drawLines(); //draw a line between every node and every neighbour.
 	}
 
 	public void moveToPosition(Vector3 position) {
@@ -49,11 +54,25 @@ public class timelineNode : MonoBehaviour
 			transform.position = Vector3.MoveTowards(transform.position, position, movespeed);
 			yield return null;
 		}
+	    Moveable = true;
 	}
 
-	//Frame-independant update
+    private void Float() {
+        Vector3 newPos = new Vector3(transform.position.x, startPosition.y + 0.5f * Mathf.Sin(1 * (Time.time + floatOffset)), transform.position.z);
+        transform.position = newPos;
+    }
+
+    private void rotateRight() {
+        transform.Rotate(Vector3.forward * -2);
+    }
+
 	void FixedUpdate() {
-		if (Input.GetKeyDown ("return") && mouseOver) {
+
+	    if (active && Moveable) {
+            rotateRight();
+	        Float();
+        }
+        if (Input.GetKeyDown ("return") && mouseOver) {
 			//If this node is moused over and enter is pressed, focus on it.
 			//If any other node is the focus, make it a past-focus
 			foreach (timelineNode tn in allNodes) {
@@ -175,16 +194,12 @@ public class timelineNode : MonoBehaviour
 		smooth_time = 0.2f;
 
 		//Change Collider accordingly
-		//DEBUG
-		//print ("Changing node size for " + this.node_name);
-		//END DEBUG
 		if (gameObject.GetComponent<SpriteRenderer>().sprite != null)
 		{
 			float new_width = gameObject.GetComponent<SpriteRenderer>().sprite.bounds.size.x; //base_size.x;
 			float new_height = gameObject.GetComponent<SpriteRenderer>().sprite.bounds.size.y; //base_size.y;
 			float desired_collider_radius = Mathf.Min(new_width, new_height);
 			gameObject.GetComponent<CircleCollider2D>().radius = desired_collider_radius*0.75f;
-			//Begin the co-routine to change the node size.
 			if (gameObject.active)
 				StartCoroutine("ChangeNodeSize");
 		} //end if
@@ -239,8 +254,9 @@ public class timelineNode : MonoBehaviour
 	private bool mouseOver = false;
 
 	public void OnMouseEnter() {
-		//Only trigger mouse effects if this node is active
-		if (active) {
+	    Moveable = false;
+        //Only trigger mouse effects if this node is active
+        if (active) {
 			mouseOver = true;
 			ChangeSize (new Vector3 (baseSize.x * 2f, baseSize.y * 2f, baseSize.z));
 			ChangeColor (Color.cyan);
@@ -248,8 +264,9 @@ public class timelineNode : MonoBehaviour
 	}
 
 	public void OnMouseExit() {
-		//Only trigger mouse effects if this node is active
-		if (active) {
+	    Moveable = true;
+        //Only trigger mouse effects if this node is active
+        if (active) {
 			mouseOver = false;
 			ChangeSize (new Vector3 (baseSize.x, baseSize.y, baseSize.z));
 			ChangeColor (baseColor);
