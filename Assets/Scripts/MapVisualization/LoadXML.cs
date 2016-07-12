@@ -4,6 +4,7 @@ using System.Xml.Serialization;
 using System.IO;
 using System.Collections.Generic;
 using System;
+using System.Text;
 
 public class LoadXML : MonoBehaviour {
 
@@ -15,6 +16,10 @@ public class LoadXML : MonoBehaviour {
 	private float nodeSpriteWidth;
 	private float cameraWidth;
 	private float nodeDistanceIncrement;
+
+	public void Start() {
+		Initialize();
+	}
 
 	// Use this for initialization
 	public void Initialize() {
@@ -137,15 +142,50 @@ public class LoadXML : MonoBehaviour {
 		
 	}//end method FixedUpdate
 
+	[Serializable]
+	public class ChronologyRequest {
+		public ChronologyRequest(int id, int turns) {
+			this.id = id;
+			this.turns = turns;
+		}
+		public int id;
+		public int turns;
+	}
+
+	[Serializable]
+	public class ChronologyResponse {
+		public List<string> sequence;
+	}
+
 	//Narrate a sequence of nodes
 	IEnumerator Narrate()
 	{
 		//The sequence of nodes we want to narrate, by name
 		List<string> sequence_by_name = new List<string>();
-
+		
 		//Ask the backend for a node sequence
-		gameObject.GetComponent<SocketListener>().sendMessageToServer("CHRONOLOGY:13:10");
-		string return_message = gameObject.GetComponent<SocketListener> ().ReceiveDataFromServer ();
+		//gameObject.GetComponent<SocketListener>().sendMessageToServer("CHRONOLOGY:13:10");
+
+
+
+		string url = "http://localhost:8084/chronology";
+		string data = JsonUtility.ToJson(new ChronologyRequest(13,10));
+		Debug.Log("request: " + data);
+		WWW www = new WWW(url, Encoding.UTF8.GetBytes(data));
+		yield return www;
+
+		// check for errors
+		if (www.error == null) {
+			Debug.Log("WWW Ok!: " + www.text);
+		}
+		else {
+			Debug.Log("WWW Error: " + www.error);
+			yield break;
+		}
+
+		ChronologyResponse response = JsonUtility.FromJson<ChronologyResponse>(www.text);	
+
+		/*string return_message = gameObject.GetComponent<SocketListener> ().ReceiveDataFromServer ();
 		print ("Backend response: " + return_message);
 
 		//Separate the response by double-colon
@@ -153,7 +193,7 @@ public class LoadXML : MonoBehaviour {
 		string[] return_message_split = return_message.Split(delimiters, StringSplitOptions.None);
 		foreach (string message_part in return_message_split) {
 			sequence_by_name.Add (message_part);
-		}//end foreach
+		}//end foreach*/
 
 		/*sequence_by_name.Add("Roman Empire");
 		sequence_by_name.Add("Rome");
@@ -167,8 +207,8 @@ public class LoadXML : MonoBehaviour {
 		//The nodes themselves
 		List<GameObject> sequence_by_node = new List<GameObject>();
 		GameObject temp_node = null;
-		foreach (string name in sequence_by_name)
-		{
+		//foreach (string name in sequence_by_name)
+		foreach (string name in response.sequence) {
 			temp_node = null;
 			nodeDict.TryGetValue(name, out temp_node);
 			sequence_by_node.Add(temp_node);
@@ -253,6 +293,6 @@ public class LoadXML : MonoBehaviour {
 	{
 		//When the application quits, send a QUIT message to the backend.
 		//This allows the backend to shut down its server gracefully.
-		gameObject.GetComponent<SocketListener> ().sendMessageToServer ("QUIT");
+		//gameObject.GetComponent<SocketListener> ().sendMessageToServer ("QUIT");
 	}//end method OnApplicationQuit
 }
