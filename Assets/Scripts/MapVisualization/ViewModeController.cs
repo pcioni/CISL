@@ -48,7 +48,7 @@ public class ViewModeController : MonoBehaviour {
 		}
 		if(positions.Count != 0) {
 			start.location = get_centroid(positions);
-			print("location found for " + start.name + ": " + start.location);
+			//print("location found for " + start.name + ": " + start.location);
 		}
 		
 	}
