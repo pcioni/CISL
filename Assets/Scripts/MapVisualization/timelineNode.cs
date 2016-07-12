@@ -2,6 +2,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using UnityEditor;
 
 public class timelineNode : MonoBehaviour
 {
@@ -30,10 +32,14 @@ public class timelineNode : MonoBehaviour
     private Vector3 startPosition;
     private float floatOffset;
     private bool Moveable;
+    private timelineNode currentFocus;
+    private Rect timeline;
+    private bool drawTimeline;
 
 	private IEnumerator moveCoroutine;//reference to movement
 
 	public void Start() {
+	    drawTimeline = false;
 	    Moveable = false;
         transform.Rotate(Vector3.forward * UnityEngine.Random.Range(0f, 80f)); //add some random initial rotation to offset angle from other nodes
 	    floatOffset = UnityEngine.Random.Range(0f, 3f);
@@ -67,8 +73,7 @@ public class timelineNode : MonoBehaviour
     }
 
 	void FixedUpdate() {
-
-	    if (active && Moveable) {
+        if (active && Moveable) {
             rotateRight();
 	        Float();
         }
@@ -238,6 +243,10 @@ public class timelineNode : MonoBehaviour
 
 	void OnGUI()
 	{
+
+	    if (drawTimeline) {
+	        GUI.TextArea(timeline, "Add dates to me!", 1000);
+	    }
 		// GUI box that follows the mouse; Display-info on right, mouseover info on left
 		if (display_info)
 		{
@@ -257,23 +266,51 @@ public class timelineNode : MonoBehaviour
 	    Moveable = false;
         //Only trigger mouse effects if this node is active
         if (active) {
+            setTimeline();
+            drawTimeline = true;
 			mouseOver = true;
 			ChangeSize (new Vector3 (baseSize.x * 2f, baseSize.y * 2f, baseSize.z));
 			ChangeColor (Color.cyan);
 		}//end if
 	}
 
+    private void setTimeline() {
+        //get the leftmost gameobject so our timeline always draws in the correct direction
+        //TODO: use a LINQ function or something
+        Vector3 leftPos;
+        Vector3 rightPos;
+        currentFocus = allNodes.First(x => x.state == 1);
+        if (transform.position.x < currentFocus.transform.position.x) {
+            leftPos = transform.position;
+            rightPos = currentFocus.transform.position;
+        }
+        else {
+            leftPos = currentFocus.transform.position;
+            rightPos = transform.position;
+        }
+        //convert screen coordinates to world coordinates.
+        Vector3 guiPos = Camera.main.WorldToScreenPoint(leftPos);
+        float width = Vector3.Distance(leftPos, rightPos);
+        timeline.Set(guiPos.x, Screen.height - guiPos.y - 125, width * 8.75f, 100); //multiply to scale the pixels properly....dunno why Unity can't do it itself.
+    }
+
 	public void OnMouseExit() {
 	    Moveable = true;
         //Only trigger mouse effects if this node is active
         if (active) {
+            clearTimeline();
+            drawTimeline = false;
 			mouseOver = false;
 			ChangeSize (new Vector3 (baseSize.x, baseSize.y, baseSize.z));
 			ChangeColor (baseColor);
 		}//end if
 	}
 
-	public void ChangeColor(Color newColor) {
+    private void clearTimeline() {
+        timeline.Set(0,0,0,0);
+    }
+
+    public void ChangeColor(Color newColor) {
 		GetComponent<SpriteRenderer>().color = newColor;
 	}
 
