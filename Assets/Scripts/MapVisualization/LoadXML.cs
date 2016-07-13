@@ -124,7 +124,7 @@ public class LoadXML : MonoBehaviour {
 			int totaldays = 365 * tn.date.Year + tn.date.DayOfYear;
 
 			//TODO: use nodeDistanceIncrement
-			tn.timelinePosition = new Vector3(map(totaldays, mindays, maxdays, 0, 100) + mover, UnityEngine.Random.Range(-45, 45), 0);
+			tn.timelinePosition = new Vector3(map(totaldays, mindays, maxdays, 0, 100) + mover, UnityEngine.Random.Range(-40, 40), 0);
 			tn.moveToPosition(tn.timelinePosition);
 			mover += .1f;
 		}
