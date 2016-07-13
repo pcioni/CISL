@@ -58,6 +58,9 @@ public class timelineNode : MonoBehaviour
 		float movespeed = 1.0f / movetime;
 		while (Vector3.Distance(transform.position, position) > 0.1f) {
 			transform.position = Vector3.MoveTowards(transform.position, position, movespeed);
+			//Each time this node moves, if it is in an appropriate state, re-draw its lines
+			if (state == 1 || state == 3)
+				drawLines();
 			yield return null;
 		}
 	    Moveable = true;
@@ -76,6 +79,9 @@ public class timelineNode : MonoBehaviour
         if (active && Moveable) {
             rotateRight();
 	        Float();
+			//Redraw lines
+			if (state == 1 || state == 3)
+				drawLines ();
         }
         if (Input.GetKeyDown ("return") && mouseOver) {
 			//If this node is moused over and enter is pressed, focus on it.
@@ -108,6 +114,11 @@ public class timelineNode : MonoBehaviour
 			, gameObject.transform.position.y
 			, gameObject.transform.position.z - 5);
 
+		//Bring the node to the center line
+		moveToPosition(new Vector3(gameObject.transform.position.x
+			, 0
+			, gameObject.transform.position.z));
+
 		//Bring its neighbors into half-focus if they aren't a past-focus or a focus.
 		foreach (KeyValuePair<string,timelineNode> neighbor_node in this.neighbors) {
 			if (neighbor_node.Value.state != 3 && neighbor_node.Value.state != 1)
@@ -134,6 +145,7 @@ public class timelineNode : MonoBehaviour
 
 	//Bring this node out of full focus, but remember it used to be the focus.
 	public void PastFocus() {
+		print ("Past Focus " + text);
 		//Mark this node as active
 		active = true;
 		state = 3;
