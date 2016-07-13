@@ -79,6 +79,9 @@ public class timelineNode : MonoBehaviour
         if (active && Moveable) {
             rotateRight();
 	        Float();
+			//Redraw lines
+			if (state == 1 || state == 3)
+				drawLines ();
         }
         if (Input.GetKeyDown ("return") && mouseOver) {
 			//If this node is moused over and enter is pressed, focus on it.
