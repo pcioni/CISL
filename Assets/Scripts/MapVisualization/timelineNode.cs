@@ -43,7 +43,6 @@ public class timelineNode : MonoBehaviour
 	    Moveable = false;
         transform.Rotate(Vector3.forward * UnityEngine.Random.Range(0f, 80f)); //add some random initial rotation to offset angle from other nodes
 	    floatOffset = UnityEngine.Random.Range(0f, 3f);
-	    startPosition = transform.position;
 		baseColor = GetComponent<SpriteRenderer>().color;
 		baseSize = gameObject.GetComponent<RectTransform>().localScale;
 		//drawLines(); //draw a line between every node and every neighbour.
@@ -51,7 +50,7 @@ public class timelineNode : MonoBehaviour
 
 	public void moveToPosition(Vector3 position) {
 		if(moveCoroutine != null) StopCoroutine(moveCoroutine);
-		moveCoroutine = _move(position, 1.5f);
+		moveCoroutine = _move(position, 1f);
 		StartCoroutine(moveCoroutine);
 	}
 	private IEnumerator _move(Vector3 position, float movetime) {
@@ -64,10 +63,11 @@ public class timelineNode : MonoBehaviour
 			yield return null;
 		}
 	    Moveable = true;
-	}
+        startPosition = transform.position;
+    }
 
     private void Float() {
-        Vector3 newPos = new Vector3(transform.position.x, startPosition.y + 0.5f * Mathf.Sin(1 * (Time.time + floatOffset)), transform.position.z);
+        Vector3 newPos = new Vector3(transform.position.x, startPosition.y + 0.5f * Mathf.Sin(Time.time + floatOffset), transform.position.z);
         transform.position = newPos;
     }
 
@@ -78,7 +78,7 @@ public class timelineNode : MonoBehaviour
 	void FixedUpdate() {
         if (active && Moveable) {
             rotateRight();
-	        Float();
+	        //Float();
 			//Redraw lines
 			if (state == 1 || state == 3)
 				drawLines ();
@@ -129,6 +129,7 @@ public class timelineNode : MonoBehaviour
 	//Half-focus this node.
 	public void HalfFocus() {
 		//Mark this node as active
+		active = true;
 		active = true;
 		state = 2;
 		//Do not have it always display information
@@ -256,9 +257,9 @@ public class timelineNode : MonoBehaviour
 	void OnGUI()
 	{
 
-	    if (drawTimeline) {
+	    /*if (drawTimeline) {
 	        GUI.TextArea(timeline, "Add dates to me!", 1000);
-	    }
+	    }*/
 		// GUI box that follows the mouse; Display-info on right, mouseover info on left
 		if (display_info)
 		{
