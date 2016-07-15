@@ -29,20 +29,20 @@ public class timelineNode : MonoBehaviour
 
 	public Vector3 timelinePosition; //where the node should be on the timeline
 	public Vector3 mapPosition; //where the node should be on the map
-    private Vector3 startPosition;
-    private float floatOffset;
-    private bool Moveable;
-    private timelineNode currentFocus;
-    private Rect timeline;
-    private bool drawTimeline;
+	private Vector3 startPosition;
+	private float floatOffset;
+	private bool Moveable;
+	private timelineNode currentFocus;
+	private Rect timeline;
+	private bool drawTimeline;
 
 	private IEnumerator moveCoroutine;//reference to movement
 
 	public void Start() {
-	    drawTimeline = false;
-	    Moveable = false;
-        transform.Rotate(Vector3.forward * UnityEngine.Random.Range(0f, 80f)); //add some random initial rotation to offset angle from other nodes
-	    floatOffset = UnityEngine.Random.Range(0f, 3f);
+		drawTimeline = false;
+		Moveable = false;
+		transform.Rotate(Vector3.forward * UnityEngine.Random.Range(0f, 80f)); //add some random initial rotation to offset angle from other nodes
+		floatOffset = UnityEngine.Random.Range(0f, 3f);
 		baseColor = GetComponent<SpriteRenderer>().color;
 		baseSize = gameObject.GetComponent<RectTransform>().localScale;
 		//drawLines(); //draw a line between every node and every neighbour.
@@ -50,40 +50,42 @@ public class timelineNode : MonoBehaviour
 
 	public void moveToPosition(Vector3 position) {
 		if(moveCoroutine != null) StopCoroutine(moveCoroutine);
-		moveCoroutine = _move(position, 1f);
+		moveCoroutine = _move(position, 1.5f);
 		StartCoroutine(moveCoroutine);
 	}
 	private IEnumerator _move(Vector3 position, float movetime) {
-		float movespeed = 1.0f / movetime;
-		while (Vector3.Distance(transform.position, position) > 0.1f) {
-			transform.position = Vector3.MoveTowards(transform.position, position, movespeed);
+		Vector3 currentPos = transform.position;
+		float t = 0f;
+		while (t < 1) {
+			t += Time.deltaTime / movetime;
+			transform.position = Vector3.Lerp(currentPos, position, t);
 			//Each time this node moves, if it is in an appropriate state, re-draw its lines
 			if (state == 1 || state == 3)
 				drawLines();
 			yield return null;
 		}
-	    Moveable = true;
-        startPosition = transform.position;
-    }
+		Moveable = true;
+		startPosition = transform.position;
+	}
 
-    private void Float() {
-        Vector3 newPos = new Vector3(transform.position.x, startPosition.y + 0.5f * Mathf.Sin(Time.time + floatOffset), transform.position.z);
-        transform.position = newPos;
-    }
+	private void Float() {
+		Vector3 newPos = new Vector3(transform.position.x, startPosition.y + 0.5f * Mathf.Sin(Time.time + floatOffset), transform.position.z);
+		transform.position = newPos;
+	}
 
-    private void rotateRight() {
-        transform.Rotate(Vector3.forward * -2);
-    }
+	private void rotateRight() {
+		transform.Rotate(Vector3.forward * -2);
+	}
 
 	void FixedUpdate() {
-        if (active && Moveable) {
-            rotateRight();
-	        //Float();
+		if (active && Moveable) {
+			rotateRight();
+			//Float();
 			//Redraw lines
 			if (state == 1 || state == 3)
 				drawLines ();
-        }
-        if (Input.GetKeyDown ("return") && mouseOver) {
+		}
+		if (Input.GetKeyDown ("return") && mouseOver) {
 			//If this node is moused over and enter is pressed, focus on it.
 			//If any other node is the focus, make it a past-focus
 			foreach (timelineNode tn in allNodes) {
@@ -257,9 +259,9 @@ public class timelineNode : MonoBehaviour
 	void OnGUI()
 	{
 
-	    /*if (drawTimeline) {
-	        GUI.TextArea(timeline, "Add dates to me!", 1000);
-	    }*/
+		/*if (drawTimeline) {
+			GUI.TextArea(timeline, "Add dates to me!", 1000);
+		}*/
 		// GUI box that follows the mouse; Display-info on right, mouseover info on left
 		if (display_info)
 		{
@@ -276,54 +278,54 @@ public class timelineNode : MonoBehaviour
 	private bool mouseOver = false;
 
 	public void OnMouseEnter() {
-	    Moveable = false;
-        //Only trigger mouse effects if this node is active
-        if (active) {
-            setTimeline();
-            drawTimeline = true;
+		Moveable = false;
+		//Only trigger mouse effects if this node is active
+		if (active) {
+			setTimeline();
+			drawTimeline = true;
 			mouseOver = true;
 			ChangeSize (new Vector3 (baseSize.x * 2f, baseSize.y * 2f, baseSize.z));
 			ChangeColor (Color.cyan);
 		}//end if
 	}
 
-    private void setTimeline() {
-        //get the leftmost gameobject so our timeline always draws in the correct direction
-        //TODO: use a LINQ function or something
-        Vector3 leftPos;
-        Vector3 rightPos;
-        currentFocus = allNodes.First(x => x.state == 1);
-        if (transform.position.x < currentFocus.transform.position.x) {
-            leftPos = transform.position;
-            rightPos = currentFocus.transform.position;
-        }
-        else {
-            leftPos = currentFocus.transform.position;
-            rightPos = transform.position;
-        }
-        //convert screen coordinates to world coordinates.
-        Vector3 guiPos = Camera.main.WorldToScreenPoint(leftPos);
-        float width = Vector3.Distance(leftPos, rightPos);
-        timeline.Set(guiPos.x, Screen.height - guiPos.y - 125, width * 8.75f, 100); //multiply to scale the pixels properly....dunno why Unity can't do it itself.
-    }
+	private void setTimeline() {
+		//get the leftmost gameobject so our timeline always draws in the correct direction
+		//TODO: use a LINQ function or something
+		Vector3 leftPos;
+		Vector3 rightPos;
+		currentFocus = allNodes.First(x => x.state == 1);
+		if (transform.position.x < currentFocus.transform.position.x) {
+			leftPos = transform.position;
+			rightPos = currentFocus.transform.position;
+		}
+		else {
+			leftPos = currentFocus.transform.position;
+			rightPos = transform.position;
+		}
+		//convert screen coordinates to world coordinates.
+		Vector3 guiPos = Camera.main.WorldToScreenPoint(leftPos);
+		float width = Vector3.Distance(leftPos, rightPos);
+		timeline.Set(guiPos.x, Screen.height - guiPos.y - 125, width * 8.75f, 100); //multiply to scale the pixels properly....dunno why Unity can't do it itself.
+	}
 
 	public void OnMouseExit() {
-	    Moveable = true;
-        //Only trigger mouse effects if this node is active
-        if (active) {
-            clearTimeline();
-            drawTimeline = false;
+		Moveable = true;
+		//Only trigger mouse effects if this node is active
+		if (active) {
+			clearTimeline();
+			drawTimeline = false;
 			mouseOver = false;
 			ChangeSize (new Vector3 (baseSize.x, baseSize.y, baseSize.z));
 			ChangeColor (baseColor);
 		}//end if
 	}
 
-    private void clearTimeline() {
-        timeline.Set(0,0,0,0);
-    }
+	private void clearTimeline() {
+		timeline.Set(0,0,0,0);
+	}
 
-    public void ChangeColor(Color newColor) {
+	public void ChangeColor(Color newColor) {
 		GetComponent<SpriteRenderer>().color = newColor;
 	}
 
