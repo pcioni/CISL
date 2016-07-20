@@ -23,7 +23,7 @@ public class ViewModeController : MonoBehaviour {
 		}
 		print("Done finding positions");
 		foreach (timelineNode tn in lx.nodeList) {
-			tn.mapPosition = current_map.coord2world(tn.location);
+			tn.mapPosition = current_map.coord2world(tn.location) + Random.insideUnitCircle*3;
 		}
 	}
 
@@ -58,7 +58,7 @@ public class ViewModeController : MonoBehaviour {
 		float sumy = 0;
 		float sumz = 0;
 		int len = positions.Count;
-
+		
 		foreach(Vector3 v in positions) {
 			sumx += v.x;
 			sumy += v.y;
@@ -92,7 +92,8 @@ public class ViewModeController : MonoBehaviour {
 
 		//move foreground nodes to map position
 		foreach (timelineNode tn in lx.nodeList) {
-			tn.moveToPosition(tn.mapPosition);
+			Vector3 newpos = new Vector3(tn.mapPosition.x, tn.mapPosition.y, tn.transform.position.z);
+			tn.moveToPosition(newpos);
 		}
 
 	}
@@ -101,7 +102,8 @@ public class ViewModeController : MonoBehaviour {
 		//switch to timeline mode
 
 		foreach (timelineNode tn in lx.nodeList) {
-			tn.moveToPosition(tn.timelinePosition);
+			Vector3 newpos = new Vector3(tn.timelinePosition.x, tn.timelinePosition.y, tn.transform.position.z);
+			tn.moveToPosition(newpos);
 		}
 
 	}
