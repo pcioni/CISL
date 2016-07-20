@@ -195,8 +195,8 @@ public class timelineNode : MonoBehaviour
 		lr.SetVertexCount(points.Length);
 		lr.SetPositions(points);
 
-		lr.SetColors(Color.blue, Color.blue);
-		lr.SetWidth(0.05f, 0.05f);
+		//lr.SetColors(Color.blue, Color.blue);
+		lr.SetWidth(0.15f, 0.15f);
 		lr.material = new Material(Shader.Find("Particles/Additive"));
 	}
 

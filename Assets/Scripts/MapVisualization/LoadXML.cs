@@ -16,6 +16,7 @@ public class LoadXML : MonoBehaviour {
 	private float nodeSpriteWidth;
 	private float cameraWidth;
 	private float nodeDistanceIncrement;
+    private GameObject fNode;
 
 	public void Start() {
 		Initialize();
@@ -39,7 +40,10 @@ public class LoadXML : MonoBehaviour {
 			tmp_obj.AddComponent<CircleCollider2D>();
 			tmp_obj.AddComponent<LineRenderer>();
 
-			if (f.speak != null) {
+            tmp_obj.GetComponent<LineRenderer>().SetColors(Color.blue, Color.blue);
+            tmp_obj.GetComponent<LineRenderer>().SetWidth(0.15f, 0.15f);
+
+            if (f.speak != null) {
 				tn.text = f.speak;
 			}
 
@@ -93,7 +97,7 @@ public class LoadXML : MonoBehaviour {
 			idMap[f.id] = tn;//map id to node
 
 		}
-		//TODO pass this a reference to the list so we dont have to manuall assign it afterwards
+		//TODO pass this a reference to the list so we dont have to manually assign it afterwards
 		foreach (timelineNode tn in nodeList) {
 			tn.allNodes = nodeList;
 		}
@@ -231,6 +235,7 @@ public class LoadXML : MonoBehaviour {
 			if (node_history.Count >= 1)
 				node_history [node_history.Count - 1].GetComponent<timelineNode> ().PastFocus ();
 			//Present this node
+		    fNode = node_to_present;
 			Present(node_to_present, node_history);
 			//Add it to the history
 			node_history.Add(node_to_present);
@@ -287,6 +292,7 @@ public class LoadXML : MonoBehaviour {
 		{
 			yield return null;
 		} while (!Input.GetKeyDown(keyCode));
+        fNode.GetComponent<LineRenderer>().SetColors(Color.cyan, Color.cyan);
 	}
 
 	void OnApplicationQuit()
