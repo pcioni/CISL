@@ -8,7 +8,8 @@ using System.Text;
 
 public class LoadXML : MonoBehaviour {
 
-	public string xml_location = "Assets/xml/roman_empire_1000.xml";
+	//public string xml_location = "Assets/xml/roman_empire_1000.xml";
+	public string xml_location = AppConfig.Settings.Frontend.xml_location;
 	public Dictionary<string, GameObject> nodeDict = new Dictionary<string, GameObject>();
 	public Dictionary<int, timelineNode> idMap = new Dictionary<int, timelineNode>();
 	public Sprite node_sprite;
@@ -16,7 +17,7 @@ public class LoadXML : MonoBehaviour {
 	private float nodeSpriteWidth;
 	private float cameraWidth;
 	private float nodeDistanceIncrement;
-    private GameObject fNode;
+	private GameObject fNode;
 
 	public void Start() {
 		Initialize();
@@ -40,10 +41,10 @@ public class LoadXML : MonoBehaviour {
 			tmp_obj.AddComponent<CircleCollider2D>();
 			tmp_obj.AddComponent<LineRenderer>();
 
-            tmp_obj.GetComponent<LineRenderer>().SetColors(Color.blue, Color.blue);
-            tmp_obj.GetComponent<LineRenderer>().SetWidth(0.15f, 0.15f);
+			tmp_obj.GetComponent<LineRenderer>().SetColors(Color.blue, Color.blue);
+			tmp_obj.GetComponent<LineRenderer>().SetWidth(0.15f, 0.15f);
 
-            if (f.speak != null) {
+			if (f.speak != null) {
 				tn.text = f.speak;
 			}
 
@@ -166,13 +167,13 @@ public class LoadXML : MonoBehaviour {
 	{
 		//The sequence of nodes we want to narrate, by name
 		List<string> sequence_by_name = new List<string>();
-		
+
 		//Ask the backend for a node sequence
 		//gameObject.GetComponent<SocketListener>().sendMessageToServer("CHRONOLOGY:13:10");
 
 
-
-		string url = "http://localhost:8084/chronology";
+		string url = "http://" + AppConfig.Settings.Backend.ip_address +":" + AppConfig.Settings.Backend.port + "/chronology";
+		//string url = "http://localhost:8084/chronology";
 		string data = JsonUtility.ToJson(new ChronologyRequest(13,10));
 		Debug.Log("request: " + data);
 		WWW www = new WWW(url, Encoding.UTF8.GetBytes(data));
@@ -235,7 +236,7 @@ public class LoadXML : MonoBehaviour {
 			if (node_history.Count >= 1)
 				node_history [node_history.Count - 1].GetComponent<timelineNode> ().PastFocus ();
 			//Present this node
-		    fNode = node_to_present;
+			fNode = node_to_present;
 			Present(node_to_present, node_history);
 			//Add it to the history
 			node_history.Add(node_to_present);
@@ -292,7 +293,7 @@ public class LoadXML : MonoBehaviour {
 		{
 			yield return null;
 		} while (!Input.GetKeyDown(keyCode));
-        fNode.GetComponent<LineRenderer>().SetColors(Color.cyan, Color.cyan);
+		fNode.GetComponent<LineRenderer>().SetColors(Color.cyan, Color.cyan);
 	}
 
 	void OnApplicationQuit()
