@@ -147,6 +147,42 @@ public class LoadXML : MonoBehaviour {
 		
 	}//end method FixedUpdate
 
+
+	/*
+	{'AnchorNodeId': 13,
+ 'StorySequence': [{'graph_node_id': 13, 'story_acts': [], 'turn': 0},
+				   {'graph_node_id': 574,
+					'story_acts': [{'Item1': 'relationship', 'Item2': 13}],
+					'turn': 1},
+				   {'graph_node_id': 552,
+					'story_acts': [{'Item1': 'lead-in', 'Item2': 552}],
+					'turn': 2},
+				   {'graph_node_id': 576,
+					'story_acts': [{'Item1': 'lead-in', 'Item2': 576}],
+					'turn': 3},
+				   {'graph_node_id': 582,
+					'story_acts': [{'Item1': 'relationship', 'Item2': 576}],
+					'turn': 4},
+				   {'graph_node_id': 583,
+					'story_acts': [{'Item1': 'lead-in', 'Item2': 583}],
+					'turn': 5},
+				   {'graph_node_id': 584,
+					'story_acts': [{'Item1': 'lead-in', 'Item2': 584}],
+					'turn': 6},
+				   {'graph_node_id': 585,
+					'story_acts': [{'Item1': 'lead-in', 'Item2': 585}],
+					'turn': 7},
+				   {'graph_node_id': 408,
+					'story_acts': [{'Item1': 'lead-in', 'Item2': 408}],
+					'turn': 8},
+				   {'graph_node_id': 531,
+					'story_acts': [{'Item1': 'relationship', 'Item2': 408}],
+					'turn': 9},
+				   {'graph_node_id': 578,
+					'story_acts': [{'Item1': 'lead-in', 'Item2': 578}],
+					'turn': 10}],
+ 'current_turn': 11}*/
+
 	[Serializable]
 	public class ChronologyRequest {
 		public ChronologyRequest(int id, int turns) {
@@ -156,10 +192,22 @@ public class LoadXML : MonoBehaviour {
 		public int id;
 		public int turns;
 	}
-
+	[Serializable]
+	public class StoryNode {
+		public int graph_node_id;
+		public List<StoryAct> StorySequence;
+		public int turn;
+	}
+	[Serializable]
+	public class StoryAct {
+		public string Item1;
+		public int Item2;
+	}
 	[Serializable]
 	public class ChronologyResponse {
-		public List<string> sequence;
+		public int AnchorNodeId;
+		public List<StoryNode> StorySequence;
+		public int current_turn;
 	}
 
 	//Narrate a sequence of nodes
@@ -190,33 +238,15 @@ public class LoadXML : MonoBehaviour {
 
 		ChronologyResponse response = JsonUtility.FromJson<ChronologyResponse>(www.text);	
 
-		/*string return_message = gameObject.GetComponent<SocketListener> ().ReceiveDataFromServer ();
-		print ("Backend response: " + return_message);
-
-		//Separate the response by double-colon
-		string[] delimiters = {"::"};
-		string[] return_message_split = return_message.Split(delimiters, StringSplitOptions.None);
-		foreach (string message_part in return_message_split) {
-			sequence_by_name.Add (message_part);
-		}//end foreach*/
-
-		/*sequence_by_name.Add("Roman Empire");
-		sequence_by_name.Add("Rome");
-		sequence_by_name.Add("Italy");
-		sequence_by_name.Add("Constantinople");
-		sequence_by_name.Add("Byzantine Empire");
-		sequence_by_name.Add("Istanbul");
-		sequence_by_name.Add("Turkey");
-		sequence_by_name.Add("Ankara");*/
-
 		//The nodes themselves
 		List<GameObject> sequence_by_node = new List<GameObject>();
-		GameObject temp_node = null;
+		timelineNode temp_node = null;
 		//foreach (string name in sequence_by_name)
-		foreach (string name in response.sequence) {
+		foreach (StoryNode sn in response.StorySequence) {
+			int id = sn.graph_node_id;
 			temp_node = null;
-			nodeDict.TryGetValue(name, out temp_node);
-			sequence_by_node.Add(temp_node);
+			idMap.TryGetValue(id, out temp_node);
+			sequence_by_node.Add(temp_node.gameObject);
 		}//end foreach
 
 		//Bring each node out of focus.

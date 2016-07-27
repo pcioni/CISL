@@ -25,13 +25,10 @@ public static class AppConfig {
 				var foo = path;
 			}
 		}
-
-		
 	}
 
 	static AppConfig() {
 		//load INI configuration
-
 		if (File.Exists(path)) {
 			using (StreamReader sr = new StreamReader(path)) {
 				string line;
@@ -58,6 +55,7 @@ public static class AppConfig {
 					Type thisType = Type.GetType("AppConfig+Settings+"+theSection);
 					thisType.GetField(theKey).SetValue(thisType, theValue);
 				}
+				Debug.Log("Configuration file loaded.");
 			}
 		}
 		else {
