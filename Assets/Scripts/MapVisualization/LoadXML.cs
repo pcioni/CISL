@@ -18,6 +18,7 @@ public class LoadXML : MonoBehaviour {
 	private float cameraWidth;
 	private float nodeDistanceIncrement;
 	private GameObject fNode;
+    public GameObject timelineNodePref;
 
 	public void Start() {
 		Initialize();
@@ -34,15 +35,8 @@ public class LoadXML : MonoBehaviour {
 		cameraWidth = 2f * Camera.main.orthographicSize * Camera.main.aspect;
 
 		foreach (Feature f in container.features) {
-			GameObject tmp_obj = new GameObject(f.data);
-			timelineNode tn = tmp_obj.AddComponent<timelineNode>();
-			tmp_obj.AddComponent<SpriteRenderer>().sprite = node_sprite;
-			tmp_obj.AddComponent<RectTransform>();
-			tmp_obj.AddComponent<CircleCollider2D>();
-			tmp_obj.AddComponent<LineRenderer>();
-
-			tmp_obj.GetComponent<LineRenderer>().SetColors(Color.blue, Color.blue);
-			tmp_obj.GetComponent<LineRenderer>().SetWidth(0.15f, 0.15f);
+		    GameObject tmp_obj = (GameObject) Instantiate(timelineNodePref, transform.position, transform.rotation);
+		    timelineNode tn = tmp_obj.GetComponent<timelineNode>();
 
 			if (f.speak != null) {
 				tn.text = f.speak;
