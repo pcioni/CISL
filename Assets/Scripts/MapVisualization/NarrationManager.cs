@@ -15,8 +15,6 @@ public class NarrationManager : MonoBehaviour {
 	private IEnumerator current_narration;
 	private bool user_can_take_turn = false;
 
-	private int current_turn = 0;
-
 	void Awake() {
 		listener = delegate (string data){
 			Narrate(int.Parse(data), 5);
@@ -41,7 +39,7 @@ public class NarrationManager : MonoBehaviour {
 		WWW www = new WWW(url);
 		yield return www;
 		if (www.error == null) {
-			current_turn = 0;
+			print("NARRATION RESET");
 		}		
 	}
 
@@ -49,14 +47,14 @@ public class NarrationManager : MonoBehaviour {
 		//narrate about node for N turns
 		print("Narrate attempt");
 		if (current_narration != null ) {
-			if (user_can_take_turn) {
-				user_can_take_turn = false;
+			//if (user_can_take_turn) {
+			//	user_can_take_turn = false;
 				StopCoroutine(current_narration);
-			}
+			//}
 		}
-		if (!user_can_take_turn) {
+		//if (!user_can_take_turn) {
 			StartCoroutine(_Narrate(node_id, turns));
-		}	
+		//}	
 	}
 	
 	
@@ -121,7 +119,7 @@ public class NarrationManager : MonoBehaviour {
 		timelineNode temp_node = null;
 		//foreach (string name in sequence_by_name)
 
-		foreach (StoryNode sn in response.StorySequence.GetRange(current_turn,turns+1)) {
+		foreach (StoryNode sn in response.StorySequence) {
 			int id = sn.graph_node_id;
 			temp_node = null;
 			lxml.idMap.TryGetValue(id, out temp_node);
@@ -150,7 +148,6 @@ public class NarrationManager : MonoBehaviour {
 			//Wait for spacebar before presenting the next.
 
 			yield return StartCoroutine(WaitForKeyDown(KeyCode.Space));
-			current_turn++;
 			fNode.GetComponent<LineRenderer>().SetColors(Color.cyan, Color.cyan);
 		}//end foreach
 		user_can_take_turn = true;
