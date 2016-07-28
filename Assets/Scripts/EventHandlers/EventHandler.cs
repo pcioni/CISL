@@ -2,12 +2,13 @@
 using UnityEngine.Events;
 using System;
 
-[Serializable]
-public class NarrationEvent : UnityEvent {
 
-}
 
-public class NarrationEventHandler : MonoBehaviour {
+
+
+namespace EventHandler {
+
+	
 
 
 	/*
@@ -19,14 +20,4 @@ public class NarrationEventHandler : MonoBehaviour {
 	Tie-Back - relate to information about a node that has been mentioned in the past
 	*/
 
-	//determine what functions to call when event is invoked
-	public NarrationEvent UserTurn = new NarrationEvent();
-	public NarrationEvent Chronology = new NarrationEvent();
-	public NarrationEvent NextNode = new NarrationEvent();
-
-
-	//determine when to invoke event
-	public void foo() {
-		UserTurn.Invoke();
-	}
 }

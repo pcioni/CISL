@@ -7,7 +7,7 @@ using UnityEditor;
 
 public class timelineNode : MonoBehaviour
 {
-
+	public int node_id;
 	public DateTime date;
 	public string datevalue;
 	public long dateticks;
@@ -95,6 +95,7 @@ public class timelineNode : MonoBehaviour
 			}//end foreach
 			//Focus on this node.
 			Focus();
+			EventManager.TriggerEvent(EventManager.EventType.INTERFACE_NODE_SELECT, node_id.ToString());
 		}//end if
 	}
 
@@ -220,7 +221,7 @@ public class timelineNode : MonoBehaviour
 			float new_height = gameObject.GetComponent<SpriteRenderer>().sprite.bounds.size.y; //base_size.y;
 			float desired_collider_radius = Mathf.Min(new_width, new_height);
 			gameObject.GetComponent<CircleCollider2D>().radius = desired_collider_radius*0.75f;
-			if (gameObject.active)
+			if (gameObject.activeInHierarchy)
 				StartCoroutine("ChangeNodeSize");
 		} //end if
 	} //end method ChangeNodeSize

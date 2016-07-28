@@ -4,12 +4,38 @@ using System.Xml.Serialization;
 using System.IO;
 using System.Collections.Generic;
 using System;
-using System.Text;
+
+#if UNITY_EDITOR
+using UnityEditor;
+//using System.Runtime.InteropServices;
+
+[CustomEditor(typeof(LoadXML))]
+public class ObjectBuilderEditor : Editor {
+	//[DllImport("user32.dll")]
+	//private static extern void OpenFileDialog();
+
+	public override void OnInspectorGUI() {
+		DrawDefaultInspector();
+
+		LoadXML myScript = (LoadXML)target;
+		if (GUILayout.Button("Load XML file")) {
+			//System.Windows.Forms.OpenFileDialog ofd = new System.Windows.Forms.OpenFileDialog();
+			//myScript.xml_location = ofd.FileName;
+			myScript.xml_location = EditorUtility.OpenFilePanel("open file", Application.dataPath, "xml");
+		}
+		if (GUILayout.Button("Load Default XML")) {
+			//System.Windows.Forms.OpenFileDialog ofd = new System.Windows.Forms.OpenFileDialog();
+			//myScript.xml_location = ofd.FileName;
+			myScript.xml_location = AppConfig.Settings.Frontend.xml_location;
+		}
+	}
+}
+#endif
 
 public class LoadXML : MonoBehaviour {
 
 	//public string xml_location = "Assets/xml/roman_empire_1000.xml";
-	public string xml_location = AppConfig.Settings.Frontend.xml_location;
+	public string xml_location;
 	public Dictionary<string, GameObject> nodeDict = new Dictionary<string, GameObject>();
 	public Dictionary<int, timelineNode> idMap = new Dictionary<int, timelineNode>();
 	public Sprite node_sprite;
@@ -17,15 +43,17 @@ public class LoadXML : MonoBehaviour {
 	private float nodeSpriteWidth;
 	private float cameraWidth;
 	private float nodeDistanceIncrement;
-	private GameObject fNode;
-    public GameObject timelineNodePref;
+	
+	public GameObject timelineNodePref;
 
-	public void Start() {
-		Initialize();
-	}
+	public bool loaded = false;
 
 	// Use this for initialization
 	public void Initialize() {
+		//load default file if not specified
+		if (string.IsNullOrEmpty(xml_location)) {
+			 xml_location = AppConfig.Settings.Frontend.xml_location;
+		}
 		XmlSerializer serializer = new XmlSerializer(typeof(AIMind));
 		FileStream stream = new FileStream(xml_location, FileMode.Open);
 		AIMind container = (AIMind)serializer.Deserialize(stream);
@@ -35,8 +63,9 @@ public class LoadXML : MonoBehaviour {
 		cameraWidth = 2f * Camera.main.orthographicSize * Camera.main.aspect;
 
 		foreach (Feature f in container.features) {
-		    GameObject tmp_obj = (GameObject) Instantiate(timelineNodePref, transform.position, transform.rotation);
-		    timelineNode tn = tmp_obj.GetComponent<timelineNode>();
+			GameObject tmp_obj = (GameObject) Instantiate(timelineNodePref, transform.position, transform.rotation);
+			timelineNode tn = tmp_obj.GetComponent<timelineNode>();
+			tn.node_id = f.id;
 
 			if (f.speak != null) {
 				tn.text = f.speak;
@@ -70,9 +99,7 @@ public class LoadXML : MonoBehaviour {
 					}else {
 						tn.date = new DateTime();
 					}
-					
 				}
-
 			}
 			try {
 				//check if node has geodata associated with it
@@ -106,8 +133,6 @@ public class LoadXML : MonoBehaviour {
 			}
 		}
 
-
-
 		nodeDistanceIncrement = nodeList.Count;
 
 		long maxdays = int.MinValue;
@@ -128,9 +153,7 @@ public class LoadXML : MonoBehaviour {
 			mover += .1f;
 		}
 
-		//Begin narration
-		StartCoroutine(Narrate());
-		//Narrate();
+		loaded = true;
 	}
 
 	long map(long x, long in_min, long in_max, long out_min, long out_max) {
@@ -139,186 +162,7 @@ public class LoadXML : MonoBehaviour {
 
 	void FixedUpdate() {
 		
-	}//end method FixedUpdate
-
-
-	/*
-	{'AnchorNodeId': 13,
- 'StorySequence': [{'graph_node_id': 13, 'story_acts': [], 'turn': 0},
-				   {'graph_node_id': 574,
-					'story_acts': [{'Item1': 'relationship', 'Item2': 13}],
-					'turn': 1},
-				   {'graph_node_id': 552,
-					'story_acts': [{'Item1': 'lead-in', 'Item2': 552}],
-					'turn': 2},
-				   {'graph_node_id': 576,
-					'story_acts': [{'Item1': 'lead-in', 'Item2': 576}],
-					'turn': 3},
-				   {'graph_node_id': 582,
-					'story_acts': [{'Item1': 'relationship', 'Item2': 576}],
-					'turn': 4},
-				   {'graph_node_id': 583,
-					'story_acts': [{'Item1': 'lead-in', 'Item2': 583}],
-					'turn': 5},
-				   {'graph_node_id': 584,
-					'story_acts': [{'Item1': 'lead-in', 'Item2': 584}],
-					'turn': 6},
-				   {'graph_node_id': 585,
-					'story_acts': [{'Item1': 'lead-in', 'Item2': 585}],
-					'turn': 7},
-				   {'graph_node_id': 408,
-					'story_acts': [{'Item1': 'lead-in', 'Item2': 408}],
-					'turn': 8},
-				   {'graph_node_id': 531,
-					'story_acts': [{'Item1': 'relationship', 'Item2': 408}],
-					'turn': 9},
-				   {'graph_node_id': 578,
-					'story_acts': [{'Item1': 'lead-in', 'Item2': 578}],
-					'turn': 10}],
- 'current_turn': 11}*/
-
-	[Serializable]
-	public class ChronologyRequest {
-		public ChronologyRequest(int id, int turns) {
-			this.id = id;
-			this.turns = turns;
-		}
-		public int id;
-		public int turns;
-	}
-	[Serializable]
-	public class StoryNode {
-		public int graph_node_id;
-		public List<StoryAct> StorySequence;
-		public int turn;
-	}
-	[Serializable]
-	public class StoryAct {
-		public string Item1;
-		public int Item2;
-	}
-	[Serializable]
-	public class ChronologyResponse {
-		public int AnchorNodeId;
-		public List<StoryNode> StorySequence;
-		public int current_turn;
-	}
-
-	//Narrate a sequence of nodes
-	IEnumerator Narrate()
-	{
-		//The sequence of nodes we want to narrate, by name
-		List<string> sequence_by_name = new List<string>();
-
-		//Ask the backend for a node sequence
-		//gameObject.GetComponent<SocketListener>().sendMessageToServer("CHRONOLOGY:13:10");
-
-
-		string url = "http://" + AppConfig.Settings.Backend.ip_address +":" + AppConfig.Settings.Backend.port + "/chronology";
-		//string url = "http://localhost:8084/chronology";
-		string data = JsonUtility.ToJson(new ChronologyRequest(13,10));
-		Debug.Log("request: " + data);
-		WWW www = new WWW(url, Encoding.UTF8.GetBytes(data));
-		yield return www;
-
-		// check for errors
-		if (www.error == null) {
-			Debug.Log("WWW Ok!: " + www.text);
-		}
-		else {
-			Debug.Log("WWW Error: " + www.error);
-			yield break;
-		}
-
-		ChronologyResponse response = JsonUtility.FromJson<ChronologyResponse>(www.text);	
-
-		//The nodes themselves
-		List<GameObject> sequence_by_node = new List<GameObject>();
-		timelineNode temp_node = null;
-		//foreach (string name in sequence_by_name)
-		foreach (StoryNode sn in response.StorySequence) {
-			int id = sn.graph_node_id;
-			temp_node = null;
-			idMap.TryGetValue(id, out temp_node);
-			sequence_by_node.Add(temp_node.gameObject);
-		}//end foreach
-
-		//Bring each node out of focus.
-		foreach (timelineNode tn in nodeList)
-		{
-			//Change its color
-			//temp.GetComponent<SpriteRenderer>().color = new Color(0.5f, 0.5f, 0.5f, 0.2f);
-			//Set it to not display information on mouseover
-			//temp.GetComponent<timelineNode>().display_info = false;
-			tn.Unfocus();
-		}//end foreach
-
-		List<GameObject> node_history = new List<GameObject>();
-		foreach (GameObject node_to_present in sequence_by_node)
-		{
-			//Bring the previous node into past-focus
-			if (node_history.Count >= 1)
-				node_history [node_history.Count - 1].GetComponent<timelineNode> ().PastFocus ();
-			//Present this node
-			fNode = node_to_present;
-			Present(node_to_present, node_history);
-			//Add it to the history
-			node_history.Add(node_to_present);
-			//Wait for spacebar before presenting the next.
-
-			/*bool space_bar_pressed = false;
-			while (!space_bar_pressed) {
-				if (Input.GetKeyDown(KeyCode.Space)) {
-					space_bar_pressed = true;
-					break;
-				}//end if
-				yield return null;
-			}//end while*/
-
-			yield return StartCoroutine(WaitForKeyDown(KeyCode.Space));
-		}//end foreach
-	}//end method Traverse
-
-	//Present the given node given the previous nodes presented
-	void Present(GameObject node_to_present, List<GameObject> node_history)
-	{
-		print ("Current node: " + node_to_present.GetComponent<timelineNode>().text);
-		//Bring this node into focus
-		node_to_present.GetComponent<timelineNode>().Focus();
-
-		/*//Some nodes may be layered on top of each other. Displace this node in the y if any other
-		//nodes in the history share a position with it.
-		bool layered = true;
-		while (layered)
-		{
-			layered = false;
-			//Check to see if the node we wish to present is layered on any node in the history.
-			foreach (GameObject past_node in node_history)
-			{
-				if (past_node.transform.position.Equals(node_to_present.transform.position))
-				{
-					layered = true;
-				}//end if
-			}//end foreach
-
-			//If it is layered, displace it in the y
-			if (layered)
-				node_to_present.transform.position = new Vector3(node_to_present.transform.position.x
-					, node_to_present.transform.position.y + 1
-					, node_to_present.transform.position.z);
-		}//end while*/
-
-	}//end method Present
-
-	//Wait asynchronously for a key press
-	IEnumerator WaitForKeyDown(KeyCode keyCode)
-	{
-		do
-		{
-			yield return null;
-		} while (!Input.GetKeyDown(keyCode));
-		fNode.GetComponent<LineRenderer>().SetColors(Color.cyan, Color.cyan);
-	}
+	}//end method FixedUpdate	
 
 	void OnApplicationQuit()
 	{
