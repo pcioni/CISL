@@ -85,22 +85,22 @@ public class timelineNode : MonoBehaviour
 			if (state == 1 || state == 3)
 				drawLines ();
 		}
-		if (Input.GetKeyDown ("return") && mouseOver) {
-			//If this node is moused over and enter is pressed, focus on it.
-			//If any other node is the focus, make it a past-focus
-			foreach (timelineNode tn in allNodes) {
-				if (tn.state == 1){
-					tn.PastFocus();
-				}
-			}//end foreach
-			//Focus on this node.
-			Focus();
+		if (Input.GetKeyDown (KeyCode.Return) && mouseOver) {
+			//request a focus
 			EventManager.TriggerEvent(EventManager.EventType.INTERFACE_NODE_SELECT, node_id.ToString());
-		}//end if
+		}
 	}
 
 	//Bring this node into focus.
 	public void Focus() {
+
+		//If any other node is the focus, make it a past-focus
+		foreach (timelineNode tn in allNodes) {
+			if (tn.state == 1) {
+				tn.PastFocus();
+			}
+		}//end foreach
+
 		//Mark this node as active
 		active = true;
 		state = 1;

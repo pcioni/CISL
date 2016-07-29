@@ -13,11 +13,16 @@ public class NarrationManager : MonoBehaviour {
 	private UnityAction<string> listener;
 
 	private IEnumerator current_narration;
-	private bool user_can_take_turn = false;
+	private bool user_can_take_turn = true;
 
 	void Awake() {
 		listener = delegate (string data){
-			Narrate(int.Parse(data), 5);
+			if (user_can_take_turn) {
+				user_can_take_turn = false;
+				int node_id = int.Parse(data);
+				lxml.idMap[node_id].Focus();
+				Narrate(node_id, 5);
+			}
 		};
 		lxml = GetComponent<LoadXML>();
 	}
@@ -46,15 +51,10 @@ public class NarrationManager : MonoBehaviour {
 	public void Narrate(int node_id, int turns) {
 		//narrate about node for N turns
 		print("Narrate attempt");
-		if (current_narration != null ) {
-			//if (user_can_take_turn) {
-			//	user_can_take_turn = false;
-				StopCoroutine(current_narration);
-			//}
+		if (current_narration != null) {
+			StopCoroutine(current_narration);
 		}
-		//if (!user_can_take_turn) {
-			StartCoroutine(_Narrate(node_id, turns));
-		//}	
+		StartCoroutine(_Narrate(node_id, turns));
 	}
 	
 	
@@ -148,9 +148,11 @@ public class NarrationManager : MonoBehaviour {
 			//Wait for spacebar before presenting the next.
 
 			yield return StartCoroutine(WaitForKeyDown(KeyCode.Space));
-			fNode.GetComponent<LineRenderer>().SetColors(Color.cyan, Color.cyan);
+			Color tmp = new Color(0,1,1,.05f);
+			fNode.GetComponent<LineRenderer>().SetColors(tmp, tmp);
 		}//end foreach
 		user_can_take_turn = true;
+		print("STORY ARC COMPLETE");
 		//EventManager.TriggerEvent(EventManager.EventType.NARRATION_USER_TURN);
 	}
 
