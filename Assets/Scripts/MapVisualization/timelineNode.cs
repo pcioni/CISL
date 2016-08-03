@@ -35,11 +35,16 @@ public class timelineNode : MonoBehaviour
 	private timelineNode currentFocus;
 	private Rect timeline;
 	private bool drawTimeline;
+    Color focusColor = Color.blue;
+    Color pastFocusColor = Color.grey;
+    Color refocusColor = Color.cyan;
 
-	private IEnumerator moveCoroutine;//reference to movement
+    private IEnumerator moveCoroutine;//reference to movement
 
 	public void Start() {
-		drawTimeline = false;
+        focusColor.a = 1f;
+        pastFocusColor.a = 0.1f;
+        drawTimeline = false;
 		Moveable = false;
 		transform.Rotate(Vector3.forward * UnityEngine.Random.Range(0f, 80f)); //add some random initial rotation to offset angle from other nodes
 		floatOffset = UnityEngine.Random.Range(0f, 3f);
@@ -82,8 +87,7 @@ public class timelineNode : MonoBehaviour
 			rotateRight();
 			//Float();
 			//Redraw lines
-			if (state == 1 || state == 3)
-				drawLines ();
+
 		}
 		if (Input.GetKeyDown (KeyCode.Return) && mouseOver) {
 			//request a focus
@@ -127,6 +131,8 @@ public class timelineNode : MonoBehaviour
 			if (neighbor_node.Value.state != 3 && neighbor_node.Value.state != 1)
 				neighbor_node.Value.HalfFocus ();
 		}//end foreach
+
+        gameObject.GetComponent<LineRenderer>().SetColors(focusColor, focusColor);
 	}//end method Focus
 
 	//Half-focus this node.
@@ -163,16 +169,16 @@ public class timelineNode : MonoBehaviour
 		gameObject.transform.position = new Vector3(gameObject.transform.position.x
 			, gameObject.transform.position.y
 			, gameObject.transform.position.z - 3);
-	}//end method PastFocus
+        gameObject.GetComponent<LineRenderer>().SetColors(pastFocusColor, pastFocusColor);
+    }//end method PastFocus
 
-	//Bring this node out of focus
-	public void Unfocus() {
+    //Bring this node out of focus
+    public void Unfocus() {
 		//Mark this node as inactive
 		active = false;
 		state = 0;
 		display_info = false;
 		//Remove lines from this node to its neighbors
-		eraseLines();
 		//Change its color
 		Color unfocus_color = new Color(0.5f, 0.5f, 0.5f, 0.2f);
 		baseColor = unfocus_color;
@@ -181,9 +187,10 @@ public class timelineNode : MonoBehaviour
 		gameObject.transform.position = new Vector3(gameObject.transform.position.x
 			, gameObject.transform.position.y
 			, gameObject.transform.position.z + 5);
-	}//end method Unfocus
+        gameObject.GetComponent<LineRenderer>().SetColors(pastFocusColor, pastFocusColor);
+    }//end method Unfocus
 
-	private void drawLines() {
+    private void drawLines() {
 		Vector3 centralNodePos = transform.position;
 		Vector3[] points = new Vector3[Math.Max(neighbors.Count * 2, 1)];
 		points[0] = centralNodePos;
@@ -198,16 +205,12 @@ public class timelineNode : MonoBehaviour
 		lr.SetVertexCount(points.Length);
 		lr.SetPositions(points);
 
-		//lr.SetColors(Color.blue, Color.blue);
 		lr.SetWidth(0.15f, 0.15f);
 		lr.material = new Material(Shader.Find("Particles/Additive"));
+
 	}
 
-	//Remove all lines going out of this node
-	private void eraseLines() {
-		//LineRenderer lr = GetComponent<LineRenderer> ();
-		//lr.SetVertexCount (0);
-	}//end method eraseLines
+
 
 	public void ChangeSize(Vector3 final_size)
 	{
@@ -288,9 +291,13 @@ public class timelineNode : MonoBehaviour
 			ChangeSize (new Vector3 (baseSize.x * 2f, baseSize.y * 2f, baseSize.z));
 			ChangeColor (Color.cyan);
 		}//end if
+
+	    if (state != 1) {
+	        gameObject.GetComponent<LineRenderer>().SetColors(refocusColor, refocusColor);
+	    }
 	}
 
-	private void setTimeline() {
+    private void setTimeline() {
 		//get the leftmost gameobject so our timeline always draws in the correct direction
 		//TODO: use a LINQ function or something
 		Vector3 leftPos;
@@ -320,6 +327,7 @@ public class timelineNode : MonoBehaviour
 			ChangeSize (new Vector3 (baseSize.x, baseSize.y, baseSize.z));
 			ChangeColor (baseColor);
 		}//end if
+        gameObject.GetComponent<LineRenderer>().SetColors(pastFocusColor, pastFocusColor);
 	}
 
 	private void clearTimeline() {
