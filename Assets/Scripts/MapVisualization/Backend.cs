@@ -17,7 +17,8 @@ namespace Backend {
 	[Serializable]
 	public class StoryNode {
 		public int graph_node_id;
-		public List<StoryAct> StorySequence;
+		public List<StoryAct> story_acts;
+		public string text;
 		public int turn;
 	}
 	[Serializable]

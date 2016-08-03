@@ -87,7 +87,7 @@ class Node{
 	}
 }
 
-public class Text : MonoBehaviour {
+public class NodeText : MonoBehaviour {
 	bool warning=false;
 	string default_name="";
 	string search_value="";

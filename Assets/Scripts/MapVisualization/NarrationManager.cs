@@ -115,7 +115,7 @@ public class NarrationManager : MonoBehaviour {
 		ChronologyResponse response = JsonUtility.FromJson<ChronologyResponse>(www.text);
 
 		//The nodes themselves
-		List<GameObject> sequence_by_node = new List<GameObject>();
+		List<KeyValuePair<GameObject, string>> sequence_by_node = new List<KeyValuePair<GameObject, string>>();
 		timelineNode temp_node = null;
 		//foreach (string name in sequence_by_name)
 
@@ -123,7 +123,7 @@ public class NarrationManager : MonoBehaviour {
 			int id = sn.graph_node_id;
 			temp_node = null;
 			lxml.idMap.TryGetValue(id, out temp_node);
-			sequence_by_node.Add(temp_node.gameObject);
+			sequence_by_node.Add(new KeyValuePair<GameObject, string>(temp_node.gameObject,sn.text));
 		}//end foreach
 
 		//Bring each node out of focus.
@@ -136,13 +136,15 @@ public class NarrationManager : MonoBehaviour {
 		}//end foreach
 
 		List<GameObject> node_history = new List<GameObject>();
-		foreach (GameObject node_to_present in sequence_by_node) {
+		foreach (KeyValuePair<GameObject,string> kvp in sequence_by_node) {
+			GameObject node_to_present = kvp.Key;
 			//Bring the previous node into past-focus
 			if (node_history.Count >= 1)
 				node_history[node_history.Count - 1].GetComponent<timelineNode>().PastFocus();
 			//Present this node
 			fNode = node_to_present;
 			Present(node_to_present, node_history);
+			EventManager.TriggerEvent(EventManager.EventType.NARRATION_MACHINE_TURN,kvp.Value);
 			//Add it to the history
 			node_history.Add(node_to_present);
 			//Wait for spacebar before presenting the next.
