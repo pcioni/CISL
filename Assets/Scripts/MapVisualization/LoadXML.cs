@@ -64,6 +64,7 @@ public class LoadXML : MonoBehaviour {
 
 		foreach (Feature f in container.features) {
 			GameObject tmp_obj = (GameObject) Instantiate(timelineNodePref, transform.position, transform.rotation);
+			tmp_obj.name = "Node<"+f.data+">";
 			timelineNode tn = tmp_obj.GetComponent<timelineNode>();
 			tn.node_id = f.id;
 
@@ -143,12 +144,19 @@ public class LoadXML : MonoBehaviour {
 			if (totaldays < mindays) mindays = totaldays;
 		}
 
+		TimeLineBar.minDays = mindays;
+		TimeLineBar.maxDays = maxdays;
+
+
 		float mover = 0;
 		foreach (timelineNode tn in nodeList) {
 			int totaldays = 365 * tn.date.Year + tn.date.DayOfYear;
 
 			//TODO: use nodeDistanceIncrement
-			tn.timelinePosition = new Vector3(map(totaldays, mindays, maxdays, 0, 100) + mover, UnityEngine.Random.Range(-40, 40), 0);
+			//tn.timelinePosition = new Vector3(map(totaldays, mindays, maxdays, 0, 100) + mover, UnityEngine.Random.Range(-40, 40), 0);
+
+			tn.timelinePosition = new Vector3(TimeLineBar.dateToPosition(totaldays) + UnityEngine.Random.Range(-.2f,.2f), UnityEngine.Random.Range(-40, 40), 0);
+
 			tn.moveToPosition(tn.timelinePosition);
 			mover += .1f;
 		}

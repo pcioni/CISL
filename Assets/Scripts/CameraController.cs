@@ -4,8 +4,8 @@ using System.Collections;
 public class CameraController : MonoBehaviour
 {
 	private Vector3 last_mouse_position;
-    public float minZoom = 0f;
-    public float maxZoom = 100f;
+	public float minZoom = 0f;
+	public float maxZoom = 100f;
 
 
 	void Update()
@@ -19,31 +19,33 @@ public class CameraController : MonoBehaviour
 			last_mouse_position = Input.mousePosition;
 		}
 
-        //scroll in
-        if (Input.GetAxis("Mouse ScrollWheel") > 0) {
-            ZoomOrthoCamera(Camera.main.ScreenToWorldPoint(Input.mousePosition), 1);
-        }
-        //scroll out
-        if (Input.GetAxis("Mouse ScrollWheel") < 0) {
-            ZoomOrthoCamera(Camera.main.ScreenToWorldPoint(Input.mousePosition), -1);
-        }
-    }
+		//scroll in
+		if (Input.GetAxis("Mouse ScrollWheel") > 0) {
+			ZoomOrthoCamera(Camera.main.ScreenToWorldPoint(Input.mousePosition), 1);
+			EventManager.TriggerEvent(EventManager.EventType.INTERFACE_ZOOM_OUT, Camera.main.orthographicSize.ToString());
+		}
+		//scroll out
+		if (Input.GetAxis("Mouse ScrollWheel") < 0) {
+			ZoomOrthoCamera(Camera.main.ScreenToWorldPoint(Input.mousePosition), -1);
+			EventManager.TriggerEvent(EventManager.EventType.INTERFACE_ZOOM_IN, Camera.main.orthographicSize.ToString());
+		}
+	}
 
-    // ortographic camera zoom towards a point in world coordinates. 
-    // negative amount zooms in, positive zooms out
-    // TODO: stop camera movement when at zoom limit
-    void ZoomOrthoCamera(Vector3 zoomTowards, float amount) {
-        // Calculate how much we will have to move towards the zoomTowards position
-        float multiplier = (1.0f / GetComponent<Camera>().orthographicSize * amount);
+	// ortographic camera zoom towards a point in world coordinates. 
+	// negative amount zooms in, positive zooms out
+	// TODO: stop camera movement when at zoom limit
+	void ZoomOrthoCamera(Vector3 zoomTowards, float amount) {
+		// Calculate how much we will have to move towards the zoomTowards position
+		float multiplier = (1.0f / GetComponent<Camera>().orthographicSize * amount);
 
-        // Move camera
-        transform.position += (zoomTowards - transform.position) * multiplier;
+		// Move camera
+		transform.position += (zoomTowards - transform.position) * multiplier;
 
-        // Zoom camera
-        GetComponent<Camera>().orthographicSize -= amount;
+		// Zoom camera
+		GetComponent<Camera>().orthographicSize -= amount;
 
-        // Limit zoom
-        GetComponent<Camera>().orthographicSize = Mathf.Clamp(GetComponent<Camera>().orthographicSize, minZoom, maxZoom);
-    }
+		// Limit zoom
+		GetComponent<Camera>().orthographicSize = Mathf.Clamp(GetComponent<Camera>().orthographicSize, minZoom, maxZoom);
+	}
 
 }

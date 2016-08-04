@@ -17,7 +17,9 @@ public class EventManager : MonoBehaviour {
 		//NARRATION_TIE_BACK,
 		NARRATION_MACHINE_TURN,
 		NARRATION_USER_TURN,
-		INTERFACE_NODE_SELECT
+		INTERFACE_NODE_SELECT,
+		INTERFACE_ZOOM_IN,
+		INTERFACE_ZOOM_OUT
 	}
 
 	private Dictionary<EventType, NarrationEvent> eventDictionary;
