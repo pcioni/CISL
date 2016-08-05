@@ -327,7 +327,9 @@ public class timelineNode : MonoBehaviour
 			ChangeSize (new Vector3 (baseSize.x, baseSize.y, baseSize.z));
 			ChangeColor (baseColor);
 		}//end if
-        gameObject.GetComponent<LineRenderer>().SetColors(pastFocusColor, pastFocusColor);
+	    if (state != 1) {
+	        gameObject.GetComponent<LineRenderer>().SetColors(pastFocusColor, pastFocusColor);
+	    }
 	}
 
 	private void clearTimeline() {
