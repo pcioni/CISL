@@ -8,6 +8,7 @@ using UnityEditor;
 public class timelineNode : MonoBehaviour
 {
 	public int node_id;
+	public string node_name;
 	public DateTime date;
 	public string datevalue;
 	public long dateticks;
@@ -42,6 +43,8 @@ public class timelineNode : MonoBehaviour
 	private Vector3 target_position;
 	private IEnumerator moveCoroutine;//reference to movement
 
+	public GameObject nametagprefab;
+
 	public void Start() {
 		focusColor.a = 1f;
 		pastFocusColor.a = 0.1f;
@@ -52,6 +55,9 @@ public class timelineNode : MonoBehaviour
 		baseColor = GetComponent<SpriteRenderer>().color;
 		baseSize = gameObject.GetComponent<RectTransform>().localScale;
 		//drawLines(); //draw a line between every node and every neighbour.
+		GameObject tag = Instantiate(nametagprefab) as GameObject;
+		tag.GetComponent<NameTag>().setTarget(transform,node_name);
+		tag.transform.SetParent(GameObject.FindGameObjectWithTag("Overlay").transform,false);
 	}
 
 	public void moveToPosition(Vector3 position) {

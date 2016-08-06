@@ -105,8 +105,10 @@ public class TimeLineBar : MonoBehaviour {
 
 		for (int i=0; i< ticks; i++) {
 
-			int year = i*(int)map(granularity,0,maxTimelineWidth,minDays,maxDays)/365;
-			
+			//int year = i*(int)map(granularity,0,maxTimelineWidth,minDays,maxDays)/365;
+
+			int year = i * (int)map(granularity, 0, 100, 0, 2000) / 365;
+
 			if (i % granularity == 0) {
 				s1 += "<size=" + fsize + ">|</size>";
 				s2 += year;

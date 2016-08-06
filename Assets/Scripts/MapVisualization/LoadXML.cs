@@ -67,7 +67,7 @@ public class LoadXML : MonoBehaviour {
 			tmp_obj.name = "Node<"+f.data+">";
 			timelineNode tn = tmp_obj.GetComponent<timelineNode>();
 			tn.node_id = f.id;
-
+			tn.node_name = f.data;
 			if (f.speak != null) {
 				tn.text = f.speak;
 			}
