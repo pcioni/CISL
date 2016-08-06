@@ -17,6 +17,7 @@ public class CameraController : MonoBehaviour
 			Vector3 delta = last_mouse_position - Input.mousePosition;
 			Camera.main.transform.Translate(delta.x * .1f, delta.y * .1f, 0);
 			last_mouse_position = Input.mousePosition;
+			EventManager.TriggerEvent(EventManager.EventType.INTERFACE_PAN, Camera.main.orthographicSize.ToString());
 		}
 
 		//scroll in

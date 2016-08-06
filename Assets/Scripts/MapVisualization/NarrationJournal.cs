@@ -13,7 +13,7 @@ public class NarrationJournal : MonoBehaviour {
 	void Awake() {
 		txt = GetComponent<Text>();
 		listener = delegate (string data) {
-			txt.text += data + "\n";
+			txt.text += data + "\n\n";
 		};
 	}
 

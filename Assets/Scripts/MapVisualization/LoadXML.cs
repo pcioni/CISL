@@ -155,7 +155,7 @@ public class LoadXML : MonoBehaviour {
 			//TODO: use nodeDistanceIncrement
 			//tn.timelinePosition = new Vector3(map(totaldays, mindays, maxdays, 0, 100) + mover, UnityEngine.Random.Range(-40, 40), 0);
 
-			tn.timelinePosition = new Vector3(TimeLineBar.dateToPosition(totaldays) + UnityEngine.Random.Range(-.2f,.2f), UnityEngine.Random.Range(-40, 40), 0);
+			tn.timelinePosition = new Vector3(TimeLineBar.dateToPosition(totaldays), UnityEngine.Random.Range(-40, 40), 0);
 
 			tn.moveToPosition(tn.timelinePosition);
 			mover += .1f;

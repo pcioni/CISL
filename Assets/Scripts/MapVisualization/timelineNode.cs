@@ -35,16 +35,17 @@ public class timelineNode : MonoBehaviour
 	private timelineNode currentFocus;
 	private Rect timeline;
 	private bool drawTimeline;
-    Color focusColor = Color.blue;
-    Color pastFocusColor = Color.grey;
-    Color refocusColor = Color.cyan;
+	Color focusColor = Color.blue;
+	Color pastFocusColor = Color.grey;
+	Color refocusColor = Color.cyan;
 
-    private IEnumerator moveCoroutine;//reference to movement
+	private Vector3 target_position;
+	private IEnumerator moveCoroutine;//reference to movement
 
 	public void Start() {
-        focusColor.a = 1f;
-        pastFocusColor.a = 0.1f;
-        drawTimeline = false;
+		focusColor.a = 1f;
+		pastFocusColor.a = 0.1f;
+		drawTimeline = false;
 		Moveable = false;
 		transform.Rotate(Vector3.forward * UnityEngine.Random.Range(0f, 80f)); //add some random initial rotation to offset angle from other nodes
 		floatOffset = UnityEngine.Random.Range(0f, 3f);
@@ -55,15 +56,17 @@ public class timelineNode : MonoBehaviour
 
 	public void moveToPosition(Vector3 position) {
 		if(moveCoroutine != null) StopCoroutine(moveCoroutine);
-		moveCoroutine = _move(position, 1.5f);
+		moveCoroutine = _move(1.5f);
+		target_position = position;
 		StartCoroutine(moveCoroutine);
 	}
-	private IEnumerator _move(Vector3 position, float movetime) {
+
+	private IEnumerator _move(float movetime) {
 		Vector3 currentPos = transform.position;
 		float t = 0f;
 		while (t < 1) {
 			t += Time.deltaTime / movetime;
-			transform.position = Vector3.Lerp(currentPos, position, t);
+			transform.position = Vector3.Lerp(currentPos, target_position, t);
 			//Each time this node moves, if it is in an appropriate state, re-draw its lines
 			if (state == 1 || state == 3)
 				drawLines();
@@ -116,15 +119,11 @@ public class timelineNode : MonoBehaviour
 		Color focus_color = Color.red; //new Color(1f, 1f, 1f, 1f);
 		baseColor = focus_color;
 		ChangeColor (focus_color);
-		//Bring it to the front by changing its Z
-		gameObject.transform.position = new Vector3(gameObject.transform.position.x
-			, gameObject.transform.position.y
-			, gameObject.transform.position.z - 5);
 
 		//Bring the node to the center line
-		moveToPosition(new Vector3(gameObject.transform.position.x
+		moveToPosition(new Vector3(target_position.x
 			, 0
-			, gameObject.transform.position.z));
+			, target_position.z));
 
 		//Bring its neighbors into half-focus if they aren't a past-focus or a focus.
 		foreach (KeyValuePair<string,timelineNode> neighbor_node in this.neighbors) {
@@ -132,7 +131,7 @@ public class timelineNode : MonoBehaviour
 				neighbor_node.Value.HalfFocus ();
 		}//end foreach
 
-        gameObject.GetComponent<LineRenderer>().SetColors(focusColor, focusColor);
+		gameObject.GetComponent<LineRenderer>().SetColors(focusColor, focusColor);
 	}//end method Focus
 
 	//Half-focus this node.
@@ -169,11 +168,11 @@ public class timelineNode : MonoBehaviour
 		gameObject.transform.position = new Vector3(gameObject.transform.position.x
 			, gameObject.transform.position.y
 			, gameObject.transform.position.z - 3);
-        gameObject.GetComponent<LineRenderer>().SetColors(pastFocusColor, pastFocusColor);
-    }//end method PastFocus
+		gameObject.GetComponent<LineRenderer>().SetColors(pastFocusColor, pastFocusColor);
+	}//end method PastFocus
 
-    //Bring this node out of focus
-    public void Unfocus() {
+	//Bring this node out of focus
+	public void Unfocus() {
 		//Mark this node as inactive
 		active = false;
 		state = 0;
@@ -187,10 +186,10 @@ public class timelineNode : MonoBehaviour
 		gameObject.transform.position = new Vector3(gameObject.transform.position.x
 			, gameObject.transform.position.y
 			, gameObject.transform.position.z + 5);
-        gameObject.GetComponent<LineRenderer>().SetColors(pastFocusColor, pastFocusColor);
-    }//end method Unfocus
+		gameObject.GetComponent<LineRenderer>().SetColors(pastFocusColor, pastFocusColor);
+	}//end method Unfocus
 
-    private void drawLines() {
+	private void drawLines() {
 		Vector3 centralNodePos = transform.position;
 		Vector3[] points = new Vector3[Math.Max(neighbors.Count * 2, 1)];
 		points[0] = centralNodePos;
@@ -292,12 +291,12 @@ public class timelineNode : MonoBehaviour
 			ChangeColor (Color.cyan);
 		}//end if
 
-	    if (state != 1) {
-	        gameObject.GetComponent<LineRenderer>().SetColors(refocusColor, refocusColor);
-	    }
+		if (state != 1) {
+			gameObject.GetComponent<LineRenderer>().SetColors(refocusColor, refocusColor);
+		}
 	}
 
-    private void setTimeline() {
+	private void setTimeline() {
 		//get the leftmost gameobject so our timeline always draws in the correct direction
 		//TODO: use a LINQ function or something
 		Vector3 leftPos;
@@ -327,9 +326,9 @@ public class timelineNode : MonoBehaviour
 			ChangeSize (new Vector3 (baseSize.x, baseSize.y, baseSize.z));
 			ChangeColor (baseColor);
 		}//end if
-	    if (state != 1) {
-	        gameObject.GetComponent<LineRenderer>().SetColors(pastFocusColor, pastFocusColor);
-	    }
+		if (state != 1) {
+			gameObject.GetComponent<LineRenderer>().SetColors(pastFocusColor, pastFocusColor);
+		}
 	}
 
 	private void clearTimeline() {
@@ -340,6 +339,7 @@ public class timelineNode : MonoBehaviour
 		GetComponent<SpriteRenderer>().color = newColor;
 	}
 
+	/*
 	public void OnMouseDrag() {
 		//Only trigger mouse effects if this node is active
 		if (active) {
@@ -355,4 +355,5 @@ public class timelineNode : MonoBehaviour
 			transform.position = Camera.main.ScreenToWorldPoint ((new Vector3 (Input.mousePosition.x, Input.mousePosition.y, 10)));
 		}//end if
 	}
+	*/
 }
