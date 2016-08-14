@@ -187,7 +187,7 @@ public class TimeLineBar : MonoBehaviour {
 
 		//while (curwidth < screenWidth) { 
 		//while(curx < 50) { 
-		for(int xyr=startyear/roundvalue; xyr < rightyear/roundvalue; xyr++) {
+		for(int xyr = (startyear/roundvalue - 1); xyr < (rightyear/roundvalue + 1); xyr++) {
 			GameObject section = Instantiate(sectionFab) as GameObject;
 			sections.Add(section);		
 			//curwidth += marksize;
