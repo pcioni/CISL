@@ -137,6 +137,11 @@ public class timelineNode : MonoBehaviour
 		baseColor = focus_color;
 		ChangeColor (focus_color);
 
+		//Send OSC packet of position.x and sound trigger
+		List<object> newFocus = new List<object>();
+		newFocus.AddRange(new object[] { gameObject.transform.position.x, 1 });
+		OSCHandler.Instance.SendMessageToClient("MaxServer", "/newFocus/", newFocus);
+
 		//Bring the node to the center line
 		moveToPosition(new Vector3(target_position.x
 			, 0
@@ -167,6 +172,12 @@ public class timelineNode : MonoBehaviour
 		gameObject.transform.position = new Vector3(gameObject.transform.position.x
 			, gameObject.transform.position.y
 			, gameObject.transform.position.z - 3);
+
+		//Send OSC packet of position.x and position.y for neighbors
+		List<object> halfFocus = new List<object>();
+		halfFocus.AddRange(new object[] { gameObject.transform.position.x, gameObject.transform.position.y });
+		OSCHandler.Instance.SendMessageToClient("MaxServer", "/halfFocus/", halfFocus);
+
 	}//end method HalfFocus
 
 	//Bring this node out of full focus, but remember it used to be the focus.
@@ -306,6 +317,12 @@ public class timelineNode : MonoBehaviour
 			mouseOver = true;
 			ChangeSize (new Vector3 (baseSize.x * 2f, baseSize.y * 2f, baseSize.z));
 			ChangeColor (Color.cyan);
+
+			//Send OSC packet of posiion.x and position.y of moused over node
+			List<object> moused = new List<object>();
+			moused.AddRange(new object[] { gameObject.transform.position.x, gameObject.transform.position.y });
+			OSCHandler.Instance.SendMessageToClient("MaxServer", "/mouseOver/", moused);
+
 		}//end if
 
 		if (state != 1) {
