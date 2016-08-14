@@ -44,6 +44,7 @@ public class timelineNode : MonoBehaviour
 	private IEnumerator moveCoroutine;//reference to movement
 
 	public GameObject nametagprefab;
+	private GameObject nametag;
 
 	public void Start() {
 		focusColor.a = 1f;
@@ -58,6 +59,16 @@ public class timelineNode : MonoBehaviour
 		GameObject tag = Instantiate(nametagprefab) as GameObject;
 		tag.GetComponent<NameTag>().setTarget(transform,node_name);
 		tag.transform.SetParent(GameObject.FindGameObjectWithTag("Overlay").transform,false);
+		nametag = tag;
+		disable_tag();
+	}
+
+	public void enable_tag() {
+		nametag.SetActive(true);
+	}
+
+	public void disable_tag() {
+		nametag.SetActive(false);
 	}
 
 	public void moveToPosition(Vector3 position) {
