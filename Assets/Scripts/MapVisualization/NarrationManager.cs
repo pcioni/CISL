@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using Backend;
 using UnityEngine.Events;
+using UnityEngine.EventSystems;
 
 [RequireComponent(typeof(LoadXML))]
 public class NarrationManager : MonoBehaviour {
@@ -15,7 +16,9 @@ public class NarrationManager : MonoBehaviour {
 	private IEnumerator current_narration;
 	private bool user_can_take_turn = true;
 
-	void Awake() {
+    public static bool progressNarrationSwitch = false;
+
+    void Awake() {
 		listener = delegate (string data){
 			if (user_can_take_turn) {
 				user_can_take_turn = false;
@@ -34,10 +37,24 @@ public class NarrationManager : MonoBehaviour {
 		EventManager.StartListening(EventManager.EventType.INTERFACE_NODE_SELECT, listener);
 	}
 
+    public void Update() {
+        if (Input.GetKeyDown(KeyCode.Space)) {
+            //TODO: event manager call isn't functional yet
+            //EventManager.TriggerEvent(EventManager.EventType.INTERFACE_NODE_SELECT, "progressNarration");
+            progressNarration();
+        }
+    }
+
 	public void Reset_Narration() {
 		//resets narration history
 		StartCoroutine(_Reset_Narration());
 	}
+
+    //Call this to progress the story turn
+    public static void progressNarration() {
+        progressNarrationSwitch = true;
+        Debug.Log("progressing narration from event manager");
+    }
 
 	IEnumerator _Reset_Narration() {
 		string url = "http://" + AppConfig.Settings.Backend.ip_address + ":" + AppConfig.Settings.Backend.port + "/chronology/reset";
@@ -149,7 +166,8 @@ public class NarrationManager : MonoBehaviour {
 			node_history.Add(node_to_present);
 			//Wait for spacebar before presenting the next.
 
-			yield return StartCoroutine(WaitForKeyDown(KeyCode.Space));
+			yield return StartCoroutine(WaitForKeyDown());
+		    progressNarrationSwitch = false;
 			Color tmp = new Color(0,1,1,.05f);
 			fNode.GetComponent<LineRenderer>().SetColors(tmp, tmp);
 		}//end foreach
@@ -159,10 +177,10 @@ public class NarrationManager : MonoBehaviour {
 	}
 
 	//Wait asynchronously for a key press
-	IEnumerator WaitForKeyDown(KeyCode keyCode) {
+	IEnumerator WaitForKeyDown() {
 		do {
 			yield return null;
-		} while (!Input.GetKeyDown(keyCode));
+		} while (!progressNarrationSwitch);
 
 	}
 }
