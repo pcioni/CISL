@@ -139,7 +139,7 @@ public class timelineNode : MonoBehaviour
 
 		//Send OSC packet of position.x and sound trigger
 		List<object> newFocus = new List<object>();
-		newFocus.AddRange(new object[] { gameObject.transform.position.x, 1 });
+		newFocus.AddRange(new object[] {1, gameObject.transform.position.x});
 		OSCHandler.Instance.SendMessageToClient("MaxServer", "/newFocus/", newFocus);
 
 		//Bring the node to the center line
@@ -175,7 +175,7 @@ public class timelineNode : MonoBehaviour
 
 		//Send OSC packet of position.x and position.y for neighbors
 		List<object> halfFocus = new List<object>();
-		halfFocus.AddRange(new object[] { gameObject.transform.position.x, gameObject.transform.position.y });
+		halfFocus.AddRange(new object[] {gameObject.transform.position.y, gameObject.transform.position.x});
 		OSCHandler.Instance.SendMessageToClient("MaxServer", "/halfFocus/", halfFocus);
 
 	}//end method HalfFocus
@@ -320,7 +320,7 @@ public class timelineNode : MonoBehaviour
 
 			//Send OSC packet of posiion.x and position.y of moused over node
 			List<object> moused = new List<object>();
-			moused.AddRange(new object[] { gameObject.transform.position.x, gameObject.transform.position.y });
+			moused.AddRange(new object[] {gameObject.transform.position.y, gameObject.transform.position.x});
 			OSCHandler.Instance.SendMessageToClient("MaxServer", "/mouseOver/", moused);
 
 		}//end if
