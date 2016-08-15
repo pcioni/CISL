@@ -105,7 +105,7 @@ public class timelineNode : MonoBehaviour
 			transform.position = Vector3.Lerp(currentPos, target_position, t);
 			//Each time this node moves, if it is in an appropriate state, re-draw its lines
 			if (state == 1 || state == 3)
-				drawLines();
+				StartCoroutine(drawLines());
 			yield return null;
 		}
 		Moveable = true;
@@ -124,10 +124,9 @@ public class timelineNode : MonoBehaviour
 	void FixedUpdate() {
 		if (active && Moveable) {
 			rotateRight();
-			//Float();
-			//Redraw lines
-
 		}
+
+        //TODO: user turn requesting expansion
 		if (Input.GetKeyDown (KeyCode.Return) && mouseOver) {
 			//request a focus
 			EventManager.TriggerEvent(EventManager.EventType.INTERFACE_NODE_SELECT, node_id.ToString());
@@ -147,10 +146,10 @@ public class timelineNode : MonoBehaviour
 		//Mark this node as active
 		active = true;
 		state = 1;
-		//Draw lines from this node to its neighbors
-		drawLines();
-		//Have it always display information
-		display_info = true;
+        //Draw lines from this node to its neighbors
+        StartCoroutine(drawLines());
+        //Have it always display information
+        display_info = true;
 		//Change its color
 		Color focus_color = Color.red; //new Color(1f, 1f, 1f, 1f);
 		baseColor = focus_color;
@@ -158,7 +157,7 @@ public class timelineNode : MonoBehaviour
 
 		//Send OSC packet of position.x and sound trigger
 		List<object> newFocus = new List<object>();
-		newFocus.AddRange(new object[] { gameObject.transform.position.x, 1 });
+		newFocus.AddRange(new object[] {1, gameObject.transform.position.x});
 		OSCHandler.Instance.SendMessageToClient("MaxServer", "/newFocus/", newFocus);
 
 		//Bring the node to the center line
@@ -194,7 +193,7 @@ public class timelineNode : MonoBehaviour
 
 		//Send OSC packet of position.x and position.y for neighbors
 		List<object> halfFocus = new List<object>();
-		halfFocus.AddRange(new object[] { gameObject.transform.position.x, gameObject.transform.position.y });
+		halfFocus.AddRange(new object[] {gameObject.transform.position.y, gameObject.transform.position.x});
 		OSCHandler.Instance.SendMessageToClient("MaxServer", "/halfFocus/", halfFocus);
 
 	}//end method HalfFocus
@@ -236,7 +235,8 @@ public class timelineNode : MonoBehaviour
 		gameObject.GetComponent<LineRenderer>().SetColors(pastFocusColor, pastFocusColor);
 	}//end method Unfocus
 
-	private void drawLines() {
+	private IEnumerator drawLines() {
+        yield return new WaitForSeconds(1);
 		Vector3 centralNodePos = transform.position;
 		Vector3[] points = new Vector3[Math.Max(neighbors.Count * 2, 1)];
 		points[0] = centralNodePos;
@@ -306,22 +306,9 @@ public class timelineNode : MonoBehaviour
 	private bool mouseover = false;
 	public string text_to_display = "";
 
-	void OnGUI()
-	{
-
-		/*if (drawTimeline) {
-			GUI.TextArea(timeline, "Add dates to me!", 1000);
-		}*/
-		// GUI box that follows the mouse; Display-info on right, mouseover info on left
-		if (display_info)
-		{
-			GUI.TextArea(new Rect(Input.mousePosition.x + 15, Screen.height - Input.mousePosition.y, 200, 100), text,
-				1000);
-		}
-		else if (mouseOver)
-		{
-			GUI.TextArea(new Rect(Input.mousePosition.x - 203, Screen.height - Input.mousePosition.y, 200, 100), text,
-				1000);
+	void OnGUI() {
+		if (mouseOver) {
+			GUI.TextArea(new Rect(Input.mousePosition.x - 103, Screen.height - Input.mousePosition.y, (node_name.Length * 8), 20), node_name, 1000);
 		}
 	}
 
@@ -339,7 +326,7 @@ public class timelineNode : MonoBehaviour
 
 			//Send OSC packet of posiion.x and position.y of moused over node
 			List<object> moused = new List<object>();
-			moused.AddRange(new object[] { gameObject.transform.position.x, gameObject.transform.position.y });
+			moused.AddRange(new object[] {gameObject.transform.position.y, gameObject.transform.position.x});
 			OSCHandler.Instance.SendMessageToClient("MaxServer", "/mouseOver/", moused);
 
 		}//end if
@@ -391,6 +378,12 @@ public class timelineNode : MonoBehaviour
 	public void ChangeColor(Color newColor) {
 		GetComponent<SpriteRenderer>().color = newColor;
 	}
+
+    void OnMouseDown() {
+        if (state == 1) {
+            EventManager.TriggerEvent(EventManager.EventType.INTERFACE_NODE_SELECT, "progNarration");
+        }
+    }
 
 	/*
 	public void OnMouseDrag() {
