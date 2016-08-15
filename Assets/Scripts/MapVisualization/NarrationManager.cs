@@ -12,8 +12,9 @@ public class NarrationManager : MonoBehaviour {
 	private LoadXML lxml;
 	private GameObject fNode;
 	private UnityAction<string> listener;
+    private UnityAction<string> narrationListener;
 
-	private IEnumerator current_narration;
+    private IEnumerator current_narration;
 	private bool user_can_take_turn = true;
 
     public static bool progressNarrationSwitch = false;
@@ -27,22 +28,27 @@ public class NarrationManager : MonoBehaviour {
 				Narrate(node_id, 5);
 			}
 		};
-		lxml = GetComponent<LoadXML>();
+        narrationListener = delegate (string data) {
+            progressNarration();
+        };
+        lxml = GetComponent<LoadXML>();
 	}
 
 	void Start() {
 		OSCHandler.Instance.Init(); //init OSC
 		lxml.Initialize();
 		listener("13");
+	    narrationListener("progNarration");
 		Reset_Narration();
-		EventManager.StartListening(EventManager.EventType.INTERFACE_NODE_SELECT, listener);
-	}
+        EventManager.StartListening(EventManager.EventType.INTERFACE_NODE_SELECT, listener);
+        EventManager.StartListening(EventManager.EventType.INTERFACE_NODE_SELECT, narrationListener);
+    }
 
     public void Update() {
         if (Input.GetKeyDown(KeyCode.Space)) {
             //TODO: event manager call isn't functional yet
-            //EventManager.TriggerEvent(EventManager.EventType.INTERFACE_NODE_SELECT, "progressNarration");
-            progressNarration();
+            EventManager.TriggerEvent(EventManager.EventType.INTERFACE_NODE_SELECT, "progNarration");
+            //progressNarration();
         }
     }
 
