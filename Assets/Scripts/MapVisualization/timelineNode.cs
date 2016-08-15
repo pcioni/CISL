@@ -57,10 +57,10 @@ public class timelineNode : MonoBehaviour
 	public GameObject nametagprefab;
 	private GameObject nametag;
 
-	void Awake() {
+	/*void Awake() {
 		//assign random category for now, need to hook up to backend
 		category = (nodeCategory)UnityEngine.Random.Range(0, 3);
-	}
+	}*/
 
 	void Start() {
 		focusColor.a = 1f;
@@ -126,7 +126,7 @@ public class timelineNode : MonoBehaviour
 			rotateRight();
 		}
 
-        //TODO: user turn requesting expansion
+		//TODO: user turn requesting expansion
 		if (Input.GetKeyDown (KeyCode.Return) && mouseOver) {
 			//request a focus
 			EventManager.TriggerEvent(EventManager.EventType.INTERFACE_NODE_SELECT, node_id.ToString());
@@ -146,10 +146,10 @@ public class timelineNode : MonoBehaviour
 		//Mark this node as active
 		active = true;
 		state = 1;
-        //Draw lines from this node to its neighbors
-        StartCoroutine(drawLines());
-        //Have it always display information
-        display_info = true;
+		//Draw lines from this node to its neighbors
+		StartCoroutine(drawLines());
+		//Have it always display information
+		display_info = true;
 		//Change its color
 		Color focus_color = Color.red; //new Color(1f, 1f, 1f, 1f);
 		baseColor = focus_color;
@@ -161,9 +161,9 @@ public class timelineNode : MonoBehaviour
 		OSCHandler.Instance.SendMessageToClient("MaxServer", "/newFocus/", newFocus);
 
 		//Bring the node to the center line
-		moveToPosition(new Vector3(target_position.x
-			, 0
-			, target_position.z));
+		//moveToPosition(new Vector3(target_position.x
+		//	, 0
+		//	, target_position.z));
 
 		//Bring its neighbors into half-focus if they aren't a past-focus or a focus.
 		foreach (KeyValuePair<string,timelineNode> neighbor_node in this.neighbors) {
@@ -236,7 +236,7 @@ public class timelineNode : MonoBehaviour
 	}//end method Unfocus
 
 	private IEnumerator drawLines() {
-        yield return new WaitForSeconds(1);
+		yield return new WaitForSeconds(1);
 		Vector3 centralNodePos = transform.position;
 		Vector3[] points = new Vector3[Math.Max(neighbors.Count * 2, 1)];
 		points[0] = centralNodePos;
@@ -379,11 +379,11 @@ public class timelineNode : MonoBehaviour
 		GetComponent<SpriteRenderer>().color = newColor;
 	}
 
-    void OnMouseDown() {
-        if (state == 1) {
-            EventManager.TriggerEvent(EventManager.EventType.INTERFACE_NODE_SELECT, "progNarration");
-        }
-    }
+	void OnMouseDown() {
+		if (state == 1) {
+			EventManager.TriggerEvent(EventManager.EventType.INTERFACE_NODE_SELECT, "progNarration");
+		}
+	}
 
 	/*
 	public void OnMouseDrag() {

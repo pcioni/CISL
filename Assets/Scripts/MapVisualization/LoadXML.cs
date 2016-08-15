@@ -4,6 +4,7 @@ using System.Xml.Serialization;
 using System.IO;
 using System.Collections.Generic;
 using System;
+using Backend;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -148,6 +149,36 @@ public class LoadXML : MonoBehaviour {
 		TimeLineBar.maxDays = maxdays;
 
 
+		string url = "http://" + AppConfig.Settings.Backend.ip_address + ":" + AppConfig.Settings.Backend.port + "/getgraph";
+		WWW www = new WWW(url);
+		float start = Time.time;
+		while (!www.isDone) {//wait for request
+			if(Time.time > start + 10) {//time out after 10s
+				break;
+			}
+		}
+
+		GraphLight response = JsonUtility.FromJson<GraphLight>(www.text);
+
+		foreach(GraphNodeLight gn in response.graph_nodes) {
+			switch (gn.entity_type) {
+				case "character":
+					idMap[gn.id].category = timelineNode.nodeCategory.CHARACTER;
+					break;
+				case "location":
+					idMap[gn.id].category = timelineNode.nodeCategory.LOCATION;
+					break;
+				case "event":
+					idMap[gn.id].category = timelineNode.nodeCategory.EVENT;
+					break;
+				default:
+					idMap[gn.id].category = timelineNode.nodeCategory.UNKNOWN;
+					break;
+			}
+		}
+
+
+
 		float mover = 0;
 		foreach (timelineNode tn in nodeList) {
 			int totaldays = 365 * tn.date.Year + tn.date.DayOfYear;
@@ -155,16 +186,16 @@ public class LoadXML : MonoBehaviour {
 			float ypos = 0;
 			switch (tn.category) {
 				case timelineNode.nodeCategory.CHARACTER:
-					ypos = -30;
+					ypos = 0;
 					break;
 				case timelineNode.nodeCategory.EVENT:
-					ypos = -10;
+					ypos = -20;
 					break;
 				case timelineNode.nodeCategory.LOCATION:
-					ypos = 10;
+					ypos = 20;
 					break;
 				case timelineNode.nodeCategory.UNKNOWN:
-					ypos = 30;
+					ypos = -40;
 					break;
 			}
 

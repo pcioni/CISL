@@ -12,17 +12,17 @@ public class NarrationManager : MonoBehaviour {
 	private LoadXML lxml;
 	private GameObject fNode;
 	private UnityAction<string> listener;
-    private UnityAction<string> narrationListener = null;
+	private UnityAction<string> narrationListener = null;
 
-    private IEnumerator current_narration;
+	private IEnumerator current_narration;
 	private bool user_can_take_turn = true;
 
-    public static bool progressNarrationSwitch = false;
-    public static bool firstPassNarration = true;
+	public static bool progressNarrationSwitch = false;
+	public static bool firstPassNarration = true;
 
-    void Awake() {
-        progressNarrationSwitch = false;
-        listener = delegate (string data){
+	void Awake() {
+		progressNarrationSwitch = false;
+		listener = delegate (string data){
 			if (user_can_take_turn) {
 				user_can_take_turn = false;
 				int node_id = int.Parse(data);
@@ -31,45 +31,45 @@ public class NarrationManager : MonoBehaviour {
 			}
 		};
 
-        narrationListener = delegate (string data) {
-            progressNarration();
-        };
+		narrationListener = delegate (string data) {
+			progressNarration();
+		};
 
-        lxml = GetComponent<LoadXML>();
+		lxml = GetComponent<LoadXML>();
 	}
 
 	void Start() {
 		OSCHandler.Instance.Init(); //init OSC
 		lxml.Initialize();
 		listener("13");
-	    narrationListener("progNarration");
+		narrationListener("progNarration");
 		Reset_Narration();
-        EventManager.StartListening(EventManager.EventType.INTERFACE_NODE_SELECT, listener);
-        EventManager.StartListening(EventManager.EventType.INTERFACE_NODE_SELECT, narrationListener);
-    }
+		EventManager.StartListening(EventManager.EventType.INTERFACE_NODE_SELECT, listener);
+		EventManager.StartListening(EventManager.EventType.INTERFACE_NODE_SELECT, narrationListener);
+	}
 
-    public void Update() {
-        if (Input.GetKeyDown(KeyCode.Space)) {
-            EventManager.TriggerEvent(EventManager.EventType.INTERFACE_NODE_SELECT, "progNarration");
-        }
-    }
+	public void Update() {
+		if (Input.GetKeyDown(KeyCode.Space)) {
+			EventManager.TriggerEvent(EventManager.EventType.INTERFACE_NODE_SELECT, "progNarration");
+		}
+	}
 
 	public void Reset_Narration() {
 		//resets narration history
 		StartCoroutine(_Reset_Narration());
 	}
 
-    //Call this to progress the story turn
-    public static void progressNarration(bool firstPass = false) {
-        //Assigning the delegate calls the function, so dont assign the listener until we do the first expansion.
-        if (!firstPassNarration) {
-            progressNarrationSwitch = true;
-        }
-        else {
-            firstPassNarration = false;
-        }
-        Debug.Log("progressing narration from event manager");
-    }
+	//Call this to progress the story turn
+	public static void progressNarration(bool firstPass = false) {
+		//Assigning the delegate calls the function, so dont assign the listener until we do the first expansion.
+		if (!firstPassNarration) {
+			progressNarrationSwitch = true;
+		}
+		else {
+			firstPassNarration = false;
+		}
+		Debug.Log("progressing narration from event manager");
+	}
 
 	IEnumerator _Reset_Narration() {
 		string url = "http://" + AppConfig.Settings.Backend.ip_address + ":" + AppConfig.Settings.Backend.port + "/chronology/reset";
@@ -182,7 +182,7 @@ public class NarrationManager : MonoBehaviour {
 			//Wait for spacebar before presenting the next.
 
 			yield return StartCoroutine(WaitForKeyDown());
-		    progressNarrationSwitch = false;
+			progressNarrationSwitch = false;
 			Color tmp = new Color(0,1,1,.05f);
 			fNode.GetComponent<LineRenderer>().SetColors(tmp, tmp);
 		}//end foreach

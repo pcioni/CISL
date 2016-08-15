@@ -32,4 +32,15 @@ namespace Backend {
 		public List<StoryNode> StorySequence;
 		public int current_turn;
 	}
+
+	[Serializable]
+	class GraphNodeLight {
+		public int id;
+		public string entity_type;
+	}
+
+	[Serializable]
+	class GraphLight {
+		public List<GraphNodeLight> graph_nodes;
+	}
 }
