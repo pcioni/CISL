@@ -66,8 +66,8 @@ public class timelineNode : MonoBehaviour
 			transform.position = Vector3.Lerp(currentPos, position, t);
 			//Each time this node moves, if it is in an appropriate state, re-draw its lines
 			if (state == 1 || state == 3)
-				drawLines();
-			yield return null;
+                StartCoroutine(drawLines());
+            yield return null;
 		}
 		Moveable = true;
 		startPosition = transform.position;
@@ -108,10 +108,10 @@ public class timelineNode : MonoBehaviour
 		//Mark this node as active
 		active = true;
 		state = 1;
-		//Draw lines from this node to its neighbors
-		drawLines();
-		//Have it always display information
-		display_info = true;
+        //Draw lines from this node to its neighbors
+        StartCoroutine(drawLines());
+        //Have it always display information
+        display_info = true;
 		//Change its color
 		Color focus_color = Color.red; //new Color(1f, 1f, 1f, 1f);
 		baseColor = focus_color;
@@ -190,8 +190,9 @@ public class timelineNode : MonoBehaviour
         gameObject.GetComponent<LineRenderer>().SetColors(pastFocusColor, pastFocusColor);
     }//end method Unfocus
 
-    private void drawLines() {
-		Vector3 centralNodePos = transform.position;
+    private IEnumerator drawLines() {
+        yield return new WaitForSeconds(1); //pause before drawing lines
+        Vector3 centralNodePos = transform.position;
 		Vector3[] points = new Vector3[Math.Max(neighbors.Count * 2, 1)];
 		points[0] = centralNodePos;
 		int nCount = 0;
@@ -344,12 +345,12 @@ public class timelineNode : MonoBehaviour
 		//Only trigger mouse effects if this node is active
 		if (active) {
 			if (state == 1 || state == 3)
-				drawLines ();
-			//TODO: MAKE EACH NODE ONLY REDRAW THE LINE TO THIS NODE
-			foreach (timelineNode tn in allNodes) {
+		        StartCoroutine(drawLines());
+            //TODO: MAKE EACH NODE ONLY REDRAW THE LINE TO THIS NODE
+            foreach (timelineNode tn in allNodes) {
 				//Only redraw if the other node is a focus or past-focus node (states 1 or 3)
 				if (tn.state == 1 || tn.state == 3) {
-					tn.drawLines();
+					tn.StartCoroutine(drawLines());
 				}
 			}
 			transform.position = Camera.main.ScreenToWorldPoint ((new Vector3 (Input.mousePosition.x, Input.mousePosition.y, 10)));
