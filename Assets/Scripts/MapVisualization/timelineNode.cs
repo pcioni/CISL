@@ -86,7 +86,7 @@ public class timelineNode : MonoBehaviour
 			transform.position = Vector3.Lerp(currentPos, target_position, t);
 			//Each time this node moves, if it is in an appropriate state, re-draw its lines
 			if (state == 1 || state == 3)
-				drawLines();
+				StartCoroutine(drawLines());
 			yield return null;
 		}
 		Moveable = true;
@@ -128,10 +128,10 @@ public class timelineNode : MonoBehaviour
 		//Mark this node as active
 		active = true;
 		state = 1;
-		//Draw lines from this node to its neighbors
-		drawLines();
-		//Have it always display information
-		display_info = true;
+        //Draw lines from this node to its neighbors
+        StartCoroutine(drawLines());
+        //Have it always display information
+        display_info = true;
 		//Change its color
 		Color focus_color = Color.red; //new Color(1f, 1f, 1f, 1f);
 		baseColor = focus_color;
@@ -217,7 +217,8 @@ public class timelineNode : MonoBehaviour
 		gameObject.GetComponent<LineRenderer>().SetColors(pastFocusColor, pastFocusColor);
 	}//end method Unfocus
 
-	private void drawLines() {
+	private IEnumerator drawLines() {
+        yield return new WaitForSeconds(1);
 		Vector3 centralNodePos = transform.position;
 		Vector3[] points = new Vector3[Math.Max(neighbors.Count * 2, 1)];
 		points[0] = centralNodePos;
