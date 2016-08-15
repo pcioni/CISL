@@ -295,14 +295,9 @@ public class timelineNode : MonoBehaviour
 			GUI.TextArea(timeline, "Add dates to me!", 1000);
 		}*/
 		// GUI box that follows the mouse; Display-info on right, mouseover info on left
-		if (display_info)
+		if (mouseOver)
 		{
-			GUI.TextArea(new Rect(Input.mousePosition.x + 15, Screen.height - Input.mousePosition.y, 200, 100), text,
-				1000);
-		}
-		else if (mouseOver)
-		{
-			GUI.TextArea(new Rect(Input.mousePosition.x - 203, Screen.height - Input.mousePosition.y, 200, 100), text,
+			GUI.TextArea(new Rect(Input.mousePosition.x - 103, Screen.height - Input.mousePosition.y, 100, 40), node_name,
 				1000);
 		}
 	}
