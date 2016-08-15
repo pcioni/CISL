@@ -31,6 +31,7 @@ public class NarrationManager : MonoBehaviour {
 	}
 
 	void Start() {
+		OSCHandler.Instance.Init(); //init OSC
 		lxml.Initialize();
 		listener("13");
 		Reset_Narration();

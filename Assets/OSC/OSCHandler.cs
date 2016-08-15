@@ -95,6 +95,11 @@ public class OSCHandler : MonoBehaviour
         //Example:		
         //CreateClient("SuperCollider", IPAddress.Parse("127.0.0.1"), 5555);
 
+		//Creates client on the machine's local ip address - change if using remote machine
+		var ipaddress = Network.player.ipAddress;
+        CreateClient("MaxServer", IPAddress.Parse(ipaddress), 3456);
+        //CreateClient("MaxServer", IPAddress.Parse(""), 3456);
+
         //Initialize OSC servers (listeners)
         //Example:
 

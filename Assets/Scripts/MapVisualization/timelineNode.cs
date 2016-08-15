@@ -8,6 +8,7 @@ using UnityEditor;
 public class timelineNode : MonoBehaviour
 {
 	public int node_id;
+	public string node_name;
 	public DateTime date;
 	public string datevalue;
 	public long dateticks;
@@ -35,39 +36,58 @@ public class timelineNode : MonoBehaviour
 	private timelineNode currentFocus;
 	private Rect timeline;
 	private bool drawTimeline;
-    Color focusColor = Color.blue;
-    Color pastFocusColor = Color.grey;
-    Color refocusColor = Color.cyan;
+	Color focusColor = Color.blue;
+	Color pastFocusColor = Color.grey;
+	Color refocusColor = Color.cyan;
 
-    private IEnumerator moveCoroutine;//reference to movement
+	private Vector3 target_position;
+	private IEnumerator moveCoroutine;//reference to movement
+
+	public GameObject nametagprefab;
+	private GameObject nametag;
 
 	public void Start() {
-        focusColor.a = 1f;
-        pastFocusColor.a = 0.1f;
-        drawTimeline = false;
+		focusColor.a = 1f;
+		pastFocusColor.a = 0.1f;
+		drawTimeline = false;
 		Moveable = false;
 		transform.Rotate(Vector3.forward * UnityEngine.Random.Range(0f, 80f)); //add some random initial rotation to offset angle from other nodes
 		floatOffset = UnityEngine.Random.Range(0f, 3f);
 		baseColor = GetComponent<SpriteRenderer>().color;
 		baseSize = gameObject.GetComponent<RectTransform>().localScale;
 		//drawLines(); //draw a line between every node and every neighbour.
+		GameObject tag = Instantiate(nametagprefab) as GameObject;
+		tag.GetComponent<NameTag>().setTarget(transform,node_name);
+		tag.transform.SetParent(GameObject.FindGameObjectWithTag("Overlay").transform,false);
+		nametag = tag;
+		disable_tag();
+	}
+
+	public void enable_tag() {
+		nametag.SetActive(true);
+	}
+
+	public void disable_tag() {
+		nametag.SetActive(false);
 	}
 
 	public void moveToPosition(Vector3 position) {
 		if(moveCoroutine != null) StopCoroutine(moveCoroutine);
-		moveCoroutine = _move(position, 1.5f);
+		moveCoroutine = _move(1.5f);
+		target_position = position;
 		StartCoroutine(moveCoroutine);
 	}
-	private IEnumerator _move(Vector3 position, float movetime) {
+
+	private IEnumerator _move(float movetime) {
 		Vector3 currentPos = transform.position;
 		float t = 0f;
 		while (t < 1) {
 			t += Time.deltaTime / movetime;
-			transform.position = Vector3.Lerp(currentPos, position, t);
+			transform.position = Vector3.Lerp(currentPos, target_position, t);
 			//Each time this node moves, if it is in an appropriate state, re-draw its lines
 			if (state == 1 || state == 3)
-                StartCoroutine(drawLines());
-            yield return null;
+				drawLines();
+			yield return null;
 		}
 		Moveable = true;
 		startPosition = transform.position;
@@ -108,23 +128,24 @@ public class timelineNode : MonoBehaviour
 		//Mark this node as active
 		active = true;
 		state = 1;
-        //Draw lines from this node to its neighbors
-        StartCoroutine(drawLines());
-        //Have it always display information
-        display_info = true;
+		//Draw lines from this node to its neighbors
+		drawLines();
+		//Have it always display information
+		display_info = true;
 		//Change its color
 		Color focus_color = Color.red; //new Color(1f, 1f, 1f, 1f);
 		baseColor = focus_color;
 		ChangeColor (focus_color);
-		//Bring it to the front by changing its Z
-		gameObject.transform.position = new Vector3(gameObject.transform.position.x
-			, gameObject.transform.position.y
-			, gameObject.transform.position.z - 5);
+
+		//Send OSC packet of position.x and sound trigger
+		List<object> newFocus = new List<object>();
+		newFocus.AddRange(new object[] {1, gameObject.transform.position.x});
+		OSCHandler.Instance.SendMessageToClient("MaxServer", "/newFocus/", newFocus);
 
 		//Bring the node to the center line
-		moveToPosition(new Vector3(gameObject.transform.position.x
+		moveToPosition(new Vector3(target_position.x
 			, 0
-			, gameObject.transform.position.z));
+			, target_position.z));
 
 		//Bring its neighbors into half-focus if they aren't a past-focus or a focus.
 		foreach (KeyValuePair<string,timelineNode> neighbor_node in this.neighbors) {
@@ -132,7 +153,7 @@ public class timelineNode : MonoBehaviour
 				neighbor_node.Value.HalfFocus ();
 		}//end foreach
 
-        gameObject.GetComponent<LineRenderer>().SetColors(focusColor, focusColor);
+		gameObject.GetComponent<LineRenderer>().SetColors(focusColor, focusColor);
 	}//end method Focus
 
 	//Half-focus this node.
@@ -151,6 +172,12 @@ public class timelineNode : MonoBehaviour
 		gameObject.transform.position = new Vector3(gameObject.transform.position.x
 			, gameObject.transform.position.y
 			, gameObject.transform.position.z - 3);
+
+		//Send OSC packet of position.x and position.y for neighbors
+		List<object> halfFocus = new List<object>();
+		halfFocus.AddRange(new object[] {gameObject.transform.position.y, gameObject.transform.position.x});
+		OSCHandler.Instance.SendMessageToClient("MaxServer", "/halfFocus/", halfFocus);
+
 	}//end method HalfFocus
 
 	//Bring this node out of full focus, but remember it used to be the focus.
@@ -169,11 +196,11 @@ public class timelineNode : MonoBehaviour
 		gameObject.transform.position = new Vector3(gameObject.transform.position.x
 			, gameObject.transform.position.y
 			, gameObject.transform.position.z - 3);
-        gameObject.GetComponent<LineRenderer>().SetColors(pastFocusColor, pastFocusColor);
-    }//end method PastFocus
+		gameObject.GetComponent<LineRenderer>().SetColors(pastFocusColor, pastFocusColor);
+	}//end method PastFocus
 
-    //Bring this node out of focus
-    public void Unfocus() {
+	//Bring this node out of focus
+	public void Unfocus() {
 		//Mark this node as inactive
 		active = false;
 		state = 0;
@@ -187,12 +214,11 @@ public class timelineNode : MonoBehaviour
 		gameObject.transform.position = new Vector3(gameObject.transform.position.x
 			, gameObject.transform.position.y
 			, gameObject.transform.position.z + 5);
-        gameObject.GetComponent<LineRenderer>().SetColors(pastFocusColor, pastFocusColor);
-    }//end method Unfocus
+		gameObject.GetComponent<LineRenderer>().SetColors(pastFocusColor, pastFocusColor);
+	}//end method Unfocus
 
-    private IEnumerator drawLines() {
-        yield return new WaitForSeconds(1); //pause before drawing lines
-        Vector3 centralNodePos = transform.position;
+	private void drawLines() {
+		Vector3 centralNodePos = transform.position;
 		Vector3[] points = new Vector3[Math.Max(neighbors.Count * 2, 1)];
 		points[0] = centralNodePos;
 		int nCount = 0;
@@ -291,14 +317,20 @@ public class timelineNode : MonoBehaviour
 			mouseOver = true;
 			ChangeSize (new Vector3 (baseSize.x * 2f, baseSize.y * 2f, baseSize.z));
 			ChangeColor (Color.cyan);
+
+			//Send OSC packet of posiion.x and position.y of moused over node
+			List<object> moused = new List<object>();
+			moused.AddRange(new object[] {gameObject.transform.position.y, gameObject.transform.position.x});
+			OSCHandler.Instance.SendMessageToClient("MaxServer", "/mouseOver/", moused);
+
 		}//end if
 
-	    if (state != 1) {
-	        gameObject.GetComponent<LineRenderer>().SetColors(refocusColor, refocusColor);
-	    }
+		if (state != 1) {
+			gameObject.GetComponent<LineRenderer>().SetColors(refocusColor, refocusColor);
+		}
 	}
 
-    private void setTimeline() {
+	private void setTimeline() {
 		//get the leftmost gameobject so our timeline always draws in the correct direction
 		//TODO: use a LINQ function or something
 		Vector3 leftPos;
@@ -328,9 +360,9 @@ public class timelineNode : MonoBehaviour
 			ChangeSize (new Vector3 (baseSize.x, baseSize.y, baseSize.z));
 			ChangeColor (baseColor);
 		}//end if
-	    if (state != 1) {
-	        gameObject.GetComponent<LineRenderer>().SetColors(pastFocusColor, pastFocusColor);
-	    }
+		if (state != 1) {
+			gameObject.GetComponent<LineRenderer>().SetColors(pastFocusColor, pastFocusColor);
+		}
 	}
 
 	private void clearTimeline() {
@@ -341,19 +373,21 @@ public class timelineNode : MonoBehaviour
 		GetComponent<SpriteRenderer>().color = newColor;
 	}
 
+	/*
 	public void OnMouseDrag() {
 		//Only trigger mouse effects if this node is active
 		if (active) {
 			if (state == 1 || state == 3)
-		        StartCoroutine(drawLines());
-            //TODO: MAKE EACH NODE ONLY REDRAW THE LINE TO THIS NODE
-            foreach (timelineNode tn in allNodes) {
+				drawLines ();
+			//TODO: MAKE EACH NODE ONLY REDRAW THE LINE TO THIS NODE
+			foreach (timelineNode tn in allNodes) {
 				//Only redraw if the other node is a focus or past-focus node (states 1 or 3)
 				if (tn.state == 1 || tn.state == 3) {
-					tn.StartCoroutine(drawLines());
+					tn.drawLines();
 				}
 			}
 			transform.position = Camera.main.ScreenToWorldPoint ((new Vector3 (Input.mousePosition.x, Input.mousePosition.y, 10)));
 		}//end if
 	}
+	*/
 }
