@@ -40,13 +40,29 @@ public class timelineNode : MonoBehaviour
 	Color pastFocusColor = Color.grey;
 	Color refocusColor = Color.cyan;
 
+	public enum nodeCategory {
+		CHARACTER,
+		LOCATION,
+		EVENT,
+		UNKNOWN
+	}
+
+	public nodeCategory category = nodeCategory.UNKNOWN;
+
+
+
 	private Vector3 target_position;
 	private IEnumerator moveCoroutine;//reference to movement
 
 	public GameObject nametagprefab;
 	private GameObject nametag;
 
-	public void Start() {
+	void Awake() {
+		//assign random category for now, need to hook up to backend
+		category = (nodeCategory)UnityEngine.Random.Range(0, 3);
+	}
+
+	void Start() {
 		focusColor.a = 1f;
 		pastFocusColor.a = 0.1f;
 		drawTimeline = false;
@@ -61,6 +77,9 @@ public class timelineNode : MonoBehaviour
 		tag.transform.SetParent(GameObject.FindGameObjectWithTag("Overlay").transform,false);
 		nametag = tag;
 		disable_tag();
+
+		
+
 	}
 
 	public void enable_tag() {

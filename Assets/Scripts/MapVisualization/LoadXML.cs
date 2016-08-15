@@ -152,10 +152,29 @@ public class LoadXML : MonoBehaviour {
 		foreach (timelineNode tn in nodeList) {
 			int totaldays = 365 * tn.date.Year + tn.date.DayOfYear;
 
-			//TODO: use nodeDistanceIncrement
-			//tn.timelinePosition = new Vector3(map(totaldays, mindays, maxdays, 0, 100) + mover, UnityEngine.Random.Range(-40, 40), 0);
+			float ypos = 0;
+			switch (tn.category) {
+				case timelineNode.nodeCategory.CHARACTER:
+					ypos = -30;
+					break;
+				case timelineNode.nodeCategory.EVENT:
+					ypos = -10;
+					break;
+				case timelineNode.nodeCategory.LOCATION:
+					ypos = 10;
+					break;
+				case timelineNode.nodeCategory.UNKNOWN:
+					ypos = 30;
+					break;
+			}
 
-			tn.timelinePosition = new Vector3(TimeLineBar.dateToPosition(totaldays), UnityEngine.Random.Range(-40, 40), 0);
+			tn.timelinePosition = new Vector3(TimeLineBar.dateToPosition(totaldays), ypos + UnityEngine.Random.Range(-5,5), 0);
+
+
+
+
+
+
 
 			tn.moveToPosition(tn.timelinePosition);
 			mover += .1f;
