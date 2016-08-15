@@ -103,7 +103,6 @@ public class timelineNode : MonoBehaviour
 	}
 
 	void FixedUpdate() {
-
 		if (active && Moveable) {
 			rotateRight();
 		}
@@ -288,17 +287,9 @@ public class timelineNode : MonoBehaviour
 	private bool mouseover = false;
 	public string text_to_display = "";
 
-	void OnGUI()
-	{
-
-		/*if (drawTimeline) {
-			GUI.TextArea(timeline, "Add dates to me!", 1000);
-		}*/
-		// GUI box that follows the mouse; Display-info on right, mouseover info on left
-		if (mouseOver)
-		{
-			GUI.TextArea(new Rect(Input.mousePosition.x - 103, Screen.height - Input.mousePosition.y, 100, 40), node_name,
-				1000);
+	void OnGUI() {
+		if (mouseOver) {
+			GUI.TextArea(new Rect(Input.mousePosition.x - 103, Screen.height - Input.mousePosition.y, (node_name.Length * 8), 20), node_name, 1000);
 		}
 	}
 
