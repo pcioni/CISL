@@ -791,6 +791,8 @@ public class NodeController : MonoBehaviour
 			is_focus_node = true;
 			loader_object.GetComponent<Loader> ().SetFocusNode (id, true);
 		}//end else
+
+
 	}//end method onMouseDown
 
 	void OnMouseEnter()

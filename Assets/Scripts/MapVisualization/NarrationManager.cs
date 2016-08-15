@@ -12,15 +12,17 @@ public class NarrationManager : MonoBehaviour {
 	private LoadXML lxml;
 	private GameObject fNode;
 	private UnityAction<string> listener;
-    private UnityAction<string> narrationListener;
+    private UnityAction<string> narrationListener = null;
 
     private IEnumerator current_narration;
 	private bool user_can_take_turn = true;
 
     public static bool progressNarrationSwitch = false;
+    public static bool firstPassNarration = true;
 
     void Awake() {
-		listener = delegate (string data){
+        progressNarrationSwitch = false;
+        listener = delegate (string data){
 			if (user_can_take_turn) {
 				user_can_take_turn = false;
 				int node_id = int.Parse(data);
@@ -28,9 +30,11 @@ public class NarrationManager : MonoBehaviour {
 				Narrate(node_id, 5);
 			}
 		};
+
         narrationListener = delegate (string data) {
             progressNarration();
         };
+
         lxml = GetComponent<LoadXML>();
 	}
 
@@ -46,9 +50,7 @@ public class NarrationManager : MonoBehaviour {
 
     public void Update() {
         if (Input.GetKeyDown(KeyCode.Space)) {
-            //TODO: event manager call isn't functional yet
             EventManager.TriggerEvent(EventManager.EventType.INTERFACE_NODE_SELECT, "progNarration");
-            //progressNarration();
         }
     }
 
@@ -58,8 +60,14 @@ public class NarrationManager : MonoBehaviour {
 	}
 
     //Call this to progress the story turn
-    public static void progressNarration() {
-        progressNarrationSwitch = true;
+    public static void progressNarration(bool firstPass = false) {
+        //Assigning the delegate calls the function, so dont assign the listener until we do the first expansion.
+        if (!firstPassNarration) {
+            progressNarrationSwitch = true;
+        }
+        else {
+            firstPassNarration = false;
+        }
         Debug.Log("progressing narration from event manager");
     }
 

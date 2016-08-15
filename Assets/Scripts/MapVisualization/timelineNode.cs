@@ -103,12 +103,12 @@ public class timelineNode : MonoBehaviour
 	}
 
 	void FixedUpdate() {
+
 		if (active && Moveable) {
 			rotateRight();
-			//Float();
-			//Redraw lines
-
 		}
+
+        //TODO: user turn requesting expansion
 		if (Input.GetKeyDown (KeyCode.Return) && mouseOver) {
 			//request a focus
 			EventManager.TriggerEvent(EventManager.EventType.INTERFACE_NODE_SELECT, node_id.ToString());
@@ -373,6 +373,12 @@ public class timelineNode : MonoBehaviour
 	public void ChangeColor(Color newColor) {
 		GetComponent<SpriteRenderer>().color = newColor;
 	}
+
+    void OnMouseDown() {
+        if (state == 1) {
+            EventManager.TriggerEvent(EventManager.EventType.INTERFACE_NODE_SELECT, "progNarration");
+        }
+    }
 
 	/*
 	public void OnMouseDrag() {
