@@ -1,37 +1,98 @@
 ﻿using UnityEngine;
+using UnityEngine.Events;
 using System.Collections;
 using System.Collections.Generic;
 
 public class ViewModeController : MonoBehaviour {
 
-	public enum viewMode { MAP, TIMELINE}
-	public viewMode current_mode = viewMode.TIMELINE;
+	//public enum viewMode { MAP, TIMELINE}
+	//public viewMode current_mode = viewMode.TIMELINE;
 
 	public LocationMapper current_map;
 
+	private UnityAction<string> listener;
+
 	private LoadXML lx;
+
+	public GameObject mapNodePrefab;
+	public List<mapNode> dummynodes;
+	public Dictionary<int, Vector2> dummynodemap;
+
+	public Camera mapCam;
+	public float panTime = 3f;
+
+	void Awake() {
+		listener = delegate (string data) {
+			print("== loc change: " + data + " ==");
+			panToPoint(dummynodemap[int.Parse(data)]);
+		};
+
+		EventManager.StartListening(EventManager.EventType.INTERFACE_NODE_SELECT, listener);
+	}
+
 
 	IEnumerator Start() {
 		lx = GetComponent<LoadXML>();
+		dummynodes = new List<mapNode>();
+		dummynodemap = new Dictionary<int, Vector2>();
 
 		//find all of the appropriate positions for the current map
 		foreach (timelineNode tn in lx.nodeList) {
 			if (!tn.known_location) {
 				find_coordinates(tn);
 			}
+			GameObject dummy = Instantiate(mapNodePrefab) as GameObject;
+			mapNode mn = dummy.GetComponent<mapNode>();
+			mn.master = tn;
+			dummy.layer = LayerMask.NameToLayer("MapLayer");
+			mn.transform.SetParent(current_map.transform, false);
+			
+			tn.mapPosition = current_map.coord2world(tn.location);
+			mn.mapPosition = current_map.coord2local(tn.location);
+			mn.transform.localPosition = mn.mapPosition;
+
+			dummynodemap[tn.node_id] = mn.transform.position;
+			dummynodes.Add(mn);
+
 			yield return null;
 		}
 		print("Done finding positions");
-		foreach (timelineNode tn in lx.nodeList) {
-			tn.mapPosition = current_map.coord2world(tn.location) + Random.insideUnitCircle*3;
-		}
+		panToPoint(dummynodemap[13]);//start off on rome
 	}
 
+
+	private IEnumerator currentPan = null;
+	void panToPoint(Vector2 location) {
+		if (currentPan != null) StopCoroutine(currentPan);
+		currentPan = _pan(location);
+		StartCoroutine(currentPan);
+	}
+
+	public AnimationCurve panCurve;
+
+	IEnumerator _pan(Vector2 location) {
+		float t = 0f;
+		Vector2 startpos = mapCam.transform.position;
+		while (t < 1) {
+			t += Time.deltaTime / panTime;
+			mapCam.transform.position = Vector2.Lerp(startpos, location, t);
+
+			mapCam.orthographicSize = panCurve.Evaluate(t);
+			/*if (t < .5f) {//zoom out when panning a long distance
+				mapCam.orthographicSize = Mathf.Lerp(14, 40, t * 2);
+			}
+			else {//zoom back in at end	
+				mapCam.orthographicSize = Mathf.Lerp(40, 14, t * 2 - 1);
+			}*/
+
+			yield return null;
+		}
+	}
 
 	private void find_coordinates(timelineNode start) {
 
 		List<Vector3> positions = new List<Vector3>();
-		int max_depth = 4;
+		int max_depth = 3;
 
 		Queue<KeyValuePair<int, timelineNode>> q = new Queue<KeyValuePair<int, timelineNode>>();
 		q.Enqueue(new KeyValuePair<int, timelineNode>(0,start));
@@ -68,7 +129,7 @@ public class ViewModeController : MonoBehaviour {
 		return new Vector3(sumx / len, sumy / len, sumz / len);
 	}
 
-
+	/*
 	public void toggle_mode() {
 		//switch from timeline view to map view and vice versa
 		switch (current_mode) {
@@ -113,8 +174,7 @@ public class ViewModeController : MonoBehaviour {
 			toggle_mode();
 		}
 	}
-
-
+	*/
 
 
 }

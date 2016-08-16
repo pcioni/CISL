@@ -66,7 +66,7 @@ public class TimeLineBar : MonoBehaviour {
 		granularity = granularity == 0 ? 1 : granularity;
 
 
-		float screenWidth = rt.rect.width;
+		//float screenWidth = rt.rect.width;
 		int leftyear = Mathf.CeilToInt(positionToDate(Camera.main.ScreenToWorldPoint(rt.anchoredPosition).x) / 365);
 
 		int rightyear = Mathf.CeilToInt(positionToDate(Camera.main.ScreenToWorldPoint(new Vector2(rt.anchoredPosition.x + rt.rect.width,0)).x) / 365);

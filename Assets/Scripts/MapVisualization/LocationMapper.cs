@@ -57,6 +57,16 @@ public class LocationMapper : MonoBehaviour {
 
 	}
 
+	public Vector2 coord2local(Vector2 coord) {
+		//convert coordinate point to local position
+		Vector2 tmp = coord2pix(coord);
+		tmp.x -= w / 2;
+		tmp.y -= h / 2;
+		tmp.y *= -1; // something went wrong somewhere?
+		return tmp;
+
+	}
+
 	public void alignCoordinatesToWorldPosition(Vector2 worldpoint, Vector2 coordinates) {
 		//align a point on the map to a point in the world
 

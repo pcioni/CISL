@@ -9,18 +9,21 @@ public class EventManager : MonoBehaviour {
 
 	//event types defined here
 	public enum EventType {
-		//NARRATION_RELATIONSHIP,
-		//NARRATION_ANALOGY,
-		//NARRATION_LEAD_IN,
-		//NARRATION_NOVEL_LEAD_IN,
-		//NARRATION_HINT_AT,
-		//NARRATION_TIE_BACK,
+		NARRATION_RELATIONSHIP,
+		NARRATION_ANALOGY,
+		NARRATION_LEAD_IN,
+		NARRATION_NOVEL_LEAD_IN,
+		NARRATION_HINT_AT,
+		NARRATION_TIE_BACK,
+		NARRATION_LOCATION_CHANGE,
+
 		NARRATION_MACHINE_TURN, //called when the machine takes a turn
 		NARRATION_USER_TURN, //called when the user takes a turn
+
 		INTERFACE_NODE_SELECT, //called when the user selects a node
 		INTERFACE_ZOOM_IN, //called when the user zooms in
 		INTERFACE_ZOOM_OUT, //called when the user zooms out
-		INTERFACE_PAN //called when the user pans the camera
+		INTERFACE_PAN, //called when the user pans the camera
 	}
 
 	private Dictionary<EventType, NarrationEvent> eventDictionary;

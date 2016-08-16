@@ -1,9 +1,8 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿#pragma warning disable 0168
+
+using UnityEngine;
 using System.IO;
-using System.Collections.Generic;
 using System;
-using System.Reflection;
 
 public static class AppConfig {
 	private static string path = Path.Combine(Application.dataPath, "config.ini");

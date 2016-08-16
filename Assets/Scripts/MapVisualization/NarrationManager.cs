@@ -12,7 +12,6 @@ public class NarrationManager : MonoBehaviour {
 	private LoadXML lxml;
 	private GameObject fNode;
 	private UnityAction<string> listener;
-	private UnityAction<string> narrationListener = null;
 
 	private IEnumerator current_narration;
 	private bool user_can_take_turn = true;
@@ -42,7 +41,6 @@ public class NarrationManager : MonoBehaviour {
 		Reset_Narration();
 		EventManager.StartListening(EventManager.EventType.INTERFACE_NODE_SELECT, listener);
 		listener("13");
-		//narrationListener("progNarration");
 
 	}
 
@@ -81,7 +79,8 @@ public class NarrationManager : MonoBehaviour {
 		if (current_narration != null) {
 			StopCoroutine(current_narration);
 		}
-		StartCoroutine(_Narrate(node_id, turns));
+		current_narration = _Narrate(node_id, turns);
+		StartCoroutine(current_narration);
 	}
 	
 	
@@ -119,8 +118,6 @@ public class NarrationManager : MonoBehaviour {
 	//Narrate a sequence of nodes
 	IEnumerator _Narrate(int node_id, int turns) {
 		print("===== NEW NARRATION =====");
-		//The sequence of nodes we want to narrate, by name
-		List<string> sequence_by_name = new List<string>();
 
 		//Ask the backend for a node sequence
 		string url = "http://" + AppConfig.Settings.Backend.ip_address + ":" + AppConfig.Settings.Backend.port + "/chronology";
@@ -143,14 +140,15 @@ public class NarrationManager : MonoBehaviour {
 
 		//The nodes themselves
 		List<KeyValuePair<GameObject, string>> sequence_by_node = new List<KeyValuePair<GameObject, string>>();
+		List<List<StoryAct>> sequence_acts = new List<List<StoryAct>>();
 		timelineNode temp_node = null;
-		//foreach (string name in sequence_by_name)
 
 		foreach (StoryNode sn in response.StorySequence) {
 			int id = sn.graph_node_id;
 			temp_node = null;
 			lxml.idMap.TryGetValue(id, out temp_node);
 			sequence_by_node.Add(new KeyValuePair<GameObject, string>(temp_node.gameObject,sn.text));
+			sequence_acts.Add(sn.story_acts);
 		}//end foreach
 
 		//Bring each node out of focus.
@@ -167,14 +165,15 @@ public class NarrationManager : MonoBehaviour {
 
 		bool tmp_flag = true;
 		List<GameObject> node_history = new List<GameObject>();
-		foreach (KeyValuePair<GameObject,string> kvp in sequence_by_node) {
+		for(int ix=0; ix<sequence_by_node.Count; ix++) {
+		//foreach (KeyValuePair<GameObject,string> kvp in sequence_by_node) {
 			if (first_flag) {//wait for keypress before presenting first node
 				first_flag = false;
 				yield return StartCoroutine(WaitForKeyDown());
 			}else if(!tmp_flag){//dont wait for keypress on first node
 				yield return StartCoroutine(WaitForKeyDown());
 			}
-			
+			KeyValuePair<GameObject, string> kvp = sequence_by_node[ix];
 			GameObject node_to_present = kvp.Key;
 			//Bring the previous node into past-focus
 			if (node_history.Count >= 1) {
@@ -184,11 +183,41 @@ public class NarrationManager : MonoBehaviour {
 			fNode = node_to_present;
 			Present(node_to_present, node_history);
 			EventManager.TriggerEvent(EventManager.EventType.NARRATION_MACHINE_TURN,kvp.Value);
+
+			//trigger events for all current story acts
+
+			foreach (StoryAct sa in sequence_acts[ix]) {
+				switch (sa.Item1) {
+					case "lead-in":
+						EventManager.TriggerEvent(EventManager.EventType.NARRATION_LEAD_IN, sa.Item2.ToString());
+						break;
+					case "tie-back":
+						EventManager.TriggerEvent(EventManager.EventType.NARRATION_TIE_BACK, sa.Item2.ToString());
+						break;
+					case "relationship":
+						EventManager.TriggerEvent(EventManager.EventType.NARRATION_RELATIONSHIP, sa.Item2.ToString());
+						break;
+					case "novel-lead-in":
+						EventManager.TriggerEvent(EventManager.EventType.NARRATION_NOVEL_LEAD_IN, sa.Item2.ToString());
+						break;
+					case "location-change":
+						EventManager.TriggerEvent(EventManager.EventType.NARRATION_LOCATION_CHANGE, sa.Item2.ToString());
+						break;
+					case "hint-at":
+						EventManager.TriggerEvent(EventManager.EventType.NARRATION_HINT_AT, sa.Item2.ToString());
+						break;
+					case "analogy":
+						EventManager.TriggerEvent(EventManager.EventType.NARRATION_ANALOGY, sa.Item2.ToString());
+						break;
+					case "user-turn":
+						EventManager.TriggerEvent(EventManager.EventType.NARRATION_USER_TURN, sa.Item2.ToString());
+						break;
+				}
+			}
+
 			//Add it to the history
 			node_history.Add(node_to_present);
-			//Wait for spacebar before presenting the next.
-
-
+			
 			progressNarrationSwitch = false;
 			Color tmp = new Color(0,1,1,.05f);
 			fNode.GetComponent<LineRenderer>().SetColors(tmp, tmp);

@@ -41,9 +41,6 @@ public class LoadXML : MonoBehaviour {
 	public Dictionary<int, timelineNode> idMap = new Dictionary<int, timelineNode>();
 	public Sprite node_sprite;
 	public List<timelineNode> nodeList = new List<timelineNode>();
-	private float nodeSpriteWidth;
-	private float cameraWidth;
-	private float nodeDistanceIncrement;
 	
 	public GameObject timelineNodePref;
 
@@ -60,8 +57,7 @@ public class LoadXML : MonoBehaviour {
 		AIMind container = (AIMind)serializer.Deserialize(stream);
 		stream.Close();
 
-		nodeSpriteWidth = node_sprite.bounds.size.x;
-		cameraWidth = 2f * Camera.main.orthographicSize * Camera.main.aspect;
+		GameObject timeLineNodes = new GameObject("TimeLineNodes");
 
 		foreach (Feature f in container.features) {
 			GameObject tmp_obj = (GameObject) Instantiate(timelineNodePref, transform.position, transform.rotation);
@@ -120,6 +116,8 @@ public class LoadXML : MonoBehaviour {
 
 			idMap[f.id] = tn;//map id to node
 
+			tmp_obj.transform.SetParent(timeLineNodes.transform);
+
 		}
 		//TODO pass this a reference to the list so we dont have to manually assign it afterwards
 		foreach (timelineNode tn in nodeList) {
@@ -134,8 +132,6 @@ public class LoadXML : MonoBehaviour {
 				tn.neighbors.Add(new KeyValuePair<string, timelineNode>(n.relationship,idMap[n.dest]));
 			}
 		}
-
-		nodeDistanceIncrement = nodeList.Count;
 
 		long maxdays = int.MinValue;
 		long mindays = int.MaxValue;

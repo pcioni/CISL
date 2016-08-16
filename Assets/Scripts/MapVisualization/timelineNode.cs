@@ -42,9 +42,6 @@ public class timelineNode : MonoBehaviour
 	private Vector3 startPosition;
 	private float floatOffset;
 	private bool Moveable;
-	//private timelineNode currentFocus;
-	//private Rect timeline;
-	private bool drawTimeline;
 	Color focusColor = Color.blue;
 	Color pastFocusColor = Color.grey;
 	Color refocusColor = Color.cyan;
@@ -66,15 +63,9 @@ public class timelineNode : MonoBehaviour
 	public GameObject nametagprefab;
 	private GameObject nametag;
 
-	/*void Awake() {
-		//assign random category for now, need to hook up to backend
-		category = (nodeCategory)UnityEngine.Random.Range(0, 3);
-	}*/
-
 	void Start() {
 		focusColor.a = 1f;
 		pastFocusColor.a = 0.1f;
-		drawTimeline = false;
 		Moveable = false;
 		transform.Rotate(Vector3.forward * UnityEngine.Random.Range(0f, 80f)); //add some random initial rotation to offset angle from other nodes
 		floatOffset = UnityEngine.Random.Range(0f, 3f);
@@ -115,7 +106,7 @@ public class timelineNode : MonoBehaviour
 			transform.position = Vector3.Lerp(currentPos, target_position, t);
 			//Each time this node moves, if it is in an appropriate state, re-draw its lines
 			if (state == focusState.IN || state == focusState.PAST)
-				StartCoroutine(drawLines());
+				drawLines();
 			yield return null;
 		}
 		Moveable = true;
@@ -151,7 +142,7 @@ public class timelineNode : MonoBehaviour
 		active = true;
 		state = focusState.IN;
 		//Draw lines from this node to its neighbors
-		StartCoroutine(drawLines());
+		drawLines();
 		//Have it always display information
 		display_info = true;
 		//Change its color
@@ -239,7 +230,16 @@ public class timelineNode : MonoBehaviour
 		gameObject.GetComponent<LineRenderer>().SetColors(pastFocusColor, pastFocusColor);
 	}//end method Unfocus
 
-	private IEnumerator drawLines() {
+	private IEnumerator tmplcr = null;
+	void drawLines() {
+		if(tmplcr != null) {
+			StopCoroutine(tmplcr);
+		}
+		tmplcr = _drawLines();
+		StartCoroutine(tmplcr);
+	}
+
+	private IEnumerator _drawLines() {
 		//yield return new WaitForSeconds(1);
 		Vector3 centralNodePos = transform.position;
 		Vector3[] points = new Vector3[Math.Max(neighbors.Count * 2, 1)];
@@ -249,13 +249,14 @@ public class timelineNode : MonoBehaviour
 			points[i - 1] = centralNodePos;
 			points[i] = neighbors[nCount].Value.transform.position;
 			nCount++;
+			yield return null;
 		}
 		LineRenderer lr = GetComponent<LineRenderer>();
 
 		lr.SetVertexCount(points.Length);
 		lr.SetPositions(points);
 
-		yield return null;
+		tmplcr = null;
 
 	}
 
@@ -306,27 +307,16 @@ public class timelineNode : MonoBehaviour
 	}
 
 	public bool display_info = false;
-	private bool mouseover = false;
 	public string text_to_display = "";
-
-	/*void OnGUI() {
-		if (mouseOver) {
-			GUI.TextArea(new Rect(Input.mousePosition.x - 103, Screen.height - Input.mousePosition.y, (node_name.Length * 8), 20), node_name, 1000);
-		}
-	}*/
 
 	private bool mouseOver = false;
 
 	public void OnMouseEnter() {
 		Moveable = false;
 		//Only trigger mouse effects if this node is active
-		if (active && !mouseover) {
-			//setTimeline();
-			drawTimeline = true;
+		if (active && !mouseOver) {
 			mouseOver = true;
-
 			enable_tag();
-
 			ChangeSize (new Vector3 (baseSize.x * 2f, baseSize.y * 2f, baseSize.z));
 			ChangeColor (Color.cyan);
 
@@ -342,32 +332,10 @@ public class timelineNode : MonoBehaviour
 		}
 	}
 
-	/*private void setTimeline() {
-		//get the leftmost gameobject so our timeline always draws in the correct direction
-		//TODO: use a LINQ function or something
-		Vector3 leftPos;
-		Vector3 rightPos;
-		currentFocus = allNodes.First(x => x.state == focusState.IN);
-		if (transform.position.x < currentFocus.transform.position.x) {
-			leftPos = transform.position;
-			rightPos = currentFocus.transform.position;
-		}
-		else {
-			leftPos = currentFocus.transform.position;
-			rightPos = transform.position;
-		}
-		//convert screen coordinates to world coordinates.
-		Vector3 guiPos = Camera.main.WorldToScreenPoint(leftPos);
-		float width = Vector3.Distance(leftPos, rightPos);
-		timeline.Set(guiPos.x, Screen.height - guiPos.y - 125, width * 8.75f, 100); //multiply to scale the pixels properly....dunno why Unity can't do it itself.
-	}*/
-
 	public void OnMouseExit() {
 		Moveable = true;
 		//Only trigger mouse effects if this node is active
 		if (active) {
-			//clearTimeline();
-			drawTimeline = false;
 			mouseOver = false;
 			ChangeSize (new Vector3 (baseSize.x, baseSize.y, baseSize.z));
 			ChangeColor (baseColor);
@@ -378,16 +346,11 @@ public class timelineNode : MonoBehaviour
 		}
 	}
 
-	/*private void clearTimeline() {
-		timeline.Set(0,0,0,0);
-	}*/
-
 	public void ChangeColor(Color newColor) {
 		GetComponent<SpriteRenderer>().color = newColor;
 	}
 
 	void OnMouseDown() {
-		print(state);
 		if ((state & (focusState.IN | focusState.HALF | focusState.PAST)) != 0) {
 			EventManager.TriggerEvent(EventManager.EventType.INTERFACE_NODE_SELECT, node_id.ToString());
 		}
