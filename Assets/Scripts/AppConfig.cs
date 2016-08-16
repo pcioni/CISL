@@ -5,7 +5,7 @@ using System.IO;
 using System;
 
 public static class AppConfig {
-	private static string path = Path.Combine(Application.dataPath, "config.ini");
+	private static string path;// = Path.Combine(Path.Combine(Application.dataPath, "Resources"),"config.ini");
 	public static class Settings {
 		public static class Backend {
 			public static string ip_address = "localhost";
@@ -31,8 +31,9 @@ public static class AppConfig {
 
 	static AppConfig() {
 		//load INI configuration
-		if (File.Exists(path)) {
-			using (StreamReader sr = new StreamReader(path)) {
+		TextAsset config = Resources.Load("config") as TextAsset;
+		//if (File.Exists(path)) {
+		using (StringReader sr = new StringReader(config.text)) {
 				string line;
 				string theSection = "";
 				string theKey = "";
@@ -59,10 +60,10 @@ public static class AppConfig {
 				}
 				Debug.Log("Configuration file loaded.");
 			}
-		}
-		else {
-			Debug.LogError("ERROR: unable to read config file: " + path);
-		}
+		//}
+		//else {
+		//	Debug.LogError("ERROR: unable to read config file: " + path);
+		//}
 	}
 
 	
