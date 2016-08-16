@@ -112,7 +112,7 @@ public class timelineNode : MonoBehaviour
 			transform.position = Vector3.Lerp(currentPos, target_position, t);
 			//Each time this node moves, if it is in an appropriate state, re-draw its lines
 			if (state == focusState.IN || state == focusState.PAST)
-				drawLines();
+				StartCoroutine(drawLines());
 			yield return null;
 		}
 		Moveable = true;
@@ -148,9 +148,9 @@ public class timelineNode : MonoBehaviour
 		active = true;
 		state = focusState.IN;
 		//Draw lines from this node to its neighbors
-		drawLines();
-		//Have it always display information
-		display_info = true;
+		StartCoroutine(drawLines());
+        //Have it always display information
+        display_info = true;
 		//Change its color
 		Color focus_color = Color.red; //new Color(1f, 1f, 1f, 1f);
 		baseColor = focus_color;
@@ -241,7 +241,9 @@ public class timelineNode : MonoBehaviour
 	}//end method Unfocus
 
 	private IEnumerator tmplcr = null;
-	public void drawLines() {
+	public IEnumerator drawLines() {
+        //pause before drawing lines
+        yield return new WaitForSeconds(1);
 		if(tmplcr != null) {
 			StopCoroutine(tmplcr);
 		}
