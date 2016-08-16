@@ -19,6 +19,9 @@ public static class AppConfig {
 		}
 		public static class Frontend {
 			public static string xml_location = "Assets/xml/roman_empire_1000.xml";
+			public static string osc_client_name = "MaxServer";
+			public static string osc_address = "localhost";
+			public static string osc_port= "3456";
 
 			//need this to force load
 			static Frontend() {

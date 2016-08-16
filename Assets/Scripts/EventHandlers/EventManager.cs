@@ -15,12 +15,12 @@ public class EventManager : MonoBehaviour {
 		//NARRATION_NOVEL_LEAD_IN,
 		//NARRATION_HINT_AT,
 		//NARRATION_TIE_BACK,
-		NARRATION_MACHINE_TURN,
-		NARRATION_USER_TURN,
-		INTERFACE_NODE_SELECT,
-		INTERFACE_ZOOM_IN,
-		INTERFACE_ZOOM_OUT,
-		INTERFACE_PAN
+		NARRATION_MACHINE_TURN, //called when the machine takes a turn
+		NARRATION_USER_TURN, //called when the user takes a turn
+		INTERFACE_NODE_SELECT, //called when the user selects a node
+		INTERFACE_ZOOM_IN, //called when the user zooms in
+		INTERFACE_ZOOM_OUT, //called when the user zooms out
+		INTERFACE_PAN //called when the user pans the camera
 	}
 
 	private Dictionary<EventType, NarrationEvent> eventDictionary;

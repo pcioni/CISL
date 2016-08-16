@@ -20,19 +20,17 @@ public class NarrationManager : MonoBehaviour {
 	public static bool progressNarrationSwitch = false;
 	public static bool firstPassNarration = true;
 
+	private static bool first_flag = true;//set to false after first node has been expanded
+
 	void Awake() {
 		progressNarrationSwitch = false;
 		listener = delegate (string data){
 			if (user_can_take_turn) {
 				user_can_take_turn = false;
 				int node_id = int.Parse(data);
-				lxml.idMap[node_id].Focus();
+				//lxml.idMap[node_id].Focus();
 				Narrate(node_id, 5);
 			}
-		};
-
-		narrationListener = delegate (string data) {
-			progressNarration();
 		};
 
 		lxml = GetComponent<LoadXML>();
@@ -41,16 +39,19 @@ public class NarrationManager : MonoBehaviour {
 	void Start() {
 		OSCHandler.Instance.Init(); //init OSC
 		lxml.Initialize();
-		listener("13");
-		narrationListener("progNarration");
 		Reset_Narration();
 		EventManager.StartListening(EventManager.EventType.INTERFACE_NODE_SELECT, listener);
-		EventManager.StartListening(EventManager.EventType.INTERFACE_NODE_SELECT, narrationListener);
+		listener("13");
+		//narrationListener("progNarration");
+
 	}
 
 	public void Update() {
 		if (Input.GetKeyDown(KeyCode.Space)) {
-			EventManager.TriggerEvent(EventManager.EventType.INTERFACE_NODE_SELECT, "progNarration");
+			if (!user_can_take_turn) {
+				progressNarration();
+			}
+			
 		}
 	}
 
@@ -60,14 +61,8 @@ public class NarrationManager : MonoBehaviour {
 	}
 
 	//Call this to progress the story turn
-	public static void progressNarration(bool firstPass = false) {
-		//Assigning the delegate calls the function, so dont assign the listener until we do the first expansion.
-		if (!firstPassNarration) {
-			progressNarrationSwitch = true;
-		}
-		else {
-			firstPassNarration = false;
-		}
+	public static void progressNarration() {
+		progressNarrationSwitch = true;
 		Debug.Log("progressing narration from event manager");
 	}
 
@@ -164,15 +159,27 @@ public class NarrationManager : MonoBehaviour {
 			//temp.GetComponent<SpriteRenderer>().color = new Color(0.5f, 0.5f, 0.5f, 0.2f);
 			//Set it to not display information on mouseover
 			//temp.GetComponent<timelineNode>().display_info = false;
-			tn.Unfocus();
+			if(tn.node_id != node_id) {
+				tn.Unfocus();
+			}
+			
 		}//end foreach
 
+		bool tmp_flag = true;
 		List<GameObject> node_history = new List<GameObject>();
 		foreach (KeyValuePair<GameObject,string> kvp in sequence_by_node) {
+			if (first_flag) {//wait for keypress before presenting first node
+				first_flag = false;
+				yield return StartCoroutine(WaitForKeyDown());
+			}else if(!tmp_flag){//dont wait for keypress on first node
+				yield return StartCoroutine(WaitForKeyDown());
+			}
+			
 			GameObject node_to_present = kvp.Key;
 			//Bring the previous node into past-focus
-			if (node_history.Count >= 1)
+			if (node_history.Count >= 1) {
 				node_history[node_history.Count - 1].GetComponent<timelineNode>().PastFocus();
+			}
 			//Present this node
 			fNode = node_to_present;
 			Present(node_to_present, node_history);
@@ -181,10 +188,11 @@ public class NarrationManager : MonoBehaviour {
 			node_history.Add(node_to_present);
 			//Wait for spacebar before presenting the next.
 
-			yield return StartCoroutine(WaitForKeyDown());
+
 			progressNarrationSwitch = false;
 			Color tmp = new Color(0,1,1,.05f);
 			fNode.GetComponent<LineRenderer>().SetColors(tmp, tmp);
+			tmp_flag = false;
 		}//end foreach
 		user_can_take_turn = true;
 		print("STORY ARC COMPLETE");

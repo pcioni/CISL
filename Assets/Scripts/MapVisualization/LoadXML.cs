@@ -157,6 +157,10 @@ public class LoadXML : MonoBehaviour {
 				break;
 			}
 		}
+		if(www.error != null) {
+			Debug.LogError("Error: could not connect to backend; aborting.");
+			return;
+		}
 
 		GraphLight response = JsonUtility.FromJson<GraphLight>(www.text);
 

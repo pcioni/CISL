@@ -65,15 +65,15 @@ public class OSCHandler : MonoBehaviour
 	
 	public static OSCHandler Instance 
 	{
-	    get 
+		get 
 		{
-	        if (_instance == null) 
+			if (_instance == null) 
 			{
 				_instance = new GameObject ("OSCHandler").AddComponent<OSCHandler>();
-	        }
-	       
-	        return _instance;
-	    }
+			}
+		   
+			return _instance;
+		}
 	}
 	#endregion
 	
@@ -91,19 +91,22 @@ public class OSCHandler : MonoBehaviour
 	/// </summary>
 	public void Init()
 	{
-        //Initialize OSC clients (transmitters)
-        //Example:		
-        //CreateClient("SuperCollider", IPAddress.Parse("127.0.0.1"), 5555);
+		//Initialize OSC clients (transmitters)
+		//Example:		
+		//CreateClient("SuperCollider", IPAddress.Parse("127.0.0.1"), 5555);
 
 		//Creates client on the machine's local ip address - change if using remote machine
-		var ipaddress = Network.player.ipAddress;
-        CreateClient("MaxServer", IPAddress.Parse(ipaddress), 3456);
-        //CreateClient("MaxServer", IPAddress.Parse(""), 3456);
+		//var ipaddress = Network.player.ipAddress;
+		//CreateClient("MaxServer", IPAddress.Parse(ipaddress), 3456);
+		//CreateClient("MaxServer", IPAddress.Parse("129.161.134.67"), 3456);
+		CreateClient(AppConfig.Settings.Frontend.osc_client_name,
+					 IPAddress.Parse(AppConfig.Settings.Frontend.osc_address),
+					 Int32.Parse(AppConfig.Settings.Frontend.osc_port));
 
-        //Initialize OSC servers (listeners)
-        //Example:
+		//Initialize OSC servers (listeners)
+		//Example:
 
-        //CreateServer("AndroidPhone", 6666);
+		//CreateServer("AndroidPhone", 6666);
 	}
 	
 	#region Properties
@@ -172,8 +175,8 @@ public class OSCHandler : MonoBehaviour
 		message.Append(port); message.Append("OK");
 		
 		_clients[clientId].log.Add(String.Concat(DateTime.UtcNow.ToString(),".",
-		                                         FormatMilliseconds(DateTime.Now.Millisecond), " : ",
-		                                         testaddress," ", DataToString(message.Data)));
+												 FormatMilliseconds(DateTime.Now.Millisecond), " : ",
+												 testaddress," ", DataToString(message.Data)));
 		_clients[clientId].messages.Add(message);
 		
 		_clients[clientId].client.Send(message);
@@ -190,20 +193,20 @@ public class OSCHandler : MonoBehaviour
 	/// </param>
 	public void CreateServer(string serverId, int port)
 	{
-        OSCServer server = new OSCServer(port);
-        server.PacketReceivedEvent += OnPacketReceived;
+		OSCServer server = new OSCServer(port);
+		server.PacketReceivedEvent += OnPacketReceived;
 
-        ServerLog serveritem = new ServerLog();
-        serveritem.server = server;
+		ServerLog serveritem = new ServerLog();
+		serveritem.server = server;
 		serveritem.log = new List<string>();
 		serveritem.packets = new List<OSCPacket>();
 		
 		_servers.Add(serverId, serveritem);
 	}
 
-    void OnPacketReceived(OSCServer server, OSCPacket packet)
-    {
-    }
+	void OnPacketReceived(OSCServer server, OSCPacket packet)
+	{
+	}
 	
 	/// <summary>
 	/// Sends an OSC message to a specified client, given its clientId (defined at the OSC client construction),
@@ -253,8 +256,8 @@ public class OSCHandler : MonoBehaviour
 			if(_clients[clientId].log.Count < _loglength)
 			{
 				_clients[clientId].log.Add(String.Concat(DateTime.UtcNow.ToString(),".",
-				                                         FormatMilliseconds(DateTime.Now.Millisecond),
-				                                         " : ", address, " ", DataToString(message.Data)));
+														 FormatMilliseconds(DateTime.Now.Millisecond),
+														 " : ", address, " ", DataToString(message.Data)));
 				_clients[clientId].messages.Add(message);
 			}
 			else
@@ -263,8 +266,8 @@ public class OSCHandler : MonoBehaviour
 				_clients[clientId].messages.RemoveAt(0);
 				
 				_clients[clientId].log.Add(String.Concat(DateTime.UtcNow.ToString(),".",
-				                                         FormatMilliseconds(DateTime.Now.Millisecond),
-				                                         " : ", address, " ", DataToString(message.Data)));
+														 FormatMilliseconds(DateTime.Now.Millisecond),
+														 " : ", address, " ", DataToString(message.Data)));
 				_clients[clientId].messages.Add(message);
 			}
 			
@@ -291,9 +294,9 @@ public class OSCHandler : MonoBehaviour
 					_servers[pair.Key].packets.Add(_servers[pair.Key].server.LastReceivedPacket);
 						
 					_servers[pair.Key].log.Add(String.Concat(DateTime.UtcNow.ToString(), ".",
-					                                         FormatMilliseconds(DateTime.Now.Millisecond)," : ",
-					                                         _servers[pair.Key].server.LastReceivedPacket.Address," ",
-					                                         DataToString(_servers[pair.Key].server.LastReceivedPacket.Data)));
+															 FormatMilliseconds(DateTime.Now.Millisecond)," : ",
+															 _servers[pair.Key].server.LastReceivedPacket.Address," ",
+															 DataToString(_servers[pair.Key].server.LastReceivedPacket.Data)));
 					break;
 				}
 						
@@ -309,9 +312,9 @@ public class OSCHandler : MonoBehaviour
 					_servers[pair.Key].packets.Add(_servers[pair.Key].server.LastReceivedPacket);
 						
 					_servers[pair.Key].log.Add(String.Concat(DateTime.UtcNow.ToString(), ".",
-					                                         FormatMilliseconds(DateTime.Now.Millisecond)," : ",
-					                                         _servers[pair.Key].server.LastReceivedPacket.Address," ",
-					                                         DataToString(_servers[pair.Key].server.LastReceivedPacket.Data)));
+															 FormatMilliseconds(DateTime.Now.Millisecond)," : ",
+															 _servers[pair.Key].server.LastReceivedPacket.Address," ",
+															 DataToString(_servers[pair.Key].server.LastReceivedPacket.Data)));
 				}
 			}
 		}
