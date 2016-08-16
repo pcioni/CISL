@@ -17,6 +17,7 @@ public class ViewModeController : MonoBehaviour {
 	public GameObject mapNodePrefab;
 	public List<mapNode> dummynodes;
 	public Dictionary<int, Vector2> dummynodemap;
+	public Dictionary<timelineNode, mapNode> crossmap;
 
 	public Camera mapCam;
 	public float panTime = 3f;
@@ -35,6 +36,7 @@ public class ViewModeController : MonoBehaviour {
 		lx = GetComponent<LoadXML>();
 		dummynodes = new List<mapNode>();
 		dummynodemap = new Dictionary<int, Vector2>();
+		crossmap = new Dictionary<timelineNode, mapNode>();
 
 		//find all of the appropriate positions for the current map
 		foreach (timelineNode tn in lx.nodeList) {
@@ -53,9 +55,21 @@ public class ViewModeController : MonoBehaviour {
 
 			dummynodemap[tn.node_id] = mn.transform.position;
 			dummynodes.Add(mn);
+			crossmap[tn] = mn;
 
 			yield return null;
 		}
+
+		//assign corresponding neighbors
+		foreach (timelineNode tn in lx.nodeList) {
+			mapNode tmp = crossmap[tn];
+			foreach(KeyValuePair<string,timelineNode> tn2 in tn.neighbors) {
+				tmp.neighbors.Add(crossmap[tn2.Value]);
+			}
+			yield return null;
+		}
+
+
 		print("Done finding positions");
 		panToPoint(dummynodemap[13]);//start off on rome
 	}
@@ -89,12 +103,12 @@ public class ViewModeController : MonoBehaviour {
 		}
 	}
 
+	private Queue<KeyValuePair<int, timelineNode>> q = new Queue<KeyValuePair<int, timelineNode>>();
+	private List<Vector3> positions = new List<Vector3>();
+	private int max_depth = 3;
 	private void find_coordinates(timelineNode start) {
-
-		List<Vector3> positions = new List<Vector3>();
-		int max_depth = 3;
-
-		Queue<KeyValuePair<int, timelineNode>> q = new Queue<KeyValuePair<int, timelineNode>>();
+		positions.Clear();
+		q.Clear();
 		q.Enqueue(new KeyValuePair<int, timelineNode>(0,start));
 		while (q.Count > 0) {
 			KeyValuePair<int, timelineNode> current = q.Dequeue();

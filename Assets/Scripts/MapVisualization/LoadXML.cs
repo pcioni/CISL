@@ -200,13 +200,6 @@ public class LoadXML : MonoBehaviour {
 			}
 
 			tn.timelinePosition = new Vector3(TimeLineBar.dateToPosition(totaldays), ypos + UnityEngine.Random.Range(-5,5), 0);
-
-
-
-
-
-
-
 			tn.moveToPosition(tn.timelinePosition);
 			mover += .1f;
 		}
@@ -218,14 +211,4 @@ public class LoadXML : MonoBehaviour {
 		return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
 	}
 
-	void FixedUpdate() {
-		
-	}//end method FixedUpdate	
-
-	void OnApplicationQuit()
-	{
-		//When the application quits, send a QUIT message to the backend.
-		//This allows the backend to shut down its server gracefully.
-		//gameObject.GetComponent<SocketListener> ().sendMessageToServer ("QUIT");
-	}//end method OnApplicationQuit
 }

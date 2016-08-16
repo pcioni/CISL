@@ -2,8 +2,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-//using UnityEditor;
+using UnityEngine.Events;
 
 public class timelineNode : MonoBehaviour
 {
@@ -21,6 +20,11 @@ public class timelineNode : MonoBehaviour
 	public List<KeyValuePair<string,timelineNode>> neighbors = new List<KeyValuePair<string, timelineNode>>();//use kvp because no tuple support in unity
 	public List<timelineNode> allNodes;
 	public bool active = false; //Whether this node is active and interactable.
+
+	private LineRenderer lr;
+	public SpriteRenderer sr;
+
+	public UnityAction<string> callback = null;
 
 
 	//OUT = Out of focus. Node does not respond to mouse, is transparent, and does not draw lines to neighboring nodes.
@@ -64,6 +68,8 @@ public class timelineNode : MonoBehaviour
 	private GameObject nametag;
 
 	void Start() {
+		sr = GetComponent<SpriteRenderer>();
+		lr = GetComponent<LineRenderer>();
 		focusColor.a = 1f;
 		pastFocusColor.a = 0.1f;
 		Moveable = false;
@@ -167,6 +173,7 @@ public class timelineNode : MonoBehaviour
 		}//end foreach
 
 		gameObject.GetComponent<LineRenderer>().SetColors(focusColor, focusColor);
+		if (callback != null) callback("IN");
 	}//end method Focus
 
 	//Half-focus this node.
@@ -190,6 +197,7 @@ public class timelineNode : MonoBehaviour
 		List<object> halfFocus = new List<object>();
 		halfFocus.AddRange(new object[] {gameObject.transform.position.y, gameObject.transform.position.x});
 		OSCHandler.Instance.SendMessageToClient("MaxServer", "/halfFocus/", halfFocus);
+		if (callback != null) callback("HALF");
 
 	}//end method HalfFocus
 
@@ -210,6 +218,7 @@ public class timelineNode : MonoBehaviour
 			, gameObject.transform.position.y
 			, gameObject.transform.position.z - 3);
 		gameObject.GetComponent<LineRenderer>().SetColors(pastFocusColor, pastFocusColor);
+		if (callback != null) callback("PAST");
 	}//end method PastFocus
 
 	//Bring this node out of focus
@@ -228,10 +237,11 @@ public class timelineNode : MonoBehaviour
 			, gameObject.transform.position.y
 			, gameObject.transform.position.z + 5);
 		gameObject.GetComponent<LineRenderer>().SetColors(pastFocusColor, pastFocusColor);
+		if (callback != null) callback("OUT");
 	}//end method Unfocus
 
 	private IEnumerator tmplcr = null;
-	void drawLines() {
+	public void drawLines() {
 		if(tmplcr != null) {
 			StopCoroutine(tmplcr);
 		}
@@ -242,7 +252,7 @@ public class timelineNode : MonoBehaviour
 	private IEnumerator _drawLines() {
 		//yield return new WaitForSeconds(1);
 		Vector3 centralNodePos = transform.position;
-		Vector3[] points = new Vector3[Math.Max(neighbors.Count * 2, 1)];
+		Vector3[] points = new Vector3[Mathf.Max(neighbors.Count * 2, 1)];
 		points[0] = centralNodePos;
 		int nCount = 0;
 		for (int i = 1; i < points.Length; i += 2) {
@@ -251,7 +261,6 @@ public class timelineNode : MonoBehaviour
 			nCount++;
 			yield return null;
 		}
-		LineRenderer lr = GetComponent<LineRenderer>();
 
 		lr.SetVertexCount(points.Length);
 		lr.SetPositions(points);
@@ -319,6 +328,7 @@ public class timelineNode : MonoBehaviour
 			enable_tag();
 			ChangeSize (new Vector3 (baseSize.x * 2f, baseSize.y * 2f, baseSize.z));
 			ChangeColor (Color.cyan);
+			if (callback != null) callback("RE");
 
 			//Send OSC packet of posiion.x and position.y of moused over node
 			List<object> moused = new List<object>();
@@ -326,10 +336,7 @@ public class timelineNode : MonoBehaviour
 			OSCHandler.Instance.SendMessageToClient("MaxServer", "/mouseOver/", moused);
 
 		}//end if
-
-		if (state != focusState.IN) {
-			gameObject.GetComponent<LineRenderer>().SetColors(refocusColor, refocusColor);
-		}
+		gameObject.GetComponent<LineRenderer>().SetColors(refocusColor, refocusColor);
 	}
 
 	public void OnMouseExit() {
@@ -339,15 +346,18 @@ public class timelineNode : MonoBehaviour
 			mouseOver = false;
 			ChangeSize (new Vector3 (baseSize.x, baseSize.y, baseSize.z));
 			ChangeColor (baseColor);
+			if (callback != null) callback("BACK");
 		}//end if
 		disable_tag();
 		if (state != focusState.IN) {
 			gameObject.GetComponent<LineRenderer>().SetColors(pastFocusColor, pastFocusColor);
+		}else {
+			gameObject.GetComponent<LineRenderer>().SetColors(focusColor, focusColor);
 		}
 	}
 
 	public void ChangeColor(Color newColor) {
-		GetComponent<SpriteRenderer>().color = newColor;
+		sr.color = newColor;
 	}
 
 	void OnMouseDown() {
