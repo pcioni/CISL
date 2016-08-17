@@ -28,7 +28,7 @@ public class NarrationManager : MonoBehaviour {
 				user_can_take_turn = false;
 				int node_id = int.Parse(data);
 				//lxml.idMap[node_id].Focus();
-				Narrate(node_id, 5);
+				Narrate(node_id, 9);
 			}
 		};
 
@@ -36,11 +36,11 @@ public class NarrationManager : MonoBehaviour {
 	}
 
 	void Start() {
-		//OSCHandler.Instance.Init(); //init OSC
+		OSCHandler.Instance.Init(); //init OSC
 		lxml.Initialize();
 		Reset_Narration();
 		EventManager.StartListening(EventManager.EventType.INTERFACE_NODE_SELECT, listener);
-		listener("18");
+		listener("13");
 
 	}
 
@@ -59,7 +59,7 @@ public class NarrationManager : MonoBehaviour {
 	}
 
 	//Call this to progress the story turn
-	public static void progressNarration() {
+	public void progressNarration() {
 		progressNarrationSwitch = true;
 		Debug.Log("progressing narration from event manager");
 	}
@@ -178,9 +178,10 @@ public class NarrationManager : MonoBehaviour {
 			//Bring the previous node into past-focus
 			if (node_history.Count >= 1) {
 				node_history[node_history.Count - 1].GetComponent<timelineNode>().PastFocus();
-			}
-			//Present this node
-			fNode = node_to_present;
+                node_to_present.GetComponent<timelineNode>().pastStoryNodeTransform = node_history[node_history.Count - 1].transform;
+            }
+            //Present this node
+            fNode = node_to_present;
 			Present(node_to_present, node_history);
 			EventManager.TriggerEvent(EventManager.EventType.NARRATION_MACHINE_TURN,kvp.Value);
 
@@ -219,8 +220,6 @@ public class NarrationManager : MonoBehaviour {
 			node_history.Add(node_to_present);
 			
 			progressNarrationSwitch = false;
-			Color tmp = new Color(0,1,1,.05f);
-			fNode.GetComponent<LineRenderer>().SetColors(tmp, tmp);
 			tmp_flag = false;
 		}//end foreach
 		user_can_take_turn = true;

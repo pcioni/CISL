@@ -11,6 +11,10 @@ public class DisplayScript : MonoBehaviour {
 	public Camera rightcam;
 	public Camera middlecam;
 
+    public int leftIndex = 1;
+    public int rightIndex = 2;
+    public int middleIndex = 3;
+
 	void Start() {
 		
 
@@ -60,9 +64,9 @@ public class DisplayScript : MonoBehaviour {
 			middlecam.rect = new Rect (0f, 0f, 1f, 1f);
 			leftcam.rect = new Rect (0f, 0f, 1f, 1f);
 			rightcam.rect = new Rect (0f, 0f, 1f, 1f);
-			leftcam.targetDisplay = 0;
-			middlecam.targetDisplay = 2;
-			rightcam.targetDisplay = 1;
+			leftcam.targetDisplay = leftIndex;
+			middlecam.targetDisplay = middleIndex;
+			rightcam.targetDisplay = rightIndex;
 		}
 	}
 
