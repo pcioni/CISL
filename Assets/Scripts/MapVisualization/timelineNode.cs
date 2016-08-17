@@ -4,34 +4,42 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.Events;
 
-public class timelineNode : MonoBehaviour
-{
+public class timelineNode : MonoBehaviour {
 	public int node_id;
-	public string node_name;
-	public DateTime date;
-	public string datevalue;
-	public long dateticks;
-	public bool known_location = false;
-	public Vector2 location;
+    public long dateticks;
+    private float zeroRef = 0.0f;
+    private float floatOffset;
+    public string node_name;
 	public string text;
+    public string text_to_display = "";
+	public string datevalue;
+    public DateTime date;
+	private bool Moveable;
+    public bool display_info = false;
+    public bool mouseOver = false;
+	public bool known_location = false;
+    public bool active = false; //Whether this node is active and interactable.
+    public Vector2 location;
 	public Vector3 baseSize;
-	private float zeroRef = 0.0f;
-	private Color baseColor;
-	public List<KeyValuePair<string,timelineNode>> neighbors = new List<KeyValuePair<string, timelineNode>>();//use kvp because no tuple support in unity
+    public Vector3 timelinePosition; //where the node should be on the timeline
+    public Vector3 mapPosition; //where the node should be on the map
+    private Vector3 target_position;
+    public Vector3 startPosition;
+    private Color baseColor;
+    private Color focusColor = Color.blue;
+    private Color pastFocusColor = Color.white;
+    private Color refocusColor = Color.cyan;
+    public List<KeyValuePair<string,timelineNode>> neighbors = new List<KeyValuePair<string, timelineNode>>();//use kvp because no tuple support in unity
 	public List<timelineNode> allNodes;
-	public bool active = false; //Whether this node is active and interactable.
-
-	private LineRenderer lr; 
 	public SpriteRenderer sr;
-
 	public UnityAction<string> callback = null;
-
+    private LineRenderer lr;
     private LineRenderer pastNarrationLineRenderer;
     public Transform pastStoryNodeTransform;
-
-    public bool display_info = false;
-    public string text_to_display = "";
-    private bool mouseOver = false;
+    public GameObject nametagprefab;
+    private GameObject nametag;
+    private IEnumerator moveCoroutine;//reference to movement
+    public nodeCategory category = nodeCategory.UNKNOWN;
 
     //OUT  = Out of focus. Node does not respond to mouse, is transparent, and does not draw lines to neighboring nodes.
     //IN   = In focus. Node responds to mouse, is the focus color (red), always displays information, and draws lines to neighboring nodes.
@@ -47,29 +55,12 @@ public class timelineNode : MonoBehaviour
 	[SerializeField]//display for debug purposes
 	private focusState state = focusState.OUT; 
 
-	public Vector3 timelinePosition; //where the node should be on the timeline
-	public Vector3 mapPosition; //where the node should be on the map
-	private Vector3 startPosition;
-	private float floatOffset;
-	private bool Moveable;
-	Color focusColor = Color.blue;
-	Color pastFocusColor = Color.grey;
-	Color refocusColor = Color.cyan;
-
 	public enum nodeCategory {
 		CHARACTER,
 		LOCATION,
 		EVENT,
 		UNKNOWN
 	}
-
-	public nodeCategory category = nodeCategory.UNKNOWN;
-
-	private Vector3 target_position;
-	private IEnumerator moveCoroutine;//reference to movement
-
-	public GameObject nametagprefab;
-	private GameObject nametag;
 
 	void Start() {
 		sr = GetComponent<SpriteRenderer>();
@@ -146,15 +137,19 @@ public class timelineNode : MonoBehaviour
 			}
 		}//end foreach
 
-		//Mark this node as active
-		active = true;
+        ChangeSize(new Vector3(baseSize.x * 2.5f, baseSize.y * 2.5f, baseSize.z));
+
+        //Mark this node as active
+        active = true;
 		state = focusState.IN;
-		//Draw lines from this node to its neighbors
-		drawLines();
+        //Draw lines from this node to its neighbors
+        gameObject.GetComponent<LineRenderer>().SetColors(focusColor, focusColor);
+        drawLines();
+        gameObject.GetComponent<LineRenderer>().SetColors(focusColor, focusColor);
         //Have it always display information
         display_info = true;
 		//Change its color
-		Color focus_color = Color.red; //new Color(1f, 1f, 1f, 1f);
+		Color focus_color = Color.white; //new Color(1f, 1f, 1f, 1f);
 		baseColor = focus_color;
 		ChangeColor (focus_color);
 
@@ -174,7 +169,6 @@ public class timelineNode : MonoBehaviour
 				neighbor_node.Value.HalfFocus();
 		}//end foreach
 
-		gameObject.GetComponent<LineRenderer>().SetColors(focusColor, focusColor);
 		if (callback != null) callback("IN");
 	}//end method Focus
 
@@ -206,13 +200,14 @@ public class timelineNode : MonoBehaviour
 	//Bring this node out of full focus, but remember it used to be the focus.
 	public void PastFocus() {
 		print ("Past Focus " + text);
-		//Mark this node as active
-		active = true;
+        //Mark this node as active
+        ChangeSize(new Vector3(baseSize.x, baseSize.y, baseSize.z));
+        active = true;
 		state = focusState.PAST;
 		//Do not have it always display information
 		display_info = false;
 		//Change its color
-		Color past_focus_color = Color.blue;
+		Color past_focus_color = Color.white;
 		baseColor = past_focus_color;
 		ChangeColor (past_focus_color);
 		//Bring it forward by changing its Z
@@ -225,8 +220,8 @@ public class timelineNode : MonoBehaviour
 
 	//Bring this node out of focus
 	public void Unfocus() {
-		//Mark this node as inactive
-		active = false;
+        //Mark this node as inactive
+        active = false;
 		state = focusState.OUT;
 		display_info = false;
 		//Remove lines from this node to its neighbors
@@ -342,8 +337,10 @@ public class timelineNode : MonoBehaviour
 		Moveable = true;
 		//Only trigger mouse effects if this node is active
 		if (active) {
-			mouseOver = false;
-			ChangeSize (new Vector3 (baseSize.x, baseSize.y, baseSize.z));
+            if (state != focusState.IN) {
+                ChangeSize(new Vector3(baseSize.x, baseSize.y, baseSize.z));
+            }
+            mouseOver = false;
 			ChangeColor (baseColor);
 			if (callback != null) callback("BACK");
 		}//end if

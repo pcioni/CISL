@@ -220,8 +220,6 @@ public class NarrationManager : MonoBehaviour {
 			node_history.Add(node_to_present);
 			
 			progressNarrationSwitch = false;
-			Color tmp = new Color(0,1,1,.05f);
-			fNode.GetComponent<LineRenderer>().SetColors(tmp, tmp);
 			tmp_flag = false;
 		}//end foreach
 		user_can_take_turn = true;
