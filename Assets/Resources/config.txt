@@ -5,6 +5,6 @@ port=8084
 [Frontend]
 xml_location=Assets/xml/roman_empire_1000.xml
 osc_client_name=MaxServer
-osc_address=129.161.135.25
+osc_address=128.113.21.30
 osc_port=3456
 

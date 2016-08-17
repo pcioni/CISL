@@ -67,11 +67,13 @@ public class mapNode : MonoBehaviour {
 		Vector3 centralNodePos = transform.position;
 		Vector3[] points = new Vector3[Mathf.Max(neighbors.Count * 2, 1)];
 		points[0] = centralNodePos;
+        points[0].z = 1;
 		int nCount = 0;
 		for (int i = 1; i < points.Length; i += 2) {
 			points[i - 1] = centralNodePos;
 			points[i] = neighbors[nCount].transform.position;
-			nCount++;
+            points[i].z = 1;
+            nCount++;
 			yield return null;
 		}
 		lr.SetVertexCount(points.Length);
