@@ -26,6 +26,8 @@ public class timelineNode : MonoBehaviour
 
 	public UnityAction<string> callback = null;
 
+    private LineRenderer pastNarrationLineRenderer;
+
 
 	//OUT = Out of focus. Node does not respond to mouse, is transparent, and does not draw lines to neighboring nodes.
 	//IN = In focus. Node responds to mouse, is the focus color (red), always displays information, and draws lines to neighboring nodes.
@@ -84,6 +86,7 @@ public class timelineNode : MonoBehaviour
 		nametag = tag;
 		disable_tag();
 		HalfFocus();
+        pastNarrationLineRenderer = transform.GetChild(0).gameObject.GetComponent<LineRenderer>();
 
 		
 
@@ -241,6 +244,8 @@ public class timelineNode : MonoBehaviour
 	}//end method Unfocus
 
 	private IEnumerator tmplcr = null;
+    //past-focus == 8
+    //if the node is a previous story node, draw the line thicker and 
 	public IEnumerator drawLines() {
         //pause before drawing lines
         yield return new WaitForSeconds(1);
@@ -252,18 +257,28 @@ public class timelineNode : MonoBehaviour
 	}
 
 	private IEnumerator _drawLines() {
-		//yield return new WaitForSeconds(1);
+		yield return new WaitForSeconds(1);
 		Vector3 centralNodePos = transform.position;
 		Vector3[] points = new Vector3[Mathf.Max(neighbors.Count * 2, 1)];
+        Vector3[] pastNarrationPoints = new Vector3[6]; //TODO: we're assuming there are only 2 narration nodes in neighbours.
 		points[0] = centralNodePos;
+        pastNarrationPoints[0] = centralNodePos;
 		int nCount = 0;
+        int pastPointsCount = 1;
 		for (int i = 1; i < points.Length; i += 2) {
+            if (neighbors[nCount].Value.state == focusState.PAST) {
+                pastNarrationPoints[pastPointsCount] = neighbors[nCount].Value.transform.position;
+                pastNarrationPoints[pastPointsCount + 1] = centralNodePos;
+                pastPointsCount += 2;
+            }
 			points[i - 1] = centralNodePos;
 			points[i] = neighbors[nCount].Value.transform.position;
 			nCount++;
 			yield return null;
 		}
 
+        pastNarrationLineRenderer.SetVertexCount(pastPointsCount); 
+        pastNarrationLineRenderer.SetPositions(pastNarrationPoints);
 		lr.SetVertexCount(points.Length);
 		lr.SetPositions(points);
 
