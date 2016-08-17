@@ -178,9 +178,10 @@ public class NarrationManager : MonoBehaviour {
 			//Bring the previous node into past-focus
 			if (node_history.Count >= 1) {
 				node_history[node_history.Count - 1].GetComponent<timelineNode>().PastFocus();
-			}
-			//Present this node
-			fNode = node_to_present;
+                node_to_present.GetComponent<timelineNode>().pastStoryNodeTransform = node_history[node_history.Count - 1].transform;
+            }
+            //Present this node
+            fNode = node_to_present;
 			Present(node_to_present, node_history);
 			EventManager.TriggerEvent(EventManager.EventType.NARRATION_MACHINE_TURN,kvp.Value);
 
@@ -219,8 +220,6 @@ public class NarrationManager : MonoBehaviour {
 			node_history.Add(node_to_present);
 			
 			progressNarrationSwitch = false;
-			Color tmp = new Color(0,1,1,.05f);
-			fNode.GetComponent<LineRenderer>().SetColors(tmp, tmp);
 			tmp_flag = false;
 		}//end foreach
 		user_can_take_turn = true;
