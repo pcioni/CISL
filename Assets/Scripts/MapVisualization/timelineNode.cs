@@ -21,7 +21,7 @@ public class timelineNode : MonoBehaviour
 	public List<timelineNode> allNodes;
 	public bool active = false; //Whether this node is active and interactable.
 
-	private LineRenderer lr;
+	private LineRenderer lr; 
 	public SpriteRenderer sr;
 
 	public UnityAction<string> callback = null;
@@ -29,12 +29,15 @@ public class timelineNode : MonoBehaviour
     private LineRenderer pastNarrationLineRenderer;
     public Transform pastStoryNodeTransform;
 
+    public bool display_info = false;
+    public string text_to_display = "";
+    private bool mouseOver = false;
 
-	//OUT = Out of focus. Node does not respond to mouse, is transparent, and does not draw lines to neighboring nodes.
-	//IN = In focus. Node responds to mouse, is the focus color (red), always displays information, and draws lines to neighboring nodes.
-	//HALF = Half-Focus. Node responds to mouse, is the half-focus color (white), displays information on mouse-over, and does not draw lines to neighboring nodes.
-	//PAST = Past-focus. Node responds to mouse, is the past-focus color (blue), displays information on mouse-over, and draws lines to neighboring nodes.
-	public enum focusState {
+    //OUT  = Out of focus. Node does not respond to mouse, is transparent, and does not draw lines to neighboring nodes.
+    //IN   = In focus. Node responds to mouse, is the focus color (red), always displays information, and draws lines to neighboring nodes.
+    //HALF = Half-Focus. Node responds to mouse, is the half-focus color (white), displays information on mouse-over, and does not draw lines to neighboring nodes.
+    //PAST = Past-focus. Node responds to mouse, is the past-focus color (blue), displays information on mouse-over, and draws lines to neighboring nodes.
+    public enum focusState {
 		OUT = 1,
 		IN = 2,
 		HALF = 4,
@@ -62,8 +65,6 @@ public class timelineNode : MonoBehaviour
 
 	public nodeCategory category = nodeCategory.UNKNOWN;
 
-
-
 	private Vector3 target_position;
 	private IEnumerator moveCoroutine;//reference to movement
 
@@ -80,7 +81,6 @@ public class timelineNode : MonoBehaviour
 		floatOffset = UnityEngine.Random.Range(0f, 3f);
 		baseColor = GetComponent<SpriteRenderer>().color;
 		baseSize = gameObject.GetComponent<RectTransform>().localScale;
-		//drawLines(); //draw a line between every node and every neighbour.
 		GameObject tag = Instantiate(nametagprefab) as GameObject;
 		tag.GetComponent<NameTag>().setTarget(transform,node_name);
 		tag.transform.SetParent(GameObject.FindGameObjectWithTag("Overlay").transform,false);
@@ -89,8 +89,6 @@ public class timelineNode : MonoBehaviour
 		HalfFocus();
         pastNarrationLineRenderer = transform.GetChild(0).gameObject.GetComponent<LineRenderer>();
         pastStoryNodeTransform = null;
-		
-
 	}
 
 	public void enable_tag() {
@@ -116,7 +114,7 @@ public class timelineNode : MonoBehaviour
 			transform.position = Vector3.Lerp(currentPos, target_position, t);
 			//Each time this node moves, if it is in an appropriate state, re-draw its lines
 			if (state == focusState.IN || state == focusState.PAST)
-				StartCoroutine(drawLines());
+				drawLines();
 			yield return null;
 		}
 		Moveable = true;
@@ -152,7 +150,7 @@ public class timelineNode : MonoBehaviour
 		active = true;
 		state = focusState.IN;
 		//Draw lines from this node to its neighbors
-		StartCoroutine(drawLines());
+		drawLines();
         //Have it always display information
         display_info = true;
 		//Change its color
@@ -247,9 +245,7 @@ public class timelineNode : MonoBehaviour
 	private IEnumerator tmplcr = null;
     //past-focus == 8
     //if the node is a previous story node, draw the line thicker and 
-	public IEnumerator drawLines() {
-        //pause before drawing lines
-        yield return new WaitForSeconds(1);
+	public void drawLines() {
 		if(tmplcr != null) {
 			StopCoroutine(tmplcr);
 		}
@@ -257,21 +253,21 @@ public class timelineNode : MonoBehaviour
 		StartCoroutine(tmplcr);
 	}
 
+    //Assign Line Renderer vertcies
 	private IEnumerator _drawLines() {
 		yield return new WaitForSeconds(1);
 		Vector3 centralNodePos = transform.position;
 		Vector3[] points = new Vector3[Mathf.Max(neighbors.Count * 2, 1)];
-        Vector3[] pastNarrationPoints = new Vector3[2]; //TODO: we're assuming there are only 2 narration nodes in neighbours.
+        Vector3[] pastNarrationPoints = new Vector3[2]; 
 		points[0] = centralNodePos;
-		int nCount = 0;
-		for (int i = 1; i < points.Length; i += 2) {
+		for (int i = 1, nCount = 0; i < points.Length; i += 2, nCount += 1) {
+            //draw the past story node in it the child-object's Line Renderer
             if (pastStoryNodeTransform != null) {
                 pastNarrationPoints[1] = pastStoryNodeTransform.position;
                 pastNarrationPoints[0] = centralNodePos;
             }
 			points[i - 1] = centralNodePos;
 			points[i] = neighbors[nCount].Value.transform.position;
-			nCount++;
 			yield return null;
 		}
 
@@ -281,7 +277,6 @@ public class timelineNode : MonoBehaviour
 		lr.SetPositions(points);
 
 		tmplcr = null;
-
 	}
 
 
@@ -306,34 +301,23 @@ public class timelineNode : MonoBehaviour
 	private float smooth_time;
 	private Vector3 end_size;
 
-	IEnumerator ChangeNodeSize()
-	{
+	IEnumerator ChangeNodeSize() {
 		float distance_to_final = Vector3.Distance(gameObject.GetComponent<RectTransform>().localScale, end_size);
-		while (distance_to_final > 0.01f)
-		{
+		while (distance_to_final > 0.01f) {
 			distance_to_final = Vector3.Distance(gameObject.GetComponent<RectTransform>().localScale, end_size);
-			if (distance_to_final <= 0.01f)
-			{
+			if (distance_to_final <= 0.01f) {
 				gameObject.GetComponent<RectTransform>().localScale = end_size;
-				break;
+				break; 
 			}
 
 			gameObject.GetComponent<RectTransform>().localScale =
 				new Vector3(
-					Mathf.SmoothDamp(gameObject.GetComponent<RectTransform>().localScale.x, end_size.x, ref zeroRef,
-						smooth_time)
-					,
-					Mathf.SmoothDamp(gameObject.GetComponent<RectTransform>().localScale.y, end_size.y, ref zeroRef,
-						smooth_time)
-					, gameObject.GetComponent<RectTransform>().localScale.z);
+					Mathf.SmoothDamp(gameObject.GetComponent<RectTransform>().localScale.x, end_size.x, ref zeroRef, smooth_time) ,
+					Mathf.SmoothDamp(gameObject.GetComponent<RectTransform>().localScale.y, end_size.y, ref zeroRef, smooth_time) , 
+                    gameObject.GetComponent<RectTransform>().localScale.z);
 			yield return null;
 		}
 	}
-
-	public bool display_info = false;
-	public string text_to_display = "";
-
-	private bool mouseOver = false;
 
 	public void OnMouseEnter() {
 		Moveable = false;
