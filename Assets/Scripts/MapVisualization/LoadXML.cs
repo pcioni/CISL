@@ -60,7 +60,7 @@ public class LoadXML : MonoBehaviour {
 		GameObject timeLineNodes = new GameObject("TimeLineNodes");
 
 		foreach (Feature f in container.features) {
-			GameObject tmp_obj = (GameObject) Instantiate(timelineNodePref, transform.position, transform.rotation);
+			GameObject tmp_obj = (GameObject) Instantiate(timelineNodePref, UnityEngine.Random.insideUnitCircle * 50, transform.rotation);
 			tmp_obj.name = "Node<"+f.data+">";
 			timelineNode tn = tmp_obj.GetComponent<timelineNode>();
 			tn.node_id = f.id;
