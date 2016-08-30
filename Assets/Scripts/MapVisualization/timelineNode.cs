@@ -26,7 +26,7 @@ public class timelineNode : MonoBehaviour {
 	private Vector3 target_position;
 	public Vector3 startPosition;
 	private Color baseColor;
-	private Color focusColor = Color.blue;
+	private Color focusColor = Color.red;
 	private Color pastFocusColor = Color.white;
 	private Color refocusColor = Color.cyan;
 	public List<KeyValuePair<string,timelineNode>> neighbors = new List<KeyValuePair<string, timelineNode>>();//use kvp because no tuple support in unity
@@ -168,7 +168,7 @@ public class timelineNode : MonoBehaviour {
 		//Have it always display information
 		display_info = true;
 		//Change its color
-		Color focus_color = Color.white; //new Color(1f, 1f, 1f, 1f);
+		Color focus_color = Color.red; //new Color(1f, 1f, 1f, 1f);
 		baseColor = focus_color;
 		ChangeColor (focus_color);
 
