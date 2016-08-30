@@ -19,7 +19,6 @@ namespace Backend {
 		public int graph_node_id;
 		public List<StoryAct> story_acts;
 		public string text;
-		public int turn;
 	}
 	[Serializable]
 	public class StoryAct {
@@ -28,9 +27,10 @@ namespace Backend {
 	}
 	[Serializable]
 	public class ChronologyResponse {
-		public int AnchorNodeId;
-		public List<StoryNode> StorySequence;
-		public int current_turn;
+		public int anchor_node_id;
+		public List<StoryNode> Sequence;
+		public int length;
+		public int starting_turn;
 	}
 
 	[Serializable]
