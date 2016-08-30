@@ -24,6 +24,9 @@ public class EventManager : MonoBehaviour {
 		INTERFACE_ZOOM_IN, //called when the user zooms in
 		INTERFACE_ZOOM_OUT, //called when the user zooms out
 		INTERFACE_PAN, //called when the user pans the camera
+
+		INTERFACE_PAGE_LEFT, //called when the user steps back in the journal
+		INTERFACE_PAGE_RIGHT, //called when the user steps forward in the journal
 	}
 
 	private Dictionary<EventType, NarrationEvent> eventDictionary;

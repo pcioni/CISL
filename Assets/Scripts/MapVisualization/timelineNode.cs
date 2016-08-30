@@ -6,46 +6,46 @@ using UnityEngine.Events;
 
 public class timelineNode : MonoBehaviour {
 	public int node_id;
-    public long dateticks;
-    private float zeroRef = 0.0f;
-    private float floatOffset;
-    public string node_name;
+	public long dateticks;
+	private float zeroRef = 0.0f;
+	private float floatOffset;
+	public string node_name;
 	public string text;
-    public string text_to_display = "";
+	public string text_to_display = "";
 	public string datevalue;
-    public DateTime date;
+	public DateTime date;
 	private bool Moveable;
-    public bool display_info = false;
-    public bool mouseOver = false;
+	public bool display_info = false;
+	public bool mouseOver = false;
 	public bool known_location = false;
-    public bool active = false; //Whether this node is active and interactable.
-    public Vector2 location;
+	public bool active = false; //Whether this node is active and interactable.
+	public Vector2 location;
 	public Vector3 baseSize;
-    public Vector3 timelinePosition; //where the node should be on the timeline
-    public Vector3 mapPosition; //where the node should be on the map
-    private Vector3 target_position;
-    public Vector3 startPosition;
-    private Color baseColor;
-    private Color focusColor = Color.blue;
-    private Color pastFocusColor = Color.white;
-    private Color refocusColor = Color.cyan;
-    public List<KeyValuePair<string,timelineNode>> neighbors = new List<KeyValuePair<string, timelineNode>>();//use kvp because no tuple support in unity
+	public Vector3 timelinePosition; //where the node should be on the timeline
+	public Vector3 mapPosition; //where the node should be on the map
+	private Vector3 target_position;
+	public Vector3 startPosition;
+	private Color baseColor;
+	private Color focusColor = Color.blue;
+	private Color pastFocusColor = Color.white;
+	private Color refocusColor = Color.cyan;
+	public List<KeyValuePair<string,timelineNode>> neighbors = new List<KeyValuePair<string, timelineNode>>();//use kvp because no tuple support in unity
 	public List<timelineNode> allNodes;
 	public SpriteRenderer sr;
 	public UnityAction<string> callback = null;
-    private LineRenderer lr;
-    private LineRenderer pastNarrationLineRenderer;
-    public Transform pastStoryNodeTransform;
-    public GameObject nametagprefab;
-    private GameObject nametag;
-    private IEnumerator moveCoroutine;//reference to movement
-    public nodeCategory category = nodeCategory.UNKNOWN;
+	private LineRenderer lr;
+	private LineRenderer pastNarrationLineRenderer;
+	public Transform pastStoryNodeTransform;
+	public GameObject nametagprefab;
+	public GameObject nametag;
+	private IEnumerator moveCoroutine;//reference to movement
+	public nodeCategory category = nodeCategory.UNKNOWN;
 
-    //OUT  = Out of focus. Node does not respond to mouse, is transparent, and does not draw lines to neighboring nodes.
-    //IN   = In focus. Node responds to mouse, is the focus color (red), always displays information, and draws lines to neighboring nodes.
-    //HALF = Half-Focus. Node responds to mouse, is the half-focus color (white), displays information on mouse-over, and does not draw lines to neighboring nodes.
-    //PAST = Past-focus. Node responds to mouse, is the past-focus color (blue), displays information on mouse-over, and draws lines to neighboring nodes.
-    public enum focusState {
+	//OUT  = Out of focus. Node does not respond to mouse, is transparent, and does not draw lines to neighboring nodes.
+	//IN   = In focus. Node responds to mouse, is the focus color (red), always displays information, and draws lines to neighboring nodes.
+	//HALF = Half-Focus. Node responds to mouse, is the half-focus color (white), displays information on mouse-over, and does not draw lines to neighboring nodes.
+	//PAST = Past-focus. Node responds to mouse, is the past-focus color (blue), displays information on mouse-over, and draws lines to neighboring nodes.
+	public enum focusState {
 		OUT = 1,
 		IN = 2,
 		HALF = 4,
@@ -62,6 +62,10 @@ public class timelineNode : MonoBehaviour {
 		UNKNOWN
 	}
 
+	void Awake() {
+
+	}
+
 	void Start() {
 		sr = GetComponent<SpriteRenderer>();
 		lr = GetComponent<LineRenderer>();
@@ -72,22 +76,37 @@ public class timelineNode : MonoBehaviour {
 		floatOffset = UnityEngine.Random.Range(0f, 3f);
 		baseColor = GetComponent<SpriteRenderer>().color;
 		baseSize = gameObject.GetComponent<RectTransform>().localScale;
+		HalfFocus();
+		pastNarrationLineRenderer = transform.GetChild(0).gameObject.GetComponent<LineRenderer>();
+		pastStoryNodeTransform = null;
+
+		//make nametag
 		GameObject tag = Instantiate(nametagprefab) as GameObject;
-		tag.GetComponent<NameTag>().setTarget(transform,node_name);
-		tag.transform.SetParent(GameObject.FindGameObjectWithTag("Overlay").transform,false);
+		tag.GetComponent<NameTag>().setTarget(transform, node_name);
+		tag.transform.SetParent(GameObject.FindGameObjectWithTag("Overlay").transform, false);
 		nametag = tag;
 		disable_tag();
-		HalfFocus();
-        pastNarrationLineRenderer = transform.GetChild(0).gameObject.GetComponent<LineRenderer>();
-        pastStoryNodeTransform = null;
 	}
 
 	public void enable_tag() {
+		nametag.transform.position = transform.position;
 		nametag.SetActive(true);
+
+		foreach (KeyValuePair<string, timelineNode> neighbor_node in this.neighbors) {
+			neighbor_node.Value.nametag.transform.position = neighbor_node.Value.transform.position;
+			neighbor_node.Value.nametag.SetActive(true);
+		}
 	}
 
 	public void disable_tag() {
-		nametag.SetActive(false);
+		if(nametag != null) {
+			nametag.SetActive(false);
+		}
+		foreach (KeyValuePair<string, timelineNode> neighbor_node in this.neighbors) {
+			if (neighbor_node.Value.nametag != null) {
+				neighbor_node.Value.nametag.SetActive(false);
+			}
+		}
 	}
 
 	public void moveToPosition(Vector3 position) {
@@ -137,17 +156,17 @@ public class timelineNode : MonoBehaviour {
 			}
 		}//end foreach
 
-        ChangeSize(new Vector3(baseSize.x * 2.5f, baseSize.y * 2.5f, baseSize.z));
+		ChangeSize(new Vector3(baseSize.x * 2.5f, baseSize.y * 2.5f, baseSize.z));
 
-        //Mark this node as active
-        active = true;
+		//Mark this node as active
+		active = true;
 		state = focusState.IN;
-        //Draw lines from this node to its neighbors
-        gameObject.GetComponent<LineRenderer>().SetColors(focusColor, focusColor);
-        drawLines();
-        gameObject.GetComponent<LineRenderer>().SetColors(focusColor, focusColor);
-        //Have it always display information
-        display_info = true;
+		//Draw lines from this node to its neighbors
+		gameObject.GetComponent<LineRenderer>().SetColors(focusColor, focusColor);
+		drawLines();
+		gameObject.GetComponent<LineRenderer>().SetColors(focusColor, focusColor);
+		//Have it always display information
+		display_info = true;
 		//Change its color
 		Color focus_color = Color.white; //new Color(1f, 1f, 1f, 1f);
 		baseColor = focus_color;
@@ -200,9 +219,9 @@ public class timelineNode : MonoBehaviour {
 	//Bring this node out of full focus, but remember it used to be the focus.
 	public void PastFocus() {
 		print ("Past Focus " + text);
-        //Mark this node as active
-        ChangeSize(new Vector3(baseSize.x, baseSize.y, baseSize.z));
-        active = true;
+		//Mark this node as active
+		ChangeSize(new Vector3(baseSize.x, baseSize.y, baseSize.z));
+		active = true;
 		state = focusState.PAST;
 		//Do not have it always display information
 		display_info = false;
@@ -220,8 +239,8 @@ public class timelineNode : MonoBehaviour {
 
 	//Bring this node out of focus
 	public void Unfocus() {
-        //Mark this node as inactive
-        active = false;
+		//Mark this node as inactive
+		active = false;
 		state = focusState.OUT;
 		display_info = false;
 		//Remove lines from this node to its neighbors
@@ -238,8 +257,8 @@ public class timelineNode : MonoBehaviour {
 	}//end method Unfocus
 
 	private IEnumerator tmplcr = null;
-    //past-focus == 8
-    //if the node is a previous story node, draw the line thicker and 
+	//past-focus == 8
+	//if the node is a previous story node, draw the line thicker and 
 	public void drawLines() {
 		if(tmplcr != null) {
 			StopCoroutine(tmplcr);
@@ -248,26 +267,26 @@ public class timelineNode : MonoBehaviour {
 		StartCoroutine(tmplcr);
 	}
 
-    //Assign Line Renderer vertcies
+	//Assign Line Renderer vertcies
 	private IEnumerator _drawLines() {
 		yield return new WaitForSeconds(1);
 		Vector3 centralNodePos = transform.position;
 		Vector3[] points = new Vector3[Mathf.Max(neighbors.Count * 2, 1)];
-        Vector3[] pastNarrationPoints = new Vector3[2]; 
+		Vector3[] pastNarrationPoints = new Vector3[2]; 
 		points[0] = centralNodePos;
 		for (int i = 1, nCount = 0; i < points.Length; i += 2, nCount += 1) {
-            //draw the past story node in it the child-object's Line Renderer
-            if (pastStoryNodeTransform != null) {
-                pastNarrationPoints[1] = pastStoryNodeTransform.position;
-                pastNarrationPoints[0] = centralNodePos;
-            }
+			//draw the past story node in it the child-object's Line Renderer
+			if (pastStoryNodeTransform != null) {
+				pastNarrationPoints[1] = pastStoryNodeTransform.position;
+				pastNarrationPoints[0] = centralNodePos;
+			}
 			points[i - 1] = centralNodePos;
 			points[i] = neighbors[nCount].Value.transform.position;
 			yield return null;
 		}
 
-        pastNarrationLineRenderer.SetVertexCount(2); 
-        pastNarrationLineRenderer.SetPositions(pastNarrationPoints);
+		pastNarrationLineRenderer.SetVertexCount(2); 
+		pastNarrationLineRenderer.SetPositions(pastNarrationPoints);
 		lr.SetVertexCount(points.Length);
 		lr.SetPositions(points);
 
@@ -309,7 +328,7 @@ public class timelineNode : MonoBehaviour {
 				new Vector3(
 					Mathf.SmoothDamp(gameObject.GetComponent<RectTransform>().localScale.x, end_size.x, ref zeroRef, smooth_time) ,
 					Mathf.SmoothDamp(gameObject.GetComponent<RectTransform>().localScale.y, end_size.y, ref zeroRef, smooth_time) , 
-                    gameObject.GetComponent<RectTransform>().localScale.z);
+					gameObject.GetComponent<RectTransform>().localScale.z);
 			yield return null;
 		}
 	}
@@ -337,10 +356,10 @@ public class timelineNode : MonoBehaviour {
 		Moveable = true;
 		//Only trigger mouse effects if this node is active
 		if (active) {
-            if (state != focusState.IN) {
-                ChangeSize(new Vector3(baseSize.x, baseSize.y, baseSize.z));
-            }
-            mouseOver = false;
+			if (state != focusState.IN) {
+				ChangeSize(new Vector3(baseSize.x, baseSize.y, baseSize.z));
+			}
+			mouseOver = false;
 			ChangeColor (baseColor);
 			if (callback != null) callback("BACK");
 		}//end if
