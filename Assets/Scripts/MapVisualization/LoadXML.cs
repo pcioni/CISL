@@ -165,7 +165,6 @@ public class LoadXML : MonoBehaviour {
 		GraphLight response = JsonUtility.FromJson<GraphLight>(www.text);
 
 		foreach(GraphNodeLight gn in response.graph_nodes) {
-			print(gn.id);
 			switch (gn.entity_type) {
 				case "character":
 					idMap[gn.id].category = timelineNode.nodeCategory.CHARACTER;

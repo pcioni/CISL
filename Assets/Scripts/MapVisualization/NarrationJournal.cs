@@ -26,7 +26,7 @@ public class NarrationJournal : MonoBehaviour {
 		listener = delegate (string data) {
 			DataConstruct1 dc1 = JsonUtility.FromJson<DataConstruct1>(data);
 			add_entry(dc1.text);
-			load_image(dc1.imgurl);
+			load_image(dc1.imgurls);
 		};
 	}
 
@@ -68,32 +68,38 @@ public class NarrationJournal : MonoBehaviour {
 		journaltext.text = entries[current_page];
 	}
 
-	public void load_image(string url) {
+	public void load_image(List<string> urls) {
 		//set the current image to display
 		//read from cache or load from url
 
 		//TODO: add cache functionality
 
-		StartCoroutine(_load_image(url));
+		StartCoroutine(_load_image(urls));
 
 
 	}
 
-	IEnumerator _load_image(string url) {
-		using (WWW www = new WWW(url)) {
-			yield return www;
-			if (string.IsNullOrEmpty(www.error)) {
-				Texture2D texture = www.texture;
-				yield return null;
-				if (texture != null && texture.width > 8 && texture.height > 8) {
-					img.texture = texture;
-					prev_images.Add(texture);
-				}else {
-					prev_images.Add(default_image);
+	IEnumerator _load_image(List<string> urls) {
+		//try to get a valid image from the list, otherwise use default
+		bool found = false;
+		foreach (string url in urls) {
+			using (WWW www = new WWW(url)) {
+				yield return www;
+				if (string.IsNullOrEmpty(www.error)) {
+					Texture2D texture = www.texture;
+					yield return null;
+					if (texture != null && texture.width > 8 && texture.height > 8) {
+						img.texture = texture;
+						prev_images.Add(texture);
+						found = true;
+						break;
+					}
 				}
-			}else {
-				prev_images.Add(default_image);
 			}
+		}
+		if (!found) {
+			prev_images.Add(default_image);
+			img.texture = default_image;
 		}
 	}
 	
