@@ -120,11 +120,16 @@ public class NarrationManager : MonoBehaviour {
 		print("===== NEW NARRATION =====");
 
 		//Ask the backend for a node sequence
-		string url = "http://" + AppConfig.Settings.Backend.ip_address + ":" + AppConfig.Settings.Backend.port + "/chronology";
-		string data = JsonUtility.ToJson(new ChronologyRequest(node_id, turns));
+		//string url = "http://" + AppConfig.Settings.Backend.ip_address + ":" + AppConfig.Settings.Backend.port + "/chronology";
+		//string data = JsonUtility.ToJson(new ChronologyRequest(node_id, turns));
 
-		Debug.Log("request: " + data);
-		WWW www = new WWW(url, Encoding.UTF8.GetBytes(data));
+		string url = "http://" + AppConfig.Settings.Backend.ip_address + ":" + AppConfig.Settings.Backend.port + "/test";
+
+
+		//Debug.Log("request: " + data);
+
+		//WWW www = new WWW(url, Encoding.UTF8.GetBytes(data));
+		WWW www = new WWW(url);
 		yield return www;
 
 		// check for errors
@@ -136,14 +141,17 @@ public class NarrationManager : MonoBehaviour {
 			yield break;
 		}
 
-		ChronologyResponse response = JsonUtility.FromJson<ChronologyResponse>(www.text);
+		//ChronologyResponse response = JsonUtility.FromJson<ChronologyResponse>(www.text);
+
+		TestSequence response = JsonUtility.FromJson<TestSequence>(www.text);
 
 		//The nodes themselves
 		List<KeyValuePair<GameObject, string>> sequence_by_node = new List<KeyValuePair<GameObject, string>>();
 		List<List<StoryAct>> sequence_acts = new List<List<StoryAct>>();
 		timelineNode temp_node = null;
 
-		foreach (StoryNode sn in response.Sequence) {
+		//foreach (StoryNode sn in response.Sequence) {
+		foreach (StoryNode sn in response.StorySequence[0].Sequence) {
 			int id = sn.graph_node_id;
 			temp_node = null;
 			lxml.idMap.TryGetValue(id, out temp_node);

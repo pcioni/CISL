@@ -74,12 +74,13 @@ public class NarrationJournal : MonoBehaviour {
 
 		//TODO: add cache functionality
 
-		StartCoroutine(_load_image(urls));
+		prev_images.Add(default_image);
+		StartCoroutine(_load_image(urls,prev_images.Count-1));
 
 
 	}
 
-	IEnumerator _load_image(List<string> urls) {
+	IEnumerator _load_image(List<string> urls, int index) {
 		//try to get a valid image from the list, otherwise use default
 		bool found = false;
 		foreach (string url in urls) {
@@ -89,16 +90,17 @@ public class NarrationJournal : MonoBehaviour {
 					Texture2D texture = www.texture;
 					yield return null;
 					if (texture != null && texture.width > 8 && texture.height > 8) {
-						img.texture = texture;
-						prev_images.Add(texture);
+						if(prev_images.Count-1 == index) {//prevent delayed loading mismatch
+							img.texture = texture;
+						}
+						prev_images[index] = texture;
 						found = true;
 						break;
 					}
 				}
 			}
 		}
-		if (!found) {
-			prev_images.Add(default_image);
+		if (!found && prev_images.Count - 1 == index) {//prevent delayed loading mismatch) {
 			img.texture = default_image;
 		}
 	}

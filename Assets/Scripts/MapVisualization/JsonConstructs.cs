@@ -54,4 +54,14 @@ namespace JsonConstructs {
 		}
 	}
 
+	[Serializable]
+	public class TestSequence {
+
+		public List<ChronologyResponse> StorySequence;
+		public int last_anchor_id;
+		public int last_segment_turn;
+		public int current_turn;
+
+	}
+
 }
