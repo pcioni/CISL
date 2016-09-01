@@ -14,9 +14,9 @@ public class Feature {
 	[XmlAttribute("data")]
 	public string data;
 
-    /*[XmlElement("speak")]
+	/*[XmlElement("speak")]
 	public Speak speak;*/
-    public string speak;
+	public string speak;
 
 	[XmlArray("neighbors")]
 	[XmlArrayItem("neighbor")]
@@ -31,8 +31,12 @@ public class Feature {
 	[XmlArray("geodata")]
 	[XmlArrayItem("coordinates")]
 	public List<Coordinates> geodata = new List<Coordinates>();
-	
+
 	//end
+
+	[XmlArray("pictures")]
+	[XmlArrayItem("picture")]
+	public List<Picture> pictures = new List<Picture>();
 
 	[XmlArray("parents")]
 	[XmlArrayItem("parent")]

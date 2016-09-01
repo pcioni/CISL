@@ -4,7 +4,7 @@ using System.Xml.Serialization;
 using System.IO;
 using System.Collections.Generic;
 using System;
-using Backend;
+using JsonConstructs;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -69,10 +69,14 @@ public class LoadXML : MonoBehaviour {
 				tn.text = f.speak;
 			}
 
+			foreach (Picture p in f.pictures) {
+				tn.pic_urls.Add(p.url);
+			}
+
 			string tmpdate = "1";
 			try {
 				foreach (Timeobj to in f.timedata) {
-					if (to.relationship == "birth date" || to.relationship == "years" || to.relationship == "date") {
+					if (to.label == "birth date" || to.label == "years" || to.label == "date") {
 						tmpdate = to.value;
 						break;
 					}
@@ -161,6 +165,7 @@ public class LoadXML : MonoBehaviour {
 		GraphLight response = JsonUtility.FromJson<GraphLight>(www.text);
 
 		foreach(GraphNodeLight gn in response.graph_nodes) {
+			print(gn.id);
 			switch (gn.entity_type) {
 				case "character":
 					idMap[gn.id].category = timelineNode.nodeCategory.CHARACTER;
@@ -177,31 +182,8 @@ public class LoadXML : MonoBehaviour {
 			}
 		}
 
-
-
-		float mover = 0;
 		foreach (timelineNode tn in nodeList) {
-			int totaldays = 365 * tn.date.Year + tn.date.DayOfYear;
-
-			float ypos = 0;
-			switch (tn.category) {
-				case timelineNode.nodeCategory.CHARACTER:
-					ypos = 0;
-					break;
-				case timelineNode.nodeCategory.EVENT:
-					ypos = -20;
-					break;
-				case timelineNode.nodeCategory.LOCATION:
-					ypos = 20;
-					break;
-				case timelineNode.nodeCategory.UNKNOWN:
-					ypos = -40;
-					break;
-			}
-
-			tn.timelinePosition = new Vector3(TimeLineBar.dateToPosition(totaldays), ypos + UnityEngine.Random.Range(-5,5), 0);
-			tn.moveToPosition(tn.timelinePosition);
-			mover += .1f;
+			tn.reset_timeline_position();
 		}
 
 		loaded = true;

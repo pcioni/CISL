@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
-using Backend;
+using JsonConstructs;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 
@@ -175,15 +175,27 @@ public class NarrationManager : MonoBehaviour {
 			}
 			KeyValuePair<GameObject, string> kvp = sequence_by_node[ix];
 			GameObject node_to_present = kvp.Key;
+			timelineNode tmptn = node_to_present.GetComponent<timelineNode>();
 			//Bring the previous node into past-focus
 			if (node_history.Count >= 1) {
 				node_history[node_history.Count - 1].GetComponent<timelineNode>().PastFocus();
-				node_to_present.GetComponent<timelineNode>().pastStoryNodeTransform = node_history[node_history.Count - 1].transform;
+				tmptn.pastStoryNodeTransform = node_history[node_history.Count - 1].transform;
 			}
 			//Present this node
 			fNode = node_to_present;
 			Present(node_to_present, node_history);
-			EventManager.TriggerEvent(EventManager.EventType.NARRATION_MACHINE_TURN,kvp.Value);
+
+			DataConstruct1 dataObj;
+			if (tmptn.pic_urls.Count > 0) {
+				dataObj = new DataConstruct1(kvp.Value, tmptn.pic_urls[0]);
+			}else {
+				dataObj = new DataConstruct1(kvp.Value, "null");
+			}
+			
+
+			string json = JsonUtility.ToJson(dataObj);
+
+			EventManager.TriggerEvent(EventManager.EventType.NARRATION_MACHINE_TURN, json);
 
 			//trigger events for all current story acts
 

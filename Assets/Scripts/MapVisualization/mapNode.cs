@@ -22,7 +22,7 @@ public class mapNode : MonoBehaviour {
 	}
 	
 	public void OnStateChange(string state) {
-		print("state change: " + state);
+		//print("state change: " + state);
 		Color tmp = master.sr.color;
 		switch (state) {
 			case "IN":

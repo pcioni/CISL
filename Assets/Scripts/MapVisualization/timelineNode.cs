@@ -41,6 +41,8 @@ public class timelineNode : MonoBehaviour {
 	private IEnumerator moveCoroutine;//reference to movement
 	public nodeCategory category = nodeCategory.UNKNOWN;
 
+	public List<string> pic_urls = new List<string>();
+
 	//OUT  = Out of focus. Node does not respond to mouse, is transparent, and does not draw lines to neighboring nodes.
 	//IN   = In focus. Node responds to mouse, is the focus color (red), always displays information, and draws lines to neighboring nodes.
 	//HALF = Half-Focus. Node responds to mouse, is the half-focus color (white), displays information on mouse-over, and does not draw lines to neighboring nodes.
@@ -60,10 +62,6 @@ public class timelineNode : MonoBehaviour {
 		LOCATION,
 		EVENT,
 		UNKNOWN
-	}
-
-	void Awake() {
-
 	}
 
 	void Start() {
@@ -86,6 +84,27 @@ public class timelineNode : MonoBehaviour {
 		tag.transform.SetParent(GameObject.FindGameObjectWithTag("Overlay").transform, false);
 		nametag = tag;
 		disable_tag();
+	}
+
+	public void reset_timeline_position() {
+		int totaldays = 365 * date.Year + date.DayOfYear;
+		float ypos = 0;
+		switch (category) {
+			case nodeCategory.CHARACTER:
+				ypos = 0;
+				break;
+			case nodeCategory.EVENT:
+				ypos = -20;
+				break;
+			case nodeCategory.LOCATION:
+				ypos = 20;
+				break;
+			case nodeCategory.UNKNOWN:
+				ypos = -40;
+				break;
+		}
+		timelinePosition = new Vector3(TimeLineBar.dateToPosition(totaldays), ypos + (node_id % 10)-5, 0); //deterministic random for horizontal stretch
+		moveToPosition(timelinePosition);
 	}
 
 	public void enable_tag() {
