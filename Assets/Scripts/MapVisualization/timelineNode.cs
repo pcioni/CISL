@@ -58,10 +58,13 @@ public class timelineNode : MonoBehaviour {
 	private focusState state = focusState.OUT; 
 
 	public enum nodeCategory {
-		CHARACTER,
-		LOCATION,
-		EVENT,
-		UNKNOWN
+		CHARACTER = 1,
+		LOCATION = 2,
+		EVENT = 4,
+		UNKNOWN = 8,
+        EMPEROR = 16,
+        BATTLE = 32,
+        CAPITOL = 64
 	}
 
 	void Start() {
@@ -93,17 +96,26 @@ public class timelineNode : MonoBehaviour {
 			case nodeCategory.CHARACTER:
 				ypos = 0;
 				break;
+            case nodeCategory.EMPEROR:
+                ypos = -10;
+                break;
 			case nodeCategory.EVENT:
 				ypos = -20;
 				break;
+            case nodeCategory.BATTLE:
+                ypos = -30;
+                break;
 			case nodeCategory.LOCATION:
 				ypos = 20;
 				break;
+            case nodeCategory.CAPITOL:
+                ypos = 10;
+                break;
 			case nodeCategory.UNKNOWN:
 				ypos = -40;
 				break;
 		}
-		timelinePosition = new Vector3(TimeLineBar.dateToPosition(totaldays), ypos + (node_id % 10)-5, 0); //deterministic random for horizontal stretch
+		timelinePosition = new Vector3(TimeLineBar.dateToPosition(totaldays), ypos + (node_id % 5)-5, 0); //deterministic random for horizontal stretch
 		moveToPosition(timelinePosition);
 	}
 
