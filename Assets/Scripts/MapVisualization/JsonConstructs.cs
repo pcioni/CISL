@@ -36,7 +36,7 @@ namespace JsonConstructs {
 	[Serializable]
 	class GraphNodeLight {
 		public int id;
-		public string entity_type;
+		public List<string> entity_type; 
 	}
 
 	[Serializable]

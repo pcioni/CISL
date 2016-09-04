@@ -165,7 +165,7 @@ public class LoadXML : MonoBehaviour {
 		GraphLight response = JsonUtility.FromJson<GraphLight>(www.text);
 
 		foreach(GraphNodeLight gn in response.graph_nodes) {
-            string e_type = (gn.entity_type.Count > 1) ? gn.entity_type[0] : gn.entity_type[1];
+			string e_type = (gn.entity_type.Count == 0) ? "unknown" : ((gn.entity_type.Count > 1) ? gn.entity_type[1] : gn.entity_type[0]);
 			switch (e_type) {
 				case "character":
 					idMap[gn.id].category = timelineNode.nodeCategory.CHARACTER;
@@ -176,15 +176,15 @@ public class LoadXML : MonoBehaviour {
 				case "event":
 					idMap[gn.id].category = timelineNode.nodeCategory.EVENT;
 					break;
-                case "emperor":
-                    idMap[gn.id].category = timelineNode.nodeCategory.EMPEROR;
-                    break;
-                case "battle":
-                    idMap[gn.id].category = timelineNode.nodeCategory.BATTLE;
-                    break;
-                case "capital":
-                    idMap[gn.id].category = timelineNode.nodeCategory.CAPITOL;
-                    break;
+				case "emperor":
+					idMap[gn.id].category = timelineNode.nodeCategory.EMPEROR;
+					break;
+				case "battle":
+					idMap[gn.id].category = timelineNode.nodeCategory.BATTLE;
+					break;
+				case "capital":
+					idMap[gn.id].category = timelineNode.nodeCategory.CAPITOL;
+					break;
 				default:
 					idMap[gn.id].category = timelineNode.nodeCategory.UNKNOWN;
 					break;

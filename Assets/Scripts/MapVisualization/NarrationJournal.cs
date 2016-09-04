@@ -11,10 +11,10 @@ public class NarrationJournal : MonoBehaviour {
 	public Texture2D default_image;
 	public Text journaltext;
 	public Text pagenumber;
-	public RawImage img;
+	public List<RawImage> imageboxes;
 	private UnityAction<string> listener;
 
-	private List<Texture2D> prev_images;
+	private List<List<Texture2D>> prev_images;
 
 	public int current_page = 0;
 
@@ -22,7 +22,7 @@ public class NarrationJournal : MonoBehaviour {
 
 	void Awake() {
 		entries = new List<string>();
-		prev_images = new List<Texture2D>();
+		prev_images = new List<List<Texture2D>>();
 		listener = delegate (string data) {
 			DataConstruct1 dc1 = JsonUtility.FromJson<DataConstruct1>(data);
 			add_entry(dc1.text);
@@ -40,7 +40,9 @@ public class NarrationJournal : MonoBehaviour {
 			journaltext.text = entries[current_page];
 		}
 		if (current_page < prev_images.Count) {
-			img.texture = prev_images[current_page];
+			for(int i=0; i < imageboxes.Count; i++) {
+				imageboxes[i].texture = prev_images[current_page][i];
+			}
 		}
 		pagenumber.text = (current_page + 1) + "/" + entries.Count;
 		EventManager.TriggerEvent(EventManager.EventType.INTERFACE_PAGE_LEFT,
@@ -53,7 +55,9 @@ public class NarrationJournal : MonoBehaviour {
 			journaltext.text = entries[current_page];
 		}
 		if (current_page < prev_images.Count) {
-			img.texture = prev_images[current_page];
+			for (int i = 0; i < imageboxes.Count; i++) {
+				imageboxes[i].texture = prev_images[current_page][i];
+			}
 		}
 
 		pagenumber.text = (current_page + 1) + "/" + entries.Count;
@@ -74,16 +78,22 @@ public class NarrationJournal : MonoBehaviour {
 
 		//TODO: add cache functionality
 
-		prev_images.Add(default_image);
-		StartCoroutine(_load_image(urls,prev_images.Count-1));
+		prev_images.Add(new List<Texture2D>());
+		StartCoroutine(_load_images(urls,prev_images.Count-1));
 
 
 	}
 
-	IEnumerator _load_image(List<string> urls, int index) {
-		//try to get a valid image from the list, otherwise use default
-		bool found = false;
+	IEnumerator _load_images(List<string> urls, int index) {
+		//try to get several valid images from the list, otherwise use default
+
+		int numtoget = imageboxes.Count;
+
+		int numfound = 0;
 		foreach (string url in urls) {
+			if(numfound >= numtoget) {
+				break;
+			}
 			using (WWW www = new WWW(url)) {
 				yield return www;
 				if (string.IsNullOrEmpty(www.error)) {
@@ -91,17 +101,19 @@ public class NarrationJournal : MonoBehaviour {
 					yield return null;
 					if (texture != null && texture.width > 8 && texture.height > 8) {
 						if(prev_images.Count-1 == index) {//prevent delayed loading mismatch
-							img.texture = texture;
+							imageboxes[numfound].texture = texture;
 						}
-						prev_images[index] = texture;
-						found = true;
-						break;
+						prev_images[index].Add(texture);
+						numfound++;
 					}
 				}
 			}
 		}
-		if (!found && prev_images.Count - 1 == index) {//prevent delayed loading mismatch) {
-			img.texture = default_image;
+		if (numfound < numtoget && prev_images.Count - 1 == index) {//prevent delayed loading mismatch
+			while(numfound < numtoget) {
+				imageboxes[numfound].texture = default_image;
+				numfound++;
+			}
 		}
 	}
 	

@@ -9,7 +9,7 @@ public class NameTag : MonoBehaviour {
 	private SpringJoint2D sj;
 	private BoxCollider2D bc;
 	private LineRenderer lr;
-	private Rigidbody2D rb;
+	//private Rigidbody2D rb;
 
 	// Use this for initialization
 	void Awake () {
@@ -17,7 +17,7 @@ public class NameTag : MonoBehaviour {
 		txt = GetComponentInChildren<Text>();
 		bc = GetComponent<BoxCollider2D>();
 		lr = GetComponent<LineRenderer>();
-		rb = GetComponent<Rigidbody2D>();
+		//rb = GetComponent<Rigidbody2D>();
 		lr.SetVertexCount(2);
 		
 		
