@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine.Events;
 using JsonConstructs;
+using System.Linq;
 
 
 public class NarrationJournal : MonoBehaviour {
@@ -20,6 +21,8 @@ public class NarrationJournal : MonoBehaviour {
 
 	public List<string> entries;
 
+	private int numtoget; //the number of images to get to fill the boxes
+
 	void Awake() {
 		entries = new List<string>();
 		prev_images = new List<List<Texture2D>>();
@@ -28,6 +31,8 @@ public class NarrationJournal : MonoBehaviour {
 			add_entry(dc1.text);
 			load_image(dc1.imgurls);
 		};
+
+		numtoget = imageboxes.Count;
 	}
 
 	void Start() {
@@ -78,7 +83,7 @@ public class NarrationJournal : MonoBehaviour {
 
 		//TODO: add cache functionality
 
-		prev_images.Add(new List<Texture2D>());
+		prev_images.Add(Enumerable.Repeat(default_image, 10).ToList());
 		StartCoroutine(_load_images(urls,prev_images.Count-1));
 
 
@@ -86,8 +91,6 @@ public class NarrationJournal : MonoBehaviour {
 
 	IEnumerator _load_images(List<string> urls, int index) {
 		//try to get several valid images from the list, otherwise use default
-
-		int numtoget = imageboxes.Count;
 
 		int numfound = 0;
 		foreach (string url in urls) {

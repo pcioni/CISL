@@ -38,10 +38,13 @@ public class timelineNode : MonoBehaviour {
 	public Transform pastStoryNodeTransform;
 	public GameObject nametagprefab;
 	public GameObject nametag;
+	private NameTag nt;
 	private IEnumerator moveCoroutine;//reference to movement
 	public nodeCategory category = nodeCategory.UNKNOWN;
 
 	public List<string> pic_urls = new List<string>();
+
+	public bool proxyflag = false;
 
 	//OUT  = Out of focus. Node does not respond to mouse, is transparent, and does not draw lines to neighboring nodes.
 	//IN   = In focus. Node responds to mouse, is the focus color (red), always displays information, and draws lines to neighboring nodes.
@@ -62,9 +65,9 @@ public class timelineNode : MonoBehaviour {
 		LOCATION = 2,
 		EVENT = 4,
 		UNKNOWN = 8,
-        EMPEROR = 16,
-        BATTLE = 32,
-        CAPITOL = 64
+		EMPEROR = 16,
+		BATTLE = 32,
+		CAPITOL = 64
 	}
 
 	void Start() {
@@ -83,7 +86,8 @@ public class timelineNode : MonoBehaviour {
 
 		//make nametag
 		GameObject tag = Instantiate(nametagprefab) as GameObject;
-		tag.GetComponent<NameTag>().setTarget(transform, node_name);
+		nt = tag.GetComponent<NameTag>();
+		nt.setTarget(transform, node_name);
 		tag.transform.SetParent(GameObject.FindGameObjectWithTag("Overlay").transform, false);
 		nametag = tag;
 		disable_tag();
@@ -96,46 +100,62 @@ public class timelineNode : MonoBehaviour {
 			case nodeCategory.CHARACTER:
 				ypos = 0;
 				break;
-            case nodeCategory.EMPEROR:
-                ypos = -10;
-                break;
-			case nodeCategory.EVENT:
+			case nodeCategory.EMPEROR:
+				//ypos = -10;
 				ypos = -20;
 				break;
-            case nodeCategory.BATTLE:
-                ypos = -30;
-                break;
-			case nodeCategory.LOCATION:
-				ypos = 20;
-				break;
-            case nodeCategory.CAPITOL:
-                ypos = 10;
-                break;
-			case nodeCategory.UNKNOWN:
+			case nodeCategory.EVENT:
+				//ypos = -20;
 				ypos = -40;
 				break;
+			case nodeCategory.BATTLE:
+				//ypos = -30;
+				ypos = -60;
+				break;
+			case nodeCategory.LOCATION:
+				//ypos = 20;
+				ypos = 20;
+				break;
+			case nodeCategory.CAPITOL:
+				//ypos = 10;
+				ypos = 20;
+				break;
+			case nodeCategory.UNKNOWN:
+				//ypos = -40;
+				ypos = -80;
+				break;
 		}
-		timelinePosition = new Vector3(TimeLineBar.dateToPosition(totaldays), ypos + (node_id % 5)-5, 0); //deterministic random for horizontal stretch
+		//timelinePosition = new Vector3(TimeLineBar.dateToPosition(totaldays), ypos + (node_id % 5)-5, 0); //deterministic random for horizontal stretch
+		timelinePosition = new Vector3(TimeLineBar.dateToPosition(totaldays), ypos + (node_id % 15) - 15, 0); //deterministic random for horizontal stretch
 		moveToPosition(timelinePosition);
 	}
 
 	public void enable_tag() {
-		nametag.transform.position = transform.position;
 		nametag.SetActive(true);
+		nt.reCenter();
 
-		foreach (KeyValuePair<string, timelineNode> neighbor_node in this.neighbors) {
-			neighbor_node.Value.nametag.transform.position = neighbor_node.Value.transform.position;
-			neighbor_node.Value.nametag.SetActive(true);
+		if(state == focusState.IN) {
+			foreach (KeyValuePair<string, timelineNode> neighbor_node in neighbors) {
+				neighbor_node.Value.nametag.SetActive(true);
+				neighbor_node.Value.nt.reCenter();
+				neighbor_node.Value.proxyflag = true;
+			}
 		}
+		
+		
 	}
 
 	public void disable_tag() {
+		if (proxyflag) return;
 		if(nametag != null) {
 			nametag.SetActive(false);
 		}
-		foreach (KeyValuePair<string, timelineNode> neighbor_node in this.neighbors) {
-			if (neighbor_node.Value.nametag != null) {
-				neighbor_node.Value.nametag.SetActive(false);
+		if (state != focusState.IN) {
+			foreach (KeyValuePair<string, timelineNode> neighbor_node in neighbors) {
+				if (neighbor_node.Value.nametag != null && neighbor_node.Value.state != focusState.IN) {
+					neighbor_node.Value.nametag.SetActive(false);
+					neighbor_node.Value.proxyflag = false;
+				}
 			}
 		}
 	}
@@ -185,6 +205,7 @@ public class timelineNode : MonoBehaviour {
 			if (tn.state == focusState.IN) {
 				tn.PastFocus();
 			}
+			tn.disable_tag();
 		}//end foreach
 
 		ChangeSize(new Vector3(baseSize.x * 2.5f, baseSize.y * 2.5f, baseSize.z));
@@ -195,6 +216,7 @@ public class timelineNode : MonoBehaviour {
 		//Draw lines from this node to its neighbors
 		gameObject.GetComponent<LineRenderer>().SetColors(focusColor, focusColor);
 		drawLines();
+		enable_tag();
 		gameObject.GetComponent<LineRenderer>().SetColors(focusColor, focusColor);
 		//Have it always display information
 		display_info = true;
@@ -364,7 +386,15 @@ public class timelineNode : MonoBehaviour {
 		}
 	}
 
+	private static Vector3 mpos = new Vector3(-1,-1,-1); //hack for stupid bug
+
 	public void OnMouseEnter() {
+		if (Input.mousePosition == mpos) {
+			return;
+		}
+		else {
+			mpos = Input.mousePosition;
+		}
 		Moveable = false;
 		//Only trigger mouse effects if this node is active
 		if (active && !mouseOver) {
@@ -384,6 +414,9 @@ public class timelineNode : MonoBehaviour {
 	}
 
 	public void OnMouseExit() {
+		if (Input.mousePosition == mpos) {
+			return;
+		}
 		Moveable = true;
 		//Only trigger mouse effects if this node is active
 		if (active) {
@@ -394,10 +427,12 @@ public class timelineNode : MonoBehaviour {
 			ChangeColor (baseColor);
 			if (callback != null) callback("BACK");
 		}//end if
-		disable_tag();
+		
 		if (state != focusState.IN) {
 			gameObject.GetComponent<LineRenderer>().SetColors(pastFocusColor, pastFocusColor);
-		}else {
+			disable_tag();
+		}
+		else {
 			gameObject.GetComponent<LineRenderer>().SetColors(focusColor, focusColor);
 		}
 	}

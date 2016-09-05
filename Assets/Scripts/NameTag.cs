@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using UnityEngine.Events;
 
 public class NameTag : MonoBehaviour {
 
@@ -11,6 +12,8 @@ public class NameTag : MonoBehaviour {
 	private LineRenderer lr;
 	//private Rigidbody2D rb;
 
+	private UnityAction<string> listener;
+
 	// Use this for initialization
 	void Awake () {
 		sj = GetComponent<SpringJoint2D>();
@@ -19,8 +22,15 @@ public class NameTag : MonoBehaviour {
 		lr = GetComponent<LineRenderer>();
 		//rb = GetComponent<Rigidbody2D>();
 		lr.SetVertexCount(2);
-		
-		
+
+		listener = delegate (string data) {
+			reCenter();
+		};
+
+		//EventManager.StartListening(EventManager.EventType.INTERFACE_ZOOM_IN, listener);
+		//EventManager.StartListening(EventManager.EventType.INTERFACE_PAN, listener);
+		//EventManager.StartListening(EventManager.EventType.INTERFACE_ZOOM_OUT, listener);
+
 	}
 
 	void Start() {
@@ -40,10 +50,21 @@ public class NameTag : MonoBehaviour {
 		follow = target;
 		txt.text = s;
 	}
+
+	public void reCenter() {
+		transform.position = follow.position;
+	}
 	
 	// Update is called once per frame
 	void Update () {
-		Vector3 tmp = follow.position;
+		//i dont know how on earth the z position screws up when you zoom
+		//but it needs to be constantly set to 0 or else it goes out of camera cull
+		Vector3 tmp = transform.position;
+		tmp.z = 0;
+		transform.position = tmp;
+
+		tmp = follow.position;
+		tmp.z = 0;
 		tmp.y += .5f;
 		sj.connectedAnchor = tmp;
 
