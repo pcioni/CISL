@@ -37,6 +37,7 @@ public class NarrationJournal : MonoBehaviour {
 			DataConstruct1 dc1 = JsonUtility.FromJson<DataConstruct1>(data);
 			add_entry(dc1.text);
 			load_image(dc1.imgurls);
+			readText(dc1.text);
 		};
 
 		numtoget = imageboxes.Count;
@@ -92,8 +93,6 @@ public class NarrationJournal : MonoBehaviour {
 
 		prev_images.Add(Enumerable.Repeat(default_image, 10).ToList());
 		StartCoroutine(_load_images(urls,prev_images.Count-1));
-
-
 	}
 
 	void cache_image(string filePath, byte[] data) {
@@ -163,5 +162,10 @@ public class NarrationJournal : MonoBehaviour {
 			}
 		}
 	}
-	
+
+	public void readText(string data){
+		TextToSpeechWatson TTS = new TextToSpeechWatson();
+		TTS.TextToSynth = data;
+		TTS.Start();
+	}	
 }

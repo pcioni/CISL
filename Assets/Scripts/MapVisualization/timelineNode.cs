@@ -94,6 +94,7 @@ public class timelineNode : MonoBehaviour {
 		tag.transform.SetParent(GameObject.FindGameObjectWithTag("Overlay").transform, false);
 		nametag = tag;
 		disable_tag();
+	
 	}
 
 	public void reset_timeline_position() {
@@ -234,6 +235,9 @@ public class timelineNode : MonoBehaviour {
 		newFocus.AddRange(new object[] {1, gameObject.transform.position.x});
 		OSCHandler.Instance.SendMessageToClient("MaxServer", "/newFocus/", newFocus);
 
+
+//		mes.Executer ();
+
 		//Bring the node to the center line
 		//moveToPosition(new Vector3(target_position.x
 		//	, 0
@@ -248,6 +252,8 @@ public class timelineNode : MonoBehaviour {
 		if (callback != null) callback("IN");
 	}//end method Focus
 
+//
+//
 	//Half-focus this node.
 	public void HalfFocus() {
 		//Mark this node as active
