@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
-using UnityEngine.Events;
 
 public class NameTag : MonoBehaviour {
 
@@ -10,27 +9,13 @@ public class NameTag : MonoBehaviour {
 	private SpringJoint2D sj;
 	private BoxCollider2D bc;
 	private LineRenderer lr;
-	//private Rigidbody2D rb;
 
-	private UnityAction<string> listener;
-
-	// Use this for initialization
 	void Awake () {
 		sj = GetComponent<SpringJoint2D>();
 		txt = GetComponentInChildren<Text>();
 		bc = GetComponent<BoxCollider2D>();
 		lr = GetComponent<LineRenderer>();
-		//rb = GetComponent<Rigidbody2D>();
 		lr.SetVertexCount(2);
-
-		listener = delegate (string data) {
-			reCenter();
-		};
-
-		//EventManager.StartListening(EventManager.EventType.INTERFACE_ZOOM_IN, listener);
-		//EventManager.StartListening(EventManager.EventType.INTERFACE_PAN, listener);
-		//EventManager.StartListening(EventManager.EventType.INTERFACE_ZOOM_OUT, listener);
-
 	}
 
 	void Start() {
@@ -76,18 +61,5 @@ public class NameTag : MonoBehaviour {
 		lr.SetPosition(1, tmp);
 		float zw = Camera.main.orthographicSize/100f;
 		lr.SetWidth(zw,zw);
-
-		/*if(rb.velocity.sqrMagnitude > 0) {
-			bc.isTrigger = false;
-		}else {
-			bc.isTrigger = true;
-		}*/
 	}
-
-	/*void OnTriggerEnter2D(Collider2D col) {
-		var rel = transform.position - col.transform.position;
-		if (rel.y > 0.5f) // if we are over the other
-			rb.AddForce(-rel * 10, ForceMode2D.Impulse);
-		
-	}*/
 }

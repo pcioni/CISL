@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using UnityEngine.Events;
 using JsonConstructs;
 using System.Linq;
+using System.IO;
 
 
 public class NarrationJournal : MonoBehaviour {
@@ -23,7 +24,13 @@ public class NarrationJournal : MonoBehaviour {
 
 	private int numtoget; //the number of images to get to fill the boxes
 
+	public string cachePath;
+
 	void Awake() {
+		cachePath = Path.Combine(Application.dataPath, "cache");
+
+		if (!Directory.Exists(cachePath)) Directory.CreateDirectory(cachePath);
+
 		entries = new List<string>();
 		prev_images = new List<List<Texture2D>>();
 		listener = delegate (string data) {
@@ -89,25 +96,62 @@ public class NarrationJournal : MonoBehaviour {
 
 	}
 
+	void cache_image(string filePath, byte[] data) {
+		File.WriteAllBytes(filePath, data);
+	}
+
 	IEnumerator _load_images(List<string> urls, int index) {
 		//try to get several valid images from the list, otherwise use default
 
 		int numfound = 0;
+		
 		foreach (string url in urls) {
-			if(numfound >= numtoget) {
+			if (numfound >= numtoget) {
 				break;
 			}
-			using (WWW www = new WWW(url)) {
+
+			WWW www;
+			string urlHash = string.Format("{0:X}", url.GetHashCode());
+			string filePath = Path.Combine(cachePath, urlHash);
+
+
+			bool cached = false;
+			if (File.Exists(filePath)) {//if file in cache, load it
+				string pathforwww = "file://" + filePath;
+				www = new WWW(pathforwww);
+				cached = true;
+			}else {
+				www = new WWW(url);
+			}
+			
+			//for demo purposes
+			string[] parsed_url = url.Split(':');
+			if (parsed_url[0].Equals("resource")) {
+				Texture2D texture = Resources.Load(parsed_url[1]) as Texture2D;
+				yield return null;
+				if (texture != null && texture.width > 8 && texture.height > 8) {
+					if (prev_images.Count - 1 == index) {//prevent delayed loading mismatch
+						imageboxes[numfound].texture = texture;
+					}
+					prev_images[index].Add(texture);
+					numfound++;
+					if (!cached) cache_image(filePath, texture.EncodeToPNG());
+				}
+				continue;
+			}
+
+			using (www) {
 				yield return www;
 				if (string.IsNullOrEmpty(www.error)) {
 					Texture2D texture = www.texture;
 					yield return null;
 					if (texture != null && texture.width > 8 && texture.height > 8) {
-						if(prev_images.Count-1 == index) {//prevent delayed loading mismatch
+						if (prev_images.Count - 1 == index) {//prevent delayed loading mismatch
 							imageboxes[numfound].texture = texture;
 						}
 						prev_images[index].Add(texture);
 						numfound++;
+						if (!cached) cache_image(filePath, texture.EncodeToPNG());
 					}
 				}
 			}
