@@ -42,6 +42,8 @@ public class timelineNode : MonoBehaviour {
 	private IEnumerator moveCoroutine;//reference to movement
 	public nodeCategory category = nodeCategory.UNKNOWN;
 
+    private ParticleSystem particle;
+
 	public List<string> pic_urls = new List<string>();
 
 	public bool proxyflag = false;
@@ -57,7 +59,7 @@ public class timelineNode : MonoBehaviour {
 		PAST = 8
 	}
 
-	[SerializeField]//display for debug purposes
+	[SerializeField]//display for debug purposes'
 	private focusState state = focusState.OUT; 
 
 	public enum nodeCategory {
@@ -71,12 +73,13 @@ public class timelineNode : MonoBehaviour {
 	}
 
 	void Start() {
+	    particle = GetComponent<ParticleSystem>();
 		sr = GetComponent<SpriteRenderer>();
 		lr = GetComponent<LineRenderer>();
 		focusColor.a = 1f;
 		pastFocusColor.a = 0.1f;
 		Moveable = false;
-		transform.Rotate(Vector3.forward * UnityEngine.Random.Range(0f, 80f)); //add some random initial rotation to offset angle from other nodes
+		//transform.Rotate(Vector3.forward * UnityEngine.Random.Range(0f, 80f)); //add some random initial rotation to offset angle from other nodes
 		floatOffset = UnityEngine.Random.Range(0f, 3f);
 		baseColor = GetComponent<SpriteRenderer>().color;
 		baseSize = gameObject.GetComponent<RectTransform>().localScale;
@@ -199,9 +202,10 @@ public class timelineNode : MonoBehaviour {
 
 	//Bring this node into focus.
 	public void Focus() {
+        //particle.Play();
 
-		//If any other node is the focus, make it a past-focus
-		foreach (timelineNode tn in allNodes) {
+        //If any other node is the focus, make it a past-focus
+        foreach (timelineNode tn in allNodes) {
 			if (tn.state == focusState.IN) {
 				tn.PastFocus();
 			}
