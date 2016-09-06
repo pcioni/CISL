@@ -19,6 +19,7 @@ public class NarrationJournal : MonoBehaviour {
 		entries = new List<string>();
 		listener = delegate (string data) {
 			add_entry(data);
+			readText(data);
 		};
 	}
 
@@ -43,6 +44,12 @@ public class NarrationJournal : MonoBehaviour {
 		current_page = entries.Count-1;
 		pagenumber.text = (current_page + 1) + "/" + entries.Count;
 		journaltext.text = entries[current_page];
+	}
+
+	public void readText(string data){
+		TextToSpeechWatson TTS = new TextToSpeechWatson();
+		TTS.TextToSynth = data;
+		TTS.Start();
 	}
 
 	void Start() {

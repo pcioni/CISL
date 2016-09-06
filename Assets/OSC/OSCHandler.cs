@@ -98,7 +98,7 @@ public class OSCHandler : MonoBehaviour
 		//Creates client on the machine's local ip address - change if using remote machine
 		//var ipaddress = Network.player.ipAddress;
 		//CreateClient("MaxServer", IPAddress.Parse(ipaddress), 3456);
-		//CreateClient("MaxServer", IPAddress.Parse("129.161.134.67"), 3456);
+		//CreateClient("MaxServer", IPAddress.Parse("127.0.0.1"), 3457);
 		CreateClient(AppConfig.Settings.Frontend.osc_client_name,
 					 IPAddress.Parse(AppConfig.Settings.Frontend.osc_address),
 					 Int32.Parse(AppConfig.Settings.Frontend.osc_port));
