@@ -6,6 +6,7 @@ using UnityEngine.Events;
 using JsonConstructs;
 using System.Linq;
 using System.IO;
+using System.Text.RegularExpressions;
 
 
 public class NarrationJournal : MonoBehaviour {
@@ -164,8 +165,12 @@ public class NarrationJournal : MonoBehaviour {
 	}
 
 	public void readText(string data){
+
+		//remove rich text tags
+		string result = Regex.Replace(data, @"<[^>]*>", string.Empty);
+
 		TextToSpeechWatson TTS = new TextToSpeechWatson();
-		TTS.TextToSynth = data;
+		TTS.TextToSynth = result;
 		TTS.Start();
 	}	
 }
