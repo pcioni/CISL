@@ -9,18 +9,13 @@ public class NameTag : MonoBehaviour {
 	private SpringJoint2D sj;
 	private BoxCollider2D bc;
 	private LineRenderer lr;
-	private Rigidbody2D rb;
 
-	// Use this for initialization
 	void Awake () {
 		sj = GetComponent<SpringJoint2D>();
 		txt = GetComponentInChildren<Text>();
 		bc = GetComponent<BoxCollider2D>();
 		lr = GetComponent<LineRenderer>();
-		rb = GetComponent<Rigidbody2D>();
 		lr.SetVertexCount(2);
-		
-		
 	}
 
 	void Start() {
@@ -40,10 +35,21 @@ public class NameTag : MonoBehaviour {
 		follow = target;
 		txt.text = s;
 	}
+
+	public void reCenter() {
+		transform.position = follow.position;
+	}
 	
 	// Update is called once per frame
 	void Update () {
-		Vector3 tmp = follow.position;
+		//i dont know how on earth the z position screws up when you zoom
+		//but it needs to be constantly set to 0 or else it goes out of camera cull
+		Vector3 tmp = transform.position;
+		tmp.z = 0;
+		transform.position = tmp;
+
+		tmp = follow.position;
+		tmp.z = 0;
 		tmp.y += .5f;
 		sj.connectedAnchor = tmp;
 
@@ -55,18 +61,5 @@ public class NameTag : MonoBehaviour {
 		lr.SetPosition(1, tmp);
 		float zw = Camera.main.orthographicSize/100f;
 		lr.SetWidth(zw,zw);
-
-		/*if(rb.velocity.sqrMagnitude > 0) {
-			bc.isTrigger = false;
-		}else {
-			bc.isTrigger = true;
-		}*/
 	}
-
-	/*void OnTriggerEnter2D(Collider2D col) {
-		var rel = transform.position - col.transform.position;
-		if (rel.y > 0.5f) // if we are over the other
-			rb.AddForce(-rel * 10, ForceMode2D.Impulse);
-		
-	}*/
 }

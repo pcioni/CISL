@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
-using Backend;
+using JsonConstructs;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 
@@ -121,11 +121,16 @@ public class NarrationManager : MonoBehaviour {
 		print("===== NEW NARRATION =====");
 
 		//Ask the backend for a node sequence
-		string url = "http://" + AppConfig.Settings.Backend.ip_address + ":" + AppConfig.Settings.Backend.port + "/chronology";
-		string data = JsonUtility.ToJson(new ChronologyRequest(node_id, turns));
+		//string url = "http://" + AppConfig.Settings.Backend.ip_address + ":" + AppConfig.Settings.Backend.port + "/chronology";
+		//string data = JsonUtility.ToJson(new ChronologyRequest(node_id, turns));
 
-		Debug.Log("request: " + data);
-		WWW www = new WWW(url, Encoding.UTF8.GetBytes(data));
+		string url = "http://" + AppConfig.Settings.Backend.ip_address + ":" + AppConfig.Settings.Backend.port + "/test";
+
+
+		//Debug.Log("request: " + data);
+
+		//WWW www = new WWW(url, Encoding.UTF8.GetBytes(data));
+		WWW www = new WWW(url);
 		yield return www;
 
 		// check for errors
@@ -137,14 +142,17 @@ public class NarrationManager : MonoBehaviour {
 			yield break;
 		}
 
-		ChronologyResponse response = JsonUtility.FromJson<ChronologyResponse>(www.text);
+		//ChronologyResponse response = JsonUtility.FromJson<ChronologyResponse>(www.text);
+
+		TestSequence response = JsonUtility.FromJson<TestSequence>(www.text);
 
 		//The nodes themselves
 		List<KeyValuePair<GameObject, string>> sequence_by_node = new List<KeyValuePair<GameObject, string>>();
 		List<List<StoryAct>> sequence_acts = new List<List<StoryAct>>();
 		timelineNode temp_node = null;
 
-		foreach (StoryNode sn in response.Sequence) {
+		//foreach (StoryNode sn in response.Sequence) {
+		foreach (StoryNode sn in response.StorySequence[0].Sequence) {
 			int id = sn.graph_node_id;
 			temp_node = null;
 			lxml.idMap.TryGetValue(id, out temp_node);
@@ -176,15 +184,21 @@ public class NarrationManager : MonoBehaviour {
 			}
 			KeyValuePair<GameObject, string> kvp = sequence_by_node[ix];
 			GameObject node_to_present = kvp.Key;
+			timelineNode tmptn = node_to_present.GetComponent<timelineNode>();
 			//Bring the previous node into past-focus
 			if (node_history.Count >= 1) {
 				node_history[node_history.Count - 1].GetComponent<timelineNode>().PastFocus();
-				node_to_present.GetComponent<timelineNode>().pastStoryNodeTransform = node_history[node_history.Count - 1].transform;
+				tmptn.pastStoryNodeTransform = node_history[node_history.Count - 1].transform;
 			}
 			//Present this node
 			fNode = node_to_present;
 			Present(node_to_present, node_history);
-			EventManager.TriggerEvent(EventManager.EventType.NARRATION_MACHINE_TURN,kvp.Value);
+
+			DataConstruct1 dataObj = new DataConstruct1(kvp.Value, tmptn.pic_urls);
+
+			string json = JsonUtility.ToJson(dataObj);
+
+			EventManager.TriggerEvent(EventManager.EventType.NARRATION_MACHINE_TURN, json);
 
 			//trigger events for all current story acts
 

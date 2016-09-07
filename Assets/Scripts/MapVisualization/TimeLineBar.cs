@@ -103,7 +103,7 @@ public class TimeLineBar : MonoBehaviour {
 			srt.anchoredPosition = new Vector2(xpos, 0);
 			int ystr = Mathf.RoundToInt(positionToDate(Camera.main.ScreenToWorldPoint(srt.anchoredPosition).x + .05f) / 365); //have to add tiny bit to prevent rounding jitter
 
-			section.transform.GetChild(0).GetComponent<Text>().text = (ystr >= 0) ? ystr.ToString() : (-ystr).ToString() + " B.C.";
+			section.transform.GetChild(0).GetComponent<Text>().text = (ystr >= 0) ? ystr.ToString() + "\nCE" : (-ystr).ToString() + "\nBCE";
 
 		}
 

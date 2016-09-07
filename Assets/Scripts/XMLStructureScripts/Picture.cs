@@ -4,11 +4,10 @@ using System.Collections;
 using System.Xml;
 using System.Xml.Serialization;
 
-public class Timeobj 
-{
+public class Picture {
+	[XmlAttribute("url")]
+	public string url;
+
 	[XmlAttribute("label")]
 	public string label;
-
-	[XmlAttribute("value")]
-	public string value;
 }
