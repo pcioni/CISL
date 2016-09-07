@@ -22,22 +22,31 @@ public class TextToSpeechWatson : MonoBehaviour
 		PlayClip(clip);
 	}
 
+	bool clipisplaying = false;
+	GameObject clipobj = null;
 
-    	public void PlayClip(AudioClip clip)
-    	{
+    public void PlayClip(AudioClip clip)
+    {
+		if (clipisplaying && clipobj!= null) {
+			Destroy (clipobj);
+			clipobj = null;
+			clipisplaying = false;
+		}
 
-		if (Application.isPlaying && clip != null && AppConfig.Settings.Frontend.playTTS)
-        	{
-            	GameObject audioObject = new GameObject("AudioObject");
-            	AudioSource source = audioObject.AddComponent<AudioSource>();
-            	source.spatialBlend = 0.0f;
-				source.loop = false;
-            	source.clip = clip;
-            	source.Play();
+		if (Application.isPlaying && clip != null && AppConfig.Settings.Frontend.playTTS){
+            GameObject audioObject = new GameObject("AudioObject");
+            AudioSource source = audioObject.AddComponent<AudioSource>();
+            source.spatialBlend = 0.0f;
+			source.loop = false;
+            source.clip = clip;
+            source.Play();
+			clipisplaying = true;
 
-	            GameObject.Destroy(audioObject, clip.length);
+			clipobj = audioObject;
 
-        	}
-    	}
+	        GameObject.Destroy(audioObject, clip.length);
+
+        }
+    }
 		
 }

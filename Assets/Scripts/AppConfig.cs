@@ -22,7 +22,7 @@ public static class AppConfig {
 			public static string osc_address = "localhost";
 			public static string osc_port = "3456";
 
-			public static bool playTTS = false;
+			public static bool playTTS = true;
 
 			//need this to force load
 			static Frontend() {
