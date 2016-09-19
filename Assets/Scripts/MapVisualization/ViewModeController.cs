@@ -51,7 +51,7 @@ public class ViewModeController : MonoBehaviour {
 			
 			tn.mapPosition = current_map.coord2world(tn.location);
 			mn.mapPosition = current_map.coord2local(tn.location);
-			mn.transform.localPosition = mn.mapPosition;
+			mn.transform.localPosition = current_map.coord2local(tn.location);
 
 			dummynodemap[tn.node_id] = mn.transform.position;
 			dummynodes.Add(mn);
