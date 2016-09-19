@@ -13,8 +13,8 @@ public class SaveScreenshot : MonoBehaviour {
 	// TODO: allow file browsing for specification of directory
 	// TODO: allow for camera picking (to screenshot one camera only, as opposed to entire scene with three setups)
 
-	public float resolution = 1.0f;
-	public string screenshotDirectory = "Screenshots";
+	public float resolution = 1.0f; // "Web" 1.0f; "Print" 4.0f //actually 4.17, but 4.0f is cleaner
+	public string screenshotDirectory = "Screenshots"; // at the CISL directory level
 
 	private bool saved = false;
 
