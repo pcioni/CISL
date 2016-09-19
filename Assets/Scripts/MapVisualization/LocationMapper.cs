@@ -19,6 +19,16 @@ public class LocationMapper : MonoBehaviour {
 	private float w, h;
 	private Image img;
 
+	[SerializeField]private float m_minWidth;
+	[SerializeField]private float m_maxWidth;
+	[SerializeField]private float m_minHeight;
+	[SerializeField]private float m_maxHeight;
+
+	[SerializeField]private float m_minLatitude;
+	[SerializeField]private float m_maxLatitude;
+	[SerializeField]private float m_minLongitude;
+	[SerializeField]private float m_maxLongitude;
+
 
 	// Use this for initialization
 	void Awake () {
@@ -26,6 +36,8 @@ public class LocationMapper : MonoBehaviour {
 		RectTransform rt = transform as RectTransform;
 		w = rt.rect.width;
 		h = rt.rect.height;
+
+		Debug.Log ("Width:" + w + " Height: " + h);
 	}
 
 	public Vector2 pix2coord(Vector2 pix) {
@@ -58,13 +70,10 @@ public class LocationMapper : MonoBehaviour {
 	}
 
 	public Vector2 coord2local(Vector2 coord) {
-		//convert coordinate point to local position
-		Vector2 tmp = coord2pix(coord);
-		tmp.x -= w / 2;
-		tmp.y -= h / 2;
-		tmp.y *= -1; // something went wrong somewhere?
+		Vector2 tmp = new Vector2 (Mathf.Lerp (m_minWidth, m_maxWidth, Mathf.InverseLerp (m_minLatitude, m_maxLatitude,coord.x)),
+			Mathf.Lerp (m_minHeight, m_maxHeight, Mathf.InverseLerp (m_minLongitude, m_maxLongitude,coord.y)));
+	
 		return tmp;
-
 	}
 
 	public void alignCoordinatesToWorldPosition(Vector2 worldpoint, Vector2 coordinates) {
