@@ -18,6 +18,7 @@
 // 	  IN THE SOFTWARE.
 //
 
+using UnityEngine;
 using System;
 using System.Net;
 using System.Net.Sockets;
@@ -105,7 +106,8 @@ namespace UnityOSC
 			}
 			catch
 			{
-				throw new Exception(String.Format("Can't send OSC packet to client {0} : {1}", _ipAddress, _port));
+				// throw new Exception(String.Format("Can't send OSC packet to client {0} : {1}", _ipAddress, _port));
+				Debug.Log (String.Format("OSCClient :: Can't send OSC packet to client {0} : {1}", _ipAddress, _port));
 			}
 		}
 		#endregion
