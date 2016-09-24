@@ -43,6 +43,7 @@ public class GoogleMap : Editor
 
 	[SerializeField]public GoogleMapMarker [] markers;
 	[SerializeField]public GoogleMapPath[] paths;
+	[SerializeField]public GoogleMapFeature[] features; //https://developers.google.com/maps/documentation/static-maps/styling
 	HTTP.Request req = null;
 
 	void Awake(){
@@ -78,6 +79,20 @@ public class GoogleMap : Editor
 		qs += "&size=" + HTTP.URL.Encode (string.Format ("{0}x{1}", m_locationMapper.GetWidth(),m_locationMapper.GetHeight()));
 		qs += "&scale=" + (doubleResolution ? "2" : "1");
 		qs += "&maptype=" + mapType.ToString ().ToLower ();
+
+		//Break style into for loop
+		foreach (GoogleMapFeature feature in features) {
+			qs += "&style=feature:" + feature.m_featureType + "%7Celement:" + feature.m_element;
+			foreach (string rule in feature.m_myRules) {
+				qs += "%7C" + rule;
+			}
+		}
+
+		/*
+		qs += "&style=feature:road.local%7Celement:geometry%7Ccolor:0x00ff00%7Cweight:1%7Cvisibility:on";
+		qs += "&style=feature:landscape%7Celement:geometry.fill%7Ccolor:0x000000%7Cvisibility:on";
+		qs += "&style=feature:administrative%7Celement:labels%7Cweight:3.9%7Cvisibility:on%7Cinverse_lightness:true"
+		qs += "&style=feature:poi%7Cvisibility:simplified";*/
 		var usingSensor = false;
 		#if UNITY_IPHONE
 		usingSensor = Input.location.isEnabledByUser && Input.location.status == LocationServiceStatus.Running;
@@ -142,6 +157,15 @@ public class GoogleMapLocation
 	public string address;
 	public float latitude;
 	public float longitude;
+}
+
+[System.Serializable]
+[ExecuteInEditMode]
+public class GoogleMapFeature
+{
+	public string m_featureType;
+	public string m_element;
+	public string [] m_myRules;
 }
 
 [System.Serializable]
