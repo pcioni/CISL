@@ -19,7 +19,6 @@ public class GoogleMap : Editor
 
 		if(GUILayout.Button("Build Map"))
 		{
-			m_instance = this;
 			Refresh();	
 		}
 	}
@@ -37,11 +36,17 @@ public class GoogleMap : Editor
 	public int zoom = 4;
 	public MapType mapType;
 	public bool doubleResolution = false;
+	public static float m_minLatitude;
+	public static float m_maxLatitude;
+	public static float m_minLongitude;
+	public static float m_maxLongitude;
+
 	[SerializeField]public GoogleMapMarker [] markers;
 	[SerializeField]public GoogleMapPath[] paths;
 	HTTP.Request req = null;
 
 	void Awake(){
+		m_instance = this;
 		Refresh ();
 	}
 	void Update() {
@@ -95,6 +100,14 @@ public class GoogleMap : Editor
 				else
 					qs += "|" + HTTP.URL.Encode (string.Format ("{0},{1}", loc.latitude, loc.longitude));
 			}
+		}
+
+		if (zoom == 4) {
+			m_minLatitude = centerLocation.latitude - 20.0f; 
+			m_maxLatitude = centerLocation.latitude + 20.0f; 
+			m_maxLongitude = centerLocation.longitude + 26.6f;
+			m_minLongitude = centerLocation.longitude - 26.6f;
+
 		}
 
 		Debug.Log (qs);

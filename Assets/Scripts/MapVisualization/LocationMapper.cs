@@ -7,7 +7,7 @@ public class LocationMapper : MonoBehaviour {
 	//maps the coordinate between a location and the map image
 
 	//requires 2 points of reference on the map and their lat/lon in order to map the pixels
-	private static LocationMapper ms_instance;
+	public static LocationMapper ms_instance;
 
 	public string referenceLoc1;
 	public Vector2 referencePix1;
@@ -24,10 +24,7 @@ public class LocationMapper : MonoBehaviour {
 	[SerializeField]private float m_minHeight;
 	[SerializeField]private float m_maxHeight;
 
-	[SerializeField]private float m_minLatitude;
-	[SerializeField]private float m_maxLatitude;
-	[SerializeField]private float m_minLongitude;
-	[SerializeField]private float m_maxLongitude;
+	[SerializeField]private RectTransform m_transform;
 
 	public float GetWidth(){
 		return m_maxWidth - m_minWidth;
@@ -39,6 +36,7 @@ public class LocationMapper : MonoBehaviour {
 
 	// Use this for initialization
 	void Awake () {
+
 		ms_instance = this;
 		img = GetComponent<Image>();
 		RectTransform rt = transform as RectTransform;
@@ -79,8 +77,8 @@ public class LocationMapper : MonoBehaviour {
 	}
 
 	public Vector2 coord2local(Vector2 coord) {
-		Vector2 tmp = new Vector2 (Mathf.Lerp (m_minWidth, m_maxWidth, Mathf.InverseLerp (m_minLongitude, m_maxLongitude,coord.y)),
-			Mathf.Lerp (m_minHeight, m_maxHeight, Mathf.InverseLerp (m_minLatitude, m_maxLatitude,coord.x)));
+		Vector2 tmp = new Vector2 (Mathf.Lerp (m_minWidth, m_maxWidth, Mathf.InverseLerp (GoogleMap.m_minLongitude, GoogleMap.m_maxLongitude,coord.y)),
+			Mathf.Lerp (m_minHeight, m_maxHeight, Mathf.InverseLerp (GoogleMap.m_minLatitude, GoogleMap.m_maxLatitude,coord.x)));
 	
 		return tmp;
 	}

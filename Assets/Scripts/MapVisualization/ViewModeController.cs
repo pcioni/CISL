@@ -38,6 +38,10 @@ public class ViewModeController : MonoBehaviour {
 		dummynodemap = new Dictionary<int, Vector2>();
 		crossmap = new Dictionary<timelineNode, mapNode>();
 
+		while (GoogleMap.m_maxLatitude == 0) {
+			yield return new WaitForEndOfFrame ();
+		}
+
 		//find all of the appropriate positions for the current map
 		foreach (timelineNode tn in lx.nodeList) {
 			if (!tn.known_location) {
