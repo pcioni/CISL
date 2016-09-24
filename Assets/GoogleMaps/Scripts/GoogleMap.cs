@@ -11,7 +11,6 @@ public class GoogleMap : Editor
 	[SerializeField]private RawImage m_image;
 	[SerializeField]private LocationMapper m_locationMapper;
 	[SerializeField]private MapRetriever m_mapRetriever;
-	private static GoogleMap m_instance;
 
 	public override void OnInspectorGUI()
 	{
@@ -30,12 +29,15 @@ public class GoogleMap : Editor
 		Terrain,
 		Hybrid
 	}
+
 	public bool loadOnStart = true;
 	public bool autoLocateCenter = true;
+
 	public GoogleMapLocation centerLocation;
 	public int zoom = 4;
 	public MapType mapType;
 	public bool doubleResolution = false;
+
 	public static float m_minLatitude;
 	public static float m_maxLatitude;
 	public static float m_minLongitude;
@@ -44,12 +46,11 @@ public class GoogleMap : Editor
 	[SerializeField]public GoogleMapMarker [] markers;
 	[SerializeField]public GoogleMapPath[] paths;
 	[SerializeField]public GoogleMapFeature[] features; //https://developers.google.com/maps/documentation/static-maps/styling
-	HTTP.Request req = null;
 
 	void Awake(){
-		m_instance = this;
 		Refresh ();
 	}
+
 	void Update() {
 
 	}
@@ -65,8 +66,11 @@ public class GoogleMap : Editor
 
 		if(autoLocateCenter && (markers.Length == 0 && paths.Length == 0)) {
 			Debug.LogError("Auto Center will only work if paths or markers are used.");	
-		}var url = "http://maps.googleapis.com/maps/api/staticmap";
+		}
+
+		var url = "http://maps.googleapis.com/maps/api/staticmap";
 		var qs = "";
+
 		if (!autoLocateCenter) {
 			if (centerLocation.address != "")
 				qs += "center=" + HTTP.URL.Encode (centerLocation.address);
@@ -76,6 +80,7 @@ public class GoogleMap : Editor
 
 			qs += "&zoom=" + zoom.ToString ();
 		}
+
 		qs += "&size=" + HTTP.URL.Encode (string.Format ("{0}x{1}", m_locationMapper.GetWidth(),m_locationMapper.GetHeight()));
 		qs += "&scale=" + (doubleResolution ? "2" : "1");
 		qs += "&maptype=" + mapType.ToString ().ToLower ();
@@ -88,15 +93,12 @@ public class GoogleMap : Editor
 			}
 		}
 
-		/*
-		qs += "&style=feature:road.local%7Celement:geometry%7Ccolor:0x00ff00%7Cweight:1%7Cvisibility:on";
-		qs += "&style=feature:landscape%7Celement:geometry.fill%7Ccolor:0x000000%7Cvisibility:on";
-		qs += "&style=feature:administrative%7Celement:labels%7Cweight:3.9%7Cvisibility:on%7Cinverse_lightness:true"
-		qs += "&style=feature:poi%7Cvisibility:simplified";*/
 		var usingSensor = false;
+
 		#if UNITY_IPHONE
 		usingSensor = Input.location.isEnabledByUser && Input.location.status == LocationServiceStatus.Running;
 		#endif
+
 		qs += "&sensor=" + (usingSensor ? "true" : "false");
 
 		foreach (var i in markers) {
@@ -122,13 +124,9 @@ public class GoogleMap : Editor
 			m_maxLatitude = centerLocation.latitude + 20.0f; 
 			m_maxLongitude = centerLocation.longitude + 26.6f;
 			m_minLongitude = centerLocation.longitude - 26.6f;
-
 		}
 
-		Debug.Log (qs);
-
-		req = new HTTP.Request ("GET",url + "?" + qs, true);
-		Debug.Log (req.uri);
+		HTTP.Request req = new HTTP.Request ("GET",url + "?" + qs, true);
 		req.Send ();
 		m_mapRetriever.StartCoroutine(m_mapRetriever.ProcessRequest (req));
 	}
