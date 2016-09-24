@@ -2,12 +2,12 @@
 using UnityEngine.UI;
 using System.Collections;
 
-[RequireComponent(typeof(Image))]
 public class LocationMapper : MonoBehaviour {
 
 	//maps the coordinate between a location and the map image
 
 	//requires 2 points of reference on the map and their lat/lon in order to map the pixels
+	private static LocationMapper ms_instance;
 
 	public string referenceLoc1;
 	public Vector2 referencePix1;
@@ -29,9 +29,17 @@ public class LocationMapper : MonoBehaviour {
 	[SerializeField]private float m_minLongitude;
 	[SerializeField]private float m_maxLongitude;
 
+	public float GetWidth(){
+		return m_maxWidth - m_minWidth;
+	}
+
+	public float GetHeight(){
+		return m_maxHeight - m_minHeight;
+	}
 
 	// Use this for initialization
 	void Awake () {
+		ms_instance = this;
 		img = GetComponent<Image>();
 		RectTransform rt = transform as RectTransform;
 		w = rt.rect.width;
@@ -41,6 +49,7 @@ public class LocationMapper : MonoBehaviour {
 	}
 
 	public Vector2 pix2coord(Vector2 pix) {
+
 		//convert local pixels on map to coordinate point
 		float cxt = Mathf.InverseLerp(referencePix1.x, referencePix2.x, pix.x);
 		float cyt = Mathf.InverseLerp(referencePix1.y, referencePix2.y, pix.y);
@@ -70,8 +79,8 @@ public class LocationMapper : MonoBehaviour {
 	}
 
 	public Vector2 coord2local(Vector2 coord) {
-		Vector2 tmp = new Vector2 (Mathf.Lerp (m_minWidth, m_maxWidth, Mathf.InverseLerp (m_minLatitude, m_maxLatitude,coord.x)),
-			Mathf.Lerp (m_minHeight, m_maxHeight, Mathf.InverseLerp (m_minLongitude, m_maxLongitude,coord.y)));
+		Vector2 tmp = new Vector2 (Mathf.Lerp (m_minWidth, m_maxWidth, Mathf.InverseLerp (m_minLongitude, m_maxLongitude,coord.y)),
+			Mathf.Lerp (m_minHeight, m_maxHeight, Mathf.InverseLerp (m_minLatitude, m_maxLatitude,coord.x)));
 	
 		return tmp;
 	}
