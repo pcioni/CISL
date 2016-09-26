@@ -6,11 +6,10 @@ using System.Collections.Generic;
 
 [CustomEditor(typeof(GoogleMap))]
 [System.Serializable]
-public class GoogleMap : Editor
+public class GoogleMap : MonoBehaviour
 {
 	[SerializeField]private RawImage m_image;
 	[SerializeField]private LocationMapper m_locationMapper;
-	[SerializeField]private MapRetriever m_mapRetriever;
 
 	public enum MapType
 	{
@@ -46,18 +45,13 @@ public class GoogleMap : Editor
 
 	public void Refresh() {
 		m_locationMapper = GameObject.Find ("MapImage").GetComponent<LocationMapper>();
-		m_mapRetriever = GameObject.Find ("MapImage").GetComponent<MapRetriever> ();
 
 		Debug.Log ("Refreshing");
 
 		var url = "http://maps.googleapis.com/maps/api/staticmap";
 		var qs = "";
 
-		if (centerLocation.address != "")
-			qs += "center=" + HTTP.URL.Encode (centerLocation.address);
-		else {
-			qs += "center=" + HTTP.URL.Encode (string.Format ("{0},{1}", centerLocation.latitude, centerLocation.longitude));
-		}
+		qs += "center=" + HTTP.URL.Encode (string.Format ("{0},{1}", centerLocation.latitude, centerLocation.longitude));
 
 		qs += "&zoom=" + zoom.ToString ();
 
@@ -91,12 +85,23 @@ public class GoogleMap : Editor
 		HTTP.Request req = new HTTP.Request ("GET",url + "?" + qs, true);
 		Debug.Log (req.uri);
 		req.Send ();
-		m_mapRetriever.StartCoroutine(m_mapRetriever.ProcessRequest (req));
+		StartCoroutine(ProcessRequest (req));
+	}
+
+	private IEnumerator ProcessRequest(HTTP.Request req){
+		while (req == null || !req.isDone) {
+			yield return new WaitForEndOfFrame ();
+		}
+
+		if (req.exception == null) {
+			var texture = new Texture2D ((int)m_locationMapper.GetWidth (), (int)m_locationMapper.GetHeight ());
+			texture.LoadImage (req.response.Bytes);
+			m_image.texture = texture;
+		}
 	}
 
 }
 
-[ExecuteInEditMode]
 public enum GoogleMapColor
 {
 	black,
@@ -112,7 +117,6 @@ public enum GoogleMapColor
 }
 
 [System.Serializable]
-[ExecuteInEditMode]
 public class GoogleMapLocation
 {
 	public string address;
@@ -121,7 +125,6 @@ public class GoogleMapLocation
 }
 
 [System.Serializable]
-[ExecuteInEditMode]
 public class GoogleMapFeature
 {
 	public string m_featureType;
@@ -130,7 +133,6 @@ public class GoogleMapFeature
 }
 
 [System.Serializable]
-[ExecuteInEditMode]
 public class GoogleMapMarker
 {
 	public enum GoogleMapMarkerSize
@@ -147,7 +149,6 @@ public class GoogleMapMarker
 }
 
 [System.Serializable]
-[ExecuteInEditMode]
 public class GoogleMapPath
 {
 	public int weight = 5;
