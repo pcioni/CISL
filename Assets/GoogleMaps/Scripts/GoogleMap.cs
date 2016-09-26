@@ -12,16 +12,6 @@ public class GoogleMap : Editor
 	[SerializeField]private LocationMapper m_locationMapper;
 	[SerializeField]private MapRetriever m_mapRetriever;
 
-	public override void OnInspectorGUI()
-	{
-		DrawDefaultInspector();
-
-		if(GUILayout.Button("Build Map"))
-		{
-			Refresh();	
-		}
-	}
-
 	public enum MapType
 	{
 		RoadMap,
@@ -31,7 +21,6 @@ public class GoogleMap : Editor
 	}
 
 	public bool loadOnStart = true;
-	public bool autoLocateCenter = true;
 
 	public GoogleMapLocation centerLocation;
 	public int zoom = 4;
@@ -42,8 +31,6 @@ public class GoogleMap : Editor
 	public static float m_minLongitude;
 	public static float m_maxLongitude;
 
-	[SerializeField]public GoogleMapMarker [] markers;
-	[SerializeField]public GoogleMapPath[] paths;
 	[SerializeField]public GoogleMapFeature[] features; //https://developers.google.com/maps/documentation/static-maps/styling
 
 	private const float height = 700.0f;
@@ -62,26 +49,17 @@ public class GoogleMap : Editor
 		m_mapRetriever = GameObject.Find ("MapImage").GetComponent<MapRetriever> ();
 
 		Debug.Log ("Refreshing");
-		if (markers == null) {
-			return;
-		}
-
-		if(autoLocateCenter && (markers.Length == 0 && paths.Length == 0)) {
-			Debug.LogError("Auto Center will only work if paths or markers are used.");	
-		}
 
 		var url = "http://maps.googleapis.com/maps/api/staticmap";
 		var qs = "";
 
-		if (!autoLocateCenter) {
-			if (centerLocation.address != "")
-				qs += "center=" + HTTP.URL.Encode (centerLocation.address);
-			else {
-				qs += "center=" + HTTP.URL.Encode (string.Format ("{0},{1}", centerLocation.latitude, centerLocation.longitude));
-			}
-
-			qs += "&zoom=" + zoom.ToString ();
+		if (centerLocation.address != "")
+			qs += "center=" + HTTP.URL.Encode (centerLocation.address);
+		else {
+			qs += "center=" + HTTP.URL.Encode (string.Format ("{0},{1}", centerLocation.latitude, centerLocation.longitude));
 		}
+
+		qs += "&zoom=" + zoom.ToString ();
 
 		qs += "&size=" + HTTP.URL.Encode (string.Format ("{0}x{1}", height,width));
 		qs += "&scale=2";
@@ -102,24 +80,6 @@ public class GoogleMap : Editor
 		#endif
 
 		qs += "&sensor=" + (usingSensor ? "true" : "false");
-
-		foreach (var i in markers) {
-			qs += "&markers=" + string.Format ("size:{0}|color:{1}|label:{2}", i.size.ToString ().ToLower (), i.color, i.label);
-			foreach (var loc in i.locations) {
-				qs += "|" + HTTP.URL.Encode (string.Format ("{0},{1}", loc.latitude, loc.longitude));
-			}
-		}
-
-		foreach (var i in paths) {
-			qs += "&path=" + string.Format ("weight:{0}|color:{1}", i.weight, i.color);
-			if(i.fill) qs += "|fillcolor:" + i.fillColor;
-			foreach (var loc in i.locations) {
-				if (loc.address != "")
-					qs += "|" + HTTP.URL.Encode (loc.address);
-				else
-					qs += "|" + HTTP.URL.Encode (string.Format ("{0},{1}", loc.latitude, loc.longitude));
-			}
-		}
 
 		if (zoom == 4) {
 			m_minLatitude = centerLocation.latitude - 20.0f * width/height; 
