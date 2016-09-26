@@ -28,3 +28,8 @@ sysinfo.txt
 
 # OS Files
 .DS_Store
+Mockups/*.psd
+Mockups/_mapTypes/
+Mockups/_progressiveImages/
+Assets/Images/maps
+Assets/Images/maps.meta
