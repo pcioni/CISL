@@ -36,7 +36,6 @@ public class GoogleMap : Editor
 	public GoogleMapLocation centerLocation;
 	public int zoom = 4;
 	public MapType mapType;
-	public bool doubleResolution = false;
 
 	public static float m_minLatitude;
 	public static float m_maxLatitude;
@@ -46,6 +45,9 @@ public class GoogleMap : Editor
 	[SerializeField]public GoogleMapMarker [] markers;
 	[SerializeField]public GoogleMapPath[] paths;
 	[SerializeField]public GoogleMapFeature[] features; //https://developers.google.com/maps/documentation/static-maps/styling
+
+	private const float height = 700.0f;
+	private const float width = 434.0f;
 
 	void Awake(){
 		Refresh ();
@@ -81,8 +83,8 @@ public class GoogleMap : Editor
 			qs += "&zoom=" + zoom.ToString ();
 		}
 
-		qs += "&size=" + HTTP.URL.Encode (string.Format ("{0}x{1}", m_locationMapper.GetWidth(),m_locationMapper.GetHeight()));
-		qs += "&scale=" + (doubleResolution ? "2" : "1");
+		qs += "&size=" + HTTP.URL.Encode (string.Format ("{0}x{1}", height,width));
+		qs += "&scale=2";
 		qs += "&maptype=" + mapType.ToString ().ToLower ();
 
 		//Break style into for loop
@@ -120,13 +122,14 @@ public class GoogleMap : Editor
 		}
 
 		if (zoom == 4) {
-			m_minLatitude = centerLocation.latitude - 20.0f; 
-			m_maxLatitude = centerLocation.latitude + 20.0f; 
+			m_minLatitude = centerLocation.latitude - 20.0f * width/height; 
+			m_maxLatitude = centerLocation.latitude + 20.0f * width/height; 
 			m_maxLongitude = centerLocation.longitude + 26.6f;
 			m_minLongitude = centerLocation.longitude - 26.6f;
 		}
 
 		HTTP.Request req = new HTTP.Request ("GET",url + "?" + qs, true);
+		Debug.Log (req.uri);
 		req.Send ();
 		m_mapRetriever.StartCoroutine(m_mapRetriever.ProcessRequest (req));
 	}
