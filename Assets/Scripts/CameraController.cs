@@ -8,15 +8,20 @@ public class CameraController : MonoBehaviour
 	public float maxZoom = 100f;
 	public float orthographicMomentum = 0.0f;
 
+	private float m_scrollTime = 0.0f;
+
 	[SerializeField]private float m_maxCameraAcceleration = 4.0f;
 	[SerializeField]private float m_maxCameraVelocity = 10.0f;
+	[SerializeField]private AnimationCurve m_scrollCurve;
+	[SerializeField]private AnimationCurve m_distanceCurve;
 
 
 	void Update()
 	{
 		orthographicMomentum = orthographicMomentum / 1.1f;
+		m_scrollTime = m_scrollTime / 1.01f;
 
-		orthographicMomentum = orthographicMomentum < 0.05f ? 0.0f : orthographicMomentum; 
+		orthographicMomentum = Mathf.Abs(orthographicMomentum) < 0.05f ? 0.0f : orthographicMomentum; 
 
 		//Pan camera with mouse
 		if (Input.GetMouseButtonDown (1))
@@ -28,41 +33,41 @@ public class CameraController : MonoBehaviour
 			EventManager.TriggerEvent (EventManager.EventType.INTERFACE_PAN, Camera.main.orthographicSize.ToString ());
 		}
 
-		//scroll in
-		if (Input.GetAxis ("Mouse ScrollWheel") > 0) {
-			ZoomOrthoCamera (Camera.main.ScreenToWorldPoint (Input.mousePosition), 1);
-			EventManager.TriggerEvent (EventManager.EventType.INTERFACE_ZOOM_OUT, Camera.main.orthographicSize.ToString ());
-		}
-		//scroll out
-		if (Input.GetAxis ("Mouse ScrollWheel") < 0) {
-			ZoomOrthoCamera (Camera.main.ScreenToWorldPoint (Input.mousePosition), -1);
-			EventManager.TriggerEvent (EventManager.EventType.INTERFACE_ZOOM_IN, Camera.main.orthographicSize.ToString ());
-		}
+		//scroll
+		ZoomOrthoCamera (Camera.main.ScreenToWorldPoint (Input.mousePosition), Input.GetAxis ("Mouse ScrollWheel"));
+		
 	}
 
 	// ortographic camera zoom towards a point in world coordinates. 
 	// negative amount zooms in, positive zooms out
 	// TODO: stop camera movement when at zoom limit
 	void ZoomOrthoCamera(Vector3 zoomTowards, float amount) {
-		if (Mathf.Sign (amount) != Mathf.Sign (orthographicMomentum)) {
-			orthographicMomentum = 0.0f;
+		
+
+		if (Mathf.Abs (amount) < .1f) {
+			return;
 		}
 
-		amount += orthographicMomentum;
-		orthographicMomentum += Mathf.Clamp(amount,-m_maxCameraAcceleration,m_maxCameraAcceleration);
-		orthographicMomentum = Mathf.Clamp (orthographicMomentum, -m_maxCameraVelocity, m_maxCameraVelocity);
+		if (Mathf.Sign (amount) != Mathf.Sign (orthographicMomentum)) {
+			orthographicMomentum = 0.0f;
+			m_scrollTime = 0.0f;
+		}
+
+		Debug.Log (m_distanceCurve.Evaluate (Mathf.InverseLerp (6.0f, 100.0f, GetComponent<Camera> ().orthographicSize)));
+
+		m_scrollTime += Time.deltaTime;
+		amount += Mathf.Sign (amount) * m_scrollCurve.Evaluate(m_scrollTime) * 10.0f + Mathf.Sign (amount) *m_distanceCurve.Evaluate(Mathf.InverseLerp(6.0f,100.0f,GetComponent<Camera>().orthographicSize)) * 10.0f;
+		orthographicMomentum += amount;
 
 		// Calculate how much we will have to move towards the zoomTowards position
 		float multiplier = (1.0f / GetComponent<Camera>().orthographicSize * amount);
-
-		// Move camera
-		transform.position += (zoomTowards - transform.position) * multiplier;
 
 		// Zoom camera
 		GetComponent<Camera>().orthographicSize -= amount;
 
 		// Limit zoom
 		GetComponent<Camera>().orthographicSize = Mathf.Clamp(GetComponent<Camera>().orthographicSize, minZoom, maxZoom);
+		EventManager.TriggerEvent (amount < 0 ? EventManager.EventType.INTERFACE_ZOOM_OUT : EventManager.EventType.INTERFACE_ZOOM_IN, Camera.main.orthographicSize.ToString ());
 	}
 
 }
