@@ -334,28 +334,28 @@ public class timelineNode : MonoBehaviour {
 	private IEnumerator _drawLines() {
 		yield return new WaitForSeconds(1);
 		Vector3 centralNodePos = transform.position;
+		GameObject midpoint;
 		for (int i = 2, nCount = 0; i < Mathf.Max(neighbors.Count * 3, 1); i += 3, nCount += 1) {
 			GameObject renderer = GameObject.Instantiate (m_lineRenderer) as GameObject;
 			Vector3 vec;
-			float dist;
 			//draw the past story node in it the child-object's Line Renderer
 			if (pastStoryNodeTransform != null) {
 
-				dist = Vector3.Distance (pastStoryNodeTransform.position, centralNodePos)/ms_scaleFactor;
-
-				vec = Vector3.Lerp(pastStoryNodeTransform.position,centralNodePos,.5f) + new Vector3(UnityEngine.Random.Range(-dist,dist),UnityEngine.Random.Range(-dist,dist),0);
 				//rotate vec 90 degrees
-
+				vec = timelineNode.ComputeMidpoint(pastStoryNodeTransform.position,centralNodePos);
 				GameObject.Instantiate (m_point,  pastStoryNodeTransform.position, this.transform.rotation,renderer.transform);
-				GameObject.Instantiate (m_point,  vec, this.transform.rotation,renderer.transform);
+				midpoint = GameObject.Instantiate (m_point,  vec, this.transform.rotation,renderer.transform) as GameObject;
+
+				midpoint.tag = "Midpoint";
+
 				GameObject.Instantiate (m_point,  centralNodePos, this.transform.rotation,renderer.transform);
 			}
-			dist = Vector3.Distance (centralNodePos,neighbors[nCount].Value.transform.position)/ms_scaleFactor;
-
-			vec = Vector3.Lerp(centralNodePos,neighbors[nCount].Value.transform.position,.5f) + new Vector3(UnityEngine.Random.Range(-dist,dist),UnityEngine.Random.Range(-dist,dist),0);
+			vec = timelineNode.ComputeMidpoint (centralNodePos, neighbors [nCount].Value.transform.position);
 
 			GameObject.Instantiate (m_point,  centralNodePos, this.transform.rotation,renderer.transform);
-			GameObject.Instantiate (m_point,  vec, this.transform.rotation,renderer.transform);
+			midpoint = GameObject.Instantiate (m_point,  vec, this.transform.rotation,renderer.transform) as GameObject;
+			midpoint.tag = "Midpoint";
+
 			GameObject.Instantiate (m_point,  neighbors[nCount].Value.transform.position, this.transform.rotation,renderer.transform);
 			yield return null;
 		}
@@ -363,6 +363,37 @@ public class timelineNode : MonoBehaviour {
 		tmplcr = null;
 	}
 
+
+	private static Vector3 ComputeMidpoint(Vector3 positionA, Vector3 positionB){
+		float dist = Vector3.Distance (positionA, positionB)/ms_scaleFactor;
+
+		Vector3 nearestMidpointPosition;
+
+		float closestDist = Mathf.Infinity;
+		Vector3? closestPos = null;
+
+		Vector3 vec = Vector3.Lerp (positionA, positionB, .5f) + new Vector3 (UnityEngine.Random.Range (-dist, dist), UnityEngine.Random.Range (-dist, dist), 0);
+
+		foreach (GameObject midpoint in GameObject.FindGameObjectsWithTag("Midpoint")) {
+			float d = Vector3.Distance (midpoint.transform.position, vec);
+			if (d < closestDist) {
+				closestDist = d;
+				closestPos = midpoint.transform.position;
+			}
+		}
+
+		if (closestPos == null) {
+			return vec;
+		}
+
+		Vector3 difVector = ((Vector3)closestPos) - vec;
+
+		vec += difVector.normalized * dist;
+
+
+		return vec;
+
+	}
 
 
 	public void ChangeSize(Vector3 final_size)
