@@ -43,6 +43,7 @@ public class timelineNode : MonoBehaviour {
 	public nodeCategory category = nodeCategory.UNKNOWN;
 
     private ParticleSystem particle;
+	[SerializeField]private GameObject m_point;
 
 	public List<string> pic_urls = new List<string>();
 
@@ -196,9 +197,6 @@ public class timelineNode : MonoBehaviour {
 	}
 
 	void Update() {
-		if (active && Moveable) {
-			rotateRight();
-		}
 	}
 
 	//Bring this node into focus.
@@ -334,21 +332,23 @@ public class timelineNode : MonoBehaviour {
 	private IEnumerator _drawLines() {
 		yield return new WaitForSeconds(1);
 		Vector3 centralNodePos = transform.position;
-		Vector3[] points = new Vector3[Mathf.Max(neighbors.Count * 2, 1)];
-		Vector3[] pastNarrationPoints = new Vector3[2]; 
+		Vector3[] points = new Vector3[Mathf.Max(neighbors.Count * 3, 1)];
+		Vector3[] pastNarrationPoints = new Vector3[3]; 
 		points[0] = centralNodePos;
-		for (int i = 1, nCount = 0; i < points.Length; i += 2, nCount += 1) {
+		for (int i = 2, nCount = 0; i < points.Length; i += 3, nCount += 1) {
 			//draw the past story node in it the child-object's Line Renderer
 			if (pastStoryNodeTransform != null) {
-				pastNarrationPoints[1] = pastStoryNodeTransform.position;
-				pastNarrationPoints[0] = centralNodePos;
+				GameObject.Instantiate (m_point,  pastStoryNodeTransform.position, this.transform.rotation,this.transform);
+				GameObject.Instantiate (m_point,  Vector3.Cross(Vector3.Lerp(pastStoryNodeTransform.position,centralNodePos,.5f),Vector3.up), this.transform.rotation,this.transform);
+				GameObject.Instantiate (m_point,  centralNodePos, this.transform.rotation,this.transform);
 			}
-			points[i - 1] = centralNodePos;
-			points[i] = neighbors[nCount].Value.transform.position;
+			GameObject.Instantiate (m_point,  centralNodePos, this.transform.rotation,this.transform);
+			GameObject.Instantiate (m_point,  Vector3.Cross(Vector3.Lerp(neighbors[nCount].Value.transform.position,centralNodePos,.5f),Vector3.up), this.transform.rotation,this.transform);
+			GameObject.Instantiate (m_point,  neighbors[nCount].Value.transform.position, this.transform.rotation,this.transform);
 			yield return null;
 		}
 
-		pastNarrationLineRenderer.SetVertexCount(2); 
+		pastNarrationLineRenderer.SetVertexCount(pastNarrationPoints.Length); 
 		pastNarrationLineRenderer.SetPositions(pastNarrationPoints);
 		lr.SetVertexCount(points.Length);
 		lr.SetPositions(points);
