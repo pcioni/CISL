@@ -43,9 +43,11 @@ public class timelineNode : MonoBehaviour {
 	public nodeCategory category = nodeCategory.UNKNOWN;
 
     private ParticleSystem particle;
+	[SerializeField]private GameObject m_lineRenderer;
 	[SerializeField]private GameObject m_point;
 
 	public List<string> pic_urls = new List<string>();
+	private const float ms_scaleFactor = 4.0f;
 
 	public bool proxyflag = false;
 
@@ -332,26 +334,31 @@ public class timelineNode : MonoBehaviour {
 	private IEnumerator _drawLines() {
 		yield return new WaitForSeconds(1);
 		Vector3 centralNodePos = transform.position;
-		Vector3[] points = new Vector3[Mathf.Max(neighbors.Count * 3, 1)];
-		Vector3[] pastNarrationPoints = new Vector3[3]; 
-		points[0] = centralNodePos;
-		for (int i = 2, nCount = 0; i < points.Length; i += 3, nCount += 1) {
+		for (int i = 2, nCount = 0; i < Mathf.Max(neighbors.Count * 3, 1); i += 3, nCount += 1) {
+			GameObject renderer = GameObject.Instantiate (m_lineRenderer) as GameObject;
+			Vector3 vec;
+			float dist;
 			//draw the past story node in it the child-object's Line Renderer
 			if (pastStoryNodeTransform != null) {
-				GameObject.Instantiate (m_point,  pastStoryNodeTransform.position, this.transform.rotation,this.transform);
-				GameObject.Instantiate (m_point,  Vector3.Cross(Vector3.Lerp(pastStoryNodeTransform.position,centralNodePos,.5f),Vector3.up), this.transform.rotation,this.transform);
-				GameObject.Instantiate (m_point,  centralNodePos, this.transform.rotation,this.transform);
+
+				dist = Vector3.Distance (pastStoryNodeTransform.position, centralNodePos)/ms_scaleFactor;
+
+				vec = Vector3.Lerp(pastStoryNodeTransform.position,centralNodePos,.5f) + new Vector3(UnityEngine.Random.Range(-dist,dist),UnityEngine.Random.Range(-dist,dist),0);
+				//rotate vec 90 degrees
+
+				GameObject.Instantiate (m_point,  pastStoryNodeTransform.position, this.transform.rotation,renderer.transform);
+				GameObject.Instantiate (m_point,  vec, this.transform.rotation,renderer.transform);
+				GameObject.Instantiate (m_point,  centralNodePos, this.transform.rotation,renderer.transform);
 			}
-			GameObject.Instantiate (m_point,  centralNodePos, this.transform.rotation,this.transform);
-			GameObject.Instantiate (m_point,  Vector3.Cross(Vector3.Lerp(neighbors[nCount].Value.transform.position,centralNodePos,.5f),Vector3.up), this.transform.rotation,this.transform);
-			GameObject.Instantiate (m_point,  neighbors[nCount].Value.transform.position, this.transform.rotation,this.transform);
+			dist = Vector3.Distance (centralNodePos,neighbors[nCount].Value.transform.position)/ms_scaleFactor;
+
+			vec = Vector3.Lerp(centralNodePos,neighbors[nCount].Value.transform.position,.5f) + new Vector3(UnityEngine.Random.Range(-dist,dist),UnityEngine.Random.Range(-dist,dist),0);
+
+			GameObject.Instantiate (m_point,  centralNodePos, this.transform.rotation,renderer.transform);
+			GameObject.Instantiate (m_point,  vec, this.transform.rotation,renderer.transform);
+			GameObject.Instantiate (m_point,  neighbors[nCount].Value.transform.position, this.transform.rotation,renderer.transform);
 			yield return null;
 		}
-
-		pastNarrationLineRenderer.SetVertexCount(pastNarrationPoints.Length); 
-		pastNarrationLineRenderer.SetPositions(pastNarrationPoints);
-		lr.SetVertexCount(points.Length);
-		lr.SetPositions(points);
 
 		tmplcr = null;
 	}
