@@ -71,6 +71,7 @@ public class LoadXML : MonoBehaviour {
 
 			foreach (Picture p in f.pictures) {
 				tn.pic_urls.Add(p.url);
+                tn.pic_labels.Add(p.label);
 			}
 
 			string tmpdate = "1";
