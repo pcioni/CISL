@@ -9,6 +9,7 @@ public class NameTag : MonoBehaviour {
 	private SpringJoint2D sj;
 	private BoxCollider2D bc;
 	private LineRenderer lr;
+    private Transform m_marker;
 
 	void Awake () {
 		sj = GetComponent<SpringJoint2D>();
@@ -31,8 +32,9 @@ public class NameTag : MonoBehaviour {
 		bc.offset = new Vector2(0, rt.rect.height / 2);
 	}
 
-	public void setTarget(Transform target, string s) {
-		follow = target;
+	public void setTarget(Transform target, string s,Transform marker) {
+        this.m_marker = marker;
+        follow = target;
 		txt.text = s;
 	}
 
@@ -53,7 +55,7 @@ public class NameTag : MonoBehaviour {
 		tmp.y += .5f;
 		sj.connectedAnchor = tmp;
 
-		Vector3 tmp2 = transform.position;
+		Vector3 tmp2 = m_marker.position;
 		tmp2.z = 0;
 
 
@@ -61,5 +63,5 @@ public class NameTag : MonoBehaviour {
 		lr.SetPosition(1, tmp);
 		float zw = Camera.main.orthographicSize/100f;
 		lr.SetWidth(zw,zw);
-	}
+    }
 }
