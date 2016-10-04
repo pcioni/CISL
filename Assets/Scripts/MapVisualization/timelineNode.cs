@@ -47,7 +47,8 @@ public class timelineNode : MonoBehaviour {
 	[SerializeField]private GameObject m_point;
 
 	public List<string> pic_urls = new List<string>();
-	private const float ms_scaleFactor = 4.0f;
+    public List<string> pic_labels = new List<string>();
+    private const float ms_scaleFactor = 4.0f;
 
 	public bool proxyflag = false;
 
@@ -76,7 +77,7 @@ public class timelineNode : MonoBehaviour {
 	}
 
 	void Start() {
-	    particle = GetComponent<ParticleSystem>();
+        particle = GetComponent<ParticleSystem>();
 		sr = GetComponent<SpriteRenderer>();
 		lr = GetComponent<LineRenderer>();
 		focusColor.a = 1f;
