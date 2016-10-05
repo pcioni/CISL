@@ -47,12 +47,12 @@ namespace JsonConstructs {
 	[Serializable]
 	public class DataConstruct1 {
 		public string text;
-        public List<string> imgUrl;
+		public List<string> imgUrl;
 		public List<string> imgLabel;
 		public DataConstruct1(string t, List<string> u, List<string> l) {
 			text = t;
-            imgUrl = u;
-            imgLabel = l;
+			imgUrl = u;
+			imgLabel = l;
 		}
 	}
 
