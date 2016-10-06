@@ -36,7 +36,7 @@ public class NameTagContainer : MonoBehaviour
 
         foreach (NameTag nt in m_nameTags)
         {
-            nt.SetNewTarget(new Vector3(t.rect.xMax, t.rect.yMax - 20.0f * ++i, 0));
+            nt.SetNewTarget(new Vector3(t.position.x + t.rect.width/2, t.position.y + t.rect.height/2 - nt.GetComponent<RectTransform>().lossyScale.y *4 * ++i, 0));
         }
     }
 

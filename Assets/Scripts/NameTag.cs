@@ -75,7 +75,7 @@ public class NameTag : MonoBehaviour {
 
 
 		lr.SetPosition(0, tmp2);
-		lr.SetPosition(1, new Vector3(tmp.x + m_rectTransform.lossyScale.x * m_rectTransform.rect.width/2, tmp.y - m_rectTransform.lossyScale.y * m_rectTransform.rect.height / 2, tmp.z));
+		lr.SetPosition(1, new Vector3(m_rectTransform.position.x + m_rectTransform.lossyScale.x * m_rectTransform.rect.width/2, m_rectTransform.position.y - m_rectTransform.lossyScale.y * m_rectTransform.rect.height / 2, m_rectTransform.position.z));
 		float zw = Camera.main.orthographicSize/100f;
 		lr.SetWidth(zw,zw);
     }

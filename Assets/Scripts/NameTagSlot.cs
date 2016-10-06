@@ -22,6 +22,8 @@ public class NameTagSlot : MonoBehaviour {
 
     void OnDrawGizmos()
     {
+        Gizmos.color = Color.red;
         Gizmos.DrawSphere(transform.position, 1.0f);
+        Gizmos.color = Color.grey;
     }
 }
