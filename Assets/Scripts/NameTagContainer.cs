@@ -5,8 +5,6 @@ using System.Collections.Generic;
 public class NameTagContainer : MonoBehaviour
 {
     public Transform follow;
-    [SerializeField]
-    private SpringJoint2D m_springJoint;
 
     [SerializeField]
     public NameTag m_originalNameTag;
@@ -27,17 +25,9 @@ public class NameTagContainer : MonoBehaviour
         tmp = follow.position;
         tmp.z = 0;
         tmp.y += .5f;
-        m_springJoint.connectedAnchor = tmp;
 
         float zw = Camera.main.orthographicSize / 100f;
         int i = 0;
-
-        RectTransform t = this.GetComponent<RectTransform>();
-
-        foreach (NameTag nt in m_nameTags)
-        {
-            nt.SetNewTarget(new Vector3(t.position.x + t.rect.width/2, t.position.y + t.rect.height/2 - nt.GetComponent<RectTransform>().lossyScale.y *4 * ++i, 0));
-        }
     }
 
 
@@ -92,34 +82,38 @@ public class NameTagContainer : MonoBehaviour
 
     }
 
-    void OnTriggerStay2D(Collider2D other)
+    void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.transform.position.y < transform.position.y)
+        NameTagContainer container = other.gameObject.GetComponent<NameTagContainer>();
+
+        if (container == null || m_nameTags == null)
         {
-            NameTagContainer container = other.gameObject.GetComponent<NameTagContainer>();
+            return;
+        }
 
-            if (container == null || m_nameTags == null)
+        m_nameTags.RemoveAll(item => item == null);
+        container.m_nameTags.RemoveAll(item => item == null);
+
+        for (int i = 0; i < container.m_nameTags.Count; i++)
+        {
+            // adopt the other nametag
+
+            if (this.m_nameTags.Contains(container.m_nameTags[i]) == false)
             {
-                return;
+                this.m_nameTags.Add(container.m_nameTags[i]);
             }
+        }
 
-            m_nameTags.RemoveAll(item => item == null);
-            container.m_nameTags.RemoveAll(item => item == null);
+        foreach (NameTag nt in m_nameTags)
+        {
+            container.m_nameTags.Remove(nt);
+        }
 
-            for (int i = 0; i < container.m_nameTags.Count; i++)
-            {
-                // adopt the other nametag
-
-                if (this.m_nameTags.Contains(container.m_nameTags[i]) == false)
-                {
-                    this.m_nameTags.Add(container.m_nameTags[i]);
-                }
-            }
-
-            foreach (NameTag nt in m_nameTags)
-            {
-                container.m_nameTags.Remove(nt);
-            }
+        RectTransform t = this.GetComponent<RectTransform>();
+        int j = 0;
+        foreach (NameTag nt in m_nameTags)
+        {
+            nt.SetNewTarget(new Vector3(t.position.x + t.rect.width*5.0f, t.position.y + t.rect.height / 2 - nt.GetComponent<RectTransform>().lossyScale.y * 4 * ++j, 0));
         }
     }
 }
