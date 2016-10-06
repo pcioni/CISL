@@ -3,6 +3,7 @@ using System.Collections;
 
 public class NameTagSlot : MonoBehaviour {
     private NameTag m_assignedNameTag;
+    public Transform m_nextSlotPosition;
 
     public void AssignNameTag(NameTag nametag)
     {

@@ -159,8 +159,8 @@ public class NarrationJournal : MonoBehaviour {
 				}
 			}
 
-            if (counter < numtoget) {
-                imageLabels[counter].text = labels[counter];
+            if (counter < numtoget && imageLabels != null && imageLabels.Count > counter) {
+                 imageLabels[counter].text = labels[counter];
             }
             counter++;
 		}
