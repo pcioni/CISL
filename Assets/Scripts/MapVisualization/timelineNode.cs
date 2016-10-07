@@ -38,13 +38,17 @@ public class timelineNode : MonoBehaviour {
 	public Transform pastStoryNodeTransform;
 	public GameObject nametagprefab;
 	public GameObject nametag;
-	private NameTag nt;
+	private NameTagContainer nt;
 	private IEnumerator moveCoroutine;//reference to movement
 	public nodeCategory category = nodeCategory.UNKNOWN;
 
     private ParticleSystem particle;
+	[SerializeField]private GameObject m_lineRenderer;
+	[SerializeField]private GameObject m_point;
 
 	public List<string> pic_urls = new List<string>();
+    public List<string> pic_labels = new List<string>();
+    private const float ms_scaleFactor = 4.0f;
 
 	public bool proxyflag = false;
 
@@ -73,7 +77,7 @@ public class timelineNode : MonoBehaviour {
 	}
 
 	void Start() {
-	    particle = GetComponent<ParticleSystem>();
+        particle = GetComponent<ParticleSystem>();
 		sr = GetComponent<SpriteRenderer>();
 		lr = GetComponent<LineRenderer>();
 		focusColor.a = 1f;
@@ -89,8 +93,8 @@ public class timelineNode : MonoBehaviour {
 
 		//make nametag
 		GameObject tag = Instantiate(nametagprefab) as GameObject;
-		nt = tag.GetComponent<NameTag>();
-		nt.setTarget(transform, node_name);
+		nt = tag.GetComponent<NameTagContainer>();
+		nt.SetTarget(transform, node_name);
 		tag.transform.SetParent(GameObject.FindGameObjectWithTag("Overlay").transform, false);
 		nametag = tag;
 		disable_tag();
@@ -136,12 +140,12 @@ public class timelineNode : MonoBehaviour {
 
 	public void enable_tag() {
 		nametag.SetActive(true);
-		nt.reCenter();
+		nt.ReCenter();
 
 		if(state == focusState.IN) {
 			foreach (KeyValuePair<string, timelineNode> neighbor_node in neighbors) {
 				neighbor_node.Value.nametag.SetActive(true);
-				neighbor_node.Value.nt.reCenter();
+				neighbor_node.Value.nt.ReCenter();
 				neighbor_node.Value.proxyflag = true;
 			}
 		}
@@ -196,9 +200,6 @@ public class timelineNode : MonoBehaviour {
 	}
 
 	void Update() {
-		if (active && Moveable) {
-			rotateRight();
-		}
 	}
 
 	//Bring this node into focus.
@@ -334,28 +335,66 @@ public class timelineNode : MonoBehaviour {
 	private IEnumerator _drawLines() {
 		yield return new WaitForSeconds(1);
 		Vector3 centralNodePos = transform.position;
-		Vector3[] points = new Vector3[Mathf.Max(neighbors.Count * 2, 1)];
-		Vector3[] pastNarrationPoints = new Vector3[2]; 
-		points[0] = centralNodePos;
-		for (int i = 1, nCount = 0; i < points.Length; i += 2, nCount += 1) {
+		GameObject midpoint;
+		for (int i = 2, nCount = 0; i < Mathf.Max(neighbors.Count * 3, 1); i += 3, nCount += 1) {
+			GameObject renderer = GameObject.Instantiate (m_lineRenderer) as GameObject;
+			Vector3 vec;
 			//draw the past story node in it the child-object's Line Renderer
 			if (pastStoryNodeTransform != null) {
-				pastNarrationPoints[1] = pastStoryNodeTransform.position;
-				pastNarrationPoints[0] = centralNodePos;
+
+				//rotate vec 90 degrees
+				vec = timelineNode.ComputeMidpoint(pastStoryNodeTransform.position,centralNodePos);
+				GameObject.Instantiate (m_point,  pastStoryNodeTransform.position, this.transform.rotation,renderer.transform);
+				midpoint = GameObject.Instantiate (m_point,  vec, this.transform.rotation,renderer.transform) as GameObject;
+
+				midpoint.tag = "Midpoint";
+
+				GameObject.Instantiate (m_point,  centralNodePos, this.transform.rotation,renderer.transform);
 			}
-			points[i - 1] = centralNodePos;
-			points[i] = neighbors[nCount].Value.transform.position;
+			vec = timelineNode.ComputeMidpoint (centralNodePos, neighbors [nCount].Value.transform.position);
+
+			GameObject.Instantiate (m_point,  centralNodePos, this.transform.rotation,renderer.transform);
+			midpoint = GameObject.Instantiate (m_point,  vec, this.transform.rotation,renderer.transform) as GameObject;
+			midpoint.tag = "Midpoint";
+
+			GameObject.Instantiate (m_point,  neighbors[nCount].Value.transform.position, this.transform.rotation,renderer.transform);
 			yield return null;
 		}
-
-		pastNarrationLineRenderer.SetVertexCount(2); 
-		pastNarrationLineRenderer.SetPositions(pastNarrationPoints);
-		lr.SetVertexCount(points.Length);
-		lr.SetPositions(points);
 
 		tmplcr = null;
 	}
 
+
+	private static Vector3 ComputeMidpoint(Vector3 positionA, Vector3 positionB){
+		float dist = Vector3.Distance (positionA, positionB)/ms_scaleFactor;
+
+		Vector3 nearestMidpointPosition;
+
+		float closestDist = Mathf.Infinity;
+		Vector3? closestPos = null;
+
+		Vector3 vec = Vector3.Lerp (positionA, positionB, .5f) + new Vector3 (UnityEngine.Random.Range (-dist, dist), UnityEngine.Random.Range (-dist, dist), 0);
+
+		foreach (GameObject midpoint in GameObject.FindGameObjectsWithTag("Midpoint")) {
+			float d = Vector3.Distance (midpoint.transform.position, vec);
+			if (d < closestDist) {
+				closestDist = d;
+				closestPos = midpoint.transform.position;
+			}
+		}
+
+		if (closestPos == null) {
+			return vec;
+		}
+
+		Vector3 difVector = ((Vector3)closestPos) - vec;
+
+		vec += difVector.normalized * dist;
+
+
+		return vec;
+
+	}
 
 
 	public void ChangeSize(Vector3 final_size)

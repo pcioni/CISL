@@ -4,11 +4,19 @@ using System.Collections;
 
 public class NameTag : MonoBehaviour {
 
-	public Transform follow;
+	public NameTagSlot follow;
 	private Text txt;
 	private SpringJoint2D sj;
 	private BoxCollider2D bc;
 	private LineRenderer lr;
+    private Transform m_marker;
+    [SerializeField]private RectTransform m_rectTransform;
+    [SerializeField]
+    private NameTagContainer m_originalContainer;
+    public NameTagContainer m_curContainer;
+
+    [SerializeField]
+    private RectTransform m_childTransform;
 
 	void Awake () {
 		sj = GetComponent<SpringJoint2D>();
@@ -18,7 +26,17 @@ public class NameTag : MonoBehaviour {
 		lr.SetVertexCount(2);
 	}
 
-	void Start() {
+    public void SetNewTarget(Vector3 targetPosition)
+    {
+        follow.transform.position = targetPosition;
+    }
+
+    public NameTagSlot GetNextSlot()
+    {
+        return follow;
+    }
+
+    void Start() {
 		StartCoroutine(_resize());
 	}
 
@@ -26,18 +44,24 @@ public class NameTag : MonoBehaviour {
 		//adjust box collider to fit size of text in text box
 		//has to execute after first udpate due to content size fitter
 		yield return new WaitForEndOfFrame();
-		RectTransform rt = transform as RectTransform;
-		bc.size = new Vector2(rt.rect.width + 10, rt.rect.height + 10);
-		bc.offset = new Vector2(0, rt.rect.height / 2);
+		bc.size = new Vector2(m_childTransform.rect.width + 10, m_childTransform.rect.height + 10);
+		bc.offset = new Vector2(m_childTransform.rect.width / 2+5, -(m_childTransform.rect.height+10)/2);
 	}
 
-	public void setTarget(Transform target, string s) {
-		follow = target;
+	public void setTarget(NameTagSlot target, string s,Transform marker) {
+        this.m_marker = marker;
+        follow = target;
 		txt.text = s;
 	}
 
-	public void reCenter() {
-		transform.position = follow.position;
+
+    void OnCollisionStay2D(Collision2D coll)
+    {
+
+    }
+
+    public void reCenter() {
+		transform.position = follow.transform.position;
 	}
 	
 	// Update is called once per frame
@@ -48,18 +72,19 @@ public class NameTag : MonoBehaviour {
 		tmp.z = 0;
 		transform.position = tmp;
 
-		tmp = follow.position;
+		tmp = follow.transform.position;
 		tmp.z = 0;
 		tmp.y += .5f;
 		sj.connectedAnchor = tmp;
 
-		Vector3 tmp2 = transform.position;
+		Vector3 tmp2 = m_marker.position;
 		tmp2.z = 0;
 
 
 		lr.SetPosition(0, tmp2);
-		lr.SetPosition(1, tmp);
+		lr.SetPosition(1, new Vector3(m_rectTransform.position.x + m_rectTransform.lossyScale.x * m_rectTransform.rect.width/2, m_rectTransform.position.y - m_rectTransform.lossyScale.y *10.0f, m_rectTransform.position.z));
 		float zw = Camera.main.orthographicSize/100f;
 		lr.SetWidth(zw,zw);
-	}
+
+    }
 }
