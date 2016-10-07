@@ -47,7 +47,7 @@ public class timelineNode : MonoBehaviour
     [SerializeField]
     private GameObject m_lineRenderer;
     [SerializeField]
-    private GameObject m_point;
+    private GameObject m_point_prefab;
 
     public List<string> pic_urls = new List<string>();
     public List<string> pic_labels = new List<string>();
@@ -367,34 +367,37 @@ public class timelineNode : MonoBehaviour
     {
         m_renderers = new List<LineRenderer>();
         yield return new WaitForSeconds(1);
-        Vector3 centralNodePos = transform.position;
-        GameObject midpoint;
+        Vector3 startPoint = transform.position; // this is the central node position
+        GameObject midpoint_go;
         for (int i = 2, nCount = 0; i < Mathf.Max(neighbors.Count * 3, 1); i += 3, nCount += 1)
         {
             GameObject renderer = GameObject.Instantiate(m_lineRenderer) as GameObject;
             m_renderers.Add(renderer.GetComponent<LineRenderer>());
             this.ColorLines(focusColor);
-            Vector3 vec;
+            Vector3 midpoint_vec;
+            
+            Vector3 endPoint;
+
             //draw the past story node in it the child-object's Line Renderer
-            if (pastStoryNodeTransform != null)
+            /*if (pastStoryNodeTransform != null)
             {
 
                 //rotate vec 90 degrees
-                vec = timelineNode.ComputeMidpoint(pastStoryNodeTransform.position, centralNodePos);
-                GameObject.Instantiate(m_point, pastStoryNodeTransform.position, this.transform.rotation, renderer.transform);
-                midpoint = GameObject.Instantiate(m_point, vec, this.transform.rotation, renderer.transform) as GameObject;
+                midpoint_vec = timelineNode.ComputeMidpoint(pastStoryNodeTransform.position, startPoint);
+                GameObject.Instantiate(m_point_prefab, pastStoryNodeTransform.position, this.transform.rotation, renderer.transform);
+                midpoint_go = GameObject.Instantiate(m_point_prefab, midpoint_vec, this.transform.rotation, renderer.transform) as GameObject;
 
-                midpoint.tag = "Midpoint";
+                midpoint_go.tag = "Midpoint";
 
-                GameObject.Instantiate(m_point, centralNodePos, this.transform.rotation, renderer.transform);
-            }
-            vec = timelineNode.ComputeMidpoint(centralNodePos, neighbors[nCount].Value.transform.position);
+                GameObject.Instantiate(m_point_prefab, startPoint, this.transform.rotation, renderer.transform);
+            }*/
+            midpoint_vec = timelineNode.ComputeMidpoint(startPoint, neighbors[nCount].Value.transform.position);
 
-            GameObject.Instantiate(m_point, centralNodePos, this.transform.rotation, renderer.transform);
-            midpoint = GameObject.Instantiate(m_point, vec, this.transform.rotation, renderer.transform) as GameObject;
-            midpoint.tag = "Midpoint";
+            GameObject.Instantiate(m_point_prefab, startPoint, this.transform.rotation, renderer.transform);
+            midpoint_go = GameObject.Instantiate(m_point_prefab, midpoint_vec, this.transform.rotation, renderer.transform) as GameObject;
+            midpoint_go.tag = "Midpoint";
 
-            GameObject.Instantiate(m_point, neighbors[nCount].Value.transform.position, this.transform.rotation, renderer.transform);
+            GameObject.Instantiate(m_point_prefab, neighbors[nCount].Value.transform.position, this.transform.rotation, renderer.transform);
             yield return null;
         }
 
