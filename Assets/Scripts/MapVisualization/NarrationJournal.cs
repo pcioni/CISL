@@ -27,8 +27,12 @@ public class NarrationJournal : MonoBehaviour {
 
 	public string cachePath;
 
+	private TextToSpeechWatson TTS;
+
 	void Awake() {
 		cachePath = Path.Combine(Application.dataPath, "cache");
+
+		TTS = GetComponent<TextToSpeechWatson>();
 
 		if (!Directory.Exists(cachePath)) Directory.CreateDirectory(cachePath);
 
@@ -169,8 +173,7 @@ public class NarrationJournal : MonoBehaviour {
 		//remove rich text tags
 		string result = Regex.Replace(data, @"<[^>]*>", string.Empty);
 
-		TextToSpeechWatson TTS = new TextToSpeechWatson();
 		TTS.TextToSynth = result;
-		TTS.Start();
+		TTS.Speak();
 	}	
 }
