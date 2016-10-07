@@ -373,6 +373,7 @@ public class timelineNode : MonoBehaviour
         {
             GameObject renderer = GameObject.Instantiate(m_lineRenderer) as GameObject;
             m_renderers.Add(renderer.GetComponent<LineRenderer>());
+            this.ColorLines(focusColor);
             Vector3 vec;
             //draw the past story node in it the child-object's Line Renderer
             if (pastStoryNodeTransform != null)
@@ -396,6 +397,7 @@ public class timelineNode : MonoBehaviour
             GameObject.Instantiate(m_point, neighbors[nCount].Value.transform.position, this.transform.rotation, renderer.transform);
             yield return null;
         }
+
 
         tmplcr = null;
     }
