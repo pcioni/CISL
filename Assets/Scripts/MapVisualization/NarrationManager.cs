@@ -121,16 +121,16 @@ public class NarrationManager : MonoBehaviour {
 		print("===== NEW NARRATION =====");
 
 		//Ask the backend for a node sequence
-		//string url = "http://" + AppConfig.Settings.Backend.ip_address + ":" + AppConfig.Settings.Backend.port + "/chronology";
-		//string data = JsonUtility.ToJson(new ChronologyRequest(node_id, turns));
+		string url = "http://" + AppConfig.Settings.Backend.ip_address + ":" + AppConfig.Settings.Backend.port + "/chronology";
+		string data = JsonUtility.ToJson(new ChronologyRequest(node_id, turns));
 
-		string url = "http://" + AppConfig.Settings.Backend.ip_address + ":" + AppConfig.Settings.Backend.port + "/test";
+		//string url = "http://" + AppConfig.Settings.Backend.ip_address + ":" + AppConfig.Settings.Backend.port + "/test";
 
 
 		//Debug.Log("request: " + data);
 
-		//WWW www = new WWW(url, Encoding.UTF8.GetBytes(data));
-		WWW www = new WWW(url);
+		WWW www = new WWW(url, Encoding.UTF8.GetBytes(data));
+		//WWW www = new WWW(url);
 		yield return www;
 
 		// check for errors

@@ -1,7 +1,7 @@
 using UnityEngine;
 using IBM.Watson.DeveloperCloud.Services.TextToSpeech.v1;
 
-public class TextToSpeechWatson : MonoBehaviour
+public class TextToSpeechWatson
 {
 
     public string TextToSynth;
@@ -28,7 +28,7 @@ public class TextToSpeechWatson : MonoBehaviour
     public void PlayClip(AudioClip clip)
     {
 		if (clipisplaying && clipobj!= null) {
-			Destroy (clipobj);
+			GameObject.Destroy(clipobj);
 			clipobj = null;
 			clipisplaying = false;
 		}
