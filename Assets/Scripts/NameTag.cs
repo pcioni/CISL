@@ -13,6 +13,7 @@ public class NameTag : MonoBehaviour {
     [SerializeField]private RectTransform m_rectTransform;
     [SerializeField]
     private NameTagContainer m_originalContainer;
+    public NameTagContainer m_curContainer;
 
     [SerializeField]
     private RectTransform m_childTransform;
@@ -53,6 +54,12 @@ public class NameTag : MonoBehaviour {
 		txt.text = s;
 	}
 
+
+    void OnCollisionStay2D(Collision2D coll)
+    {
+
+    }
+
     public void reCenter() {
 		transform.position = follow.transform.position;
 	}
@@ -78,5 +85,6 @@ public class NameTag : MonoBehaviour {
 		lr.SetPosition(1, new Vector3(m_rectTransform.position.x + m_rectTransform.lossyScale.x * m_rectTransform.rect.width/2, m_rectTransform.position.y - m_rectTransform.lossyScale.y *10.0f, m_rectTransform.position.z));
 		float zw = Camera.main.orthographicSize/100f;
 		lr.SetWidth(zw,zw);
+
     }
 }

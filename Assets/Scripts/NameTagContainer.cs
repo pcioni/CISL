@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 public class NameTagContainer : MonoBehaviour
 {
@@ -111,7 +112,11 @@ public class NameTagContainer : MonoBehaviour
 
         RectTransform t = this.GetComponent<RectTransform>();
         int j = 0;
-        foreach (NameTag nt in m_nameTags)
+
+        //sort the nametags by y value
+        
+
+        foreach (NameTag nt in m_nameTags.OrderBy(go => go.transform.position.y))
         {
             nt.SetNewTarget(new Vector3(t.position.x + t.rect.width*5.0f, t.position.y + t.rect.height / 2 - nt.GetComponent<RectTransform>().lossyScale.y * 4 * ++j, 0));
         }
