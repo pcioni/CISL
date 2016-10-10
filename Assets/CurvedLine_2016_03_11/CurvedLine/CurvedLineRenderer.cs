@@ -17,11 +17,11 @@ public class CurvedLineRenderer : MonoBehaviour
 	private Vector3[] linePositions = new Vector3[0];
 	private Vector3[] linePositionsOld = new Vector3[0];
 
-    public void Start()
-    {
-        this.GetComponent<LineRenderer>().sortingLayerName = "Default";
-        this.GetComponent<LineRenderer>().sortingOrder = -1;
-    }
+	public void Start()
+	{
+		this.GetComponent<LineRenderer>().sortingLayerName = "Default";
+		this.GetComponent<LineRenderer>().sortingOrder = -1;
+	}
 
 	// Update is called once per frame
 	public void Update () 
@@ -40,6 +40,7 @@ public class CurvedLineRenderer : MonoBehaviour
 		for( int i = 0; i < linePoints.Length; i++ )
 		{
 			linePositions[i] = linePoints[i].transform.position;
+			linePositions[i].z = 1; //prevent lines from cutting out
 		}
 	}
 
