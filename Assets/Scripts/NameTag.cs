@@ -9,14 +9,14 @@ public class NameTag : MonoBehaviour {
 	private SpringJoint2D sj;
 	private BoxCollider2D bc;
 	private LineRenderer lr;
-    private Transform m_marker;
-    [SerializeField]private RectTransform m_rectTransform;
-    [SerializeField]
-    private NameTagContainer m_originalContainer;
-    public NameTagContainer m_curContainer;
+	private Transform m_marker;
+	[SerializeField]private RectTransform m_rectTransform;
+	[SerializeField]
+	private NameTagContainer m_originalContainer;
+	public NameTagContainer m_curContainer;
 
-    [SerializeField]
-    private RectTransform m_childTransform;
+	[SerializeField]
+	private RectTransform m_childTransform;
 
 	void Awake () {
 		sj = GetComponent<SpringJoint2D>();
@@ -26,17 +26,17 @@ public class NameTag : MonoBehaviour {
 		lr.SetVertexCount(2);
 	}
 
-    public void SetNewTarget(Vector3 targetPosition)
-    {
-        follow.transform.position = targetPosition;
-    }
+	public void SetNewTarget(Vector3 targetPosition)
+	{
+		follow.transform.position = targetPosition;
+	}
 
-    public NameTagSlot GetNextSlot()
-    {
-        return follow;
-    }
+	public NameTagSlot GetNextSlot()
+	{
+		return follow;
+	}
 
-    void Start() {
+	void Start() {
 		StartCoroutine(_resize());
 	}
 
@@ -49,19 +49,19 @@ public class NameTag : MonoBehaviour {
 	}
 
 	public void setTarget(NameTagSlot target, string s,Transform marker) {
-        this.m_marker = marker;
-        follow = target;
+		this.m_marker = marker;
+		follow = target;
 		txt.text = s;
 	}
 
 
-    void OnCollisionStay2D(Collision2D coll)
-    {
+	void OnCollisionStay2D(Collision2D coll)
+	{
 
-    }
+	}
 
-    public void reCenter() {
-		transform.position = follow.transform.position;
+	public void reCenter() {
+		transform.position = new Vector3(follow.transform.position.x, follow.transform.position.y, 0);
 	}
 	
 	// Update is called once per frame
@@ -86,5 +86,5 @@ public class NameTag : MonoBehaviour {
 		float zw = Camera.main.orthographicSize/100f;
 		lr.SetWidth(zw,zw);
 
-    }
+	}
 }

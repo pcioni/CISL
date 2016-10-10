@@ -27,7 +27,6 @@ public class NarrationManager : MonoBehaviour {
 			if (user_can_take_turn) {
 				user_can_take_turn = false;
 				int node_id = int.Parse(data);
-				//lxml.idMap[node_id].Focus();
 				Narrate(node_id, 9);
 			}
 		};
@@ -226,6 +225,7 @@ public class NarrationManager : MonoBehaviour {
 						EventManager.TriggerEvent(EventManager.EventType.NARRATION_ANALOGY, sa.Item2.ToString());
 						break;
 					case "user-turn":
+					case "switch-point":
 						EventManager.TriggerEvent(EventManager.EventType.NARRATION_USER_TURN, sa.Item2.ToString());
 						break;
 				}
@@ -238,8 +238,15 @@ public class NarrationManager : MonoBehaviour {
 			tmp_flag = false;
 		}//end foreach
 		user_can_take_turn = true;
+
+
+		//need to manually yield a turn at end because backend bugged
+		EventManager.TriggerEvent(EventManager.EventType.NARRATION_USER_TURN, node_id.ToString());
+
+
+
+
 		print("STORY ARC COMPLETE");
-		//EventManager.TriggerEvent(EventManager.EventType.NARRATION_USER_TURN);
 	}
 
 	//Wait asynchronously for a key press

@@ -350,12 +350,16 @@ public class timelineNode : MonoBehaviour
 		StartCoroutine(tmplcr);
 	}
 
-	public List<LineRenderer> m_renderers;
+	public List<LineRenderer> m_renderers = new List<LineRenderer>();
 
 	//Assign Line Renderer vertcies
 	private IEnumerator _drawLines()
 	{
-		m_renderers = new List<LineRenderer>();
+
+		foreach(LineRenderer lr in m_renderers) {//need to clear old lines
+			Destroy(lr.gameObject);
+		}
+		m_renderers.Clear();
 		//yield return new WaitForSeconds(1);
 		Vector3 startPoint = transform.position; // this is the central node position
 		GameObject midpoint_go;
