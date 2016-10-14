@@ -29,12 +29,12 @@ public class CameraController : MonoBehaviour
         orthographicMomentum = Mathf.Abs(orthographicMomentum) < 0.05f ? 0.0f : orthographicMomentum;
 
         //Pan camera with mouse
-        if (Input.GetMouseButtonDown(1))
+        if (Input.GetMouseButtonDown(1)) //Store the click position wheneve the mouse is clicked
             last_mouse_position = Input.mousePosition;
-        if (Input.GetMouseButton(1))
+        if (Input.GetMouseButton(1)) //While the mouse is down translate the position of the camera
         {
-            Vector3 delta = last_mouse_position - Input.mousePosition;
-            Camera.main.transform.Translate(delta.x * .1f, delta.y * .1f, 0);
+            Vector3 delta = Camera.main.ScreenToWorldPoint(last_mouse_position) - Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            Camera.main.transform.Translate(delta.x , delta.y, 0); //TODO: check the math on this, it could be the root of strange parallax
             last_mouse_position = Input.mousePosition;
             EventManager.TriggerEvent(EventManager.EventType.INTERFACE_PAN, Camera.main.orthographicSize.ToString());
         }
@@ -50,12 +50,15 @@ public class CameraController : MonoBehaviour
     void ZoomOrthoCamera(Vector3 zoomTowards, float amount)
     {
 
-
+        // Create a deadzone to avoid scroll wheel noise
+        //
         if (Mathf.Abs(amount) < .1f)
         {
             return;
         }
 
+        // If we're moving in the opposite direction of the momentum kill all momentum immediately
+        //
         if (Mathf.Sign(amount) != Mathf.Sign(orthographicMomentum))
         {
             orthographicMomentum = 0.0f;
