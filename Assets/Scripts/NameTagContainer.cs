@@ -16,6 +16,12 @@ public class NameTagContainer : MonoBehaviour
 
 	private Transform m_nextSlotPosition;
 
+    [SerializeField]
+    public BoxCollider2D m_metaBoxColliders;
+
+    [SerializeField]
+    public BoxCollider2D m_baseBoxCollider;
+
 	// Update is called once per frame
 	void Update()
 	{
@@ -62,16 +68,15 @@ public class NameTagContainer : MonoBehaviour
 		}
 	}
 
-	void OnTriggerExit2D(Collider2D other)
+	public void CollisionEnd(NameTagContainer container)
 	{
-		NameTagContainer container = other.gameObject.GetComponent<NameTagContainer>();
-
 		if (container == null)
 		{
 			return;
 		}
+        container.m_metaBoxColliders.bounds.SetMinMax(container.m_baseBoxCollider.bounds.min, container.m_baseBoxCollider.bounds.max);
 
-		m_nameTags.RemoveAll(item => item == null);
+        m_nameTags.RemoveAll(item => item == null);
 		container.m_nameTags.RemoveAll(item => item == null);
 
 		m_nameTags.Remove(container.m_originalNameTag);
@@ -83,16 +88,19 @@ public class NameTagContainer : MonoBehaviour
 
 	}
 
-	void OnTriggerEnter2D(Collider2D other)
+	public void CollsionStart(NameTagContainer container)
 	{
-		NameTagContainer container = other.gameObject.GetComponent<NameTagContainer>();
-
 		if (container == null || m_nameTags == null)
 		{
 			return;
 		}
 
-		m_nameTags.RemoveAll(item => item == null);
+        container.m_metaBoxColliders.bounds.Encapsulate(m_baseBoxCollider.bounds.min);
+
+        container.m_metaBoxColliders.bounds.Encapsulate(m_baseBoxCollider.bounds.max);
+
+
+        m_nameTags.RemoveAll(item => item == null);
 		container.m_nameTags.RemoveAll(item => item == null);
 
 		for (int i = 0; i < container.m_nameTags.Count; i++)

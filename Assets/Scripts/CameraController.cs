@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Linq;
 
 public class CameraController : MonoBehaviour
 {
@@ -76,6 +77,25 @@ public class CameraController : MonoBehaviour
         // Limit zoom
         GetComponent<Camera>().orthographicSize = Mathf.Clamp(GetComponent<Camera>().orthographicSize, minZoom, maxZoom);
         EventManager.TriggerEvent(amount < 0 ? EventManager.EventType.INTERFACE_ZOOM_OUT : EventManager.EventType.INTERFACE_ZOOM_IN, Camera.main.orthographicSize.ToString());
+
+        //Check for NameTagCollsions
+        NameTagContainer[] containers = (from u in GameObject.FindGameObjectsWithTag("NameTagContainer") select u.GetComponent<NameTagContainer>()).ToArray();
+        for(int i = 0; i< containers.Length; i++)
+        {
+            for(int j = i; j < containers.Length; j++)
+            {
+                if (i != j && containers[i].m_metaBoxColliders.bounds.Intersects(containers[j].m_metaBoxColliders.bounds))
+                {
+                    containers[i].CollsionStart(containers[j]);
+                }
+                else if(i != j)
+                {
+                    containers[i].CollisionEnd(containers[j]);
+
+                }
+            }
+        }
+
     }
 
 }
