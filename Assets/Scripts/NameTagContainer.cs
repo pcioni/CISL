@@ -29,7 +29,7 @@ public class NameTagContainer : MonoBehaviour
 		tmp.z = 0;
 		transform.position = tmp;
 
-		tmp = follow.position;
+		tmp = follow.position; //TODO: consider using Camera.main.GetScreenSpaceFromWorldCoordinate
 		tmp.z = 0;
 		tmp.y += .5f;
 
