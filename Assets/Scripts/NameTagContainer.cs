@@ -17,10 +17,10 @@ public class NameTagContainer : MonoBehaviour
 	private Transform m_nextSlotPosition;
 
     [SerializeField]
-    public BoxCollider2D m_metaBoxColliders;
+    public BoxCollider2D m_groupCollisionBox;
 
     [SerializeField]
-    public BoxCollider2D m_baseBoxCollider;
+    public BoxCollider2D m_nodeCollisionBox;
 
 	// Update is called once per frame
 	void Update()
@@ -37,8 +37,18 @@ public class NameTagContainer : MonoBehaviour
 		int i = 0;
 	}
 
+    public bool DoesNotHaveNameTags()
+    {
+        return m_nameTags.Count > 0;
+    }
 
-	public void SetNextAvailableSlot(Transform slot)
+    public bool ContainsContainer(NameTagContainer other)
+    {
+        return m_nameTags.Contains(other.m_originalNameTag);
+    }
+
+
+    public void SetNextAvailableSlot(Transform slot)
 	{
 		this.m_nextSlotPosition = slot;
 	}
@@ -74,7 +84,7 @@ public class NameTagContainer : MonoBehaviour
 		{
 			return;
 		}
-        container.m_metaBoxColliders.bounds.SetMinMax(container.m_baseBoxCollider.bounds.min, container.m_baseBoxCollider.bounds.max);
+        container.m_groupCollisionBox.bounds.SetMinMax(container.m_nodeCollisionBox.bounds.min, container.m_nodeCollisionBox.bounds.max);
 
         m_nameTags.RemoveAll(item => item == null);
 		container.m_nameTags.RemoveAll(item => item == null);
@@ -95,9 +105,9 @@ public class NameTagContainer : MonoBehaviour
 			return;
 		}
 
-        container.m_metaBoxColliders.bounds.Encapsulate(m_baseBoxCollider.bounds.min);
+        container.m_groupCollisionBox.bounds.Encapsulate(m_nodeCollisionBox.bounds.min);
 
-        container.m_metaBoxColliders.bounds.Encapsulate(m_baseBoxCollider.bounds.max);
+        container.m_groupCollisionBox.bounds.Encapsulate(m_nodeCollisionBox.bounds.max);
 
 
         m_nameTags.RemoveAll(item => item == null);
@@ -124,9 +134,9 @@ public class NameTagContainer : MonoBehaviour
 		//sort the nametags by y value
 		
 
-		foreach (NameTag nt in m_nameTags.OrderBy(go => go.transform.position.y))
+		foreach (NameTag nt in m_nameTags.OrderBy(go => -go.transform.position.y))
 		{
-			nt.SetNewTarget(new Vector3(t.position.x + t.rect.width*5.0f, t.position.y + t.rect.height / 2 - nt.GetComponent<RectTransform>().lossyScale.y * 4 * ++j, 0));
+			nt.SetNewTarget(new Vector3(t.position.x + t.rect.width*5.0f, t.position.y + t.rect.height / 2 - nt.GetComponent<RectTransform>().lossyScale.y * 30 * ++j, 0));
 		}
 	}
 }

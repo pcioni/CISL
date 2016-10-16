@@ -34,7 +34,7 @@ public class CameraController : MonoBehaviour
         if (Input.GetMouseButton(1)) //While the mouse is down translate the position of the camera
         {
             Vector3 delta = Camera.main.ScreenToWorldPoint(last_mouse_position) - Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            Camera.main.transform.Translate(delta.x , delta.y, 0); //TODO: check the math on this, it could be the root of strange parallax
+            Camera.main.transform.Translate(delta.x, delta.y, 0); //TODO: check the math on this, it could be the root of strange parallax
             last_mouse_position = Input.mousePosition;
             EventManager.TriggerEvent(EventManager.EventType.INTERFACE_PAN, Camera.main.orthographicSize.ToString());
         }
@@ -83,22 +83,188 @@ public class CameraController : MonoBehaviour
 
         //Check for NameTagCollsions
         NameTagContainer[] containers = (from u in GameObject.FindGameObjectsWithTag("NameTagContainer") select u.GetComponent<NameTagContainer>()).ToArray();
-        for(int i = 0; i< containers.Length; i++)
-        {
-            for(int j = i; j < containers.Length; j++)
-            {
-                if (i != j && containers[i].m_metaBoxColliders.bounds.Intersects(containers[j].m_metaBoxColliders.bounds))
-                {
-                    containers[i].CollsionStart(containers[j]);
-                }
-                else if(i != j)
-                {
-                    containers[i].CollisionEnd(containers[j]);
 
-                }
+        //Refresh our lists of containers, group colliders and node colliders
+
+        foreach(NameTagContainer ntc in containers)
+        {
+            foreach (NameTagContainer ntc2 in containers)
+            {
+                ntc.CollisionEnd(ntc2);
             }
         }
 
+
+        //1. Check for node on node collisions. For each node on node collision merge their groups into a new group. Goto 2.
+        if(NodeOnNodeCheck(containers) == true)
+        {
+            return;
+        }
+
+        do
+        {
+            //2. Check for group on group collisions. For each group on group collision merge their groups into a new group. If there are collisions goto 2. Else goto 3.
+            while (GroupOnGroupCheck(containers) == false) ;
+
+            //3. Check for group on node collisions. For each node that collides merge them into the colliding group. If there are collisions goto 2. Else Finish
+        } while (GroupOnNodeCheck(containers) == false);
+    }
+
+    public bool NoContainment(NameTagContainer containerA, NameTagContainer containerB)
+    {
+        return !containerA.ContainsContainer(containerB) && !containerB.ContainsContainer(containerA);
+    }
+
+    //Return true if there are no new collisions
+    bool GroupOnNodeCheck(NameTagContainer[] containers)
+    {
+        bool noCollisions = true;
+        for (int i = 0; i < containers.Length; i++)
+        {
+            for (int j = 0; j < containers.Length; j++)
+            {
+                if (i == j)
+                {
+                    continue;
+                }
+
+                //check for 
+                NameTagContainer containerA = containers[i];
+                NameTagContainer containerB = containers[j];
+
+                if (containerA.m_nameTags.Count == 0)
+                {
+                    continue;
+                }
+
+                if (containerB.m_nameTags.Count == 0)
+                {
+                    continue;
+                }
+
+                if (containerA.m_groupCollisionBox.bounds.Intersects(containerB.m_nodeCollisionBox.bounds) && NoContainment(containerA,containerB))
+                {
+                    noCollisions = false;
+                    //merge the two colliders
+                    if (containerA.m_groupCollisionBox.size.magnitude > containerB.m_groupCollisionBox.size.magnitude)
+                    {
+                        containerA.CollsionStart(containerB);
+                    }
+                    else
+                    {
+                        containerB.CollsionStart(containerA);
+                    }
+                }
+
+            }
+        }
+
+        return noCollisions;
+    }
+
+    //Return true if there are no new collisions
+    bool GroupOnGroupCheck(NameTagContainer[] containers)
+    {
+        bool noCollisions = true;
+        for (int i = 0; i < containers.Length; i++)
+        {
+            if (containers[i].DoesNotHaveNameTags())
+            {
+                continue;
+            }
+            for (int j = 0; j < containers.Length; j++)
+            {
+                if (containers[j].DoesNotHaveNameTags())
+                {
+                    continue;
+                }
+                if (i == j)
+                {
+                    continue;
+                }
+
+                //check for 
+                NameTagContainer containerA = containers[i];
+                NameTagContainer containerB = containers[j];
+
+                if(containerA.m_nameTags.Count == 0)
+                {
+                    continue;
+                }
+
+                if(containerB.m_nameTags.Count == 0)
+                {
+                    continue;
+                }
+
+                if (containerA.m_groupCollisionBox.bounds.Intersects(containerB.m_groupCollisionBox.bounds) && NoContainment(containerA, containerB))
+                {
+                    noCollisions = false;
+                    //merge the two colliders
+                    if (containerA.m_groupCollisionBox.size.magnitude > containerB.m_groupCollisionBox.size.magnitude)
+                    {
+                        containerA.CollsionStart(containerB);
+                    }
+                    else
+                    {
+                        containerB.CollsionStart(containerA);
+                    }
+                }
+
+            }
+        }
+
+        return noCollisions;
+    }
+
+
+
+    //Return true if there are no new collisions
+    bool NodeOnNodeCheck(NameTagContainer[] containers)
+    {
+        bool noCollisions = true;
+        for (int i = 0; i < containers.Length; i++)
+        {
+            for (int j = 0; j < containers.Length; j++)
+            {
+                if (i == j)
+                {
+                    continue;
+                }
+
+                //check for 
+                NameTagContainer containerA = containers[i];
+                NameTagContainer containerB = containers[j];
+
+                if (containerA.m_nameTags.Count == 0)
+                {
+                    continue;
+                }
+
+                if (containerB.m_nameTags.Count == 0)
+                {
+                    continue;
+                }
+
+                if (containerA.m_nodeCollisionBox.bounds.Intersects(containerB.m_nodeCollisionBox.bounds) && NoContainment(containerA, containerB))
+                {
+                    noCollisions = false;
+                    //merge the two colliders
+                    if (containerA.m_groupCollisionBox.size.magnitude > containerB.m_groupCollisionBox.size.magnitude)
+                    {
+                        containerA.CollsionStart(containerB);
+                    }
+                    else
+                    {
+                        containerB.CollsionStart(containerA);
+
+                    }
+                }
+
+            }
+        }
+
+        return noCollisions;
     }
 
 }
