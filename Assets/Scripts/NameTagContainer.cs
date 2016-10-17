@@ -22,6 +22,9 @@ public class NameTagContainer : MonoBehaviour
     [SerializeField]
     public BoxCollider2D m_nodeCollisionBox;
 
+    [SerializeField]
+    private GameObject m_colliderObjects;
+
 	// Update is called once per frame
 	void Update()
 	{
@@ -29,7 +32,7 @@ public class NameTagContainer : MonoBehaviour
 		tmp.z = 0;
 		transform.position = tmp;
 
-		tmp = follow.position; //TODO: consider using Camera.main.GetScreenSpaceFromWorldCoordinate
+		tmp = follow.position;
 		tmp.z = 0;
 		tmp.y += .5f;
 
@@ -62,7 +65,10 @@ public class NameTagContainer : MonoBehaviour
 	{
 		follow = target;
 
-		for (int i = 0; i < m_nameTags.Count; i++)
+        //TODO: set the parent Collision objects to be parented to the follow
+        //m_colliderObjects.transform.SetParent(target);
+
+        for (int i = 0; i < m_nameTags.Count; i++)
 		{
 			m_nameTags[i].setTarget((GameObject.Instantiate(m_slot, target.position, target.rotation, target) as GameObject).GetComponent<NameTagSlot>(), name, follow);
 		}

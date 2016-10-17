@@ -10,6 +10,7 @@ public class NameTagSlot : MonoBehaviour {
         this.m_assignedNameTag = nametag;
     }
 
+
 	// Use this for initialization
 	void Start () {
 	
