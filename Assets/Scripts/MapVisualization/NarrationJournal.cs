@@ -16,7 +16,7 @@ public class NarrationJournal : MonoBehaviour {
 	public Text pagenumber;
 	public List<RawImage> imageboxes;
 	private UnityAction<string> listener;
-
+    public List<Text> imageLabels;
 	private List<List<Texture2D>> prev_images;
 
 	public int current_page = 0;
@@ -41,7 +41,7 @@ public class NarrationJournal : MonoBehaviour {
 		listener = delegate (string data) {
 			DataConstruct1 dc1 = JsonUtility.FromJson<DataConstruct1>(data);
 			add_entry(dc1.text);
-			load_image(dc1.imgurls);
+			load_image(dc1.imgUrl, dc1.imgLabel);
 			readText(dc1.text);
 		};
 
@@ -90,24 +90,25 @@ public class NarrationJournal : MonoBehaviour {
 		journaltext.text = entries[current_page];
 	}
 
-	public void load_image(List<string> urls) {
+	public void load_image(List<string> urls, List<string> labels) {
 		//set the current image to display
 		//read from cache or load from url
 
 		//TODO: add cache functionality
 
 		prev_images.Add(Enumerable.Repeat(default_image, 10).ToList());
-		StartCoroutine(_load_images(urls,prev_images.Count-1));
+		StartCoroutine(_load_images(urls,prev_images.Count-1, labels));
 	}
 
 	void cache_image(string filePath, byte[] data) {
 		File.WriteAllBytes(filePath, data);
 	}
 
-	IEnumerator _load_images(List<string> urls, int index) {
+	IEnumerator _load_images(List<string> urls, int index, List<string> labels) {
 		//try to get several valid images from the list, otherwise use default
 
 		int numfound = 0;
+        int counter = 0;
 		
 		foreach (string url in urls) {
 			if (numfound >= numtoget) {
@@ -159,6 +160,11 @@ public class NarrationJournal : MonoBehaviour {
 					}
 				}
 			}
+            if (counter < 3) {
+                imageLabels[counter].text = labels[counter];
+                Debug.Log("label is " + labels[counter]);
+            }
+            counter++;
 		}
 		if (numfound < numtoget && prev_images.Count - 1 == index) {//prevent delayed loading mismatch
 			while(numfound < numtoget) {
