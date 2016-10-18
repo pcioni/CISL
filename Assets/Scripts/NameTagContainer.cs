@@ -23,12 +23,23 @@ public class NameTagContainer : MonoBehaviour
     public BoxCollider2D m_nodeCollisionBox;
 
     [SerializeField]
-    private GameObject m_colliderObjects;
+    private GameObject m_nodeCollider;
+
+    private Vector3 m_nodeColliderOriginalPosition;
+    
+    void Start()
+    {
+        m_nodeColliderOriginalPosition = Camera.main.ScreenToWorldPoint(m_nodeCollider.transform.position);
+    }
+
 
 	// Update is called once per frame
 	void Update()
 	{
-		Vector3 tmp = transform.position;
+        //m_nodeCollider.transform.position = (m_nodeColliderOriginalPosition);
+
+
+        Vector3 tmp = transform.position;
 		tmp.z = 0;
 		transform.position = tmp;
 
