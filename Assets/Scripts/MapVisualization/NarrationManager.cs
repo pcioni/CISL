@@ -193,7 +193,7 @@ public class NarrationManager : MonoBehaviour {
 			fNode = node_to_present;
 			Present(node_to_present, node_history);
 
-			DataConstruct1 dataObj = new DataConstruct1(kvp.Value, tmptn.pic_urls);
+			DataConstruct1 dataObj = new DataConstruct1(kvp.Value, tmptn.pic_urls, tmptn.pic_labels);
 
 			string json = JsonUtility.ToJson(dataObj);
 
