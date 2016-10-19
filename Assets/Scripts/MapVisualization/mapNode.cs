@@ -19,6 +19,7 @@ public class mapNode : MonoBehaviour {
 		img = GetComponent<Image>();
 		master.callback = OnStateChange;
 		name = "mapNode(" + master.name + ")";
+        OnStateChange(master.state.ToString());
 	}
 	
 	public void OnStateChange(string state) {
