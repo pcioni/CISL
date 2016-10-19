@@ -53,8 +53,11 @@ public class mapNode : MonoBehaviour {
 				img.color = tmp;
 				break;
 			case "BACK":
-				lr.enabled = false;
-				img.color = tmp;
+                if (master.state != timelineNode.focusState.IN)
+                {
+                    lr.enabled = false;
+                    img.color = tmp;
+                }
 				break;
 		}
 	}
