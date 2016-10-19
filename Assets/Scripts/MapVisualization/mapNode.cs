@@ -33,10 +33,10 @@ public class mapNode : MonoBehaviour {
 				img.color = tmp;
 				break;
 			case "OUT":
-				lr.enabled = false;
-				transform.SetAsFirstSibling();
-				tmp.a = 0;
-				img.color = tmp;
+                lr.enabled = false;
+                transform.SetAsFirstSibling();
+                tmp.a = 0.75f;
+                img.color = tmp;
 				break;
 			case "HALF":
 				lr.enabled = false;
