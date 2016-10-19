@@ -9,6 +9,7 @@ public class QuitOnEscape : MonoBehaviour {
 	void Update () {
 		if (Input.GetKeyDown(KeyCode.Escape)) {
 			Application.Quit();
+            OSCHandler.Instance.SendMessageToClient("MaxServer", "/finalize/", 1.0f);
 		}
 	}
 }
