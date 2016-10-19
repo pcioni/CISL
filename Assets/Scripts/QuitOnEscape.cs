@@ -11,5 +11,9 @@ public class QuitOnEscape : MonoBehaviour {
 			Application.Quit();
             OSCHandler.Instance.SendMessageToClient("MaxServer", "/finalize/", 1.0f);
 		}
+        if (Input.GetKeyDown(KeyCode.I))
+        {
+            OSCHandler.Instance.SendMessageToClient("MaxServer", "/initialize/", 1.0f);
+        }
 	}
 }
