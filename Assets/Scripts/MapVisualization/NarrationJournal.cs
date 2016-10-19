@@ -16,7 +16,7 @@ public class NarrationJournal : MonoBehaviour {
 	public Text pagenumber;
 	public List<RawImage> imageboxes;
 	private UnityAction<string> listener;
-    public List<Text> imageLabels;
+	public List<Text> imageLabels;
 	private List<List<Texture2D>> prev_images;
 
 	public int current_page = 0;
@@ -57,14 +57,12 @@ public class NarrationJournal : MonoBehaviour {
 		if(entries.Count > 0) {
 			journaltext.text = entries[current_page];
 		}
-		if (current_page < prev_images.Count) {
-			for(int i=0; i < imageboxes.Count; i++) {
-				imageboxes[i].texture = prev_images[current_page][i];
-			}
+		for(int i=0; i < imageboxes.Count; i++) {
+			imageboxes[i].texture = prev_images[current_page][i];
 		}
 		pagenumber.text = (current_page + 1) + "/" + entries.Count;
 		EventManager.TriggerEvent(EventManager.EventType.INTERFACE_PAGE_LEFT,
-			                      current_page.ToString());
+								  current_page.ToString());
 	}
 
 	public void page_right() {
@@ -72,15 +70,12 @@ public class NarrationJournal : MonoBehaviour {
 		if (entries.Count > 0) {
 			journaltext.text = entries[current_page];
 		}
-		if (current_page < prev_images.Count) {
-			for (int i = 0; i < imageboxes.Count; i++) {
-				imageboxes[i].texture = prev_images[current_page][i];
-			}
+		for (int i = 0; i < imageboxes.Count; i++) {
+			imageboxes[i].texture = prev_images[current_page][i];
 		}
-
 		pagenumber.text = (current_page + 1) + "/" + entries.Count;
 		EventManager.TriggerEvent(EventManager.EventType.INTERFACE_PAGE_RIGHT,
-			                      current_page.ToString());
+								  current_page.ToString());
 	}
 
 	public void add_entry(string data) {
@@ -93,11 +88,8 @@ public class NarrationJournal : MonoBehaviour {
 	public void load_image(List<string> urls, List<string> labels) {
 		//set the current image to display
 		//read from cache or load from url
-
-		//TODO: add cache functionality
-
-		prev_images.Add(Enumerable.Repeat(default_image, 10).ToList());
-		StartCoroutine(_load_images(urls,prev_images.Count-1, labels));
+		prev_images.Add(Enumerable.Repeat(default_image, numtoget).ToList());
+		StartCoroutine(_load_images(urls, prev_images.Count-1, labels));
 	}
 
 	void cache_image(string filePath, byte[] data) {
@@ -108,7 +100,6 @@ public class NarrationJournal : MonoBehaviour {
 		//try to get several valid images from the list, otherwise use default
 
 		int numfound = 0;
-        int counter = 0;
 		
 		foreach (string url in urls) {
 			if (numfound >= numtoget) {
@@ -137,8 +128,12 @@ public class NarrationJournal : MonoBehaviour {
 				if (texture != null && texture.width > 8 && texture.height > 8) {
 					if (prev_images.Count - 1 == index) {//prevent delayed loading mismatch
 						imageboxes[numfound].texture = texture;
+						if (numfound < imageLabels.Count) { //conditional here for now since there are not necessarily label boxes for every image
+															//in the future, this should not be necessary
+							imageLabels[numfound].text = labels[numfound];
+						}
 					}
-					prev_images[index].Add(texture);
+					prev_images[index][numfound] = texture;
 					numfound++;
 					if (!cached) cache_image(filePath, texture.EncodeToPNG());
 				}
@@ -153,23 +148,16 @@ public class NarrationJournal : MonoBehaviour {
 					if (texture != null && texture.width > 8 && texture.height > 8) {
 						if (prev_images.Count - 1 == index) {//prevent delayed loading mismatch
 							imageboxes[numfound].texture = texture;
+							if(numfound < imageLabels.Count) { //conditional here for now since there are not necessarily label boxes for every image
+															   //in the future, this should not be necessary
+								imageLabels[numfound].text = labels[numfound];
+							}
 						}
-						prev_images[index].Add(texture);
+						prev_images[index][numfound] = texture;
 						numfound++;
 						if (!cached) cache_image(filePath, texture.EncodeToPNG());
 					}
 				}
-			}
-            if (counter < 3) {
-                imageLabels[counter].text = labels[counter];
-                Debug.Log("label is " + labels[counter]);
-            }
-            counter++;
-		}
-		if (numfound < numtoget && prev_images.Count - 1 == index) {//prevent delayed loading mismatch
-			while(numfound < numtoget) {
-				imageboxes[numfound].texture = default_image;
-				numfound++;
 			}
 		}
 	}
