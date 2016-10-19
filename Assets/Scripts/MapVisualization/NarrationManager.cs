@@ -45,7 +45,7 @@ public class NarrationManager : MonoBehaviour {
 	}
 
 	public void Update() {
-		if (Input.GetKeyDown(KeyCode.Space)) {
+		if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.Return)) {
 			if (!user_can_take_turn) {
 				progressNarration();
 			}
