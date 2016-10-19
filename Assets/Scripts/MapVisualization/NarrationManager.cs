@@ -236,6 +236,9 @@ public class NarrationManager : MonoBehaviour {
 			
 			progressNarrationSwitch = false;
 			tmp_flag = false;
+
+            //Call camera collision detection method
+            CameraController.CollisionDetection();
 		}//end foreach
 		user_can_take_turn = true;
 

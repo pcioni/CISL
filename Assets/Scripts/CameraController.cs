@@ -4,6 +4,7 @@ using System.Linq;
 
 public class CameraController : MonoBehaviour
 {
+    private static CameraController ms_instance;
     private Vector3 last_mouse_position;
     public float minZoom = 0f;
     public float maxZoom = 100f;
@@ -20,6 +21,10 @@ public class CameraController : MonoBehaviour
     [SerializeField]
     private AnimationCurve m_distanceCurve;
 
+    void Awake()
+    {
+        ms_instance = this;
+    }
 
     void Update()
     {
@@ -80,13 +85,17 @@ public class CameraController : MonoBehaviour
         // Limit zoom
         GetComponent<Camera>().orthographicSize = Mathf.Clamp(GetComponent<Camera>().orthographicSize, minZoom, maxZoom);
         EventManager.TriggerEvent(amount < 0 ? EventManager.EventType.INTERFACE_ZOOM_OUT : EventManager.EventType.INTERFACE_ZOOM_IN, Camera.main.orthographicSize.ToString());
+        CollisionDetection();
+    }
 
+    public static void CollisionDetection()
+    {
         //Check for NameTagCollsions
         NameTagContainer[] containers = (from u in GameObject.FindGameObjectsWithTag("NameTagContainer") select u.GetComponent<NameTagContainer>()).ToArray();
 
         //Refresh our lists of containers, group colliders and node colliders
 
-        foreach(NameTagContainer ntc in containers)
+        foreach (NameTagContainer ntc in containers)
         {
             foreach (NameTagContainer ntc2 in containers)
             {
@@ -96,7 +105,7 @@ public class CameraController : MonoBehaviour
 
 
         //1. Check for node on node collisions. For each node on node collision merge their groups into a new group. Goto 2.
-        if(NodeOnNodeCheck(containers) == true)
+        if (ms_instance.NodeOnNodeCheck(containers) == true)
         {
             return;
         }
@@ -104,11 +113,12 @@ public class CameraController : MonoBehaviour
         do
         {
             //2. Check for group on group collisions. For each group on group collision merge their groups into a new group. If there are collisions goto 2. Else goto 3.
-            while (GroupOnGroupCheck(containers) == false) ;
+            while (ms_instance.GroupOnGroupCheck(containers) == false) ;
 
             //3. Check for group on node collisions. For each node that collides merge them into the colliding group. If there are collisions goto 2. Else Finish
-        } while (GroupOnNodeCheck(containers) == false);
+        } while (ms_instance.GroupOnNodeCheck(containers) == false);
     }
+
 
     public bool NoContainment(NameTagContainer containerA, NameTagContainer containerB)
     {
@@ -163,7 +173,7 @@ public class CameraController : MonoBehaviour
     }
 
     //Return true if there are no new collisions
-    bool GroupOnGroupCheck(NameTagContainer[] containers)
+    bool GroupOnGroupCheck(NameTagContainer[] containers) //TODO: put this in it's own class for the sake of organization.
     {
         bool noCollisions = true;
         for (int i = 0; i < containers.Length; i++)
