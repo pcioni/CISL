@@ -7,12 +7,16 @@ public class DebugMode : MonoBehaviour {
     private bool m_active;
 	// Use this for initialization
 	void Awake () {
-        MS_ACTIVE = m_active;
-
     }
 	
 	// Update is called once per frame
 	void Update () {
-	
-	}
+        if (Input.GetKeyDown(KeyCode.D))
+        {
+            m_active = !m_active;
+        }
+
+        MS_ACTIVE = m_active;
+
+    }
 }
