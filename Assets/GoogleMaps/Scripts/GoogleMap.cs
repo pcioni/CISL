@@ -69,8 +69,11 @@ public class GoogleMap : MonoBehaviour
 			//if a texture was loaded, apply it to in-game object
 			if (texture != null) {
 				m_image.texture = texture;
-			} 
-			//else, leave the default texture in-place
+			} else {
+				//else, leave the default texture in-place and throw a warning
+				Debug.Log("GoogleMap.Awake() :: image not loaded");
+				Debug.Log("GoogleMap.Awake() :: filePath = " + filePath);
+			}
 		}
 	}
 
@@ -105,17 +108,20 @@ public class GoogleMap : MonoBehaviour
 		}
 	}
 
-	public static Texture2D LoadPNG(string filePath) {
-		// from 
+	public static Texture2D LoadPNG(string _filePath) {
+		// by IMD from http://answers.unity3d.com/answers/802424/view.html
 
 		Texture2D tex = null;
 		byte[] fileData;
 
-		if (File.Exists(filePath))     {
-			fileData = File.ReadAllBytes(filePath);
-			tex = new Texture2D(2, 2);
+		if (File.Exists (Application.dataPath + _filePath)) {
+			fileData = File.ReadAllBytes (Application.dataPath + _filePath);
+			tex = new Texture2D (2, 2);
 			tex.filterMode = FilterMode.Point;
-			tex.LoadImage(fileData); //..this will auto-resize the texture dimensions.
+			tex.LoadImage (fileData); //..this will auto-resize the texture dimensions.
+		} else {
+			Debug.Log ("GoogleMaps.LoadPNG() :: File does not exist.");
+			Debug.Log ("GoogleMaps.LoadPNG() :: _filePath = " + _filePath);
 		}
 
 		return tex;
