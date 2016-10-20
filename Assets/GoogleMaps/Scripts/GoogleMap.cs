@@ -23,7 +23,7 @@ public class GoogleMap : MonoBehaviour
 		Hybrid
 	}
 
-	public bool loadOnStart = true; //TODO: use this later
+	public bool refreshOnStart = true;
 
 	public GoogleMapLocation centerLocation;
 	public int zoom = 4;
@@ -50,8 +50,11 @@ public class GoogleMap : MonoBehaviour
 		//		texture.filterMode = FilterMode.Point;
 		//		texture.LoadImage (req.response.Bytes);
 
+		if (refreshOnStart) {
 			Refresh ();
+		} else {
 			//TODO: load the texture from last saved map
+		}
 	}
 
 	void Update() {
