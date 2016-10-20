@@ -29,6 +29,10 @@ public class GoogleMap : MonoBehaviour
 	public int zoom = 4;
 	public MapType mapType;
 
+	// tiling settings
+
+	// settings for relative lattitude and longitude placement on map
+
 	public static float m_minLatitude;
 	public static float m_maxLatitude;
 	public static float m_minLongitude;
@@ -40,11 +44,31 @@ public class GoogleMap : MonoBehaviour
 	private const float width = 434.0f;
 
 	void Awake(){
-		Refresh ();
+
+		// TODO: create, set its attributes, and apply it to the in-game object
+		//		var texture = new Texture2D ((int)m_locationMapper.GetWidth (), (int)m_locationMapper.GetHeight ());
+		//		texture.filterMode = FilterMode.Point;
+		//		texture.LoadImage (req.response.Bytes);
+
+			Refresh ();
+			//TODO: load the texture from last saved map
 	}
 
 	void Update() {
 
+		/*
+		// TODO: create a refresh button / kepress (SHIFT + M + R?)
+
+		// TODO: create a save texture as PNG button / keypress (SHIFT + M + S?)
+
+			// Encode texture into PNG
+			byte[] bytes = tex.EncodeToPNG();
+			Object.Destroy(tex);
+
+			// For testing purposes, also write to a file in the project folder
+			// File.WriteAllBytes(Application.dataPath + "/../SavedScreen.png", bytes);
+
+		*/
 	}
 
 	public void Refresh() {
@@ -84,12 +108,16 @@ public class GoogleMap : MonoBehaviour
 			m_maxLatitude = centerLocation.latitude + 20.0f * width/height; 
 			m_maxLongitude = centerLocation.longitude + 26.6f;
 			m_minLongitude = centerLocation.longitude - 26.6f;
+			// TODO: make these calculations respond to different zoom levels
 		}
 
+		// TODO: create requests to refresh image data one tile at a time
+		// TODO: loop through requests, shifting the center periodically for each tile
 		HTTP.Request req = new HTTP.Request ("GET",url + "?" + qs, true);
 		Debug.Log (req.uri);
 		req.Send ();
 		StartCoroutine(ProcessRequest (req));
+		// TODO: add settings in here for target to copy pixels into, include center, width, height, etc.
 	}
 
 	private IEnumerator ProcessRequest(HTTP.Request req){
@@ -101,6 +129,20 @@ public class GoogleMap : MonoBehaviour
 			var texture = new Texture2D ((int)m_locationMapper.GetWidth (), (int)m_locationMapper.GetHeight ());
 			texture.LoadImage (req.response.Bytes);
 			m_image.texture = texture;
+			// TODO: update this to copy pixels instead of replacing entire texture
+			/*
+
+			Graphics.CopyTexture(
+				texture, 
+				int srcElement, int srcMip, 
+				0, 0, tileWidth, tileHeight, 
+				m_image.texture, 
+				int dstElement, int dstMip, 
+				int dstX, int dstY);
+
+            m_image.Apply();	
+
+			*/
 		}
 	}
 
