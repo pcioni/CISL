@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEditor;
 #endif
 
+using System.IO;
 using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
@@ -15,6 +16,10 @@ public class GoogleMap : MonoBehaviour
 	[SerializeField]private RawImage m_image;
 	[SerializeField]private LocationMapper m_locationMapper;
 
+	//TODO: create a Refresh() button
+	//TODO: allow file selection
+	public string filePath = "/Images/google_staticmap_1280x868.png";
+
 	public enum MapType
 	{
 		RoadMap,
@@ -24,6 +29,8 @@ public class GoogleMap : MonoBehaviour
 	}
 
 	public bool refreshOnStart = true;
+	private bool refreshed = true; // set to true so it doesn't refresh twice on start
+	private bool saved = true;
 
 	public GoogleMapLocation centerLocation;
 	public int zoom = 4;
@@ -45,33 +52,70 @@ public class GoogleMap : MonoBehaviour
 
 	void Awake(){
 
-		// TODO: create, set its attributes, and apply it to the in-game object
-		//		var texture = new Texture2D ((int)m_locationMapper.GetWidth (), (int)m_locationMapper.GetHeight ());
-		//		texture.filterMode = FilterMode.Point;
-		//		texture.LoadImage (req.response.Bytes);
+		m_locationMapper = GameObject.Find ("MapImage").GetComponent<LocationMapper>();
+
+		// create texture with appropriate dimensions and apply it to m_image object
+		Texture2D texture = new Texture2D ((int)m_locationMapper.GetWidth (), (int)m_locationMapper.GetHeight ());
+		m_image.texture = texture;
 
 		if (refreshOnStart) {
 			Refresh ();
 		} else {
 			//TODO: load the texture from last saved map
+			texture = LoadPNG(filePath);
+			//if a texture was loaded, apply it to in-game object
+			if (texture != null) {
+				m_image.texture = texture;
+			} 
+			//else, leave the default texture in-place
 		}
 	}
 
 	void Update() {
+		//check for shift keypress
+		bool shiftDown = (Input.GetKey (KeyCode.LeftShift) || Input.GetKey (KeyCode.RightShift));
+		//check for refresh map kepress (SHIFT + M + R)
+		bool refreshMap = (shiftDown && Input.GetKey (KeyCode.M) && Input.GetKey (KeyCode.R));
+		//check for save map kepress (SHIFT + M + S)
+		bool saveMap = (shiftDown && Input.GetKey (KeyCode.M) && Input.GetKey (KeyCode.S));
 
-		/*
-		// TODO: create a refresh button / kepress (SHIFT + M + R?)
-
-		// TODO: create a save texture as PNG button / keypress (SHIFT + M + S?)
-
+		if (saveMap && !saved) {
 			// Encode texture into PNG
-			byte[] bytes = tex.EncodeToPNG();
-			Object.Destroy(tex);
+			byte[] bytes = (m_image.texture as Texture2D).EncodeToPNG ();
 
-			// For testing purposes, also write to a file in the project folder
-			// File.WriteAllBytes(Application.dataPath + "/../SavedScreen.png", bytes);
+			// write to a file in the project folder
+			File.WriteAllBytes (Application.dataPath + filePath, bytes);
 
-		*/
+			// debug
+			Debug.Log ("GoogleMap :: saved image filePath = " + filePath);
+
+			saved = true;
+		} else {
+			saved = false;
+		}
+
+		if (refreshMap && !refreshed) {
+			Refresh ();
+			refreshed = true;
+		} else {
+			refreshed = false;
+		}
+	}
+
+	public static Texture2D LoadPNG(string filePath) {
+		// from 
+
+		Texture2D tex = null;
+		byte[] fileData;
+
+		if (File.Exists(filePath))     {
+			fileData = File.ReadAllBytes(filePath);
+			tex = new Texture2D(2, 2);
+			tex.filterMode = FilterMode.Point;
+			tex.LoadImage(fileData); //..this will auto-resize the texture dimensions.
+		}
+
+		return tex;
 	}
 
 	public void Refresh() {
