@@ -40,6 +40,8 @@ public class GoogleMap : MonoBehaviour
 	// tiling settings
 
 	// settings for relative lattitude and longitude placement on map
+	public float lattidudeRange = 40.0f;
+	public float longitudeRange = 53.2f;
 
 	public static float m_minLatitude;
 	public static float m_maxLatitude;
@@ -151,11 +153,11 @@ public class GoogleMap : MonoBehaviour
 		qs += "&sensor=" + (usingSensor ? "true" : "false");
 
 		if (zoom == 4) {
-			m_minLatitude = centerLocation.latitude - 20.0f * width/height; 
-			m_maxLatitude = centerLocation.latitude + 20.0f * width/height; 
-			m_maxLongitude = centerLocation.longitude + 26.6f;
-			m_minLongitude = centerLocation.longitude - 26.6f;
 			// TODO: make these calculations respond to different zoom levels
+			m_minLatitude = centerLocation.latitude - (lattidudeRange/2) * width/height; 
+			m_maxLatitude = centerLocation.latitude + (lattidudeRange/2) * width/height; 
+			m_maxLongitude = centerLocation.longitude + (longitudeRange/2);
+			m_minLongitude = centerLocation.longitude - (longitudeRange/2);
 		}
 
 		// TODO: create requests to refresh image data one tile at a time
