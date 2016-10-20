@@ -23,7 +23,7 @@ public class GoogleMap : MonoBehaviour
 		Hybrid
 	}
 
-	public bool loadOnStart = true;
+	public bool loadOnStart = true; //TODO: use this later
 
 	public GoogleMapLocation centerLocation;
 	public int zoom = 4;
@@ -84,7 +84,7 @@ public class GoogleMap : MonoBehaviour
 		qs += "&zoom=" + zoom.ToString ();
 
 		qs += "&size=" + HTTP.URL.Encode (string.Format ("{0}x{1}", height,width));
-		qs += "&scale=2";
+		qs += "&scale=2"; //TODO: put this somewhere serializeable
 		qs += "&maptype=" + mapType.ToString ().ToLower ();
 
 		//Break style into for loop
@@ -127,6 +127,7 @@ public class GoogleMap : MonoBehaviour
 
 		if (req.exception == null) {
 			var texture = new Texture2D ((int)m_locationMapper.GetWidth (), (int)m_locationMapper.GetHeight ());
+            texture.filterMode = FilterMode.Point;
 			texture.LoadImage (req.response.Bytes);
 			m_image.texture = texture;
 			// TODO: update this to copy pixels instead of replacing entire texture

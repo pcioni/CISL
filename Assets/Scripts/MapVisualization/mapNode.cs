@@ -19,6 +19,7 @@ public class mapNode : MonoBehaviour {
 		img = GetComponent<Image>();
 		master.callback = OnStateChange;
 		name = "mapNode(" + master.name + ")";
+        OnStateChange(master.state.ToString());
 	}
 	
 	public void OnStateChange(string state) {
@@ -26,16 +27,16 @@ public class mapNode : MonoBehaviour {
 		Color tmp = master.sr.color;
 		switch (state) {
 			case "IN":
-				drawLines();
+				drawLines(true);
 				transform.SetAsLastSibling();
 				tmp.a = 1;
 				img.color = tmp;
 				break;
 			case "OUT":
-				lr.enabled = false;
-				transform.SetAsFirstSibling();
-				tmp.a = 0;
-				img.color = tmp;
+                lr.enabled = false;
+                transform.SetAsFirstSibling();
+                tmp.a = 0.75f;
+                img.color = tmp;
 				break;
 			case "HALF":
 				lr.enabled = false;
@@ -47,20 +48,36 @@ public class mapNode : MonoBehaviour {
 				img.color = tmp;
 				break;
 			case "RE":
-				drawLines();
+				drawLines(false);
 				transform.SetAsLastSibling();
 				img.color = tmp;
 				break;
 			case "BACK":
-				lr.enabled = false;
-				img.color = tmp;
-				break;
+                img.color = tmp;
+                if (master.state == timelineNode.focusState.IN)
+                {
+                    drawLines(true);
+                }
+                else
+                {
+                    lr.enabled = false;
+                }
+                break;
 		}
 	}
 
 	private IEnumerator tmplcr = null;
-	public void drawLines() {
+	public void drawLines(bool _in) {
 		lr.enabled = true;
+        if (_in)
+        {
+            lr.SetColors(Color.red, Color.red);
+        }
+        else
+        {
+            lr.SetColors(Color.cyan, Color.cyan);
+        }
+        
 		if (tmplcr != null) {
 			StopCoroutine(tmplcr);
 		}
