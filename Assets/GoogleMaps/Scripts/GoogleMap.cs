@@ -34,6 +34,7 @@ public class GoogleMap : MonoBehaviour
 
 	public GoogleMapLocation centerLocation;
 	public int zoom = 4;
+	public int scale = 2;
 	public MapType mapType;
 
 	// tiling settings
@@ -129,9 +130,8 @@ public class GoogleMap : MonoBehaviour
 		qs += "center=" + HTTP.URL.Encode (string.Format ("{0},{1}", centerLocation.latitude, centerLocation.longitude));
 
 		qs += "&zoom=" + zoom.ToString ();
-
 		qs += "&size=" + HTTP.URL.Encode (string.Format ("{0}x{1}", height,width));
-		qs += "&scale=2"; //TODO: put this somewhere serializeable
+		qs += "&scale=" + scale.ToString ();
 		qs += "&maptype=" + mapType.ToString ().ToLower ();
 
 		//Break style into for loop
