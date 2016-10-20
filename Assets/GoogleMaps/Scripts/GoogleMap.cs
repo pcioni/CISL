@@ -38,6 +38,10 @@ public class GoogleMap : MonoBehaviour
 	public MapType mapType;
 
 	// tiling settings
+	public int tileCount = 1;
+	public int tileSpacing = 0; // this might depend on zoom level
+	public int tileWidth = 200;
+	public int tileHeight = 200;
 
 	// settings for relative lattitude and longitude placement on map
 	public float lattidudeRange = 40.0f;
@@ -128,14 +132,12 @@ public class GoogleMap : MonoBehaviour
 	}
 
 	public void Refresh() {
-		m_locationMapper = GameObject.Find ("MapImage").GetComponent<LocationMapper>();
 
 		Debug.Log ("Refreshing");
 
 		var url = "http://maps.googleapis.com/maps/api/staticmap";
 		var qs = "";
 
-		qs += "center=" + HTTP.URL.Encode (string.Format ("{0},{1}", centerLocation.latitude, centerLocation.longitude));
 
 		qs += "&zoom=" + zoom.ToString ();
 		qs += "&size=" + HTTP.URL.Encode (string.Format ("{0}x{1}", height,width));
@@ -167,15 +169,51 @@ public class GoogleMap : MonoBehaviour
 		}
 
 		// TODO: create requests to refresh image data one tile at a time
-		// TODO: loop through requests, shifting the center periodically for each tile
-		HTTP.Request req = new HTTP.Request ("GET",url + "?" + qs, true);
-		Debug.Log (req.uri);
-		req.Send ();
-		StartCoroutine(ProcessRequest (req));
-		// TODO: add settings in here for target to copy pixels into, include center, width, height, etc.
-	}
+		float shiftRatio =  (tileCount -1)/4.0f; //how far the center of the top left tile is from center of map
+		float lat_left = centerLocation.latitude - (shiftRatio * lattidudeRange);
+		float lng_top = centerLocation.longitude - (shiftRatio * longitudeRange);
+		Debug.Log (string.Format("GoogleMap.Refresh() ::             shiftRatio = {0}", shiftRatio));
+		Debug.Log (string.Format("GoogleMap.Refresh() ::    (lat_left, lng_top) = ({0},{1})", lat_left, lng_top));
 
-	private IEnumerator ProcessRequest(HTTP.Request req){
+
+		// TODO: loop through requests, shifting the center periodically for each tile
+		for (int y = 0; y < tileCount; y++) {
+			for (int x = 0; x < tileCount; x++) {
+
+				float lat = lat_left + (x * lattidudeRange / tileCount);
+				float lng = lng_top + (y * longitudeRange / tileCount);
+
+				Debug.Log (string.Format("GoogleMap.Refresh() :: requesting tile (x, y) = ({0},{1})", x, y));
+				Debug.Log (string.Format("GoogleMap.Refresh() ::             (lat, lng) = ({0},{1})", lat, lng));
+
+				string center = "center=" + HTTP.URL.Encode (string.Format ("{0},{1}", lat, lng));
+				qs = center + qs;
+
+				HTTP.Request req = new HTTP.Request ("GET",url + "?" + qs, true);
+				Debug.Log (req.uri);
+				req.Send ();
+				StartCoroutine( ProcessRequest(
+					req,
+					0, 0, 
+					0, 0, (int)m_locationMapper.GetWidth (), (int)m_locationMapper.GetHeight (), 
+					m_image.texture, 
+					0, 0, 
+					0, 0
+				));
+				// TODO: add settings in here for target to copy pixels into, include center, width, height, etc.
+			}
+		}
+	}
+		
+
+	private IEnumerator ProcessRequest(
+		HTTP.Request req, 
+		int srcElement, int srcMip, 
+		int srcX, int srcY, int srcWidth, int srcHeight, 
+		Texture dstTx, 
+		int dstElement, int dstMip, 
+		int dstX, int dstY){
+
 		while (req == null || !req.isDone) {
 			yield return new WaitForEndOfFrame ();
 		}
@@ -203,6 +241,7 @@ public class GoogleMap : MonoBehaviour
 	}
 
 }
+
 
 public enum GoogleMapColor
 {
