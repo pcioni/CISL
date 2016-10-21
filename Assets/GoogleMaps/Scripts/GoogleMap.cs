@@ -73,6 +73,13 @@ public class GoogleMap : MonoBehaviour
 			//if a texture was loaded, apply it to in-game object
 			if (texture != null) {
 				m_image.texture = texture;
+				if (zoom == 4) {
+					// TODO: make these calculations respond to different zoom levels
+					m_minLatitude = centerLocation.latitude - (lattidudeRange/2) * width/height; 
+					m_maxLatitude = centerLocation.latitude + (lattidudeRange/2) * width/height; 
+					m_maxLongitude = centerLocation.longitude + (longitudeRange/2);
+					m_minLongitude = centerLocation.longitude - (longitudeRange/2);
+				}
 			} else {
 				//else, leave the default texture in-place and throw a warning
 				Debug.Log("GoogleMap.Awake() :: image not loaded");
@@ -175,6 +182,14 @@ public class GoogleMap : MonoBehaviour
 		Debug.Log (string.Format("GoogleMap.Refresh() ::             shiftRatio = {0}", shiftRatio));
 		Debug.Log (string.Format("GoogleMap.Refresh() ::    (lat_left, lng_top) = ({0},{1})", lat_left, lng_top));
 
+		// resize texture based on tile count
+		var texture = new Texture2D (
+			(int)m_locationMapper.GetWidth ()  * tileCount, 
+			(int)m_locationMapper.GetHeight () * tileCount
+		);
+		texture.filterMode = FilterMode.Point;
+		m_image.texture = texture;
+
 
 		// TODO: loop through requests, shifting the center periodically for each tile
 		for (int y = 0; y < tileCount; y++) {
@@ -192,6 +207,8 @@ public class GoogleMap : MonoBehaviour
 				HTTP.Request req = new HTTP.Request ("GET",url + "?" + qs, true);
 				Debug.Log (req.uri);
 				req.Send ();
+				// TODO: pass settings in here for target to copy pixels into, include center, width, height, etc.
+				// TODO: grab a slightly larger image than needed to avoid watermark //TODO: research google premium for academic institutions (RPI might already have this)
 				StartCoroutine( ProcessRequest(
 					req,
 					0, 0, 
@@ -200,7 +217,6 @@ public class GoogleMap : MonoBehaviour
 					0, 0, 
 					0, 0
 				));
-				// TODO: add settings in here for target to copy pixels into, include center, width, height, etc.
 			}
 		}
 	}
@@ -219,24 +235,23 @@ public class GoogleMap : MonoBehaviour
 		}
 
 		if (req.exception == null) {
-			var texture = new Texture2D ((int)m_locationMapper.GetWidth (), (int)m_locationMapper.GetHeight ());
-            texture.filterMode = FilterMode.Point;
-			texture.LoadImage (req.response.Bytes);
+			var texture = new Texture2D (2,2);
+			texture.LoadImage (req.response.Bytes); //..this will auto-resize the texture dimensions.
+
 			m_image.texture = texture;
-			// TODO: update this to copy pixels instead of replacing entire texture
 			/*
+			// TODO: update this to copy pixels instead of replacing entire texture
 
 			Graphics.CopyTexture(
 				texture, 
-				int srcElement, int srcMip, 
-				0, 0, tileWidth, tileHeight, 
+				srcElement, srcMip, 
+				srcX, srcY, tileWidth, tileHeight, 
 				m_image.texture, 
-				int dstElement, int dstMip, 
-				int dstX, int dstY);
+				dstElement, dstMip, 
+				dstX, dstY);
+//*/
+//            m_image.Apply(); //TODO: is something like this necessary?
 
-            m_image.Apply();	
-
-			*/
 		}
 	}
 
