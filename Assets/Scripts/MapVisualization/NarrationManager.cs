@@ -36,7 +36,7 @@ public class NarrationManager : MonoBehaviour {
 
 	void Start() {
 		OSCHandler.Instance.Init(); //init OSC
-		OSCHandler.Instance.SendMessageToClient("MaxServer", "/initialize/", 1.0f);
+//		OSCHandler.Instance.SendMessageToClient("MaxServer", "/initialize/", 1.0f);
 		lxml.Initialize();
 		Reset_Narration();
 		EventManager.StartListening(EventManager.EventType.INTERFACE_NODE_SELECT, listener);
