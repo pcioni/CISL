@@ -7,7 +7,7 @@ public class NameTag : MonoBehaviour {
 	public NameTagSlot follow;
 	private Text txt;
 	private SpringJoint2D sj;
-	private BoxCollider2D bc;
+//	private BoxCollider2D bc;
 	private LineRenderer lr;
 	private Transform m_marker;
 	[SerializeField]private RectTransform m_rectTransform;
@@ -21,7 +21,7 @@ public class NameTag : MonoBehaviour {
 	void Awake () {
 		sj = GetComponent<SpringJoint2D>();
 		txt = GetComponentInChildren<Text>();
-		bc = GetComponent<BoxCollider2D>();
+//		bc = GetComponent<BoxCollider2D>();
 		lr = GetComponent<LineRenderer>();
 		lr.SetVertexCount(2);
 	}
@@ -44,8 +44,8 @@ public class NameTag : MonoBehaviour {
 		//adjust box collider to fit size of text in text box
 		//has to execute after first udpate due to content size fitter
 		yield return new WaitForEndOfFrame();
-		bc.size = new Vector2(m_childTransform.rect.width + 10, m_childTransform.rect.height + 10);
-		bc.offset = new Vector2(m_childTransform.rect.width / 2+5, -(m_childTransform.rect.height+10)/2);
+//		bc.size = new Vector2(m_childTransform.rect.width + 10, m_childTransform.rect.height + 10);
+//		bc.offset = new Vector2(m_childTransform.rect.width / 2+5, -(m_childTransform.rect.height+10)/2);
 	}
 
 	public void setTarget(NameTagSlot target, string s,Transform marker) {
