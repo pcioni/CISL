@@ -18,7 +18,11 @@ public class GoogleMap : MonoBehaviour
 
 	//TODO: create a Refresh() button
 	//TODO: allow file selection
-	public string filePath = "/Images/google_staticmap_1280x868.png";
+	private string filePath = "";
+	public string saveFilePath = "maps/google_staticmap_lastSaved";
+	public string terrainFilePath =       "maps/google_staticmap_6400x3472_terrain";
+	public string satelliteFilePath =     "maps/google_staticmap_6400x3472_satellite";
+	public string satelliteDarkFilePath = "maps/google_staticmap_6400x3472_satellite_drk";
 
 	public enum MapType
 	{
@@ -30,6 +34,7 @@ public class GoogleMap : MonoBehaviour
 
 	public bool refreshOnStart = true;
 	private bool refreshed = true; // set to true so it doesn't refresh twice on start
+	private bool loaded = true;
 	private bool saved = true;
 
 	public GoogleMapLocation centerLocation;
@@ -61,77 +66,110 @@ public class GoogleMap : MonoBehaviour
 
 		m_locationMapper = GameObject.Find ("MapImage").GetComponent<LocationMapper>();
 
+		filePath = terrainFilePath;
+
 		// create texture with appropriate dimensions and apply it to m_image object
 		Texture2D texture = new Texture2D ((int)m_locationMapper.GetWidth (), (int)m_locationMapper.GetHeight ());
 		m_image.texture = texture;
 
+		calcExtents (zoom);
+
 		if (refreshOnStart) {
 			Refresh ();
 		} else {
-			//TODO: load the texture from last saved map
-			texture = LoadPNG(filePath);
-			//if a texture was loaded, apply it to in-game object
-			if (texture != null) {
-				m_image.texture = texture;
-				if (zoom == 4) {
-					// TODO: make these calculations respond to different zoom levels
-					m_minLatitude = centerLocation.latitude - (lattidudeRange/2) * width/height; 
-					m_maxLatitude = centerLocation.latitude + (lattidudeRange/2) * width/height; 
-					m_maxLongitude = centerLocation.longitude + (longitudeRange/2);
-					m_minLongitude = centerLocation.longitude - (longitudeRange/2);
-				}
-			} else {
-				//else, leave the default texture in-place and throw a warning
-				Debug.Log("GoogleMap.Awake() :: image not loaded");
-				Debug.Log("GoogleMap.Awake() :: filePath = " + filePath);
-			}
+			loadMap (filePath);
 		}
 	}
 
 	void Update() {
 		//check for shift keypress
 		bool shiftDown = (Input.GetKey (KeyCode.LeftShift) || Input.GetKey (KeyCode.RightShift));
-		//check for refresh map kepress (SHIFT + M + R)
-		bool refreshMap = (shiftDown && Input.GetKey (KeyCode.M) && Input.GetKey (KeyCode.R));
-		//check for save map kepress (SHIFT + M + S)
-		bool saveMap = (shiftDown && Input.GetKey (KeyCode.M) && Input.GetKey (KeyCode.S));
 
-		if (saveMap && !saved) {
+		//check for refresh map kepress (SHIFT + M + R)
+		bool refresh = (shiftDown && Input.GetKey (KeyCode.M) && Input.GetKey (KeyCode.R));
+
+		//check for load map kepress (SHIFT + M + L)
+		bool load = (shiftDown && Input.GetKey (KeyCode.M) && Input.GetKey (KeyCode.L));
+		// check for map to load keypresses
+		bool terrain = (load && Input.GetKey (KeyCode.N));
+		bool satellite = (load && Input.GetKey (KeyCode.E));
+		bool satelliteDrk = (load && Input.GetKey (KeyCode.K));
+
+		//check for save map kepress (SHIFT + M + S)
+		bool save = (shiftDown && Input.GetKey (KeyCode.M) && Input.GetKey (KeyCode.S));
+
+		if (save && !saved) {
 			// Encode texture into PNG
 			byte[] bytes = (m_image.texture as Texture2D).EncodeToPNG ();
 
 			// write to a file in the project folder
-			File.WriteAllBytes (Application.dataPath + filePath, bytes);
+			File.WriteAllBytes (Application.dataPath + "/Resources/" + saveFilePath + ".png", bytes);
 
-			// debug
-			Debug.Log ("GoogleMap :: saved image filePath = " + filePath);
+			Debug.Log ("GoogleMap.update() :: saved image filePath = " + filePath);
 
 			saved = true;
 		} else {
 			saved = false;
 		}
 
-		if (refreshMap && !refreshed) {
+		if (refresh && !refreshed) {
 			Refresh ();
 			refreshed = true;
+			Debug.Log ("GoogleMap.update() :: refreshed image.");
 		} else {
 			refreshed = false;
 		}
+
+		if (load && !loaded) {
+			if (terrain) {
+				filePath = terrainFilePath;
+			} 
+			if (satellite) {
+				filePath = satelliteFilePath;
+			} 
+			if (satelliteDrk) {
+				filePath = satelliteDarkFilePath;
+			}
+			loadMap (filePath);
+			loaded = true;
+		} else {
+			loaded = false;
+		}
+	}
+
+	public void calcExtents (int _zoom) {
+		if (_zoom == 4) {
+			// TODO: make these calculations respond to different zoom levels
+			m_minLatitude = centerLocation.latitude - (lattidudeRange/2) * width/height; 
+			m_maxLatitude = centerLocation.latitude + (lattidudeRange/2) * width/height; 
+			m_maxLongitude = centerLocation.longitude + (longitudeRange/2);
+			m_minLongitude = centerLocation.longitude - (longitudeRange/2);
+		}
+	}
+
+	public void loadMap (string _filePath) {
+		//TODO: load the texture from last saved map by default
+		Texture2D texture = LoadPNG(_filePath);
+		//if a texture was loaded, apply it to in-game object
+		if (texture != null) {
+			m_image.texture = texture;
+
+			Debug.Log("GoogleMap.loadMap() :: loaded map");
+		} else {
+			//else, leave the default texture in-place and throw a warning
+			Debug.Log("GoogleMap.loadMap() :: map not loaded");
+		}
+		Debug.Log("GoogleMap.loadMap() :: filePath = " + _filePath);
 	}
 
 	public static Texture2D LoadPNG(string _filePath) {
-		// by IMD from http://answers.unity3d.com/answers/802424/view.html
 
-		Texture2D tex = null;
-		byte[] fileData;
+		Texture2D tex = Resources.Load (_filePath) as Texture2D;
 
-		if (File.Exists (Application.dataPath + _filePath)) {
-			fileData = File.ReadAllBytes (Application.dataPath + _filePath);
-			tex = new Texture2D (2, 2);
+		if (tex != null) {
 			tex.filterMode = FilterMode.Point;
-			tex.LoadImage (fileData); //..this will auto-resize the texture dimensions.
 		} else {
-			Debug.Log ("GoogleMaps.LoadPNG() :: File does not exist.");
+			Debug.Log ("GoogleMaps.LoadPNG() :: texture file does not exist.");
 			Debug.Log ("GoogleMaps.LoadPNG() :: _filePath = " + _filePath);
 		}
 
@@ -167,13 +205,7 @@ public class GoogleMap : MonoBehaviour
 
 		qs += "&sensor=" + (usingSensor ? "true" : "false");
 
-		if (zoom == 4) {
-			// TODO: make these calculations respond to different zoom levels
-			m_minLatitude = centerLocation.latitude - (lattidudeRange/2) * width/height; 
-			m_maxLatitude = centerLocation.latitude + (lattidudeRange/2) * width/height; 
-			m_maxLongitude = centerLocation.longitude + (longitudeRange/2);
-			m_minLongitude = centerLocation.longitude - (longitudeRange/2);
-		}
+		calcExtents (zoom);
 
 		// TODO: create requests to refresh image data one tile at a time
 		float shiftRatio =  (tileCount -1)/4.0f; //how far the center of the top left tile is from center of map
