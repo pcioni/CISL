@@ -140,9 +140,39 @@ public class timelineNode : MonoBehaviour
         tag.transform.SetParent(GameObject.FindGameObjectWithTag("Overlay").transform, false);
         nametag = tag;
         disable_tag();
-
     }
 
+	public void setCategory(string cat) {
+
+		// TODO: update this to include setting sprite art per category
+		switch (cat) {
+		case "character":
+			category = timelineNode.nodeCategory.CHARACTER;
+			break;
+		case "location":
+			category = timelineNode.nodeCategory.LOCATION;
+			break;
+		case "event":
+			category = timelineNode.nodeCategory.EVENT;
+			break;
+		case "emperor":
+			category = timelineNode.nodeCategory.EMPEROR;
+			break;
+		case "battle":
+			category = timelineNode.nodeCategory.BATTLE;
+			break;
+		case "capital":
+			category = timelineNode.nodeCategory.CAPITOL;
+			break;
+		default:
+			category = timelineNode.nodeCategory.UNKNOWN;
+			break;
+		}
+
+		reset_timeline_position ();
+	}
+
+	// alignment bug
     public void reset_timeline_position()
     {
         int totaldays = 365 * date.Year + date.DayOfYear;

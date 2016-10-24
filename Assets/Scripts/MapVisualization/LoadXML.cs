@@ -138,6 +138,7 @@ public class LoadXML : MonoBehaviour {
 			}
 		}
 
+		// set timline range
 		long maxdays = int.MinValue;
 		long mindays = int.MaxValue;
 		foreach (timelineNode tn in nodeList) {
@@ -167,34 +168,14 @@ public class LoadXML : MonoBehaviour {
 
 		foreach(GraphNodeLight gn in response.graph_nodes) {
 			string e_type = (gn.entity_type.Count == 0) ? "unknown" : ((gn.entity_type.Count > 1) ? gn.entity_type[1] : gn.entity_type[0]);
-			switch (e_type) {
-				case "character":
-					idMap[gn.id].category = timelineNode.nodeCategory.CHARACTER;
-					break;
-				case "location":
-					idMap[gn.id].category = timelineNode.nodeCategory.LOCATION;
-					break;
-				case "event":
-					idMap[gn.id].category = timelineNode.nodeCategory.EVENT;
-					break;
-				case "emperor":
-					idMap[gn.id].category = timelineNode.nodeCategory.EMPEROR;
-					break;
-				case "battle":
-					idMap[gn.id].category = timelineNode.nodeCategory.BATTLE;
-					break;
-				case "capital":
-					idMap[gn.id].category = timelineNode.nodeCategory.CAPITOL;
-					break;
-				default:
-					idMap[gn.id].category = timelineNode.nodeCategory.UNKNOWN;
-					break;
-			}
+
+			idMap [gn.id].setCategory (e_type);
 		}
 
-		foreach (timelineNode tn in nodeList) {
-			tn.reset_timeline_position();
-		}
+//		// position nodes into swimming lanes
+//		foreach (timelineNode tn in nodeList) {
+//			tn.reset_timeline_position();
+//		}
 
 		loaded = true;
 	}
