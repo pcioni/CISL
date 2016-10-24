@@ -149,33 +149,34 @@ public class timelineNode : MonoBehaviour
         float ypos = 0;
         switch (category)
         {
-            case nodeCategory.CHARACTER:
-                ypos = 0;
-                break;
-            case nodeCategory.EMPEROR:
-                //ypos = -10;
-                ypos = -20;
-                break;
-            case nodeCategory.EVENT:
-                //ypos = -20;
-                ypos = -40;
-                break;
-            case nodeCategory.BATTLE:
-                //ypos = -30;
-                ypos = -60;
-                break;
-            case nodeCategory.LOCATION:
-                //ypos = 20;
-                ypos = 20;
-                break;
-            case nodeCategory.CAPITOL:
-                //ypos = 10;
-                ypos = 20;
-                break;
-            case nodeCategory.UNKNOWN:
-                //ypos = -40;
-                ypos = -80;
-                break;
+		case nodeCategory.LOCATION:
+//			ypos = 20; // TODO: make these numbers relative to a larger system rather than hard-coded constants like this
+			ypos = 20;
+			break;
+		case nodeCategory.CAPITOL:
+//			ypos = 10;
+			ypos = 20;
+			break;
+        case nodeCategory.CHARACTER:
+            ypos = 0;
+            break;
+		case nodeCategory.EMPEROR:
+			ypos = 0;
+//          ypos = -10;
+//          ypos = -20;
+            break;
+        case nodeCategory.EVENT:
+            ypos = -20;
+//          ypos = -40;
+            break;
+        case nodeCategory.BATTLE:
+            ypos = -20;
+//          ypos = -60;
+            break;
+        case nodeCategory.UNKNOWN:
+            ypos = -40;
+//          ypos = -80;
+            break;
         }
         //timelinePosition = new Vector3(TimeLineBar.dateToPosition(totaldays), ypos + (node_id % 5)-5, 0); //deterministic random for horizontal stretch
         timelinePosition = new Vector3(TimeLineBar.dateToPosition(totaldays), ypos + (node_id % 15) - 15, 0); //deterministic random for horizontal stretch
