@@ -66,7 +66,7 @@ public class GoogleMap : MonoBehaviour
 
 		m_locationMapper = GameObject.Find ("MapImage").GetComponent<LocationMapper>();
 
-		filePath = terrainFilePath;
+		filePath = satelliteFilePath;
 
 		// create texture with appropriate dimensions and apply it to m_image object
 		Texture2D texture = new Texture2D ((int)m_locationMapper.GetWidth (), (int)m_locationMapper.GetHeight ());
