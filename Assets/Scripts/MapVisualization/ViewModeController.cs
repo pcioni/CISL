@@ -2,6 +2,7 @@
 using UnityEngine.Events;
 using System.Collections;
 using System.Collections.Generic;
+using JsonConstructs;
 
 public class ViewModeController : MonoBehaviour {
 
@@ -24,8 +25,16 @@ public class ViewModeController : MonoBehaviour {
 
 	void Awake() {
 		listener = delegate (string data) {
-			print("== loc change: " + data + " ==");
-			panToPoint(dummynodemap[int.Parse(data)]);
+			NodeData nd = JsonUtility.FromJson<NodeData>(data);
+			Vector2 mappoint;
+			if(dummynodemap.TryGetValue(nd.id, out mappoint)) {
+				print("== loc change: " + nd.id + " ==");
+				panToPoint(mappoint);
+			}else {
+				Debug.LogWarning("WARNING: attempted to pan to nonexistant map node with id: " + nd.id);
+			}
+
+			
 		};
 
 		EventManager.StartListening(EventManager.EventType.INTERFACE_NODE_SELECT, listener);
@@ -75,7 +84,8 @@ public class ViewModeController : MonoBehaviour {
 
 
 		print("Done finding positions");
-		panToPoint(dummynodemap[13]);//start off on rome
+		//disabling auto move because it interrupts demo
+		//panToPoint(dummynodemap[13]);//start off on rome
 	}
 
 

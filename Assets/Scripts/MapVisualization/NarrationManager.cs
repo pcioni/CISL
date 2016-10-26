@@ -10,7 +10,6 @@ using UnityEngine.EventSystems;
 public class NarrationManager : MonoBehaviour {
 
 	private LoadXML lxml;
-	private GameObject fNode;
 	private UnityAction<string> listener;
 
 	private IEnumerator current_narration;
@@ -25,9 +24,10 @@ public class NarrationManager : MonoBehaviour {
 		progressNarrationSwitch = false;
 		listener = delegate (string data){
 			if (user_can_take_turn) {
+
+				NodeData nd = JsonUtility.FromJson<NodeData>(data);
 				user_can_take_turn = false;
-				int node_id = int.Parse(data);
-				Narrate(node_id, 9);
+				Narrate(nd.id, 9);
 			}
 		};
 
@@ -40,7 +40,10 @@ public class NarrationManager : MonoBehaviour {
 		lxml.Initialize();
 		Reset_Narration();
 		EventManager.StartListening(EventManager.EventType.INTERFACE_NODE_SELECT, listener);
-		listener("13");
+
+		//start on diocletian
+		user_can_take_turn = false;
+		Narrate(13, 9);
 
 	}
 
@@ -86,10 +89,10 @@ public class NarrationManager : MonoBehaviour {
 	
 
 	//Present the given node given the previous nodes presented
-	void Present(GameObject node_to_present, List<GameObject> node_history) {
-		print("Current node: " + node_to_present.GetComponent<timelineNode>().text);
+	void Present(timelineNode node_to_present, List<timelineNode> node_history) {
+		print("Current node: " + node_to_present.text);
 		//Bring this node into focus
-		node_to_present.GetComponent<timelineNode>().Focus();
+		node_to_present.Focus();
 
 		/*//Some nodes may be layered on top of each other. Displace this node in the y if any other
 		//nodes in the history share a position with it.
@@ -146,7 +149,7 @@ public class NarrationManager : MonoBehaviour {
 		TestSequence response = JsonUtility.FromJson<TestSequence>(www.text);
 
 		//The nodes themselves
-		List<KeyValuePair<GameObject, string>> sequence_by_node = new List<KeyValuePair<GameObject, string>>();
+		List<KeyValuePair<timelineNode, string>> sequence_by_node = new List<KeyValuePair<timelineNode, string>>();
 		List<List<StoryAct>> sequence_acts = new List<List<StoryAct>>();
 		timelineNode temp_node = null;
 
@@ -155,7 +158,9 @@ public class NarrationManager : MonoBehaviour {
 			int id = sn.graph_node_id;
 			temp_node = null;
 			lxml.idMap.TryGetValue(id, out temp_node);
-			sequence_by_node.Add(new KeyValuePair<GameObject, string>(temp_node.gameObject,sn.text));
+
+			//NOTE: need to use storynode text here for annotations
+			sequence_by_node.Add(new KeyValuePair<timelineNode, string>(temp_node,sn.text));
 			sequence_acts.Add(sn.story_acts);
 		}//end foreach
 
@@ -172,7 +177,7 @@ public class NarrationManager : MonoBehaviour {
 		}//end foreach
 
 		bool tmp_flag = true;
-		List<GameObject> node_history = new List<GameObject>();
+		List<timelineNode> node_history = new List<timelineNode>();
 		for(int ix=0; ix<sequence_by_node.Count; ix++) {
 		//foreach (KeyValuePair<GameObject,string> kvp in sequence_by_node) {
 			if (first_flag) {//wait for keypress before presenting first node
@@ -181,19 +186,17 @@ public class NarrationManager : MonoBehaviour {
 			}else if(!tmp_flag){//dont wait for keypress on first node
 				yield return StartCoroutine(WaitForKeyDown());
 			}
-			KeyValuePair<GameObject, string> kvp = sequence_by_node[ix];
-			GameObject node_to_present = kvp.Key;
-			timelineNode tmptn = node_to_present.GetComponent<timelineNode>();
+			KeyValuePair<timelineNode, string> kvp = sequence_by_node[ix];
+			timelineNode node_to_present = kvp.Key;
 			//Bring the previous node into past-focus
 			if (node_history.Count >= 1) {
-				node_history[node_history.Count - 1].GetComponent<timelineNode>().PastFocus();
-				tmptn.pastStoryNodeTransform = node_history[node_history.Count - 1].transform;
+				node_history[node_history.Count - 1].PastFocus();
+				node_to_present.pastStoryNodeTransform = node_history[node_history.Count - 1].transform;
 			}
 			//Present this node
-			fNode = node_to_present;
 			Present(node_to_present, node_history);
 
-			DataConstruct1 dataObj = new DataConstruct1(kvp.Value, tmptn.pic_urls, tmptn.pic_labels);
+			NodeData dataObj = new NodeData(node_to_present.node_id, kvp.Value, node_to_present.pic_urls, node_to_present.pic_labels);
 
 			string json = JsonUtility.ToJson(dataObj);
 
@@ -237,8 +240,8 @@ public class NarrationManager : MonoBehaviour {
 			progressNarrationSwitch = false;
 			tmp_flag = false;
 
-            //Call camera collision detection method
-            CameraController.CollisionDetection();
+			//Call camera collision detection method
+			CameraController.CollisionDetection();
 		}//end foreach
 		user_can_take_turn = true;
 

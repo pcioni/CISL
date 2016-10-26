@@ -45,14 +45,16 @@ namespace JsonConstructs {
 	}
 
 	[Serializable]
-	public class DataConstruct1 {
+	public class NodeData {
+		public int id;
 		public string text;
-        public List<string> imgLabel;
+		public List<string> imgLabel;
 		public List<string> imgUrl;
-		public DataConstruct1(string t, List<string> url, List<string> label) {
+		public NodeData(int i, string t, List<string> url, List<string> label) {
+			id = i;
 			text = t;
-            imgUrl = url;
-            imgLabel = label;
+			imgUrl = url;
+			imgLabel = label;
 		}
 	}
 
