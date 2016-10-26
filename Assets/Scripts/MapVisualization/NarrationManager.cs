@@ -92,7 +92,10 @@ public class NarrationManager : MonoBehaviour {
 		//Bring this node into focus
 		node_to_present.Focus();
 
-		/*//Some nodes may be layered on top of each other. Displace this node in the y if any other
+        // TODO: move map camera whenever new node is presented -- data type below isn't working
+        // EventManager.TriggerEvent(EventManager.EventType.NARRATION_LOCATION_CHANGE, node_to_present.GetComponent<timelineNode>().node_id.ToString());
+
+        /*//Some nodes may be layered on top of each other. Displace this node in the y if any other
 		//nodes in the history share a position with it.
 		bool layered = true;
 		while (layered)
