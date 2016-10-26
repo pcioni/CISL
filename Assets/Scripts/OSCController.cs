@@ -25,9 +25,12 @@ using System.Collections.Generic;
 using System.Text;
 using UnityOSC;
 
-public class oscControl : MonoBehaviour {
+public class OSCController : MonoBehaviour {
 
 	private Dictionary<string, ServerLog> servers;
+
+	private bool audioFinalized = false;
+	private bool audioInitialized = false;
 
 	// Script initialization
 	void Start() {	
@@ -57,5 +60,29 @@ public class oscControl : MonoBehaviour {
 					item.Value.packets[lastPacketIndex].Data[0].ToString())); //First data value
 			}
 		}
+
+		// handle audio keypresses
+		bool shiftDown = (Input.GetKey (KeyCode.LeftShift) || Input.GetKey (KeyCode.RightShift));
+		// ESCAPE -OR- SHIFT + A + F
+		bool finalizeAudio = ( Input.GetKeyDown(KeyCode.Escape) || (shiftDown && Input.GetKey(KeyCode.A) && Input.GetKey(KeyCode.F)) );
+		// SHIFT + A + I
+		bool initAudio = ( shiftDown && Input.GetKey(KeyCode.A) && Input.GetKey(KeyCode.I) );
+
+		if (finalizeAudio) {
+			OSCHandler.Instance.SendMessageToClient ("MaxServer", "/finalize/", 1.0f);
+			Debug.Log ("QuitOnEscape.Update() :: finalizing audio");
+			audioFinalized = true;
+		} else {
+			audioFinalized = false;
+		}
+
+		if (initAudio) {
+			OSCHandler.Instance.SendMessageToClient ("MaxServer", "/initialize/", 1.0f);
+			Debug.Log ("QuitOnEscape.Update() :: initializing audio");	
+			audioInitialized = true;
+		} else {
+			audioInitialized = false;
+		}
+
 	}
 }
