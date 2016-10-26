@@ -202,6 +202,9 @@ public class NarrationManager : MonoBehaviour {
 
 			EventManager.TriggerEvent(EventManager.EventType.NARRATION_MACHINE_TURN, json);
 
+			//always trigger a location change
+			EventManager.TriggerEvent(EventManager.EventType.NARRATION_LOCATION_CHANGE, json);
+
 			//trigger events for all current story acts
 
 			foreach (StoryAct sa in sequence_acts[ix]) {
@@ -219,7 +222,7 @@ public class NarrationManager : MonoBehaviour {
 						EventManager.TriggerEvent(EventManager.EventType.NARRATION_NOVEL_LEAD_IN, sa.Item2.ToString());
 						break;
 					case "location-change":
-						EventManager.TriggerEvent(EventManager.EventType.NARRATION_LOCATION_CHANGE, sa.Item2.ToString());
+						//EventManager.TriggerEvent(EventManager.EventType.NARRATION_LOCATION_CHANGE, sa.Item2.ToString());
 						break;
 					case "hint-at":
 						EventManager.TriggerEvent(EventManager.EventType.NARRATION_HINT_AT, sa.Item2.ToString());

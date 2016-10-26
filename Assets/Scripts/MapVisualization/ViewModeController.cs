@@ -38,6 +38,7 @@ public class ViewModeController : MonoBehaviour {
 		};
 
 		EventManager.StartListening(EventManager.EventType.INTERFACE_NODE_SELECT, listener);
+		EventManager.StartListening(EventManager.EventType.NARRATION_LOCATION_CHANGE, listener);
 	}
 
 
@@ -97,15 +98,18 @@ public class ViewModeController : MonoBehaviour {
 	}
 
 	public AnimationCurve panCurve;
-
+	private float currentT; //track zoom to prevent jarring
 	IEnumerator _pan(Vector2 location) {
-		float t = 0f;
+		float t1 = 0f; //pan time
+		float t2 = currentT; //zoom time
 		Vector2 startpos = mapCam.transform.position;
-		while (t < 1) {
-			t += Time.deltaTime / panTime;
-			mapCam.transform.position = Vector2.Lerp(startpos, location, t);
+		while (t1 < 1) {
+			t1 += Time.deltaTime / panTime;
+			t2 += Time.deltaTime / panTime;
+			currentT = t2;
+			mapCam.transform.position = Vector2.Lerp(startpos, location, t1);
 
-			mapCam.orthographicSize = panCurve.Evaluate(t);
+			mapCam.orthographicSize = panCurve.Evaluate(t2);
 			/*if (t < .5f) {//zoom out when panning a long distance
 				mapCam.orthographicSize = Mathf.Lerp(14, 40, t * 2);
 			}
@@ -115,6 +119,7 @@ public class ViewModeController : MonoBehaviour {
 
 			yield return null;
 		}
+		currentT = 0;
 	}
 
 	private Queue<KeyValuePair<int, timelineNode>> q = new Queue<KeyValuePair<int, timelineNode>>();
