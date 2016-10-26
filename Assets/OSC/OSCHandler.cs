@@ -106,11 +106,13 @@ public class OSCHandler : MonoBehaviour
 		//Initialize OSC servers (listeners)
 		//Example:
 
-		//CreateServer("AndroidPhone", 6666);
-	}
-	
-	#region Properties
-	public Dictionary<string, ClientLog> Clients
+        //CreateServer("AndroidPhone", 6666);
+        CreateServer("SpeechToText", 6666);
+
+    }
+
+    #region Properties
+    public Dictionary<string, ClientLog> Clients
 	{
 		get
 		{
