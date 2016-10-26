@@ -36,30 +36,32 @@ public class OSCController : MonoBehaviour {
 	void Start() {	
 		OSCHandler.Instance.Init(); //init OSC
 		servers = new Dictionary<string, ServerLog>();
-	}
 
-	// NOTE: The received messages at each server are updated here
-	// Hence, this update depends on your application architecture
-	// How many frames per second or Update() calls per frame?
-	void Update() {
+        OSCHandler.Instance.SendMessageToClient("SpeechToTextSend", "start", 1.0f);
+        OSCHandler.Instance.SendMessageToClient("SpeechToTextSend", "next", 1.0f);
+    }
+
+    // NOTE: The received messages at each server are updated here
+    // Hence, this update depends on your application architecture
+    // How many frames per second or Update() calls per frame?
+    void Update() {
 
 		OSCHandler.Instance.UpdateLogs();
 		servers = OSCHandler.Instance.Servers;
 
 		foreach( KeyValuePair<string, ServerLog> item in servers )
 		{
-			// If we have received at least one packet,
-			// show the last received from the log in the Debug console
-			if(item.Value.log.Count > 0) 
+            // If we have received at least one packet,
+            // show the last received from the log in the Debug console
+            if (item.Value.log.Count > 0) 
 			{
 				int lastPacketIndex = item.Value.packets.Count - 1;
 
-				UnityEngine.Debug.Log(String.Format("SERVER: {0} ADDRESS: {1} VALUE 0: {2}", 
-					item.Key, // Server name
-					item.Value.packets[lastPacketIndex].Address, // OSC address
-					item.Value.packets[lastPacketIndex].Data[0].ToString())); //First data value
-			}
-		}
+                UnityEngine.Debug.Log(String.Format("SERVER: {0} ADDRESS: {1}",
+                    item.Key, // Server name
+                    item.Value.packets[lastPacketIndex].Address)); // OSC address
+            }
+        }
 
 		// handle audio keypresses
 		bool shiftDown = (Input.GetKey (KeyCode.LeftShift) || Input.GetKey (KeyCode.RightShift));
