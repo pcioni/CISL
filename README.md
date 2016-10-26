@@ -1,7 +1,7 @@
 # CISL
 
 ## dependencies
-* unity version 5.4.0 — https://unity3d.com/get-unity/download/archive
+* unity version 5.4.1f1 — https://unity3d.com/get-unity/download/archive
 * narrative backend — https://github.com/adebis/NarrativeBackendRPI
 * win 10 — VS 2015 — https://go.microsoft.com/fwlink/?LinkId=691978&clcid=0x409
 * OSX — Xamarin Studio
