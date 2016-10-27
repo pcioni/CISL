@@ -14,8 +14,13 @@ public class NameTag : MonoBehaviour {
 	[SerializeField]
 	private NameTagContainer m_originalContainer;
 	public NameTagContainer m_curContainer;
+    private Color tmpWhite_pnl;
+    private Color tmpRed_pnl;
+    private Color tmpWhite_lr;
+    private Color tmpRed_lr;
 
-	[SerializeField]
+
+    [SerializeField]
 	private RectTransform m_childTransform;
 
 	void Awake () {
@@ -24,9 +29,16 @@ public class NameTag : MonoBehaviour {
 //		bc = GetComponent<BoxCollider2D>();
 		lr = GetComponent<LineRenderer>();
 		lr.SetVertexCount(2);
-	}
 
-	public void SetNewTarget(Vector3 targetPosition)
+        tmpWhite_pnl = this.GetComponentInChildren<Image>().color;
+        tmpRed_pnl= Color.red;
+        tmpWhite_lr = tmpWhite_pnl;
+        tmpWhite_lr.a = 127;
+        tmpRed_lr = tmpRed_pnl;
+        tmpRed_lr.a = 127;
+    }
+
+    public void SetNewTarget(Vector3 targetPosition)
 	{
 		follow.transform.position = targetPosition;
 	}
@@ -86,5 +98,16 @@ public class NameTag : MonoBehaviour {
 		float zw = Camera.main.orthographicSize/100f;
 		lr.SetWidth(zw,zw);
 
-	}
+        if (m_marker.GetComponent<timelineNode>().state == timelineNode.focusState.IN)
+        {
+            this.GetComponentInChildren<Image>().color = tmpRed_pnl;
+            lr.SetColors(tmpRed_pnl, tmpRed_pnl);
+        }
+        else
+        {
+            this.GetComponentInChildren<Image>().color = tmpWhite_pnl;
+            lr.SetColors(tmpWhite_pnl, tmpWhite_pnl);
+        }
+
+    }
 }
