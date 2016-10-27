@@ -44,6 +44,10 @@ public class OSCController : MonoBehaviour {
     // NOTE: The received messages at each server are updated here
     // Hence, this update depends on your application architecture
     // How many frames per second or Update() calls per frame?
+
+    long lastMessageTime = -1;
+    string lastMessage = "";
+    
     void Update() {
 
 		OSCHandler.Instance.UpdateLogs();
@@ -57,9 +61,30 @@ public class OSCController : MonoBehaviour {
 			{
 				int lastPacketIndex = item.Value.packets.Count - 1;
 
-                UnityEngine.Debug.Log(String.Format("SERVER: {0} ADDRESS: {1}",
-                    item.Key, // Server name
-                    item.Value.packets[lastPacketIndex].Address)); // OSC address
+                if (lastMessageTime == item.Value.packets[lastPacketIndex].TimeStamp) continue;
+
+                long messagetime = item.Value.packets[lastPacketIndex].TimeStamp;
+
+                long dt = (messagetime - lastMessageTime) / 6666; // TODO: figure out what this unit is
+
+                lastMessageTime = messagetime;
+
+                string message = item.Value.packets[lastPacketIndex].Address;
+
+                if (dt < 3000 && lastMessage == message) {
+                    continue;
+                }
+
+                lastMessage = message;
+
+                print("OSCController.Update() :: new message = " + message);
+
+                //Debug.Log(string.Format("server: {0} address: {1}",
+                //    item.Key, // server name
+                //    item.Value.packets[lastPacketIndex].Address)); // osc address
+                //print(item.Value.packets[lastPacketIndex].TimeStamp);
+
+                EventManager.TriggerEvent(EventManager.EventType.OSC_SPEECH_INPUT, item.Value.packets[lastPacketIndex].Address);
             }
         }
 
