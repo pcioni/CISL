@@ -30,11 +30,11 @@ public class timelineNode : MonoBehaviour
 	public List<timelineNode> allNodes;
 	public SpriteRenderer sr;
 	public UnityAction<string> callback = null;
-	private LineRenderer pastNarrationLineRenderer;
 	public Transform pastStoryNodeTransform;
 	public GameObject nametagprefab;
 	public GameObject nametag;
 	private NameTagContainer nt;
+    private LineRenderer pastNarrationLineRenderer;
 	private IEnumerator moveCoroutine;//reference to movement
 	public nodeCategory category = nodeCategory.UNKNOWN;
 
@@ -399,8 +399,29 @@ public class timelineNode : MonoBehaviour
 	//Assign Line Renderer vertcies
 	private IEnumerator _drawLines()
 	{
+        //straight-line rendering for past story nodes
+        //Doesn't use Will's system since it's due in <24hrs.
+        Vector3 centralNodePos = transform.position;
+        Vector3[] points = new Vector3[Mathf.Max(neighbors.Count * 2, 1)];
+        Vector3[] pastNarrationPoints = new Vector3[6];
+        points[0] = centralNodePos;
+        pastNarrationPoints[0] = centralNodePos;
+        int pastPointsCount = 1;
+        int coun = 0;
+        for (int i = 1; i < points.Length; i += 2) {
+            if (neighbors[coun].Value.state == focusState.PAST) {
+                pastNarrationPoints[pastPointsCount] = neighbors[coun].Value.transform.position;
+                pastNarrationPoints[pastPointsCount + 1] = centralNodePos;
+                pastPointsCount += 2;
+            }
+            points[i - 1] = centralNodePos;
+            points[i] = neighbors[coun].Value.transform.position;
+            coun++;
+        }
+        pastNarrationLineRenderer.SetVertexCount(pastPointsCount);
+        pastNarrationLineRenderer.SetPositions(pastNarrationPoints);
 
-		foreach (LineRenderer lr in m_renderers)
+        foreach (LineRenderer lr in m_renderers)
 		{//need to clear old lines
 			Destroy(lr.gameObject);
 		}
@@ -415,7 +436,8 @@ public class timelineNode : MonoBehaviour
 			ColorLines(focus_color);
 			Vector3 midpoint_vec;
 
-			//Vector3 endPoint;
+            //Vector3 endPoint;
+
 
 			//draw the past story node in it the child-object's Line Renderer
 			/*if (pastStoryNodeTransform != null)
