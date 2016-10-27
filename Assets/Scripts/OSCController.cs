@@ -47,7 +47,9 @@ public class OSCController : MonoBehaviour {
 
     long lastMessageTime = -1;
     string lastMessage = "";
-    
+    float systemTime = -1;
+    bool aboutCalled = false;
+
     void Update() {
 
 		OSCHandler.Instance.UpdateLogs();
@@ -61,30 +63,74 @@ public class OSCController : MonoBehaviour {
 			{
 				int lastPacketIndex = item.Value.packets.Count - 1;
 
-                if (lastMessageTime == item.Value.packets[lastPacketIndex].TimeStamp) continue;
-
                 long messagetime = item.Value.packets[lastPacketIndex].TimeStamp;
+                long messageDT = (messagetime - lastMessageTime) / 6666; // TODO: figure out what this unit is
+                bool sameMessageTime = lastMessageTime == messagetime;
 
-                long dt = (messagetime - lastMessageTime) / 6666; // TODO: figure out what this unit is
-
-                lastMessageTime = messagetime;
+                float systemDT = Time.time - systemTime;
 
                 string message = item.Value.packets[lastPacketIndex].Address;
+                bool sameMessage = lastMessage == message;
+                bool firstAbout = (message.Equals("about") && !sameMessage && messageDT > 2000);
+                bool lastAbout = (message.Equals("about") && sameMessage && systemDT > 2f);
 
-                if (dt < 3000 && lastMessage == message) {
+                if (sameMessageTime && !lastAbout)
+                {
                     continue;
                 }
 
+                lastMessageTime = messagetime;
+                systemTime = Time.time;
+
                 lastMessage = message;
 
-                print("OSCController.Update() :: new message = " + message);
+                if (messageDT < 3000 && sameMessage) {
+                    if (!lastAbout)
+                    {
+                        continue;
+                    }
+                    else if (aboutCalled)
+                    {
+                        continue;
+                    }
+                } else if (firstAbout)
+                {
+                    aboutCalled = false;
+                    continue;
+                }
 
-                //Debug.Log(string.Format("server: {0} address: {1}",
-                //    item.Key, // server name
-                //    item.Value.packets[lastPacketIndex].Address)); // osc address
+                print("OSCController.Update() :: new message = " + message);
+                print("dt = " + messageDT);
+                Debug.Log("sameMessage = " + sameMessage);
+                Debug.Log("firstAbout = " + firstAbout);
+                Debug.Log("lastAbout = " + lastAbout);
+                Debug.Log("aboutCalled = " + aboutCalled);
+                Debug.Log(string.Format("server: {0} address: {1}",
+                    item.Key, // server name
+                    item.Value.packets[lastPacketIndex].Address)); // osc address
                 //print(item.Value.packets[lastPacketIndex].TimeStamp);
 
-                EventManager.TriggerEvent(EventManager.EventType.OSC_SPEECH_INPUT, item.Value.packets[lastPacketIndex].Address);
+                switch (message)
+                {
+                    case "start":
+                        break;
+                    case "next":
+                        break;
+                    case "continue":
+                        break;
+                    case "begin":
+                        break;
+                    case "about":
+                        //foreach (KeyValuePair<string, ServerLog> d in item.Value.packets[lastPacketIndex].Data)
+                        //{
+                        //}
+                        //EventManager.TriggerEvent(EventManager.EventType.OSC_SPEECH_INPUT, message);
+                        aboutCalled = true;
+                        print("data[0] = " + item.Value.packets[lastPacketIndex].Data[0].ToString());
+                        break;
+                    default:
+                        break;
+                }
             }
         }
 
