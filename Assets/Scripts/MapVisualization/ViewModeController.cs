@@ -21,7 +21,6 @@ public class ViewModeController : MonoBehaviour {
 	public Dictionary<timelineNode, mapNode> crossmap;
 
 	public Camera mapCam;
-	public float panTime = 3f;
 
 	void Awake() {
 		listener = delegate (string data) {
@@ -39,6 +38,8 @@ public class ViewModeController : MonoBehaviour {
 
 		EventManager.StartListening(EventManager.EventType.INTERFACE_NODE_SELECT, listener);
 		EventManager.StartListening(EventManager.EventType.NARRATION_LOCATION_CHANGE, listener);
+
+		minOrthoSize = mapCam.orthographicSize;
 	}
 
 
@@ -92,34 +93,55 @@ public class ViewModeController : MonoBehaviour {
 
 	private IEnumerator currentPan = null;
 	void panToPoint(Vector2 location) {
+		if (location.Equals( mapCam.transform.position)) return;
 		if (currentPan != null) StopCoroutine(currentPan);
 		currentPan = _pan(location);
 		StartCoroutine(currentPan);
 	}
-
+		
+	public float maxPanTime = 2f; // seconds
+	public float minPanTime = 0.25f; // seconds
+	public float panSpeed = 0.025f; // seconds per update (i.e.: 30 fps = 0.03333333, etc.)
+	private float minOrthoSize; // gets set to devault camera ortho
+	public float maxOrthoSize = 25;
 	public AnimationCurve panCurve;
-	private float currentT; //track zoom to prevent jarring
-	IEnumerator _pan(Vector2 location) {
-		float t1 = 0f; //pan time
-		float t2 = currentT; //zoom time
-		Vector2 startpos = mapCam.transform.position;
-		while (t1 < 1) {
-			t1 += Time.deltaTime / panTime;
-			t2 += Time.deltaTime / panTime;
-			currentT = t2;
-			mapCam.transform.position = Vector2.Lerp(startpos, location, t1);
 
-			mapCam.orthographicSize = panCurve.Evaluate(t2);
-			/*if (t < .5f) {//zoom out when panning a long distance
-				mapCam.orthographicSize = Mathf.Lerp(14, 40, t * 2);
+	IEnumerator _pan(Vector2 _dest) {
+		Vector2 startPos = mapCam.transform.position;
+		float startOrtho = mapCam.orthographicSize;
+		float t = 0f;
+		float orthoT = 0f;
+
+		// calc panDuration and orthoPeak directly proportional to distance traveled on map
+		// yet clamped to min & max values
+		Vector2 d = startPos - _dest;
+		float dist = d.magnitude;
+		float panDuration = minPanTime + (maxPanTime - minPanTime) * Mathf.Clamp01 (dist * panSpeed);
+		float orthoPeak = minOrthoSize + (maxOrthoSize - minOrthoSize) * panDuration / maxPanTime; 
+
+		while (t < 1) {
+			t += Time.deltaTime / panDuration;
+
+			if (orthoPeak > startOrtho) {
+				if (t < .5f) {//zoom out when panning a long distance
+					orthoT = panCurve.Evaluate (t * 2);
+				} else {//zoom back in at end	
+					orthoT = panCurve.Evaluate (1 - (t * 2 - 1));
+				}
+			} else {
+				orthoT = panCurve.Evaluate (t);
 			}
-			else {//zoom back in at end	
-				mapCam.orthographicSize = Mathf.Lerp(40, 14, t * 2 - 1);
-			}*/
+
+			mapCam.transform.position = Vector2.Lerp(startPos, _dest, panCurve.Evaluate(t));
+			mapCam.orthographicSize = minOrthoSize + (orthoPeak - minOrthoSize) * orthoT;	
+
+//			Debug.Log ("ViewModeController._pan()");
+//			Debug.Log ("               t = " + t);
+//			Debug.Log ("           halfT = " + orthoT);
+//			Debug.Log ("orthographicSize = " + mapCam.orthographicSize);
 
 			yield return null;
 		}
-		currentT = 0;
 	}
 
 	private Queue<KeyValuePair<int, timelineNode>> q = new Queue<KeyValuePair<int, timelineNode>>();
