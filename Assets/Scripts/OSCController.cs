@@ -36,30 +36,57 @@ public class OSCController : MonoBehaviour {
 	void Start() {	
 		OSCHandler.Instance.Init(); //init OSC
 		servers = new Dictionary<string, ServerLog>();
-	}
 
-	// NOTE: The received messages at each server are updated here
-	// Hence, this update depends on your application architecture
-	// How many frames per second or Update() calls per frame?
-	void Update() {
+        OSCHandler.Instance.SendMessageToClient("SpeechToTextSend", "start", 1.0f);
+        OSCHandler.Instance.SendMessageToClient("SpeechToTextSend", "next", 1.0f);
+    }
+
+    // NOTE: The received messages at each server are updated here
+    // Hence, this update depends on your application architecture
+    // How many frames per second or Update() calls per frame?
+
+    long lastMessageTime = -1;
+    string lastMessage = "";
+    
+    void Update() {
 
 		OSCHandler.Instance.UpdateLogs();
 		servers = OSCHandler.Instance.Servers;
 
 		foreach( KeyValuePair<string, ServerLog> item in servers )
 		{
-			// If we have received at least one packet,
-			// show the last received from the log in the Debug console
-			if(item.Value.log.Count > 0) 
+            // If we have received at least one packet,
+            // show the last received from the log in the Debug console
+            if (item.Value.log.Count > 0) 
 			{
 				int lastPacketIndex = item.Value.packets.Count - 1;
 
-				UnityEngine.Debug.Log(String.Format("SERVER: {0} ADDRESS: {1} VALUE 0: {2}", 
-					item.Key, // Server name
-					item.Value.packets[lastPacketIndex].Address, // OSC address
-					item.Value.packets[lastPacketIndex].Data[0].ToString())); //First data value
-			}
-		}
+                if (lastMessageTime == item.Value.packets[lastPacketIndex].TimeStamp) continue;
+
+                long messagetime = item.Value.packets[lastPacketIndex].TimeStamp;
+
+                long dt = (messagetime - lastMessageTime) / 6666; // TODO: figure out what this unit is
+
+                lastMessageTime = messagetime;
+
+                string message = item.Value.packets[lastPacketIndex].Address;
+
+                if (dt < 3000 && lastMessage == message) {
+                    continue;
+                }
+
+                lastMessage = message;
+
+                print("OSCController.Update() :: new message = " + message);
+
+                //Debug.Log(string.Format("server: {0} address: {1}",
+                //    item.Key, // server name
+                //    item.Value.packets[lastPacketIndex].Address)); // osc address
+                //print(item.Value.packets[lastPacketIndex].TimeStamp);
+
+                EventManager.TriggerEvent(EventManager.EventType.OSC_SPEECH_INPUT, item.Value.packets[lastPacketIndex].Address);
+            }
+        }
 
 		// handle audio keypresses
 		bool shiftDown = (Input.GetKey (KeyCode.LeftShift) || Input.GetKey (KeyCode.RightShift));

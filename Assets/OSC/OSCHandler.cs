@@ -106,6 +106,9 @@ public class OSCHandler : MonoBehaviour
 		//Initialize OSC servers (listeners)
 		//Example:
 
+        CreateClient("SpeechToTextSend", IPAddress.Parse("127.0.0.1"), 6666);
+
+
         //CreateServer("AndroidPhone", 6666);
         CreateServer("SpeechToText", 6666);
 
