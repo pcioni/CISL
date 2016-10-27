@@ -28,6 +28,8 @@ sysinfo.txt
 
 # OS Files
 .DS_Store
+
+# CISL assets to ignore
 Mockups/*.psd
 Mockups/_mapTypes/
 Mockups/_progressiveImages/
@@ -37,3 +39,4 @@ Mockups/20160927_1200_smartObjects
 *Thumbs.db*
 *.psd
 *psd.meta
+cache*
