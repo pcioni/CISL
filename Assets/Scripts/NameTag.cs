@@ -32,7 +32,7 @@ public class NameTag : MonoBehaviour {
 
         tmpWhite_pnl = this.GetComponentInChildren<Image>().color;
         tmpRed_pnl= Color.red;
-        tmpWhite_lr = tmpWhite_pnl;
+		tmpWhite_lr = Color.white;
         tmpWhite_lr.a = 127;
         tmpRed_lr = tmpRed_pnl;
         tmpRed_lr.a = 127;
@@ -101,12 +101,12 @@ public class NameTag : MonoBehaviour {
         if (m_marker.GetComponent<timelineNode>().state == timelineNode.focusState.IN)
         {
             this.GetComponentInChildren<Image>().color = tmpRed_pnl;
-            lr.SetColors(tmpRed_pnl, tmpRed_pnl);
+			lr.SetColors(tmpRed_lr, tmpRed_lr);
         }
         else
         {
             this.GetComponentInChildren<Image>().color = tmpWhite_pnl;
-            lr.SetColors(tmpWhite_pnl, tmpWhite_pnl);
+			lr.SetColors(tmpWhite_lr, tmpWhite_lr);
         }
 
     }

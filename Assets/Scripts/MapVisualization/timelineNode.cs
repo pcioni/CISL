@@ -173,7 +173,6 @@ public class timelineNode : MonoBehaviour
 		reset_timeline_position ();
 	}
 
-	// alignment bug
 	public void reset_timeline_position()
 	{
 		int totaldays = 365 * date.Year + date.DayOfYear;
@@ -305,6 +304,10 @@ public class timelineNode : MonoBehaviour
 				tn.PastFocus();
 			}
 			tn.disable_tag();
+			// this might be where disappearing tags might be coming from: issue #39 
+			//                              https://github.com/pcioni/CISL/issues/39
+			// should allow tn to take care of ist own tag state handling on "PastFocus()"
+
 		}//end foreach
 
 		ChangeSize(new Vector3(baseSize.x * 2.5f, baseSize.y * 2.5f, baseSize.z));
