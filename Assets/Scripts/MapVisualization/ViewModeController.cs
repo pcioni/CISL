@@ -12,6 +12,7 @@ public class ViewModeController : MonoBehaviour {
 	public LocationMapper current_map;
 
 	private UnityAction<string> listener;
+	private string lastPanNodeData;
 
 	private LoadXML lx;
 
@@ -24,11 +25,15 @@ public class ViewModeController : MonoBehaviour {
 
 	void Awake() {
 		listener = delegate (string data) {
+			// don't respond to repeated requests to pan to the same node
+			if (data == lastPanNodeData) return;
+
 			NodeData nd = JsonUtility.FromJson<NodeData>(data);
 			Vector2 mappoint;
 			if(dummynodemap.TryGetValue(nd.id, out mappoint)) {
 				print("== loc change: " + nd.id + " ==");
 				panToPoint(mappoint);
+				lastPanNodeData = data;
 			}else {
 				Debug.LogWarning("WARNING: attempted to pan to nonexistant map node with id: " + nd.id);
 			}
@@ -125,15 +130,18 @@ public class ViewModeController : MonoBehaviour {
 			if (orthoPeak > startOrtho) {
 				if (t < .5f) {//zoom out when panning a long distance
 					orthoT = panCurve.Evaluate (t * 2);
+					mapCam.orthographicSize = startOrtho + (orthoPeak - startOrtho) * orthoT;
 				} else {//zoom back in at end	
 					orthoT = panCurve.Evaluate (1 - (t * 2 - 1));
+					mapCam.orthographicSize = minOrthoSize + (orthoPeak - minOrthoSize) * orthoT;
 				}
 			} else {
-				orthoT = panCurve.Evaluate (t);
+				orthoT = panCurve.Evaluate (1 - t);
+				mapCam.orthographicSize = minOrthoSize + (startOrtho - minOrthoSize) * orthoT;	
 			}
 
 			mapCam.transform.position = Vector2.Lerp(startPos, _dest, panCurve.Evaluate(t));
-			mapCam.orthographicSize = minOrthoSize + (orthoPeak - minOrthoSize) * orthoT;	
+
 
 //			Debug.Log ("ViewModeController._pan()");
 //			Debug.Log ("               t = " + t);
