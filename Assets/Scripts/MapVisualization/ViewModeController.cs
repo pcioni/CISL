@@ -69,8 +69,6 @@ public class ViewModeController : MonoBehaviour {
 			dummy.layer = LayerMask.NameToLayer("MapLayer");
 			mn.transform.SetParent(current_map.transform, false);
 			
-			tn.mapPosition = current_map.coord2world(tn.location);
-			mn.mapPosition = current_map.coord2local(tn.location);
 			mn.transform.localPosition = current_map.coord2local(tn.location);
 
 			dummynodemap[tn.node_id] = mn.transform.position;
@@ -80,8 +78,39 @@ public class ViewModeController : MonoBehaviour {
 			yield return null;
 		}
 
-		//assign corresponding neighbors
-		foreach (timelineNode tn in lx.nodeList) {
+        foreach (timelineNode tn in lx.nodeList)
+        {
+            bool result = false;
+            if (!tn.known_location && !tn.location_interpolated)
+            {
+                result = find_coordinates(tn, true);
+                if (!result)
+                {
+                    print("ViewModeController.Start() :: location from interpolated data not found for " + tn.node_name + ": " + tn.location);
+                    print("positions.Count: " + positions.Count);
+
+                    result = find_coordinates(tn, false, true);
+                    if (!result)
+                    {
+                        print("ViewModeController.Start() :: location from incoming connection data not found for " + tn.node_name + ": " + tn.location);
+                        print("positions.Count: " + positions.Count);
+
+                        result = find_coordinates(tn, true, true);
+                        if (!result)
+                        {
+                            print("ViewModeController.Start() :: location from interpolated incoming connection data not found for " + tn.node_name + ": " + tn.location);
+                            print("positions.Count: " + positions.Count);
+                            //TODO: tn.location = ;
+                            //tn.location_interpolated = true;
+                        }
+                    }
+
+                }
+            }
+        }
+
+        //assign corresponding neighbors
+        foreach (timelineNode tn in lx.nodeList) {
 			mapNode tmp = crossmap[tn];
 			foreach(KeyValuePair<string,timelineNode> tn2 in tn.neighbors) {
 				tmp.neighbors.Add(crossmap[tn2.Value]);
@@ -154,28 +183,47 @@ public class ViewModeController : MonoBehaviour {
 
 	private Queue<KeyValuePair<int, timelineNode>> q = new Queue<KeyValuePair<int, timelineNode>>();
 	private List<Vector3> positions = new List<Vector3>();
-	private int max_depth = 3;
-	private void find_coordinates(timelineNode start) {
+	private int max_depth = 30;
+    private int min_data = 10;
+    private bool find_coordinates(timelineNode start, bool use_interpolated = false, bool use_incoming = false) {
 		positions.Clear();
 		q.Clear();
 		q.Enqueue(new KeyValuePair<int, timelineNode>(0,start));
 		while (q.Count > 0) {
 			KeyValuePair<int, timelineNode> current = q.Dequeue();
-			if (current.Value.known_location) {
+			if ((current.Value.known_location || use_interpolated) && current.Value.location != new Vector2(0,0)) {
 				positions.Add(current.Value.location);
 			}
 			if(current.Key < max_depth) {
-				foreach(KeyValuePair<string,timelineNode> kvp in current.Value.neighbors) {
-					q.Enqueue(new KeyValuePair<int,timelineNode>(current.Key+1, kvp.Value));
-				}
-			}
+                if (!use_incoming)
+                {
+                    foreach (KeyValuePair<string, timelineNode> kvp in current.Value.neighbors)
+                    {
+                        q.Enqueue(new KeyValuePair<int, timelineNode>(current.Key + 1, kvp.Value));
+                    }
+                } else
+                {
+                    foreach (timelineNode tn in current.Value.neighbors_incoming)
+                    {
+                        q.Enqueue(new KeyValuePair<int, timelineNode>(current.Key + 1, tn));
+                    }
+                }
+                if (positions.Count >= min_data) break; // break if we found enough data
+            }
 		}
 		if(positions.Count != 0) {
 			start.location = get_centroid(positions);
-			//print("location found for " + start.name + ": " + start.location);
-		}
-		
-	}
+            start.location_interpolated = true;
+            //print("location found for " + start.node_name + ": " + start.location);
+            return true;
+        }
+        else
+        {
+            print("ViewModeController.find_coordinates() :: location not found for " + start.node_name + ": " + start.location);
+            print("positions.Count: " + positions.Count);
+            return false;
+        }
+    }
 
 	private Vector3 get_centroid(List<Vector3> positions) {
 		float sumx = 0;

@@ -19,6 +19,7 @@ public class timelineNode : MonoBehaviour
 	private bool Moveable;
 	public bool mouseOver = false;
 	public bool known_location = false;
+    public bool location_interpolated = false;
 	public bool active = false; //Whether this node is active and interactable.
 	public Vector2 location;
 	public Vector3 baseSize;
@@ -27,6 +28,7 @@ public class timelineNode : MonoBehaviour
 	private Vector3 target_position;
 	public Vector3 startPosition;
 	public List<KeyValuePair<string, timelineNode>> neighbors = new List<KeyValuePair<string, timelineNode>>();//use kvp because no tuple support in unity
+    public List<timelineNode> neighbors_incoming = new List<timelineNode>();
 	public List<timelineNode> allNodes;
 	public SpriteRenderer sr;
 	public UnityAction<string> callback = null;

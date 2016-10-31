@@ -41,7 +41,7 @@ public class LoadXML : MonoBehaviour {
 	public Dictionary<int, timelineNode> idMap = new Dictionary<int, timelineNode>();
 	public Sprite node_sprite;
 	public List<timelineNode> nodeList = new List<timelineNode>();
-	
+
 	public GameObject timelineNodePref;
 
 	public bool loaded = false;
@@ -135,6 +135,7 @@ public class LoadXML : MonoBehaviour {
 			timelineNode tn = idMap[f.id];
 			foreach(Neighbor n in f.neighbors) {
 				tn.neighbors.Add(new KeyValuePair<string, timelineNode>(n.relationship,idMap[n.dest]));
+                idMap[n.dest].neighbors_incoming.Add(tn);
 			}
 		}
 
