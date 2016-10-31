@@ -14,8 +14,9 @@ public class NarrationManager : MonoBehaviour {
 
 	private IEnumerator current_narration;
 	private bool user_can_take_turn = true;
+    private bool narration_reset = false;
 
-	public static bool progressNarrationSwitch = false;
+    public static bool progressNarrationSwitch = false;
 	public static bool firstPassNarration = true;
 
 	private static bool first_flag = true;//set to false after first node has been expanded
@@ -34,15 +35,19 @@ public class NarrationManager : MonoBehaviour {
 		lxml = GetComponent<LoadXML>();
 	}
 
-	void Start() {
+	IEnumerator Start() {
 		lxml.Initialize();
 		Reset_Narration();
-		EventManager.StartListening(EventManager.EventType.INTERFACE_NODE_SELECT, listener);
+        while(!narration_reset) {
+            yield return null;
+        }
+        narration_reset = false;
+
+        EventManager.StartListening(EventManager.EventType.INTERFACE_NODE_SELECT, listener);
 
 		//start on diocletian
 		user_can_take_turn = false;
 		Narrate(13, 9);
-
 	}
 
 	public void Update() {
@@ -71,7 +76,8 @@ public class NarrationManager : MonoBehaviour {
 		yield return www;
 		if (www.error == null) {
 			print("NARRATION RESET");
-		}		
+            narration_reset = true;
+        }		
 	}
 
 	public void Narrate(int node_id, int turns) {
