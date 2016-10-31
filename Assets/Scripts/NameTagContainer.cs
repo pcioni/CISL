@@ -25,19 +25,18 @@ public class NameTagContainer : MonoBehaviour
     [SerializeField]
     private GameObject m_nodeCollider;
 
-    private Vector3 m_nodeColliderOriginalPosition;
+    private Vector3 m_nodeOriginalPosition;
     
     void Start()
     {
-        m_nodeColliderOriginalPosition = Camera.main.ScreenToWorldPoint(m_nodeCollider.transform.position);
+        m_nodeOriginalPosition = m_nodeCollider.transform.position;
     }
 
 
-	// Update is called once per frame
-	void Update()
+    // Update is called once per frame
+    void Update()
 	{
-        //m_nodeCollider.transform.position = (m_nodeColliderOriginalPosition);
-
+        m_nodeCollider.transform.position = m_nodeOriginalPosition;
 
         Vector3 tmp = transform.position;
 		tmp.z = 0;
@@ -82,6 +81,7 @@ public class NameTagContainer : MonoBehaviour
         for (int i = 0; i < m_nameTags.Count; i++)
 		{
 			m_nameTags[i].setTarget((GameObject.Instantiate(m_slot, target.position, target.rotation, target) as GameObject).GetComponent<NameTagSlot>(), name, follow);
+            // TODO: do we also need to set the original node position again? When does this get called? Seems like this shouldn't be for looping through all nametags
 		}
 	}
 
