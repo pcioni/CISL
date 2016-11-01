@@ -52,6 +52,8 @@ public class NameTagContainer : MonoBehaviour
         float h = m_nodeCollisionBox.size.y;
         m_nodeCollisionBox.size = new Vector2(w, h);
 
+        updateLabelPositions();
+
         initialized = true;
     }
 
@@ -167,10 +169,9 @@ public class NameTagContainer : MonoBehaviour
 			return;
 		}
 
-        container.m_groupCollisionBox.bounds.Encapsulate(m_nodeCollisionBox.bounds.min);
+        m_groupCollisionBox.bounds.Encapsulate(container.m_nodeCollisionBox.bounds.min);
 
-        container.m_groupCollisionBox.bounds.Encapsulate(m_nodeCollisionBox.bounds.max);
-
+        m_groupCollisionBox.bounds.Encapsulate(container.m_nodeCollisionBox.bounds.max);
 
         // remove null items in m_nametags for both containers
         m_nameTags.RemoveAll(item => item == null);
