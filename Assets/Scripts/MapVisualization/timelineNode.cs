@@ -35,7 +35,7 @@ public class timelineNode : MonoBehaviour
 	public Transform pastStoryNodeTransform;
 	public GameObject nametagprefab;
 	public GameObject nametag;
-	private NameTagContainer nt;
+	private NameTagContainer ntContainer;
     private LineRenderer pastNarrationLineRenderer;
 	private IEnumerator moveCoroutine;//reference to movement
 	public nodeCategory category = nodeCategory.UNKNOWN;
@@ -138,8 +138,8 @@ public class timelineNode : MonoBehaviour
 
 		//make nametag
 		GameObject tag = Instantiate(nametagprefab) as GameObject;
-		nt = tag.GetComponent<NameTagContainer>();
-		nt.SetTarget(transform, node_name);
+		ntContainer = tag.GetComponent<NameTagContainer>();
+		ntContainer.SetTarget(transform, node_name);
 		tag.transform.SetParent(GameObject.FindGameObjectWithTag("Overlay").transform, false);
 		nametag = tag;
 		disable_tag();
@@ -218,14 +218,14 @@ public class timelineNode : MonoBehaviour
 	public void enable_tag()
 	{
 		nametag.SetActive(true);
-		nt.ReCenter();
+		ntContainer.ReCenter();
 
 		if (state == focusState.IN)
 		{
 			foreach (KeyValuePair<string, timelineNode> neighbor_node in neighbors)
 			{
 				neighbor_node.Value.nametag.SetActive(true);
-				neighbor_node.Value.nt.ReCenter();
+				neighbor_node.Value.ntContainer.ReCenter();
 				neighbor_node.Value.proxyflag = true;
 			}
 		}

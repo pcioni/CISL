@@ -24,19 +24,27 @@ public class NameTagContainer : MonoBehaviour
 
     [SerializeField]
     private GameObject m_nodeCollider;
+	[SerializeField]
+	private GameObject m_groupCollider;
 
     private Vector3 m_nodeOriginalPosition;
+	private Vector3 m_groupOiginalPosition;
     
     void Start()
     {
-        m_nodeOriginalPosition = m_nodeCollider.transform.position;
+		captureOriginalPositions ();
     }
 
+	void captureOriginalPositions () {
+		m_nodeOriginalPosition = m_nodeCollider.transform.position;
+		m_groupOiginalPosition = m_groupCollider.transform.position;
+	}
 
     // Update is called once per frame
     void Update()
 	{
         m_nodeCollider.transform.position = m_nodeOriginalPosition;
+		m_groupCollider.transform.position = m_groupOiginalPosition;
 
         Vector3 tmp = transform.position;
 		tmp.z = 0;
@@ -77,11 +85,16 @@ public class NameTagContainer : MonoBehaviour
 
         //TODO: set the parent Collision objects to be parented to the follow
         //m_colliderObjects.transform.SetParent(target);
+		captureOriginalPositions ();
 
         for (int i = 0; i < m_nameTags.Count; i++)
 		{
-			m_nameTags[i].setTarget((GameObject.Instantiate(m_slot, target.position, target.rotation, target) as GameObject).GetComponent<NameTagSlot>(), name, follow);
-            // TODO: do we also need to set the original node position again? When does this get called? Seems like this shouldn't be for looping through all nametags
+			m_nameTags[i].setTarget((GameObject.Instantiate(
+				m_slot, 
+				target.position, 
+				target.rotation, 
+				target
+			) as GameObject).GetComponent<NameTagSlot>(), name, follow);
 		}
 	}
 
@@ -101,7 +114,10 @@ public class NameTagContainer : MonoBehaviour
 		{
 			return;
 		}
-        container.m_groupCollisionBox.bounds.SetMinMax(container.m_nodeCollisionBox.bounds.min, container.m_nodeCollisionBox.bounds.max);
+        container.m_groupCollisionBox.bounds.SetMinMax(
+			container.m_nodeCollisionBox.bounds.min, 
+			container.m_nodeCollisionBox.bounds.max
+		);
 
         m_nameTags.RemoveAll(item => item == null);
 		container.m_nameTags.RemoveAll(item => item == null);
@@ -133,7 +149,6 @@ public class NameTagContainer : MonoBehaviour
 		for (int i = 0; i < container.m_nameTags.Count; i++)
 		{
 			// adopt the other nametag
-
 			if (this.m_nameTags.Contains(container.m_nameTags[i]) == false)
 			{
 				this.m_nameTags.Add(container.m_nameTags[i]);
@@ -149,11 +164,15 @@ public class NameTagContainer : MonoBehaviour
 		int j = 0;
 
 		//sort the nametags by y value
-		
-
 		foreach (NameTag nt in m_nameTags.OrderBy(go => -go.transform.position.y))
 		{
-			nt.SetNewTarget(new Vector3(t.position.x + t.rect.width*5.0f, t.position.y + t.rect.height / 2 - nt.GetComponent<RectTransform>().lossyScale.y * 30 * ++j, 0));
+			nt.SetNewTarget(
+				new Vector3(
+					t.position.x + t.rect.width * 5.0f, 
+					t.position.y + t.rect.height / 2 - nt.GetComponent<RectTransform>().lossyScale.y * 20 * ++j, 
+					0
+				)
+			);
 		}
 	}
 }
