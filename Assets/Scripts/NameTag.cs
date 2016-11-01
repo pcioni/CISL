@@ -13,10 +13,10 @@ public class NameTag : MonoBehaviour {
 	[SerializeField]
 	private NameTagContainer m_originalContainer;
 	public NameTagContainer m_curContainer;
-    private Color tmpWhite_pnl;
-    private Color tmpRed_pnl;
-    private Color tmpWhite_lr;
-    private Color tmpRed_lr;
+	[SerializeField] private Color tmpWhite_pnl;
+	[SerializeField] private Color tmpRed_pnl;
+	[SerializeField] private Color tmpWhite_lr;
+	[SerializeField] private Color tmpRed_lr;
 
 
     [SerializeField]
@@ -27,12 +27,7 @@ public class NameTag : MonoBehaviour {
 		txt = GetComponentInChildren<Text>();
 		lr = GetComponent<LineRenderer>();
 		lr.SetVertexCount(2);
-        tmpWhite_pnl = this.GetComponentInChildren<Image>().color;
-        tmpRed_pnl= Color.red;
-		tmpWhite_lr = Color.white;
-        tmpWhite_lr.a = 127;
-        tmpRed_lr = tmpRed_pnl;
-        tmpRed_lr.a = 127;
+		lr.material = new Material(Shader.Find("Particles/Additive (Soft)"));
     }
 
     public void SetNewTarget(Vector3 targetPosition)
@@ -104,12 +99,12 @@ public class NameTag : MonoBehaviour {
         if (m_marker.GetComponent<timelineNode>().state == timelineNode.focusState.IN)
         {
             this.GetComponentInChildren<Image>().color = tmpRed_pnl;
-			lr.SetColors(tmpRed_lr, tmpRed_lr);
+			lr.SetColors (tmpRed_lr, tmpRed_lr);
         }
         else
         {
             this.GetComponentInChildren<Image>().color = tmpWhite_pnl;
-			lr.SetColors(tmpWhite_lr, tmpWhite_lr);
+			lr.SetColors (tmpWhite_lr, tmpWhite_lr);
         }
 
     }
