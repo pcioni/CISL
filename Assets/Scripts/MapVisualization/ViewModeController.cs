@@ -58,10 +58,21 @@ public class ViewModeController : MonoBehaviour {
 			yield return new WaitForEndOfFrame ();
 		}
 
+		bool result = false;
 		//find all of the appropriate positions for the current map
 		foreach (timelineNode tn in lx.nodeList) {
 			if (!tn.known_location) {
-				find_coordinates(tn);
+				result = find_coordinates(tn);
+				if (!result) {
+					print ("ViewModeController.Start() :: location from outgoing connection data not found for " + tn.node_name + ": " + tn.location);
+					print ("positions.Count: " + positions.Count);
+
+					result = find_coordinates(tn, false, true);
+					if (!result) {
+						print ("ViewModeController.Start() :: location from incoming connection data not found for " + tn.node_name + ": " + tn.location);
+						print ("positions.Count: " + positions.Count);
+					}
+				}
 			}
 			GameObject dummy = Instantiate(mapNodePrefab) as GameObject;
 			mapNode mn = dummy.GetComponent<mapNode>();
@@ -80,31 +91,22 @@ public class ViewModeController : MonoBehaviour {
 
         foreach (timelineNode tn in lx.nodeList)
         {
-            bool result = false;
             if (!tn.known_location && !tn.location_interpolated)
             {
                 result = find_coordinates(tn, true);
                 if (!result)
                 {
-                    print("ViewModeController.Start() :: location from interpolated data not found for " + tn.node_name + ": " + tn.location);
+                    print("ViewModeController.Start() :: location from interpolated ooutgoing connect data not found for " + tn.node_name + ": " + tn.location);
                     print("positions.Count: " + positions.Count);
 
-                    result = find_coordinates(tn, false, true);
+                    result = find_coordinates(tn, true, true);
                     if (!result)
                     {
-                        print("ViewModeController.Start() :: location from incoming connection data not found for " + tn.node_name + ": " + tn.location);
+                        print("ViewModeController.Start() :: location from interpolated incoming connection data not found for " + tn.node_name + ": " + tn.location);
                         print("positions.Count: " + positions.Count);
-
-                        result = find_coordinates(tn, true, true);
-                        if (!result)
-                        {
-                            print("ViewModeController.Start() :: location from interpolated incoming connection data not found for " + tn.node_name + ": " + tn.location);
-                            print("positions.Count: " + positions.Count);
-                            //TODO: tn.location = ;
-                            //tn.location_interpolated = true;
-                        }
+                        //TODO: tn.location = ;
+                        //tn.location_interpolated = true;
                     }
-
                 }
             }
         }
