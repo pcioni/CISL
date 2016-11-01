@@ -305,7 +305,7 @@ public class timelineNode : MonoBehaviour
 			{
 				tn.PastFocus();
 			}
-			tn.disable_tag();
+			//tn.disable_tag();
 			// this might be where disappearing tags might be coming from: issue #39 
 			//                              https://github.com/pcioni/CISL/issues/39
 			// should allow tn to take care of ist own tag state handling on "PastFocus()"
@@ -369,7 +369,9 @@ public class timelineNode : MonoBehaviour
 			, gameObject.transform.position.z - 3);
 		ColorLines(line_out_focus_color);
 		if (callback != null) callback("PAST");
-	}//end method PastFocus
+
+        disable_tag();
+    }//end method PastFocus
 
 	//Bring this node out of focus
 	public void Unfocus()
@@ -575,7 +577,8 @@ public class timelineNode : MonoBehaviour
 		{
 			mouseOver = true;
 			enable_tag();
-			ChangeSize(new Vector3(baseSize.x * 2f, baseSize.y * 2f, baseSize.z));
+
+            ChangeSize(new Vector3(baseSize.x * 2f, baseSize.y * 2f, baseSize.z));
 			ChangeColor(Color.cyan);
 			if (callback != null) callback("RE");
 
@@ -586,9 +589,11 @@ public class timelineNode : MonoBehaviour
 
 		}//end if
 		ColorLines(hover_color);
-	}
 
-	public void OnMouseExit()
+        CameraController.CollisionDetection();
+    }
+
+    public void OnMouseExit()
 	{
 		if (Input.mousePosition == mpos)
 		{
@@ -615,17 +620,19 @@ public class timelineNode : MonoBehaviour
 			}
 
 			disable_tag();
-		}
-		else
+        }
+        else
 		{
 			foreach (LineRenderer lr in gameObject.GetComponent<timelineNode>().m_renderers)
 			{
 				lr.SetColors(focus_color, focus_color);
 			}
 		}
-	}
 
-	public void ChangeColor(Color newColor)
+        CameraController.CollisionDetection();
+    }
+
+    public void ChangeColor(Color newColor)
 	{
 		sr.color = newColor;
 	}
@@ -636,9 +643,11 @@ public class timelineNode : MonoBehaviour
 		{
 			EventManager.TriggerEvent(EventManager.EventType.INTERFACE_NODE_SELECT, serializeNode());
 		}
-	}
 
-	public string serializeNode() {
+        CameraController.CollisionDetection();
+    }
+
+    public string serializeNode() {
 		//serialize a node's text data for message passing
 		//returns a JSON construct
 		NodeData dataObj = new NodeData(node_id, text, pic_urls, pic_labels);

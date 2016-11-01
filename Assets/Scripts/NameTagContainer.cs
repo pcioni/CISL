@@ -27,15 +27,35 @@ public class NameTagContainer : MonoBehaviour
 	[SerializeField]
 	private GameObject m_groupCollider;
 
+
+    public GameObject m_labelPanel;
+    [SerializeField]
+    private float m_labelXOffset;
+    [SerializeField]
+    private float m_labelVPadding;
+
     private Vector3 m_nodeOriginalPosition;
 	private Vector3 m_groupOiginalPosition;
     
     void Start()
     {
 		captureOriginalPositions ();
+
     }
 
-	void captureOriginalPositions () {
+    private bool initialized = false;
+    void initialize()
+    {
+        // stretch / shrink width of collider to size of text panel
+        Vector3 scale = m_labelPanel.transform.lossyScale;
+        float w = m_labelPanel.GetComponent<RectTransform>().rect.width * scale.x; // TODO: why isn't this working as 
+        float h = m_nodeCollisionBox.size.y;
+        m_nodeCollisionBox.size = new Vector2(w, h);
+
+        initialized = true;
+    }
+
+    void captureOriginalPositions () {
 		m_nodeOriginalPosition = m_nodeCollider.transform.position;
 		m_groupOiginalPosition = m_groupCollider.transform.position;
 	}
@@ -55,8 +75,9 @@ public class NameTagContainer : MonoBehaviour
 		tmp.y += .5f;
 
 		float zw = Camera.main.orthographicSize / 100f;
-		int i = 0;
-	}
+
+        if (!initialized) initialize();
+    }
 
     public bool DoesNotHaveNameTags()
     {
@@ -69,15 +90,15 @@ public class NameTagContainer : MonoBehaviour
     }
 
 
-    public void SetNextAvailableSlot(Transform slot)
-	{
-		this.m_nextSlotPosition = slot;
-	}
+ //   public void SetNextAvailableSlot(Transform slot)
+	//{
+	//	this.m_nextSlotPosition = slot;
+	//}
 
-	public GameObject GetNextAvailableSlot()
-	{
-		return m_nextSlotPosition.gameObject;
-	}
+	//public GameObject GetNextAvailableSlot()
+	//{
+	//	return m_nextSlotPosition.gameObject;
+	//}
 
 	public void SetTarget(Transform target, string name)
 	{
@@ -87,6 +108,7 @@ public class NameTagContainer : MonoBehaviour
         //m_colliderObjects.transform.SetParent(target);
 		captureOriginalPositions ();
 
+        // TODO: this seems to duplicate functionality of 
         for (int i = 0; i < m_nameTags.Count; i++)
 		{
 			m_nameTags[i].setTarget((GameObject.Instantiate(
@@ -96,9 +118,13 @@ public class NameTagContainer : MonoBehaviour
 				target
 			) as GameObject).GetComponent<NameTagSlot>(), name, follow);
 		}
-	}
 
-	public void ReCenter()
+        updateLabelPositions();
+
+        CameraController.CollisionDetection();
+    }
+
+    public void ReCenter()
 	{
 		transform.position = new Vector3(follow.position.x, follow.position.y, 0);
 
@@ -114,11 +140,13 @@ public class NameTagContainer : MonoBehaviour
 		{
 			return;
 		}
-        container.m_groupCollisionBox.bounds.SetMinMax(
-			container.m_nodeCollisionBox.bounds.min, 
-			container.m_nodeCollisionBox.bounds.max
-		);
 
+        container.m_groupCollisionBox.bounds.SetMinMax(
+            new Vector3(0f, 0f, 0f), 
+            new Vector3(2.5f, 2f, 0f)
+            );
+
+        //remove null items
         m_nameTags.RemoveAll(item => item == null);
 		container.m_nameTags.RemoveAll(item => item == null);
 
@@ -129,9 +157,10 @@ public class NameTagContainer : MonoBehaviour
 			container.m_nameTags.Add(container.m_originalNameTag);
 		}
 
-	}
+        updateLabelPositions();
+    }
 
-	public void CollsionStart(NameTagContainer container)
+    public void CollsionStart(NameTagContainer container)
 	{
 		if (container == null || m_nameTags == null)
 		{
@@ -143,36 +172,40 @@ public class NameTagContainer : MonoBehaviour
         container.m_groupCollisionBox.bounds.Encapsulate(m_nodeCollisionBox.bounds.max);
 
 
+        // remove null items in m_nametags for both containers
         m_nameTags.RemoveAll(item => item == null);
 		container.m_nameTags.RemoveAll(item => item == null);
 
 		for (int i = 0; i < container.m_nameTags.Count; i++)
 		{
-			// adopt the other nametag
+			// adopt the other nametags
 			if (this.m_nameTags.Contains(container.m_nameTags[i]) == false)
 			{
 				this.m_nameTags.Add(container.m_nameTags[i]);
 			}
 		}
 
+        // remove nametags from other container
 		foreach (NameTag nt in m_nameTags)
 		{
 			container.m_nameTags.Remove(nt);
 		}
 
-		RectTransform t = this.GetComponent<RectTransform>();
-		int j = 0;
+        updateLabelPositions();
+    }
 
-		//sort the nametags by y value
-		foreach (NameTag nt in m_nameTags.OrderBy(go => -go.transform.position.y))
-		{
-			nt.SetNewTarget(
-				new Vector3(
-					t.position.x + t.rect.width * 5.0f, 
-					t.position.y + t.rect.height / 2 - nt.GetComponent<RectTransform>().lossyScale.y * 20 * ++j, 
-					0
-				)
-			);
-		}
-	}
+    public void updateLabelPositions()
+    {
+        Vector2 scale = m_labelPanel.GetComponent<Transform>().lossyScale;
+        Vector3 p = m_groupCollider.transform.position;
+        p.x += (m_groupCollisionBox.size.x + m_labelXOffset) * scale.x;
+        p.z = 0f;
+
+        //sort the nametags by y value
+        foreach (NameTag nt in m_nameTags.OrderBy(go => -go.getMarkerPosition().y))
+        {
+            nt.SetNewTarget(p);
+            p.y -= (m_labelPanel.GetComponent<RectTransform>().rect.height + m_labelVPadding) * scale.y;
+        }
+    }
 }

@@ -86,37 +86,32 @@ public class CameraController : MonoBehaviour
         GetComponent<Camera>().orthographicSize = Mathf.Clamp(GetComponent<Camera>().orthographicSize, minZoom, maxZoom);
         EventManager.TriggerEvent(amount < 0 ? EventManager.EventType.INTERFACE_ZOOM_OUT : EventManager.EventType.INTERFACE_ZOOM_IN, Camera.main.orthographicSize.ToString());
         CollisionDetection();
+        // TODO: why is this working when new labels are not?
     }
 
+    private NameTagContainer[] containers;
     public static void CollisionDetection()
     {
-        //Check for NameTagCollsions
-        NameTagContainer[] containers = (from u in GameObject.FindGameObjectsWithTag("NameTagContainer") select u.GetComponent<NameTagContainer>()).ToArray();
-
-        //Refresh our lists of containers, group colliders and node colliders
-
-        foreach (NameTagContainer ntc in containers)
+        if (ms_instance.containers != null)
         {
-            foreach (NameTagContainer ntc2 in containers)
+            foreach (NameTagContainer ntc in ms_instance.containers)
             {
-                ntc.CollisionEnd(ntc2);
+                foreach (NameTagContainer ntc2 in ms_instance.containers)
+                {
+                    if (ntc == ntc2)
+                    {
+                        continue;
+                    }
+                    ntc.CollisionEnd(ntc2);
+                }
             }
         }
 
+        //Refresh our lists of containers, group colliders and node colliders
+        ms_instance.containers = (from u in GameObject.FindGameObjectsWithTag("NameTagContainer") select u.GetComponent<NameTagContainer>()).ToArray();
 
-        //1. Check for node on node collisions. For each node on node collision merge their groups into a new group. Goto 2.
-        if (ms_instance.NodeOnNodeCheck(containers) == true)
-        {
-            return;
-        }
-
-        do
-        {
-            //2. Check for group on group collisions. For each group on group collision merge their groups into a new group. If there are collisions goto 2. Else goto 3.
-            while (ms_instance.GroupOnGroupCheck(containers) == false) ;
-
-            //3. Check for group on node collisions. For each node that collides merge them into the colliding group. If there are collisions goto 2. Else Finish
-        } while (ms_instance.GroupOnNodeCheck(containers) == false);
+        //Check for NameTagCollsions
+        while (ms_instance.NodeOnNodeCheck(ms_instance.containers) == true) ;
     }
 
 
@@ -125,114 +120,10 @@ public class CameraController : MonoBehaviour
         return !containerA.ContainsContainer(containerB) && !containerB.ContainsContainer(containerA);
     }
 
-    //Return true if there are no new collisions
-    bool GroupOnNodeCheck(NameTagContainer[] containers)
-    {
-        bool noCollisions = true;
-        for (int i = 0; i < containers.Length; i++)
-        {
-            for (int j = 0; j < containers.Length; j++)
-            {
-                if (i == j)
-                {
-                    continue;
-                }
-
-                //check for 
-                NameTagContainer containerA = containers[i];
-                NameTagContainer containerB = containers[j];
-
-                if (containerA.m_nameTags.Count == 0)
-                {
-                    continue;
-                }
-
-                if (containerB.m_nameTags.Count == 0)
-                {
-                    continue;
-                }
-
-                if (containerA.m_groupCollisionBox.bounds.Intersects(containerB.m_nodeCollisionBox.bounds) && NoContainment(containerA,containerB))
-                {
-                    noCollisions = false;
-                    //merge the two colliders
-                    if (containerA.m_groupCollisionBox.size.magnitude > containerB.m_groupCollisionBox.size.magnitude)
-                    {
-                        containerA.CollsionStart(containerB);
-                    }
-                    else
-                    {
-                        containerB.CollsionStart(containerA);
-                    }
-                }
-
-            }
-        }
-
-        return noCollisions;
-    }
-
-    //Return true if there are no new collisions
-    bool GroupOnGroupCheck(NameTagContainer[] containers) //TODO: put this in it's own class for the sake of organization.
-    {
-        bool noCollisions = true;
-        for (int i = 0; i < containers.Length; i++)
-        {
-            if (containers[i].DoesNotHaveNameTags())
-            {
-                continue;
-            }
-            for (int j = 0; j < containers.Length; j++)
-            {
-                if (containers[j].DoesNotHaveNameTags())
-                {
-                    continue;
-                }
-                if (i == j)
-                {
-                    continue;
-                }
-
-                //check for 
-                NameTagContainer containerA = containers[i];
-                NameTagContainer containerB = containers[j];
-
-                if(containerA.m_nameTags.Count == 0)
-                {
-                    continue;
-                }
-
-                if(containerB.m_nameTags.Count == 0)
-                {
-                    continue;
-                }
-
-                if (containerA.m_groupCollisionBox.bounds.Intersects(containerB.m_groupCollisionBox.bounds) && NoContainment(containerA, containerB))
-                {
-                    noCollisions = false;
-                    //merge the two colliders
-                    if (containerA.m_groupCollisionBox.size.magnitude > containerB.m_groupCollisionBox.size.magnitude)
-                    {
-                        containerA.CollsionStart(containerB);
-                    }
-                    else
-                    {
-                        containerB.CollsionStart(containerA);
-                    }
-                }
-
-            }
-        }
-
-        return noCollisions;
-    }
-
-
-
-    //Return true if there are no new collisions
+    //Return true if there are new collisions
     bool NodeOnNodeCheck(NameTagContainer[] containers)
     {
-        bool noCollisions = true;
+        bool collisionDetected = false;
         for (int i = 0; i < containers.Length; i++)
         {
             for (int j = 0; j < containers.Length; j++)
@@ -258,7 +149,7 @@ public class CameraController : MonoBehaviour
 
                 if (containerA.m_nodeCollisionBox.bounds.Intersects(containerB.m_nodeCollisionBox.bounds) && NoContainment(containerA, containerB))
                 {
-                    noCollisions = false;
+                    collisionDetected = true;
                     //merge the two colliders
                     if (containerA.m_groupCollisionBox.size.magnitude > containerB.m_groupCollisionBox.size.magnitude)
                     {
@@ -274,7 +165,7 @@ public class CameraController : MonoBehaviour
             }
         }
 
-        return noCollisions;
+        return collisionDetected;
     }
 
 }
