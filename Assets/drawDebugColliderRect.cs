@@ -21,12 +21,12 @@ public class drawDebugColliderRect : MonoBehaviour {
 
     void refresh()
     {
+        // hide/show panel
         panel.SetActive(DebugMode.MS_ACTIVE);
+        // resize panel to match BoxCollider2D
         if (m_collider != null && (m_panelRTrans.sizeDelta.x != m_collider.size.x || m_panelRTrans.sizeDelta.y != m_collider.size.y))
         {
             m_panelRTrans.sizeDelta = new Vector2 (m_collider.size.x, m_collider.size.y);
-            //panelRect.width = m_collider.size.x;
-            //panelRect.height = m_collider.size.y;
         }
     }
 
