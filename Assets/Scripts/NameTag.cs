@@ -27,7 +27,6 @@ public class NameTag : MonoBehaviour {
 		txt = GetComponentInChildren<Text>();
 		lr = GetComponent<LineRenderer>();
 		lr.SetVertexCount(2);
-		lr.material = new Material(Shader.Find("Particles/Additive (Soft)"));
     }
 
     public void SetNewTarget(Vector3 targetPosition)
@@ -47,9 +46,10 @@ public class NameTag : MonoBehaviour {
 
 	void Start() {
 		StartCoroutine(_resize());
-	}
+        lr.material = new Material(Shader.Find("Particles/Additive (Soft)")); // TODO: this is giving a "nullReference" Exception at runtime.
+    }
 
-	IEnumerator _resize() {
+    IEnumerator _resize() {
 		//adjust box collider to fit size of text in text box
 		//has to execute after first udpate due to content size fitter
 		yield return new WaitForEndOfFrame();
