@@ -57,7 +57,18 @@ public class NarrationManager : MonoBehaviour {
 
 		//start on diocletian
 		user_can_take_turn = false;
-		Narrate(13, 9);
+
+        //Bring each node out of focus.
+        foreach (timelineNode tn in lxml.nodeList)
+        {
+            //Change its color
+            //temp.GetComponent<SpriteRenderer>().color = new Color(0.5f, 0.5f, 0.5f, 0.2f);
+            //Set it to not display information on mouseover
+            //temp.GetComponent<timelineNode>().display_info = false;
+            tn.Unfocus();
+        }//end foreach
+
+        Narrate(13, 9);
 	}
 
 	public void Update() {
@@ -199,18 +210,6 @@ public class NarrationManager : MonoBehaviour {
 			//NOTE: need to use storynode text here for annotations
 			sequence_by_node.Add(new KeyValuePair<timelineNode, string>(temp_node,sn.text));
 			sequence_acts.Add(sn.story_acts);
-		}//end foreach
-
-		//Bring each node out of focus.
-		foreach (timelineNode tn in lxml.nodeList) {
-			//Change its color
-			//temp.GetComponent<SpriteRenderer>().color = new Color(0.5f, 0.5f, 0.5f, 0.2f);
-			//Set it to not display information on mouseover
-			//temp.GetComponent<timelineNode>().display_info = false;
-            if (tn.node_id != node_id) {
-				tn.Unfocus();
-			}
-			
 		}//end foreach
 
 		bool tmp_flag = true;

@@ -77,7 +77,7 @@ public class timelineNode : MonoBehaviour
 
 	[SerializeField]//display for debug purposes'
 					//private focusState state = focusState.OUT;
-	private focusState _state;
+	private focusState _state = focusState.OUT;
 	public focusState state
 	{
 		get { return _state; }
@@ -223,23 +223,22 @@ public class timelineNode : MonoBehaviour
 		nametag.SetActive(true);
 		ntContainer.ReCenter();
 
-		if (state == focusState.IN)
+		if (state == focusState.IN || state == focusState.PAST)
 		{
 			foreach (KeyValuePair<string, timelineNode> neighbor_node in neighbors)
 			{
 				neighbor_node.Value.nametag.SetActive(true);
 				neighbor_node.Value.ntContainer.ReCenter();
-				neighbor_node.Value.proxyflag = true;
+				if (state == focusState.IN) neighbor_node.Value.proxyflag = true;
 			}
 		}
 
         EventManager.TriggerEvent(EventManager.EventType.LABEL_COLLISION_CHECK, "");
     }
 
-    public void disable_tag()
+    public void disable_tag(bool _override = false)
 	{
-		if (proxyflag) return;
-		if (nametag != null)
+		if (nametag != null && !proxyflag)
 		{
 			nametag.SetActive(false);
 		}
@@ -249,7 +248,7 @@ public class timelineNode : MonoBehaviour
 			{
 				if (neighbor_node.Value.nametag != null && neighbor_node.Value.state != focusState.IN)
 				{
-                    if (state == focusState.PAST)
+                    if (state == focusState.PAST && _override)
                     {
                         neighbor_node.Value.proxyflag = false;
                     }
@@ -381,7 +380,7 @@ public class timelineNode : MonoBehaviour
 		ColorLines(line_out_focus_color);
 		if (callback != null) callback("PAST");
 
-        disable_tag();
+        disable_tag(true);
     }//end method PastFocus
 
 	//Bring this node out of focus
