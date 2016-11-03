@@ -173,11 +173,6 @@ public class LoadXML : MonoBehaviour {
 			idMap [gn.id].setCategory (e_type);
 		}
 
-//		// position nodes into swimming lanes
-//		foreach (timelineNode tn in nodeList) {
-//			tn.reset_timeline_position();
-//		}
-
 		loaded = true;
 	}
 

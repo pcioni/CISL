@@ -72,12 +72,6 @@ public class NameTagContainer : MonoBehaviour
 		tmp.z = 0;
 		transform.position = tmp;
 
-		tmp = follow.position;
-		tmp.z = 0;
-		tmp.y += .5f;
-
-		float zw = Camera.main.orthographicSize / 100f;
-
         if (!initialized) initialize();
     }
 
@@ -91,26 +85,13 @@ public class NameTagContainer : MonoBehaviour
         return m_nameTags.Contains(other.m_originalNameTag);
     }
 
-
- //   public void SetNextAvailableSlot(Transform slot)
-	//{
-	//	this.m_nextSlotPosition = slot;
-	//}
-
-	//public GameObject GetNextAvailableSlot()
-	//{
-	//	return m_nextSlotPosition.gameObject;
-	//}
-
 	public void SetTarget(Transform target, string name)
 	{
 		follow = target;
 
-        //TODO: set the parent Collision objects to be parented to the follow
-        //m_colliderObjects.transform.SetParent(target);
 		captureOriginalPositions ();
 
-        // TODO: this seems to duplicate functionality of 
+        // TODO: this seems to duplicate functionality of updateLabelPositions();
         for (int i = 0; i < m_nameTags.Count; i++)
 		{
 			m_nameTags[i].setTarget((GameObject.Instantiate(
