@@ -207,7 +207,7 @@ public class NarrationManager : MonoBehaviour {
 			//temp.GetComponent<SpriteRenderer>().color = new Color(0.5f, 0.5f, 0.5f, 0.2f);
 			//Set it to not display information on mouseover
 			//temp.GetComponent<timelineNode>().display_info = false;
-			if(tn.node_id != node_id) {
+            if (tn.node_id != node_id) {
 				tn.Unfocus();
 			}
 			
@@ -227,7 +227,6 @@ public class NarrationManager : MonoBehaviour {
 			timelineNode node_to_present = kvp.Key;
 			//Bring the previous node into past-focus
 			if (node_history.Count >= 1) {
-				node_history[node_history.Count - 1].PastFocus();
 				node_to_present.pastStoryNodeTransform = node_history[node_history.Count - 1].transform;
 			}
 			//Present this node

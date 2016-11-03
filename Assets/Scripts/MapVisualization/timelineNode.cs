@@ -381,9 +381,15 @@ public class timelineNode : MonoBehaviour
 	//Bring this node out of focus
 	public void Unfocus()
 	{
-		//Mark this node as inactive
-		active = false;
-		state = focusState.OUT;
+        if (state == timelineNode.focusState.IN)
+        {
+            PastFocus();
+            return;
+        }
+
+        //Mark this node as inactive
+        active = false;
+        state = focusState.OUT;
 		//Remove lines from this node to its neighbors
 		//Bring it to the back by changing its Z
 		gameObject.transform.position = new Vector3(gameObject.transform.position.x
