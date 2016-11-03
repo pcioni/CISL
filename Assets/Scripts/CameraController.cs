@@ -32,7 +32,7 @@ public class CameraController : MonoBehaviour
     }
 
     void Update()
-    {
+    { 
         foreach (Camera cam in cameras) {
             if (cam.pixelRect.Contains(Input.mousePosition)) {
                 targetCam = cam;
