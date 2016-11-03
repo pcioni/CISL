@@ -671,7 +671,19 @@ public class timelineNode : MonoBehaviour
 		{
 			EventManager.TriggerEvent(EventManager.EventType.INTERFACE_NODE_SELECT, serializeNode());
 		}
+        mouseOver = false;
     }
+
+    void OnMouseUp()
+    {
+        mouseOver = true;
+    }
+
+    void OnMouseOut()
+    {
+        mouseOver = false;
+    }
+
 
     public string serializeNode() {
 		//serialize a node's text data for message passing

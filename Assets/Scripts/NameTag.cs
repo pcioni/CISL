@@ -15,9 +15,10 @@ public class NameTag : MonoBehaviour {
 	public NameTagContainer m_curContainer;
 	[SerializeField] private Color tmpWhite_pnl;
 	[SerializeField] private Color tmpRed_pnl;
-	[SerializeField] private Color tmpWhite_lr;
+    [SerializeField] private Color tmpBlue_pnl;
+    [SerializeField] private Color tmpWhite_lr;
 	[SerializeField] private Color tmpRed_lr;
-
+    [SerializeField] private Color tmpBlue_lr;
 
     [SerializeField]
 	private RectTransform m_childTransform;
@@ -101,13 +102,17 @@ public class NameTag : MonoBehaviour {
 		float zw = Camera.main.orthographicSize/100f;
 		lr.SetWidth(zw,zw);
 
-        if (m_marker.GetComponent<timelineNode>().state == timelineNode.focusState.IN)
+        if (m_marker.GetComponent<timelineNode>().mouseOver)
+        {
+            this.GetComponentInChildren<Image>().color = tmpBlue_pnl;
+            lr.SetColors(tmpBlue_lr, tmpBlue_lr);
+        }
+        else if (m_marker.GetComponent<timelineNode>().state == timelineNode.focusState.IN)
         {
             this.GetComponentInChildren<Image>().color = tmpRed_pnl;
 			lr.SetColors (tmpRed_lr, tmpRed_lr);
         }
-        else
-        {
+        else         {
             this.GetComponentInChildren<Image>().color = tmpWhite_pnl;
 			lr.SetColors (tmpWhite_lr, tmpWhite_lr);
         }
