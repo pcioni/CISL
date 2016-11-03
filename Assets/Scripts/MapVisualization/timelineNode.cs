@@ -223,7 +223,7 @@ public class timelineNode : MonoBehaviour
 		nametag.SetActive(true);
 		ntContainer.ReCenter();
 
-		if (state == focusState.IN || state == focusState.PAST)
+		if (state == focusState.IN /*|| state == focusState.PAST*/) // TODO: reimplement this once we figure out a way to get nameTags to avoid the mouse position
 		{
 			foreach (KeyValuePair<string, timelineNode> neighbor_node in neighbors)
 			{
