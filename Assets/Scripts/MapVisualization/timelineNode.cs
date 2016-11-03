@@ -249,9 +249,15 @@ public class timelineNode : MonoBehaviour
 			{
 				if (neighbor_node.Value.nametag != null && neighbor_node.Value.state != focusState.IN)
 				{
-					neighbor_node.Value.nametag.SetActive(false);
-					neighbor_node.Value.proxyflag = false;
-				}
+                    if (state == focusState.PAST)
+                    {
+                        neighbor_node.Value.proxyflag = false;
+                    }
+                    if (neighbor_node.Value.proxyflag != true)
+                    {
+                        neighbor_node.Value.nametag.SetActive(false);
+                    }
+                }
 			}
 		}
 
