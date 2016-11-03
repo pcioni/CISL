@@ -28,7 +28,9 @@ public class EventManager : MonoBehaviour {
 		INTERFACE_PAGE_LEFT, //called when the user steps back in the journal
 		INTERFACE_PAGE_RIGHT, //called when the user steps forward in the journal
 
-        OSC_SPEECH_INPUT //called when OSC receives a speech input event
+        OSC_SPEECH_INPUT, //called when OSC receives a speech input event
+
+        LABEL_COLLISION_CHECK // called whenever a label collision check is being requested
 	}
 
 	private Dictionary<EventType, NarrationEvent> eventDictionary;

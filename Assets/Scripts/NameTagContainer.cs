@@ -121,9 +121,9 @@ public class NameTagContainer : MonoBehaviour
 			) as GameObject).GetComponent<NameTagSlot>(), name, follow);
 		}
 
-        updateLabelPositions();
+        updateLabelPositions(); // TODO: check placement of these calls
+        EventManager.TriggerEvent(EventManager.EventType.LABEL_COLLISION_CHECK, "");
 
-        CameraController.CollisionDetection();
     }
 
     public void ReCenter()

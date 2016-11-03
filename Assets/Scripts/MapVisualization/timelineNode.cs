@@ -231,10 +231,10 @@ public class timelineNode : MonoBehaviour
 			}
 		}
 
+        EventManager.TriggerEvent(EventManager.EventType.LABEL_COLLISION_CHECK, "");
+    }
 
-	}
-
-	public void disable_tag()
+    public void disable_tag()
 	{
 		if (proxyflag) return;
 		if (nametag != null)
@@ -252,7 +252,9 @@ public class timelineNode : MonoBehaviour
 				}
 			}
 		}
-	}
+
+        EventManager.TriggerEvent(EventManager.EventType.LABEL_COLLISION_CHECK, "");
+    }
 
 	public void moveToPosition(Vector3 position)
 	{
@@ -336,7 +338,8 @@ public class timelineNode : MonoBehaviour
 		}//end foreach
 
 		if (callback != null) callback("IN");
-	}//end method Focus
+        EventManager.TriggerEvent(EventManager.EventType.LABEL_COLLISION_CHECK, "");
+    }//end method Focus
 
 	//
 	//
@@ -357,7 +360,8 @@ public class timelineNode : MonoBehaviour
 		OSCHandler.Instance.SendMessageToClient("MaxServer", "/halfFocus/", halfFocus);
 		if (callback != null) callback("HALF");
 
-	}//end method HalfFocus
+        EventManager.TriggerEvent(EventManager.EventType.LABEL_COLLISION_CHECK, "");
+    }//end method HalfFocus
 
 	//Bring this node out of full focus, but remember it used to be the focus.
 	public void PastFocus()
@@ -390,9 +394,11 @@ public class timelineNode : MonoBehaviour
 			, gameObject.transform.position.z + 5);
 		ColorLines(line_out_focus_color);
 		if (callback != null) callback("OUT");
-	}//end method Unfocus
 
-	private IEnumerator tmplcr = null;
+        EventManager.TriggerEvent(EventManager.EventType.LABEL_COLLISION_CHECK, "");
+    }//end method Unfocus
+
+    private IEnumerator tmplcr = null;
 	//past-focus == 8
 	//if the node is a previous story node, draw the line thicker and 
 	public void drawLines()
@@ -607,8 +613,6 @@ public class timelineNode : MonoBehaviour
 
 		}//end if
 		ColorLines(hover_color);
-
-        CameraController.CollisionDetection();
     }
 
     public void OnMouseExit()
@@ -646,8 +650,6 @@ public class timelineNode : MonoBehaviour
 				lr.SetColors(focus_color, focus_color);
 			}
 		}
-
-        CameraController.CollisionDetection();
     }
 
     public void ChangeColor(Color newColor)
@@ -661,8 +663,6 @@ public class timelineNode : MonoBehaviour
 		{
 			EventManager.TriggerEvent(EventManager.EventType.INTERFACE_NODE_SELECT, serializeNode());
 		}
-
-        CameraController.CollisionDetection();
     }
 
     public string serializeNode() {

@@ -96,8 +96,6 @@ public class CameraController : MonoBehaviour
         // Limit zoom
         targetCam.orthographicSize = Mathf.Clamp(targetCam.orthographicSize, minZoom, maxZoom);
         EventManager.TriggerEvent(amount < 0 ? EventManager.EventType.INTERFACE_ZOOM_OUT : EventManager.EventType.INTERFACE_ZOOM_IN, Camera.main.orthographicSize.ToString());
-        CollisionDetection();
-        // TODO: why is this working when new labels are not?
     }
 
     private NameTagContainer[] containers;

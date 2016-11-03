@@ -10,7 +10,8 @@ using UnityEngine.EventSystems;
 public class NarrationManager : MonoBehaviour {
 
 	private LoadXML lxml;
-	private UnityAction<string> listener;
+    private UnityAction<string> narrationNodeSelectListener;
+    private UnityAction<string> labelCollisionCheckListener;
 
     public List<Vector3> pastNarrationNodeTransforms = new List<Vector3>();
 
@@ -25,7 +26,7 @@ public class NarrationManager : MonoBehaviour {
 
 	void Awake() {
 		progressNarrationSwitch = false;
-		listener = delegate (string data){
+		narrationNodeSelectListener = delegate (string data){
 			if (user_can_take_turn) {
 
 				NodeData nd = JsonUtility.FromJson<NodeData>(data);
@@ -34,7 +35,11 @@ public class NarrationManager : MonoBehaviour {
 			}
 		};
 
-		lxml = GetComponent<LoadXML>();
+        labelCollisionCheckListener = delegate (string data) {
+            labelCollisionCheckCount = 0;
+        };
+
+        lxml = GetComponent<LoadXML>();
 	}
 
 	IEnumerator Start() {
@@ -45,7 +50,10 @@ public class NarrationManager : MonoBehaviour {
         }
         narration_reset = false;
 
-        EventManager.StartListening(EventManager.EventType.INTERFACE_NODE_SELECT, listener);
+        EventManager.StartListening(EventManager.EventType.INTERFACE_NODE_SELECT, narrationNodeSelectListener);
+        EventManager.StartListening(EventManager.EventType.LABEL_COLLISION_CHECK, labelCollisionCheckListener);
+        EventManager.StartListening(EventManager.EventType.INTERFACE_ZOOM_OUT, labelCollisionCheckListener);
+        EventManager.StartListening(EventManager.EventType.INTERFACE_ZOOM_IN, labelCollisionCheckListener);
 
 		//start on diocletian
 		user_can_take_turn = false;
@@ -59,9 +67,29 @@ public class NarrationManager : MonoBehaviour {
 			}
 			
 		}
-	}
 
-	public void Reset_Narration() {
+        labelCollisionCheck();
+    }
+
+    private int labelCollisionCheckCount = 0;
+    public int labelCollisionCheckMax = 3;
+    void labelCollisionCheck ()
+    {
+        if (labelCollisionCheckCount < 0) return;
+
+        if (labelCollisionCheckCount < labelCollisionCheckMax)
+        {
+            CameraController.CollisionDetection();
+            labelCollisionCheckCount += 1;
+        }
+        else
+        {
+            labelCollisionCheckCount = -1;
+        }
+    }
+
+
+    public void Reset_Narration() {
 		//resets narration history
 		StartCoroutine(_Reset_Narration());
 	}
@@ -252,10 +280,13 @@ public class NarrationManager : MonoBehaviour {
 			progressNarrationSwitch = false;
 			tmp_flag = false;
 
-			//Call camera collision detection method
-			CameraController.CollisionDetection();
-		}//end foreach
-		user_can_take_turn = true;
+            //TODO: debug why this isn't getting the desired label placement
+            // (zooming collision detection / placement seems more desired, although buggy)
+            //Call camera collision detection method
+            EventManager.TriggerEvent(EventManager.EventType.LABEL_COLLISION_CHECK, "");
+
+        }//end foreach
+        user_can_take_turn = true;
 
 
 		//need to manually yield a turn at end because backend bugged
