@@ -13,7 +13,7 @@ public class CameraController : MonoBehaviour
 
     private Camera targetCam;
 
-    public Camera[] cameras = new Camera[3];
+    public Camera[] cameras = new Camera[2];
 
     private float m_scrollTime = 0.0f;
 
