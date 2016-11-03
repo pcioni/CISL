@@ -406,27 +406,7 @@ public class timelineNode : MonoBehaviour
 	//Assign Line Renderer vertcies
 	private IEnumerator _drawLines()
 	{
-        //straight-line rendering for past story nodes
-        //Doesn't use Will's system since it's due in <24hrs.
-        Vector3 centralNodePos = transform.position;
-        Vector3[] points = new Vector3[Mathf.Max(neighbors.Count * 2, 1)];
-        Vector3[] pastNarrationPoints = new Vector3[6];
-        points[0] = centralNodePos;
-        pastNarrationPoints[0] = centralNodePos;
-        int pastPointsCount = 1;
-        int coun = 0;
-        for (int i = 1; i < points.Length; i += 2) {
-            if (neighbors[coun].Value.state == focusState.PAST) {
-                pastNarrationPoints[pastPointsCount] = neighbors[coun].Value.transform.position;
-                pastNarrationPoints[pastPointsCount + 1] = centralNodePos;
-                pastPointsCount += 2;
-            }
-            points[i - 1] = centralNodePos;
-            points[i] = neighbors[coun].Value.transform.position;
-            coun++;
-        }
-        pastNarrationLineRenderer.SetVertexCount(pastPointsCount);
-        pastNarrationLineRenderer.SetPositions(pastNarrationPoints);
+        drawPastNarrationLines();
 
         foreach (LineRenderer lr in m_renderers)
 		{//need to clear old lines
@@ -473,6 +453,35 @@ public class timelineNode : MonoBehaviour
 
 		tmplcr = null;
 	}
+
+    private void drawPastNarrationLines() {
+        //straight-line rendering for past story nodes
+        Vector3 centralNodePos = transform.position;
+        Vector3[] points = new Vector3[Mathf.Max(neighbors.Count * 2, 1)];
+        Vector3[] pastNarrationPoints = new Vector3[6];
+        points[0] = centralNodePos;
+        pastNarrationPoints[0] = centralNodePos;
+        int pastPointsCount = 1;
+        int coun = 0;
+        for (int i = 1; i < points.Length; i += 2) {
+            if (neighbors[coun].Value.state == focusState.PAST) {
+                pastNarrationPoints[pastPointsCount] = neighbors[coun].Value.transform.position;
+                pastNarrationPoints[pastPointsCount + 1] = centralNodePos;
+                pastPointsCount += 1;
+            }
+            points[i - 1] = centralNodePos;
+            points[i] = neighbors[coun].Value.transform.position;
+            coun++;
+        }
+        if (pastPointsCount == 1) {
+            pastNarrationLineRenderer.SetVertexCount(pastPointsCount);
+            pastNarrationLineRenderer.SetPositions(new Vector3[1] { centralNodePos } );
+        }
+        else {
+            pastNarrationLineRenderer.SetVertexCount(pastPointsCount);
+            pastNarrationLineRenderer.SetPositions(pastNarrationPoints);
+        }
+    }
 
 
 	private static Vector3 ComputeMidpoint(Vector3 positionA, Vector3 positionB)
