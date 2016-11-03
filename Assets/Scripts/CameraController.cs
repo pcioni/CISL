@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Linq;
+using System.Collections.Generic;
 
 public class CameraController : MonoBehaviour
 {
@@ -9,6 +10,10 @@ public class CameraController : MonoBehaviour
     public float minZoom = 0f;
     public float maxZoom = 100f;
     public float orthographicMomentum = 0.0f;
+
+    private Camera targetCam;
+
+    public Camera[] cameras = new Camera[3];
 
     private float m_scrollTime = 0.0f;
 
@@ -28,6 +33,12 @@ public class CameraController : MonoBehaviour
 
     void Update()
     {
+        foreach (Camera cam in cameras) {
+            if (cam.pixelRect.Contains(Input.mousePosition)) {
+                targetCam = cam;
+                break;
+            }
+        }
         orthographicMomentum = orthographicMomentum / 1.1f;
         m_scrollTime = m_scrollTime / 1.01f;
 
@@ -38,10 +49,10 @@ public class CameraController : MonoBehaviour
             last_mouse_position = Input.mousePosition;
         if (Input.GetMouseButton(1)) //While the mouse is down translate the position of the camera
         {
-            Vector3 delta = Camera.main.ScreenToWorldPoint(last_mouse_position) - Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            Camera.main.transform.Translate(delta.x, delta.y, 0); //TODO: check the math on this, it could be the root of strange parallax
+            Vector3 delta = targetCam.ScreenToWorldPoint(last_mouse_position) - targetCam.ScreenToWorldPoint(Input.mousePosition);
+            targetCam.transform.Translate(delta.x, delta.y, 0); //TODO: check the math on this, it could be the root of strange parallax
             last_mouse_position = Input.mousePosition;
-            EventManager.TriggerEvent(EventManager.EventType.INTERFACE_PAN, Camera.main.orthographicSize.ToString());
+            EventManager.TriggerEvent(EventManager.EventType.INTERFACE_PAN, targetCam.orthographicSize.ToString());
         }
 
         //scroll
@@ -73,17 +84,17 @@ public class CameraController : MonoBehaviour
         //Debug.Log(m_distanceCurve.Evaluate(Mathf.InverseLerp(6.0f, 100.0f, GetComponent<Camera>().orthographicSize)));
 
         m_scrollTime += Time.deltaTime;
-        amount += Mathf.Sign(amount) * m_scrollCurve.Evaluate(m_scrollTime) * 10.0f + Mathf.Sign(amount) * m_distanceCurve.Evaluate(Mathf.InverseLerp(6.0f, 100.0f, GetComponent<Camera>().orthographicSize)) * 10.0f;
+        amount += Mathf.Sign(amount) * m_scrollCurve.Evaluate(m_scrollTime) * 10.0f + Mathf.Sign(amount) * m_distanceCurve.Evaluate(Mathf.InverseLerp(6.0f, 100.0f, targetCam.orthographicSize)) * 10.0f;
         orthographicMomentum += amount;
 
         // Calculate how much we will have to move towards the zoomTowards position
-        float multiplier = (1.0f / GetComponent<Camera>().orthographicSize * amount);
+        float multiplier = (1.0f / targetCam.orthographicSize * amount);
 
         // Zoom camera
-        GetComponent<Camera>().orthographicSize -= amount;
+        targetCam.orthographicSize -= amount;
 
         // Limit zoom
-        GetComponent<Camera>().orthographicSize = Mathf.Clamp(GetComponent<Camera>().orthographicSize, minZoom, maxZoom);
+        targetCam.orthographicSize = Mathf.Clamp(targetCam.orthographicSize, minZoom, maxZoom);
         EventManager.TriggerEvent(amount < 0 ? EventManager.EventType.INTERFACE_ZOOM_OUT : EventManager.EventType.INTERFACE_ZOOM_IN, Camera.main.orthographicSize.ToString());
         CollisionDetection();
         // TODO: why is this working when new labels are not?
