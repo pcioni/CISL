@@ -25,6 +25,7 @@ public class timelineNode : MonoBehaviour
 	public Vector3 baseSize;
 	public Vector3 timelinePosition; //where the node should be on the timeline
 	public Vector3 mapPosition; //where the node should be on the map
+    public List<Vector3> pastNarrationNodes;
 	private Vector3 target_position;
 	public Vector3 startPosition;
 	public List<KeyValuePair<string, timelineNode>> neighbors = new List<KeyValuePair<string, timelineNode>>();//use kvp because no tuple support in unity
@@ -296,6 +297,9 @@ public class timelineNode : MonoBehaviour
 	//Bring this node into focus.
 	public void Focus()
 	{
+        pastNarrationNodes = GameObject.Find("loader").GetComponent<NarrationManager>().pastNarrationNodeTransforms;
+        pastNarrationNodes.Add(transform.position);
+
 		//particle.Play();
 
 		//If any other node is the focus, make it a past-focus
@@ -455,7 +459,12 @@ public class timelineNode : MonoBehaviour
 	}
 
     private void drawPastNarrationLines() {
-        //straight-line rendering for past story nodes
+        //Uses a public list of transforms from NarrationManager. Focus() adds a node to the list.
+        pastNarrationLineRenderer.SetVertexCount(pastNarrationNodes.Count);
+        pastNarrationLineRenderer.SetPositions(pastNarrationNodes.ToArray());
+
+        // Old, clunky method. 
+        /*//straight-line rendering for past story nodes
         Vector3 centralNodePos = transform.position;
         Vector3[] points = new Vector3[Mathf.Max(neighbors.Count * 2, 1)];
         Vector3[] pastNarrationPoints = new Vector3[6];
@@ -480,7 +489,7 @@ public class timelineNode : MonoBehaviour
         else {
             pastNarrationLineRenderer.SetVertexCount(pastPointsCount);
             pastNarrationLineRenderer.SetPositions(pastNarrationPoints);
-        }
+        }*/
     }
 
 

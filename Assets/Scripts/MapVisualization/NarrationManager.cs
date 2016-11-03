@@ -12,7 +12,9 @@ public class NarrationManager : MonoBehaviour {
 	private LoadXML lxml;
 	private UnityAction<string> listener;
 
-	private IEnumerator current_narration;
+    public List<Vector3> pastNarrationNodeTransforms = new List<Vector3>();
+
+    private IEnumerator current_narration;
 	private bool user_can_take_turn = true;
     private bool narration_reset = false;
 
