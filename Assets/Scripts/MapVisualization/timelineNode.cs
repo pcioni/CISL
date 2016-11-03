@@ -85,6 +85,7 @@ public class timelineNode : MonoBehaviour
 		{
 			switch (value)
 			{
+                //TODO: should collision checking / label positioning go here instead?
 				case focusState.HALF:
 					base_color = half_focus_color;
 					ChangeColor(half_focus_color);
@@ -178,7 +179,7 @@ public class timelineNode : MonoBehaviour
 
 	public void reset_timeline_position()
 	{
-		int totaldays = 365 * date.Year + date.DayOfYear;
+		int totaldays = 365 * date.Year + date.DayOfYear; // TODO: track these down and interpolate them if data doesn't exist for them
 		float ypos = 0;
 		switch (category)
 		{
@@ -211,6 +212,7 @@ public class timelineNode : MonoBehaviour
 //          ypos = -80;
 			break;
 		}
+        // Is this where I would interpolate XPosition?
 		//timelinePosition = new Vector3(TimeLineBar.dateToPosition(totaldays), ypos + (node_id % 5)-5, 0); //deterministic random for horizontal stretch
 		timelinePosition = new Vector3(TimeLineBar.dateToPosition(totaldays), ypos + (node_id % 15) - 15, 0); //deterministic random for horizontal stretch
 		moveToPosition(timelinePosition);
@@ -636,7 +638,7 @@ public class timelineNode : MonoBehaviour
 				lr.SetColors(line_out_focus_color, line_out_focus_color);
 			}
 
-			disable_tag();
+			disable_tag(); // TODO: figure out why this is hidng labels to nodes that are adgacent to current node
         }
         else
 		{
