@@ -50,9 +50,12 @@ public class LoadXML : MonoBehaviour {
 	public void Initialize() {
 		//load default file if not specified
 		if (string.IsNullOrEmpty(xml_location)) {
-			 xml_location = AppConfig.Settings.Frontend.xml_location;
+			 xml_location = Application.streamingAssetsPath + AppConfig.Settings.Frontend.xml_location;
 		}
-		XmlSerializer serializer = new XmlSerializer(typeof(AIMind));
+
+        xml_location = Application.streamingAssetsPath + xml_location;
+
+        XmlSerializer serializer = new XmlSerializer(typeof(AIMind));
 		FileStream stream = new FileStream(xml_location, FileMode.Open);
 		AIMind container = (AIMind)serializer.Deserialize(stream);
 		stream.Close();
