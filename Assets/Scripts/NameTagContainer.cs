@@ -143,7 +143,7 @@ public class NameTagContainer : MonoBehaviour
         updateLabelPositions();
     }
 
-    public void CollsionStart(NameTagContainer container)
+    public void CollisionStart(NameTagContainer container)
 	{
 		if (container == null || m_nameTags == null)
 		{

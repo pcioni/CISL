@@ -162,11 +162,11 @@ public class CameraController : MonoBehaviour
                     //merge the two colliders
                     if (containerA.m_groupCollisionBox.size.magnitude > containerB.m_groupCollisionBox.size.magnitude)
                     {
-                        containerA.CollsionStart(containerB);
+                        containerA.CollisionStart(containerB);
                     }
                     else
                     {
-                        containerB.CollsionStart(containerA);
+                        containerB.CollisionStart(containerA);
 
                     }
                 }
