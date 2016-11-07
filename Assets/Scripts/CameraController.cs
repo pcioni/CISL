@@ -167,7 +167,6 @@ public class CameraController : MonoBehaviour
                     else
                     {
                         containerB.CollisionStart(containerA);
-
                     }
                 }
 

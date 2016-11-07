@@ -123,11 +123,16 @@ public class NameTagContainer : MonoBehaviour
 		{
 			return;
 		}
+        
+        Bounds b = m_groupCollisionBox.bounds;
 
-        container.m_groupCollisionBox.bounds.SetMinMax(
-            new Vector3(0f, 0f, 0f), 
+        b.SetMinMax(
+            new Vector3(0f, 0f, 0f),
             new Vector3(2.5f, 2f, 0f)
             );
+        
+        m_groupCollisionBox.offset = b.center;
+        m_groupCollisionBox.size = b.size;
 
         //remove null items
         m_nameTags.RemoveAll(item => item == null);
@@ -152,10 +157,10 @@ public class NameTagContainer : MonoBehaviour
 
         Bounds b = m_groupCollisionBox.bounds;
 
-        b.Encapsulate(container.m_nodeCollisionBox.bounds);
-
+        b.Encapsulate(container.m_nodeCollisionBox.bounds); //TODO: For some reason every collision on the first frame is with "Center: (-60.8, -2.0, 0.0), Extents: (37.5, 4.2, 0.0)", plz fix
         m_groupCollisionBox.offset = b.center;
         m_groupCollisionBox.size = b.size;
+
 
         // remove null items in m_nametags for both containers
         m_nameTags.RemoveAll(item => item == null);
