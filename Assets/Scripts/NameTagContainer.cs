@@ -150,9 +150,12 @@ public class NameTagContainer : MonoBehaviour
 			return;
 		}
 
-        m_groupCollisionBox.bounds.Encapsulate(container.m_nodeCollisionBox.bounds.min);
+        Bounds b = m_groupCollisionBox.bounds;
 
-        m_groupCollisionBox.bounds.Encapsulate(container.m_nodeCollisionBox.bounds.max);
+        b.Encapsulate(container.m_nodeCollisionBox.bounds);
+
+        m_groupCollisionBox.offset = b.center;
+        m_groupCollisionBox.size = b.size;
 
         // remove null items in m_nametags for both containers
         m_nameTags.RemoveAll(item => item == null);
