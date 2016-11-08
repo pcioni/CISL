@@ -47,6 +47,10 @@ public class ViewModeController : MonoBehaviour {
 		minOrthoSize = mapCam.orthographicSize;
 	}
 
+	enum data_type {
+		LOC,
+		DATE
+	}
 
 	IEnumerator Start() {
 		lx = GetComponent<LoadXML>();
@@ -62,44 +66,31 @@ public class ViewModeController : MonoBehaviour {
 		//find all of the appropriate positions for the current map
 		foreach (timelineNode tn in lx.nodeList) {
 			if (!tn.known_location) {
-				result = find_coordinates(tn);
+				result = reconstruct_data(tn, data_type.LOC);
 				if (!result) {
-					print ("ViewModeController.Start() :: location from outgoing connection data not found for " + tn.node_name + ": " + tn.location);
+					print ("ViewModeController.Start() :: location from outgoing connection data not found for " + tn.node_name + ": location = " + tn.location);
 					print ("positions.Count: " + positions.Count);
 
-					result = find_coordinates(tn, false, true);
+					result = reconstruct_data(tn, data_type.LOC, false, true);
 					if (!result) {
-						print ("ViewModeController.Start() :: location from incoming connection data not found for " + tn.node_name + ": " + tn.location);
+						print ("ViewModeController.Start() :: location from incoming connection data not found for " + tn.node_name + ": location = " + tn.location);
 						print ("positions.Count: " + positions.Count);
 					}
 				}
 			}
-			GameObject dummy = Instantiate(mapNodePrefab) as GameObject;
-			mapNode mn = dummy.GetComponent<mapNode>();
-			mn.master = tn;
-			dummy.layer = LayerMask.NameToLayer("MapLayer");
-			mn.transform.SetParent(current_map.transform, false);
-			
-			mn.transform.localPosition = current_map.coord2local(tn.location);
-
-			dummynodemap[tn.node_id] = mn.transform.position;
-			dummynodes.Add(mn);
-			crossmap[tn] = mn;
-
-			yield return null;
 		}
 
         foreach (timelineNode tn in lx.nodeList)
         {
             if (!tn.known_location && !tn.location_interpolated)
             {
-                result = find_coordinates(tn, true);
+				result = reconstruct_data(tn, data_type.LOC, true);
                 if (!result)
                 {
                     print("ViewModeController.Start() :: location from interpolated ooutgoing connect data not found for " + tn.node_name + ": " + tn.location);
                     print("positions.Count: " + positions.Count);
 
-                    result = find_coordinates(tn, true, true);
+					result = reconstruct_data(tn, data_type.LOC, true, true);
                     if (!result)
                     {
                         print("ViewModeController.Start() :: location from interpolated incoming connection data not found for " + tn.node_name + ": " + tn.location);
@@ -109,6 +100,20 @@ public class ViewModeController : MonoBehaviour {
                     }
                 }
             }
+
+            GameObject dummy = Instantiate(mapNodePrefab) as GameObject;
+            mapNode mn = dummy.GetComponent<mapNode>();
+            mn.master = tn;
+            dummy.layer = LayerMask.NameToLayer("MapLayer");
+            mn.transform.SetParent(current_map.transform, false);
+
+            mn.transform.localPosition = current_map.coord2local(tn.location);
+
+            dummynodemap[tn.node_id] = mn.transform.position;
+            dummynodes.Add(mn);
+            crossmap[tn] = mn;
+
+            yield return null;
         }
 
         //assign corresponding neighbors
@@ -187,14 +192,21 @@ public class ViewModeController : MonoBehaviour {
 	private List<Vector3> positions = new List<Vector3>();
 	private int max_depth = 30;
     private int min_data = 10;
-    private bool find_coordinates(timelineNode start, bool use_interpolated = false, bool use_incoming = false) {
+	private bool reconstruct_data(timelineNode start, data_type dtype, bool use_interpolated = false, bool use_incoming = false) {
 		positions.Clear();
 		q.Clear();
 		q.Enqueue(new KeyValuePair<int, timelineNode>(0,start));
 		while (q.Count > 0) {
 			KeyValuePair<int, timelineNode> current = q.Dequeue();
-			if ((current.Value.known_location || use_interpolated) && current.Value.location != new Vector2(0,0)) {
-				positions.Add(current.Value.location);
+			switch (dtype) {
+			case data_type.LOC:
+				if ((current.Value.known_location || use_interpolated) && current.Value.location != new Vector2(0,0)) {
+					positions.Add(current.Value.location);
+				}
+				break;
+			default:
+				Debug.Log ("ViewModeController.find_coordinates() :: unhandled dataType : " + dtype.ToString());
+				break;
 			}
 			if(current.Key < max_depth) {
                 if (!use_incoming)
@@ -210,21 +222,28 @@ public class ViewModeController : MonoBehaviour {
                         q.Enqueue(new KeyValuePair<int, timelineNode>(current.Key + 1, tn));
                     }
                 }
-                if (positions.Count >= min_data) break; // break if we found enough data
+                if (dtype == data_type.LOC && positions.Count >= min_data) break; // break if we found enough location data
             }
+        }
+		switch (dtype) {
+		case data_type.LOC:
+			if(positions.Count != 0) {
+				start.location = get_centroid(positions);
+				start.location_interpolated = true;
+				return true;
+			}
+			else
+			{
+				//print("ViewModeController.reconstruct_data() :: location data not found for " + start.node_name + ": " + start.location);
+				//print("positions.Count: " + positions.Count);
+				return false;
+			}
+			//break;
+		default:
+			Debug.Log ("ViewModeController.find_coordinates() :: unhandled dataType : " + dtype.ToString ());
+			return false;
+			//break;
 		}
-		if(positions.Count != 0) {
-			start.location = get_centroid(positions);
-            start.location_interpolated = true;
-            //print("location found for " + start.node_name + ": " + start.location);
-            return true;
-        }
-        else
-        {
-            print("ViewModeController.find_coordinates() :: location not found for " + start.node_name + ": " + start.location);
-            print("positions.Count: " + positions.Count);
-            return false;
-        }
     }
 
 	private Vector3 get_centroid(List<Vector3> positions) {
