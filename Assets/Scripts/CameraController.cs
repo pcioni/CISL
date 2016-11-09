@@ -37,6 +37,9 @@ public class CameraController : MonoBehaviour
             if (cam.pixelRect.Contains(Input.mousePosition)) {
                 targetCam = cam;
                 break;
+            } else
+            {
+                targetCam = null;
             }
         }
         orthographicMomentum = orthographicMomentum / 1.1f;
@@ -47,7 +50,7 @@ public class CameraController : MonoBehaviour
         //Pan camera with mouse
         if (Input.GetMouseButtonDown(1)) //Store the click position wheneve the mouse is clicked
             last_mouse_position = Input.mousePosition;
-        if (Input.GetMouseButton(1)) //While the mouse is down translate the position of the camera
+        if (Input.GetMouseButton(1) && targetCam != null) //While the mouse is down translate the position of the camera
         {
             Vector3 delta = targetCam.ScreenToWorldPoint(last_mouse_position) - targetCam.ScreenToWorldPoint(Input.mousePosition);
             targetCam.transform.Translate(delta.x, delta.y, 0); //TODO: check the math on this, it could be the root of strange parallax
@@ -65,6 +68,7 @@ public class CameraController : MonoBehaviour
     // TODO: stop camera movement when at zoom limit
     void ZoomOrthoCamera(Vector3 zoomTowards, float amount)
     {
+        if (targetCam == null) return;
 
         // Create a deadzone to avoid scroll wheel noise
         //
