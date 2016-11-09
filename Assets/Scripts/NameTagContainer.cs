@@ -158,12 +158,6 @@ public class NameTagContainer : MonoBehaviour
 			return;
 		}
 
-        Bounds b = m_groupCollisionBox.bounds;
-
-        b.Encapsulate(container.m_nodeCollisionBox.bounds);//container.m_nodeCollisionBox.bounds.Encapsulate(b); //TODO: For some reason every collision on the first frame is with "Center: (-60.8, -2.0, 0.0), Extents: (37.5, 4.2, 0.0)", plz fix
-        m_groupCollisionBox.offset = b.center;
-        m_groupCollisionBox.size = b.size;
-
 
         // remove null items in m_nametags for both containers
         m_nameTags.RemoveAll(item => item == null);
@@ -184,6 +178,52 @@ public class NameTagContainer : MonoBehaviour
 			container.m_nameTags.Remove(nt);
 		}
 
+
+
+
+        
+
+        if (m_nameTags.Count > 0) {
+
+            Vector2 max = new Vector2(0, 0);
+            Vector2 min = new Vector2(Mathf.Infinity, Mathf.Infinity);
+
+            foreach (NameTag nt in m_nameTags)
+            {
+                float xMax = nt.m_curContainer.m_groupCollisionBox.transform.position.x + nt.m_curContainer.m_groupCollisionBox.offset.x + nt.m_curContainer.m_groupCollisionBox.size.x / 2;
+                if ( xMax> max.x)
+                {
+                    max.x = xMax;
+                }
+
+
+                float yMax = nt.m_curContainer.m_groupCollisionBox.transform.position.y + nt.m_curContainer.m_groupCollisionBox.offset.y + nt.m_curContainer.m_groupCollisionBox.size.y / 2;
+                if (yMax > max.y)
+                {
+                    max.y = yMax;
+                }
+
+                float xMin = nt.m_curContainer.m_groupCollisionBox.transform.position.x + nt.m_curContainer.m_groupCollisionBox.offset.x - nt.m_curContainer.m_groupCollisionBox.size.x / 2;
+                if (xMin < min.x)
+                {
+                    min.x = xMin;
+                }
+
+
+                float yMin = nt.m_curContainer.m_groupCollisionBox.transform.position.y + nt.m_curContainer.m_groupCollisionBox.offset.y - nt.m_curContainer.m_groupCollisionBox.size.y / 2;
+                if (yMin < min.y)
+                {
+                    min.y = yMin;
+                }
+            }
+
+            Vector2 size = max - min;
+
+            Vector2 center = min + size / 2;
+
+            m_groupCollisionBox.offset = new Vector2(m_groupCollisionBox.transform.position.x, m_groupCollisionBox.transform.position.y) - center;
+            m_groupCollisionBox.size = size;
+        }
         updateLabelPositions();
     }
 
