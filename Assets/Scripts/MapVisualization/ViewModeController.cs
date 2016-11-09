@@ -190,10 +190,12 @@ public class ViewModeController : MonoBehaviour {
 
 	private Queue<KeyValuePair<int, timelineNode>> q = new Queue<KeyValuePair<int, timelineNode>>();
 	private List<Vector3> positions = new List<Vector3>();
+	private List<long> dateTicks = new List<long>();
 	private int max_depth = 30;
     private int min_data = 10;
 	private bool reconstruct_data(timelineNode start, data_type dtype, bool use_interpolated = false, bool use_incoming = false) {
 		positions.Clear();
+		dateTicks.Clear();
 		q.Clear();
 		q.Enqueue(new KeyValuePair<int, timelineNode>(0,start));
 		while (q.Count > 0) {
@@ -259,6 +261,17 @@ public class ViewModeController : MonoBehaviour {
 		}
 
 		return new Vector3(sumx / len, sumy / len, sumz / len);
+	}
+
+	private long get_centroid(List<long> _tickCounts) {
+		long sum = 0;
+		int len = _tickCounts.Count;
+
+		foreach(long t in _tickCounts) {
+			sum += t;
+		}
+
+		return sum / len;
 	}
 
 	/*
