@@ -219,10 +219,20 @@ public class NameTagContainer : MonoBehaviour
 
             Vector2 size = max - min;
 
-            Vector2 center = min + size / 2;
+            Vector2 center = min;
 
             m_groupCollisionBox.offset = new Vector2(m_groupCollisionBox.transform.position.x, m_groupCollisionBox.transform.position.y) - center;
             m_groupCollisionBox.size = size;
+        }
+        else
+        {
+            Vector2 size = new Vector2(0,0);
+
+            Vector2 center = new Vector2(0, 0);
+
+            m_groupCollisionBox.offset = new Vector2(m_groupCollisionBox.transform.position.x, m_groupCollisionBox.transform.position.y) - center;
+            m_groupCollisionBox.size = size;
+
         }
         updateLabelPositions();
     }
