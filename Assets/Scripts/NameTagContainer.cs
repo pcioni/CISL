@@ -160,7 +160,7 @@ public class NameTagContainer : MonoBehaviour
 
         Bounds b = m_groupCollisionBox.bounds;
 
-        container.m_nodeCollisionBox.bounds.Encapsulate(b); //TODO: For some reason every collision on the first frame is with "Center: (-60.8, -2.0, 0.0), Extents: (37.5, 4.2, 0.0)", plz fix
+        b.Encapsulate(container.m_nodeCollisionBox.bounds);//container.m_nodeCollisionBox.bounds.Encapsulate(b); //TODO: For some reason every collision on the first frame is with "Center: (-60.8, -2.0, 0.0), Extents: (37.5, 4.2, 0.0)", plz fix
         m_groupCollisionBox.offset = b.center;
         m_groupCollisionBox.size = b.size;
 
