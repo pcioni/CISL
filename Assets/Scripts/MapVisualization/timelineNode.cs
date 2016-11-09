@@ -180,7 +180,7 @@ public class timelineNode : MonoBehaviour
 
 	public void reset_timeline_position()
 	{
-		int totaldays = 365 * date.Year + date.DayOfYear; // TODO: track these down and interpolate them if data doesn't exist for them
+		int totaldays = 365 * date.Year + date.DayOfYear;
 		float ypos = 0;
 		switch (category)
 		{
