@@ -124,7 +124,11 @@ public class CameraController : MonoBehaviour
         ms_instance.containers = (from u in GameObject.FindGameObjectsWithTag("NameTagContainer") select u.GetComponent<NameTagContainer>()).ToArray();
 
         //Check for NameTagCollsions
-        while (ms_instance.NodeOnNodeCheck(ms_instance.containers) == true) ;
+        //while (ms_instance.NodeOnNodeCheck(ms_instance.containers) == true) ;
+        while (ms_instance.NodeOnNodeCheck(ms_instance.containers) == true)
+        {
+            //Resize the group containers each time after node on node check is performed
+        }
     }
 
 

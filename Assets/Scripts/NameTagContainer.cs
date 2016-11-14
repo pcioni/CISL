@@ -66,7 +66,7 @@ public class NameTagContainer : MonoBehaviour
     void Update()
 	{
         m_nodeCollider.transform.position = m_nodeOriginalPosition;
-		m_groupCollider.transform.position = m_groupOiginalPosition;
+        m_groupCollider.transform.position = m_groupOiginalPosition;
 
         Vector3 tmp = transform.position;
 		tmp.z = 0;
@@ -123,19 +123,6 @@ public class NameTagContainer : MonoBehaviour
 		{
 			return;
 		}
-        
-        Bounds b = m_groupCollisionBox.bounds;
-        
-
-        b.SetMinMax(
-            new Vector3(0f, 0f, 0f),
-            new Vector3(2.5f, 2f, 0f)
-            );
-
-        m_nodeCollisionBox.bounds.Encapsulate(b);
-        
-        m_groupCollisionBox.offset = b.center;
-        m_groupCollisionBox.size = b.size;
 
         //remove null items
         m_nameTags.RemoveAll(item => item == null);
@@ -163,9 +150,10 @@ public class NameTagContainer : MonoBehaviour
         m_nameTags.RemoveAll(item => item == null);
 		container.m_nameTags.RemoveAll(item => item == null);
 
-		for (int i = 0; i < container.m_nameTags.Count; i++)
+
+        // adopt the other nametags
+        for (int i = 0; i < container.m_nameTags.Count; i++)
 		{
-			// adopt the other nametags
 			if (this.m_nameTags.Contains(container.m_nameTags[i]) == false)
 			{
 				this.m_nameTags.Add(container.m_nameTags[i]);
@@ -178,11 +166,7 @@ public class NameTagContainer : MonoBehaviour
 			container.m_nameTags.Remove(nt);
 		}
 
-
-
-
-        
-
+        //Now we calculate the maximum and minimum based on our contained nametags
         if (m_nameTags.Count > 0) {
 
             Vector2 max = new Vector2(0, 0);
@@ -190,27 +174,27 @@ public class NameTagContainer : MonoBehaviour
 
             foreach (NameTag nt in m_nameTags)
             {
-                float xMax = nt.m_curContainer.m_groupCollisionBox.transform.position.x + nt.m_curContainer.m_groupCollisionBox.offset.x + nt.m_curContainer.m_groupCollisionBox.size.x / 2;
+                float xMax = nt.m_curContainer.m_nodeCollisionBox.transform.position.x + nt.m_curContainer.m_nodeCollisionBox.offset.x + nt.m_curContainer.m_nodeCollisionBox.size.x / 2;
                 if ( xMax> max.x)
                 {
                     max.x = xMax;
                 }
 
 
-                float yMax = nt.m_curContainer.m_groupCollisionBox.transform.position.y + nt.m_curContainer.m_groupCollisionBox.offset.y + nt.m_curContainer.m_groupCollisionBox.size.y / 2;
+                float yMax = nt.m_curContainer.m_nodeCollisionBox.transform.position.y + nt.m_curContainer.m_nodeCollisionBox.offset.y + nt.m_curContainer.m_nodeCollisionBox.size.y / 2;
                 if (yMax > max.y)
                 {
                     max.y = yMax;
                 }
 
-                float xMin = nt.m_curContainer.m_groupCollisionBox.transform.position.x + nt.m_curContainer.m_groupCollisionBox.offset.x - nt.m_curContainer.m_groupCollisionBox.size.x / 2;
+                float xMin = nt.m_curContainer.m_nodeCollisionBox.transform.position.x + nt.m_curContainer.m_nodeCollisionBox.offset.x - nt.m_curContainer.m_nodeCollisionBox.size.x / 2;
                 if (xMin < min.x)
                 {
                     min.x = xMin;
                 }
 
 
-                float yMin = nt.m_curContainer.m_groupCollisionBox.transform.position.y + nt.m_curContainer.m_groupCollisionBox.offset.y - nt.m_curContainer.m_groupCollisionBox.size.y / 2;
+                float yMin = nt.m_curContainer.m_nodeCollisionBox.transform.position.y + nt.m_curContainer.m_nodeCollisionBox.offset.y - nt.m_curContainer.m_nodeCollisionBox.size.y / 2;
                 if (yMin < min.y)
                 {
                     min.y = yMin;
@@ -218,19 +202,11 @@ public class NameTagContainer : MonoBehaviour
             }
 
             Vector2 size = max - min;
-
-            Vector2 center = min;
-
-            m_groupCollisionBox.offset = new Vector2(m_groupCollisionBox.transform.position.x, m_groupCollisionBox.transform.position.y) - center;
             m_groupCollisionBox.size = size;
         }
         else
         {
-            Vector2 size = new Vector2(0,0);
-
-            Vector2 center = new Vector2(0, 0);
-
-            m_groupCollisionBox.offset = new Vector2(m_groupCollisionBox.transform.position.x, m_groupCollisionBox.transform.position.y) - center;
+            Vector2 size = new Vector2(2.5f, 2.0f);
             m_groupCollisionBox.size = size;
 
         }
