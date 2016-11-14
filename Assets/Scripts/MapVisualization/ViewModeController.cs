@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.Events;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using JsonConstructs;
@@ -20,6 +21,9 @@ public class ViewModeController : MonoBehaviour {
 	public List<mapNode> dummynodes;
 	public Dictionary<int, Vector2> dummynodemap;
 	public Dictionary<timelineNode, mapNode> crossmap;
+
+    public bool reconstructGeolocationData = true;
+    public bool reconstructDateData = true;
 
 	public Camera mapCam;
 
@@ -47,6 +51,10 @@ public class ViewModeController : MonoBehaviour {
 		minOrthoSize = mapCam.orthographicSize;
 	}
 
+	enum data_type {
+		LOC,
+		DATE
+	}
 
 	IEnumerator Start() {
 		lx = GetComponent<LoadXML>();
@@ -61,54 +69,81 @@ public class ViewModeController : MonoBehaviour {
 		bool result = false;
 		//find all of the appropriate positions for the current map
 		foreach (timelineNode tn in lx.nodeList) {
-			if (!tn.known_location) {
-				result = find_coordinates(tn);
+			if (!tn.known_location && reconstructGeolocationData) {
+				result = reconstruct_data(tn, data_type.LOC);
 				if (!result) {
-					print ("ViewModeController.Start() :: location from outgoing connection data not found for " + tn.node_name + ": " + tn.location);
-					print ("positions.Count: " + positions.Count);
+					//print ("ViewModeController.Start() :: location from outgoing connection data not found for " + tn.node_name + ": location = " + tn.location);
+					//print ("positions.Count: " + positions.Count);
 
-					result = find_coordinates(tn, false, true);
+					result = reconstruct_data(tn, data_type.LOC, false, true);
 					if (!result) {
-						print ("ViewModeController.Start() :: location from incoming connection data not found for " + tn.node_name + ": " + tn.location);
-						print ("positions.Count: " + positions.Count);
+						//print ("ViewModeController.Start() :: location from incoming connection data not found for " + tn.node_name + ": location = " + tn.location);
+						//print ("positions.Count: " + positions.Count);
 					}
 				}
 			}
-			GameObject dummy = Instantiate(mapNodePrefab) as GameObject;
-			mapNode mn = dummy.GetComponent<mapNode>();
-			mn.master = tn;
-			dummy.layer = LayerMask.NameToLayer("MapLayer");
-			mn.transform.SetParent(current_map.transform, false);
-			
-			mn.transform.localPosition = current_map.coord2local(tn.location);
+			if (!tn.known_date && reconstructDateData) {
+                result = reconstruct_data(tn, data_type.DATE);
+                if (!result) {
+					//print ("ViewModeController.Start() :: date from outgoing connection data not found for " + tn.node_name + ": dateticks = " + tn.dateticks);
+					//print ("dateTicks.Count: " + dateTicks.Count);
 
-			dummynodemap[tn.node_id] = mn.transform.position;
-			dummynodes.Add(mn);
-			crossmap[tn] = mn;
-
-			yield return null;
+                    result = reconstruct_data(tn, data_type.DATE, false, true);
+                    if (!result) {
+						//print ("ViewModeController.Start() :: date from incoming connection data not found for " + tn.node_name + ": dateticks = " + tn.dateticks);
+						//print ("dateTicks.Count: " + dateTicks.Count);
+					}
+				}
+			}
 		}
 
         foreach (timelineNode tn in lx.nodeList)
         {
-            if (!tn.known_location && !tn.location_interpolated)
+            if (!tn.known_location && !tn.location_interpolated && reconstructGeolocationData)
             {
-                result = find_coordinates(tn, true);
+				result = reconstruct_data(tn, data_type.LOC, true);
                 if (!result)
                 {
-                    print("ViewModeController.Start() :: location from interpolated ooutgoing connect data not found for " + tn.node_name + ": " + tn.location);
-                    print("positions.Count: " + positions.Count);
+                    //print("ViewModeController.Start() :: location from interpolated ooutgoing connect data not found for " + tn.node_name + ": " + tn.location);
+                    //print("positions.Count: " + positions.Count);
 
-                    result = find_coordinates(tn, true, true);
+					result = reconstruct_data(tn, data_type.LOC, true, true);
                     if (!result)
                     {
-                        print("ViewModeController.Start() :: location from interpolated incoming connection data not found for " + tn.node_name + ": " + tn.location);
-                        print("positions.Count: " + positions.Count);
-                        //TODO: tn.location = ;
-                        //tn.location_interpolated = true;
+                        //print("ViewModeController.Start() :: location from interpolated incoming connection data not found for " + tn.node_name + ": " + tn.location);
+                        //print("positions.Count: " + positions.Count);
                     }
                 }
             }
+            if (!tn.known_date && !tn.date_interpolated && reconstructDateData)
+            {
+                result = reconstruct_data(tn, data_type.DATE, true);
+                if (!result)
+                {
+                    //print("ViewModeController.Start() :: date from interpolated ooutgoing connect data not found for " + tn.node_name + ": dateticks = " + tn.dateticks);
+                    //print("dateTicks.Count: " + dateTicks.Count);
+
+                    result = reconstruct_data(tn, data_type.DATE, true, true);
+                    if (!result)
+                    {
+                        //print("ViewModeController.Start() :: date from interpolated incoming connection data not found for " + tn.node_name + ": dateticks = " + tn.dateticks);
+                        //print("dateTicks.Count: " + dateTicks.Count);
+                    }
+                }
+            }
+            GameObject dummy = Instantiate(mapNodePrefab) as GameObject;
+            mapNode mn = dummy.GetComponent<mapNode>();
+            mn.master = tn;
+            dummy.layer = LayerMask.NameToLayer("MapLayer");
+            mn.transform.SetParent(current_map.transform, false);
+
+            mn.transform.localPosition = current_map.coord2local(tn.location);
+
+            dummynodemap[tn.node_id] = mn.transform.position;
+            dummynodes.Add(mn);
+            crossmap[tn] = mn;
+
+            yield return null;
         }
 
         //assign corresponding neighbors
@@ -185,16 +220,32 @@ public class ViewModeController : MonoBehaviour {
 
 	private Queue<KeyValuePair<int, timelineNode>> q = new Queue<KeyValuePair<int, timelineNode>>();
 	private List<Vector3> positions = new List<Vector3>();
+	private List<long> dateTicks = new List<long>();
 	private int max_depth = 30;
     private int min_data = 10;
-    private bool find_coordinates(timelineNode start, bool use_interpolated = false, bool use_incoming = false) {
+	private bool reconstruct_data(timelineNode start, data_type dtype, bool use_interpolated = false, bool use_incoming = false) {
 		positions.Clear();
+		dateTicks.Clear();
 		q.Clear();
 		q.Enqueue(new KeyValuePair<int, timelineNode>(0,start));
 		while (q.Count > 0) {
 			KeyValuePair<int, timelineNode> current = q.Dequeue();
-			if ((current.Value.known_location || use_interpolated) && current.Value.location != new Vector2(0,0)) {
-				positions.Add(current.Value.location);
+			switch (dtype) {
+			case data_type.LOC:
+				if ((current.Value.known_location || use_interpolated) && current.Value.location != new Vector2(0,0)) {
+					positions.Add(current.Value.location);
+				}
+				break;
+            case data_type.DATE:
+                if ((current.Value.known_date || use_interpolated) && current.Value.dateticks != 0)
+                {
+                    dateTicks.Add(current.Value.dateticks);
+                }
+                break;
+            default:
+				Debug.Log ("ViewModeController.find_coordinates() :: unhandled dataType : " + dtype.ToString());
+                return false;
+				//break;
 			}
 			if(current.Key < max_depth) {
                 if (!use_incoming)
@@ -210,20 +261,46 @@ public class ViewModeController : MonoBehaviour {
                         q.Enqueue(new KeyValuePair<int, timelineNode>(current.Key + 1, tn));
                     }
                 }
-                if (positions.Count >= min_data) break; // break if we found enough data
+                if (dtype == data_type.LOC && positions.Count >= min_data) break; // break if we found enough location data
+                if (dtype == data_type.DATE && dateTicks.Count >= min_data) break; // break if we found enough date data
             }
-		}
-		if(positions.Count != 0) {
-			start.location = get_centroid(positions);
-            start.location_interpolated = true;
-            //print("location found for " + start.node_name + ": " + start.location);
-            return true;
         }
-        else
-        {
-            print("ViewModeController.find_coordinates() :: location not found for " + start.node_name + ": " + start.location);
-            print("positions.Count: " + positions.Count);
-            return false;
+		switch (dtype) {
+            case data_type.LOC:
+                if (positions.Count != 0)
+                {
+                    start.location = get_centroid(positions);
+                    start.location_interpolated = true;
+                    return true;
+                }
+                else
+                {
+                    //print("ViewModeController.reconstruct_data() :: location data not found for " + start.node_name + ": " + start.location);
+                    //print("positions.Count: " + positions.Count);
+                    return false;
+                }
+                //break;
+            case data_type.DATE:
+                if (dateTicks.Count != 0)
+                {
+                    start.dateticks = get_centroid(dateTicks);
+                    start.date = new DateTime(start.dateticks);
+                    start.datevalue = start.date.ToShortDateString();
+                    start.date_interpolated = true;
+                    start.reset_timeline_position();
+                    return true;
+                }
+                else
+                {
+                    //print("ViewModeController.reconstruct_data() :: date data not found; node_name = " + start.node_name + "; dateticks = " + start.dateticks);
+                    //print("tickCounts.Count: " + dateTicks.Count);
+                    return false;
+                }
+                //break;
+            default:
+                Debug.Log("ViewModeController.find_coordinates() :: unhandled dataType : " + dtype.ToString());
+                return false;
+                //break;
         }
     }
 
@@ -240,6 +317,17 @@ public class ViewModeController : MonoBehaviour {
 		}
 
 		return new Vector3(sumx / len, sumy / len, sumz / len);
+	}
+
+	private long get_centroid(List<long> _tickCounts) {
+		long sum = 0;
+		int len = _tickCounts.Count;
+
+		foreach(long t in _tickCounts) {
+			sum += t / len;
+		}
+
+		return sum;
 	}
 
 	/*

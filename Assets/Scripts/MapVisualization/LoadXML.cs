@@ -119,7 +119,8 @@ public class LoadXML : MonoBehaviour {
 			}
 			tn.datevalue = tn.date.ToShortDateString();
 			tn.dateticks = tn.date.Ticks;
-			nodeList.Add(tn);
+            tn.known_date = tn.dateticks == 0 ? false : true;
+            nodeList.Add(tn);
 			nodeDict[f.data] = tmp_obj;
 
 			idMap[f.id] = tn;//map id to node

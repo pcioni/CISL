@@ -20,6 +20,8 @@ public class timelineNode : MonoBehaviour
 	public bool mouseOver = false;
 	public bool known_location = false;
     public bool location_interpolated = false;
+	public bool known_date = false;
+	public bool date_interpolated = false;
 	public bool active = false; //Whether this node is active and interactable.
 	public Vector2 location;
 	public Vector3 baseSize;
@@ -85,7 +87,6 @@ public class timelineNode : MonoBehaviour
 		{
 			switch (value)
 			{
-                //TODO: should collision checking / label positioning go here instead?
 				case focusState.HALF:
 					base_color = half_focus_color;
 					ChangeColor(half_focus_color);
@@ -179,7 +180,7 @@ public class timelineNode : MonoBehaviour
 
 	public void reset_timeline_position()
 	{
-		int totaldays = 365 * date.Year + date.DayOfYear; // TODO: track these down and interpolate them if data doesn't exist for them
+		int totaldays = 365 * date.Year + date.DayOfYear;
 		float ypos = 0;
 		switch (category)
 		{
