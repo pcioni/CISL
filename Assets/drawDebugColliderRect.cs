@@ -26,7 +26,7 @@ public class drawDebugColliderRect : MonoBehaviour {
         // resize panel to match BoxCollider2D
         if (m_collider != null && (m_panelRTrans.sizeDelta.x != m_collider.size.x || m_panelRTrans.sizeDelta.y != m_collider.size.y || !m_panelRTrans.position.Equals(m_collider.offset)))
         {
-            m_panelRTrans.sizeDelta = new Vector2 (m_collider.size.x, m_collider.size.y);
+            m_panelRTrans.sizeDelta = new Vector2(m_collider.size.x, m_collider.size.y);
             m_panelRTrans.localPosition = m_collider.offset;
 
 
