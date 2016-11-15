@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<AIMind>
+  <Root id="1"/>
+  <Features>
+    <Feature data="Chinese cuisine" zh-data="" id="3" uri="http://dbpedia.org/resource/Chinese_cuisine">
+      <neighbors/>
+      <geodata/>
+      <timedata/>
+      <pictures>
+        <picture url="https://upload.wikimedia.org/wikipedia/commons/8d/ChineseDishLogo.png" label="ChineseDishLogo.png"/>
+        <picture url="https://upload.wikimedia.org/wikipedia/commons/b/b0/China_dragon.svg" label="icon"/>
+        <picture url="https://upload.wikimedia.org/wikipedia/commons/5/59/Chinese_fried_rice.jpg" label=""/>
+        <picture url="https://upload.wikimedia.org/wikipedia/en/9/99/Question_book-new.svg" label=""/>
+        <picture url="https://upload.wikimedia.org/wikipedia/commons/e/e5/Quanjude_roastduck.JPG" label=""/>
+        <picture url="https://upload.wikimedia.org/wikipedia/commons/6/63/La_Zi_Ji_%28Chicken_with_Chiles%29_%282269517013%29.jpg" label=""/>
+        <picture url="https://upload.wikimedia.org/wikipedia/commons/a/aa/Billyzhajiang1.jpg" label=""/>
+        <picture url="https://upload.wikimedia.org/wikipedia/commons/e/e4/Bokchoycooked.jpg" label=""/>
+        <picture url="https://upload.wikimedia.org/wikipedia/commons/0/00/Egg_custard_tarts.jpg" label=""/>
+        <picture url="https://upload.wikimedia.org/wikipedia/commons/6/6e/Tougan_shrimp_soup.jpg" label=""/>
+        <picture url="https://upload.wikimedia.org/wikipedia/commons/f/f4/Baozi_Chengdu.JPG" label=""/>
+        <picture url="https://upload.wikimedia.org/wikipedia/commons/b/b2/Longjing_tea_3.jpg" label=""/>
+        <picture url="https://upload.wikimedia.org/wikipedia/en/4/4a/Commons-logo.svg" label=""/>
+        <picture url="https://upload.wikimedia.org/wikipedia/commons/d/d6/Foodlogo2.svg" label="icon"/>
+        <picture url="https://upload.wikimedia.org/wikipedia/commons/d/d6/Foodlogo2.svg" label="icon"/>
+        <picture url="https://upload.wikimedia.org/wikipedia/commons/b/b0/China_dragon.svg" label="icon"/>
+      </pictures>
+      <speak>Chinese cuisine includes styles originating from the diverse regions of China, as well as from Chinese people in other parts of the world including most Asia nations. The history of Chinese cuisine in China stretches back for thousands of years and has changed from period to period and in each region according to climate, imperial fashions, and local preferences.</speak>
+      <zh-speak/>
+      <description>Chinese cuisine includes styles originating from the diverse regions of China, as well as from Chinese people in other parts of the world including most Asia nations. The history of Chinese cuisine in China stretches back for thousands of years and has changed from period to period and in each region according to climate, imperial fashions, and local preferences. Over time, techniques and ingredients from the cuisines of other cultures were integrated into the cuisine of the Chinese people due both to imperial expansion and from the trade with nearby regions in pre-modern times, and from Europe and the New World in the modern period. In addition, dairy is rarely—if ever—used in any recipes in the style.The \"Eight Culinary Cuisines\" of China are Anhui, Cantonese, Fujian, Hunan, Jiangsu, Shandong, Sichuan, and Zhejiang cuisines.The staple foods of Chinese cooking include rice, noodles, vegetables, and sauces and seasonings.</description>
+      <zh-data/>
+      <thumbnail>http://commons.wikimedia.org/wiki/Special:FilePath/Chinese_fried_rice.jpg?width=300</thumbnail>
+    </Feature>
+    <Feature data="Joy Hing's Roasted Meat" zh-data="" id="4" uri="http://dbpedia.org/resource/Joy_Hing's_Roasted_Meat">
+      <neighbors>
+        <neighbor dest="3" relationship="food-type" weight="0"/>
+      </neighbors>
+      <geodata>
+        <coordinates lat="22.2784" lon="114.177"/>
+      </geodata>
+      <timedata/>
+      <pictures>
+        <picture url="https://upload.wikimedia.org/wikipedia/commons/a/a8/HK_Wan_Chai_Stewart_Road_%E5%86%8D%E8%88%88%E7%87%92%E8%87%98%E9%A3%AF%E5%BA%97_BBQ_meat_shop_a.jpg" label="HK Wan Chai Stewart Road 再興燒臘飯店 BBQ meat shop a.jpg"/>
+        <picture url="https://upload.wikimedia.org/wikipedia/commons/5/51/Star_full.svg" label="Star full.svg"/>
+        <picture url="https://upload.wikimedia.org/wikipedia/en/4/4a/Commons-logo.svg" label=""/>
+      </pictures>
+      <speak>Joy Hing's Roasted Meat is a Cantonese char siu restaurant in Hong Kong, founded in the later part of the Qing Dynasty.The restaurant, rated 1 star by the Michelin Guide and picked as the best char siu restaurant by a local food critics website OpenRice, is characterized by its long queue all day long and customers from grassroots to superstars.</speak>
+      <zh-speak/>
+      <description>Joy Hing's Roasted Meat is a Cantonese char siu restaurant in Hong Kong, founded in the later part of the Qing Dynasty.The restaurant, rated 1 star by the Michelin Guide and picked as the best char siu restaurant by a local food critics website OpenRice, is characterized by its long queue all day long and customers from grassroots to superstars.</description>
+      <zh-data/>
+      <thumbnail>http://commons.wikimedia.org/wiki/Special:FilePath/HK_Wan_Chai_Stewart_Road_再興燒臘飯店_BBQ_meat_shop_a.jpg?width=300</thumbnail>
+    </Feature>
+    <Feature data="Bakso" zh-data="" id="5" uri="http://dbpedia.org/resource/Bakso">
+      <neighbors>
+        <neighbor dest="3" relationship="country" weight="0"/>
+      </neighbors>
+      <geodata/>
+      <timedata/>
+      <pictures>
+        <picture url="https://upload.wikimedia.org/wikipedia/commons/2/28/Bakso_mi_bihun.jpg" label="Bakso mi bihun.jpg"/>
+        <picture url="https://upload.wikimedia.org/wikipedia/commons/d/df/Wikibooks-logo-en-noslogan.svg" label=""/>
+        <picture url="https://upload.wikimedia.org/wikipedia/en/4/4a/Commons-logo.svg" label=""/>
+        <picture url="https://upload.wikimedia.org/wikipedia/commons/6/68/Bakso.JPG" label=""/>
+        <picture url="https://upload.wikimedia.org/wikipedia/commons/b/b6/Baso_Malang_Karapitan.JPG" label=""/>
+        <picture url="https://upload.wikimedia.org/wikipedia/commons/6/6e/Bakso_urat_asli_solo.jpg" label=""/>
+        <picture url="https://upload.wikimedia.org/wikipedia/commons/9/9d/Indonesian_travelling_meatball_vendor_on_bike.jpg" label=""/>
+        <picture url="https://upload.wikimedia.org/wikipedia/commons/d/d6/Foodlogo2.svg" label="icon"/>
+        <picture url="https://upload.wikimedia.org/wikipedia/en/4/4a/Commons-logo.svg" label=""/>
+        <picture url="https://upload.wikimedia.org/wikipedia/commons/a/a3/La_Ranchera_Serving_Side.jpg" label="A food truck"/>
+      </pictures>
+      <speak>Bakso or baso is Indonesian meatball, or meat paste made from beef surimi. Its texture is similar to the Chinese beef ball, fish ball, or pork ball. The term bakso could refer to a single meatball or the whole bowl of meatballs soup.Bakso can be found all across Indonesia; from the traveling cart street vendors to restaurants. Next to soto, satay and siomay, bakso is one of the popular street food in Indonesia.</speak>
+      <zh-speak/>
+      <description>Bakso or baso is Indonesian meatball, or meat paste made from beef surimi. Its texture is similar to the Chinese beef ball, fish ball, or pork ball. The term bakso could refer to a single meatball or the whole bowl of meatballs soup.Bakso can be found all across Indonesia; from the traveling cart street vendors to restaurants. Next to soto, satay and siomay, bakso is one of the popular street food in Indonesia. Today, various types of ready to cook bakso also available as frozen food commonly sold in supermarkets in Indonesia.</description>
+      <zh-data/>
+      <thumbnail>http://commons.wikimedia.org/wiki/Special:FilePath/Bakso_mi_bihun.jpg?width=300</thumbnail>
+    </Feature>
+    <Feature data="Fried rice" zh-data="" id="6" uri="http://dbpedia.org/resource/Fried_rice">
+      <neighbors>
+        <neighbor dest="3" relationship="creator of dish" weight="0"/>
+      </neighbors>
+      <geodata/>
+      <timedata/>
+      <pictures>
+        <picture url="https://upload.wikimedia.org/wikipedia/en/9/99/Question_book-new.svg" label=""/>
+        <picture url="https://upload.wikimedia.org/wikipedia/commons/b/b5/Nasi_goreng_Solaria_Kuta.JPG" label="Nasi goreng Solaria Kuta.JPG"/>
+        <picture url="https://upload.wikimedia.org/wikipedia/commons/d/df/Wikibooks-logo-en-noslogan.svg" label=""/>
+        <picture url="https://upload.wikimedia.org/wikipedia/en/4/4a/Commons-logo.svg" label=""/>
+        <picture url="https://upload.wikimedia.org/wikipedia/commons/4/4c/Nasi_Goreng_Travelling_Vendor_in_Jakarta.JPG" label=""/>
+        <picture url="https://upload.wikimedia.org/wikipedia/commons/e/e5/Korean_cuisine-Kimchi_bokkeumbap.jpg" label=""/>
+        <picture url="https://upload.wikimedia.org/wikipedia/commons/b/b0/Crab_meat_fried_rice_-_Me_Dee_Thai.jpg" label=""/>
+        <picture url="https://upload.wikimedia.org/wikipedia/commons/d/d6/Foodlogo2.svg" label="icon"/>
+        <picture url="https://upload.wikimedia.org/wikipedia/commons/d/df/Wikibooks-logo-en-noslogan.svg" label=""/>
+        <picture url="https://upload.wikimedia.org/wikipedia/en/4/4a/Commons-logo.svg" label=""/>
+      </pictures>
+      <speak>Fried rice, chao fan (Chinese), is a dish of steamed rice stir-fried in a wok, often mixed with other ingredients, such as eggs, vegetables, and meat, and as such, often served as a complete dish. It is sometimes served as the penultimate dish in Chinese banquets, just before dessert.</speak>
+      <zh-speak/>
+      <description>Fried rice, chao fan (Chinese), is a dish of steamed rice stir-fried in a wok, often mixed with other ingredients, such as eggs, vegetables, and meat, and as such, often served as a complete dish. It is sometimes served as the penultimate dish in Chinese banquets, just before dessert. As a homemade dish, fried rice is typically made with leftover ingredients (including vegetables and/or meat) from other dishes, leading to countless variations, being an economic hodgepodge like it is done with fried noodles or pyttipanna.Many popular varieties of fried rice have their own specific list of ingredients. In Asia, the more famous varieties include Yangzhou and Fujian fried rice. Elsewhere, most restaurants catering to vegetarian or Muslim clientele have invented their own varieties of fried rice including egg fried rice and the Indonesian spicy nasi goreng (fried rice). Fried rice is a common staple in American Chinese cuisine, especially in the form sold as fast food. The most common form of American Chinese fried rice consists of some mixture of eggs, scallions, and vegetables, with chopped meat added at the customer's discretion, and usually flavored with soy sauce instead of table salt (more typical for Chinese-style fried rice). Fried rice made in American Chinese restaurants can vary in appearance, from a dark brown appearance often seen in East Coast establishments, to a light brown appearance often seen in Midwestern American Chinese restaurants. Fried rice is also seen in other American restaurants, even in cuisines with no native tradition of the dish. The dish is also a staple of Chinese restaurants in the United Kingdom (both \"sit-in\" and \"takeaway\"), and is very popular in the West African nations of Nigeria, Ghana and Togo, both as restaurant and as street food.</description>
+      <zh-data/>
+      <thumbnail>http://commons.wikimedia.org/wiki/Special:FilePath/Nasi_goreng_Solaria_Kuta.JPG?width=300</thumbnail>
+    </Feature>
+    <Feature data="Heichinrou" zh-data="" id="7" uri="http://dbpedia.org/resource/Heichinrou">
+      <neighbors>
+        <neighbor dest="3" relationship="food-type" weight="0"/>
+      </neighbors>
+      <geodata>
+        <coordinates lat="35.4436" lon="139.646"/>
+      </geodata>
+      <timedata/>
+      <pictures>
+        <picture url="https://upload.wikimedia.org/wikipedia/en/9/99/Question_book-new.svg" label=""/>
+        <picture url="https://upload.wikimedia.org/wikipedia/commons/ff/Heichin_logo2.gif" label="Heichin logo2.gif"/>
+        <picture url="https://upload.wikimedia.org/wikipedia/commons/d/da/Heichin_m.jpg" label=""/>
+        <picture url="https://upload.wikimedia.org/wikipedia/commons/b/b9/Heichin_s.jpg" label=""/>
+        <picture url="https://upload.wikimedia.org/wikipedia/commons/5/5c/%E8%A5%BF%E5%B4%8E%E7%B7%8F%E6%96%99%E7%90%86%E9%95%B7.jpg" label=""/>
+      </pictures>
+      <speak>Heichinrou (Kanji: 聘珍樓, Hiragana: へいちんろう, Chinese: Pìn-zhen-lou), is a Chinese restaurant located in the Chinatown of Yokohama, Japan.  It is privately held and is the oldest operating Chinese restaurant in Japan. The Zhang (張) family first started the restaurant and operated for it for two generations, then the Bao (鮑) family for three generations until Tatsuo Hayashi (林達雄) took over. Today his son, Yasuhiro Hayashi (林康弘) operates as the seventh president.</speak>
+      <zh-speak/>
+      <description>Heichinrou (Kanji: 聘珍樓, Hiragana: へいちんろう, Chinese: Pìn-zhen-lou), is a Chinese restaurant located in the Chinatown of Yokohama, Japan.  It is privately held and is the oldest operating Chinese restaurant in Japan. The Zhang (張) family first started the restaurant and operated for it for two generations, then the Bao (鮑) family for three generations until Tatsuo Hayashi (林達雄) took over. Today his son, Yasuhiro Hayashi (林康弘) operates as the seventh president. Heichinrou Japan and Heichinrou Hong Kong are separate entities with no financial association but both represented by Yasuhiro Hayashi.The three Chinese characters of Heichinrou, (聘珍樓), means “a place welcoming distinguished, good, and wonderful people.” The logo was created by Alan Chan in 1988, presenting a basket filled with peaches, lily bulbs, lotus roots, laichees, bergamots and pomegranates, which represents longevity, forever love, good harvest, wealth, health, and children accordingly.In 2009 “A Grand Exposition for Yokohama's 150th Year” took place due to 150th Anniversary of Yokohama, and Yokohama Archives of History edited and published “Yokohama Chinatown 150th Year.” An article which featured Heichinrou revealed that the restaurant was found in 1884 and that it was one of two stores which still remain on the same site with same name today, therefore, the establishment date was modified from 1887 to 1884 in year 2009.Heichinrou was featured on the Japanese television series Iron Chef, with its chefs competing against Chen Kenichi (陳健一). Chen managed to defeat two of their head chefs before losing to the very famous Heichinrou's grand chef Xie Huaxian (謝華顕). Xie Huaxian was once on the worldwide TV series \"Yan Can Cook\" when it featured Heichinrou. During the show, Xie Huaxian was introduced by the host Yan as the greatest Chinese Chef in our time. Xie was the acting Executive Grand Chef of Heichinrou Group from 1981 to 2009.  The successor of Xie in Heichinrou Japan now is Hideyuki Nishizaki (西崎英行), the first Japanese national appointed as a Head Grand Chef of Heichinrou.</description>
+      <zh-data/>
+      <thumbnail>http://commons.wikimedia.org/wiki/Special:FilePath/Heichin_logo2.gif?width=300</thumbnail>
+    </Feature>
+    <Feature data="East Dawning" zh-data="" id="8" uri="http://dbpedia.org/resource/East_Dawning">
+      <neighbors>
+        <neighbor dest="3" relationship="product" weight="0"/>
+      </neighbors>
+      <geodata/>
+      <timedata>
+        <timeobj label="founding year" value="2004"/>
+      </timedata>
+      <pictures>
+        <picture url="https://upload.wikimedia.org/wikipedia/en/a/a4/Flag_of_the_United_States.svg" label="Stub icon"/>
+      </pictures>
+      <speak>East Dawning (Chinese: 东方既白, Dongfang Jibai) is Yum! Brands' fusion of the KFC business model with Chinese cuisine. Chinese food is served exclusively, but the chain focuses on the elements of Chinese cuisine that are more quickly and easily prepared. This excludes some dishes, such as boiled dumplings (jiaozi), but includes steamed pastries such as steamed buns, including the popular xiaolongbao.</speak>
+      <zh-speak/>
+      <description>East Dawning (Chinese: 东方既白, Dongfang Jibai) is Yum! Brands' fusion of the KFC business model with Chinese cuisine. Chinese food is served exclusively, but the chain focuses on the elements of Chinese cuisine that are more quickly and easily prepared. This excludes some dishes, such as boiled dumplings (jiaozi), but includes steamed pastries such as steamed buns, including the popular xiaolongbao. Soft drinks are eschewed in favor of traditional and modern Chinese drinks such as teas (including milk tea), juices, and soy milk. However, unlike most Chinese fast food, East Dawning uses consistent recipes and preparation methods between restaurants. The restaurants are designed to resemble Chinese homes; for instance, the dining tables are similar to offering tables found in many homes.A test cafeteria-style restaurant was opened in Shanghai in 2004. After the failure of the test restaurant, Yum! Brands chose the KFC business model (KFC is the most successful Western chain in China) and found greater success. As of the first quarter of 2013, there are 30 East Dawning restaurants in China. The restaurants are located in Shanghai, Beijing, Guangzhou and Suzhou.</description>
+      <zh-data/>
+      <thumbnail/>
+    </Feature>
+    <Feature data="Yung Kee" zh-data="" id="9" uri="http://dbpedia.org/resource/Yung_Kee">
+      <neighbors>
+        <neighbor dest="3" relationship="food-type" weight="0"/>
+      </neighbors>
+      <geodata>
+        <coordinates lat="22.2815" lon="114.156"/>
+      </geodata>
+      <timedata/>
+      <pictures>
+        <picture url="https://upload.wikimedia.org/wikipedia/commons/6/6b/Yung_Kee_Restaurant.jpg" label="Yung Kee Restaurant.jpg"/>
+        <picture url="https://upload.wikimedia.org/wikipedia/en/4/4a/Commons-logo.svg" label=""/>
+      </pictures>
+      <speak>Yung Kee (Chinese: 鏞記) is a Chinese restaurant located on Wellington Street in Central, Hong Kong. It is most famous for its roast goose.</speak>
+      <zh-speak/>
+      <description>Yung Kee (Chinese: 鏞記) is a Chinese restaurant located on Wellington Street in Central, Hong Kong. It is most famous for its roast goose.</description>
+      <zh-data/>
+      <thumbnail>http://commons.wikimedia.org/wiki/Special:FilePath/Yung_Kee_Restaurant.jpg?width=300</thumbnail>
+    </Feature>
+    <Feature data="Wei-Chuan Food Corporation" zh-data="" id="10" uri="http://dbpedia.org/resource/Wei-Chuan_Food_Corporation">
+      <neighbors>
+        <neighbor dest="3" relationship="genre" weight="0"/>
+      </neighbors>
+      <geodata/>
+      <timedata>
+        <timeobj label="founding year" value="1972"/>
+      </timedata>
+      <pictures>
+        <picture url="https://upload.wikimedia.org/wikipedia/commons/d/d6/Foodlogo2.svg" label="icon"/>
+        <picture url="https://upload.wikimedia.org/wikipedia/commons/6/6c/Xiao_long_bao_closeup_in_Shanghai.jpg" label="Stub icon"/>
+        <picture url="https://upload.wikimedia.org/wikipedia/commons/6/6b/Soft_Drink.svg" label="Stub icon"/>
+      </pictures>
+      <speak>Wei Chuan Foods (Chinese: 味全食品; pinyin: Wèiquán; Pe̍h-ōe-jī: Bī-chôan) is a Taiwan-based manufacturer of Chinese condiments, canned goods, drinks, and frozen goods. Its more popular, widely recognized products include canned pickles, soy sauce and oyster sauces, and frozen dumplings and wontons.</speak>
+      <zh-speak/>
+      <description>Wei Chuan Foods (Chinese: 味全食品; pinyin: Wèiquán; Pe̍h-ōe-jī: Bī-chôan) is a Taiwan-based manufacturer of Chinese condiments, canned goods, drinks, and frozen goods. Its more popular, widely recognized products include canned pickles, soy sauce and oyster sauces, and frozen dumplings and wontons.</description>
+      <zh-data/>
+      <thumbnail/>
+    </Feature>
+    <Feature data="Frank Fat's Restaurant" zh-data="" id="11" uri="http://dbpedia.org/resource/Frank_Fat's_Restaurant">
+      <neighbors>
+        <neighbor dest="3" relationship="food-type" weight="0"/>
+      </neighbors>
+      <geodata/>
+      <timedata/>
+      <pictures>
+        <picture url="https://upload.wikimedia.org/wikipedia/en/a/a4/Flag_of_the_United_States.svg" label="Stub icon"/>
+      </pictures>
+      <speak>Frank Fat's Restaurant is a Chinese cuisine restaurant in Sacramento, California founded in 1939 by a Chinese immigrant who entered the United States in 1919. The original restaurant is one of five now owned by the family.Frank Fat's celebrated its 75th anniversary in 2014.Frank Fat's is a 2013 winner of a James Beard Foundation Award as an American Classic.</speak>
+      <zh-speak/>
+      <description>Frank Fat's Restaurant is a Chinese cuisine restaurant in Sacramento, California founded in 1939 by a Chinese immigrant who entered the United States in 1919. The original restaurant is one of five now owned by the family.Frank Fat's celebrated its 75th anniversary in 2014.Frank Fat's is a 2013 winner of a James Beard Foundation Award as an American Classic.</description>
+      <zh-data/>
+      <thumbnail/>
+    </Feature>
+    <Feature data="Jing Fong" zh-data="" id="12" uri="http://dbpedia.org/resource/Jing_Fong">
+      <neighbors>
+        <neighbor dest="3" relationship="food-type" weight="0"/>
+      </neighbors>
+      <geodata/>
+      <timedata/>
+      <pictures/>
+      <speak>Jing Fong is a Chinese dim sum restaurant located in Chinatown, Manhattan on Elizabeth Street. It is located on the second floor and is known for its large seating capacity accommodating over 800 seats with 20,000 square feet.</speak>
+      <zh-speak/>
+      <description>Jing Fong is a Chinese dim sum restaurant located in Chinatown, Manhattan on Elizabeth Street. It is located on the second floor and is known for its large seating capacity accommodating over 800 seats with 20,000 square feet.</description>
+      <zh-data/>
+      <thumbnail/>
+    </Feature>
+    <Feature data="Chicken feet" zh-data="" id="13" uri="http://dbpedia.org/resource/Chicken_feet">
+      <neighbors>
+        <neighbor dest="3" relationship="country" weight="0"/>
+      </neighbors>
+      <geodata/>
+      <timedata/>
+      <pictures>
+        <picture url="https://upload.wikimedia.org/wikipedia/commons/4/43/Chicken_feet.jpg" label="Chicken feet.jpg"/>
+        <picture url="https://upload.wikimedia.org/wikipedia/commons/d/df/Wikibooks-logo-en-noslogan.svg" label=""/>
+        <picture url="https://upload.wikimedia.org/wikipedia/en/4/4a/Commons-logo.svg" label=""/>
+        <picture url="https://upload.wikimedia.org/wikipedia/commons/d/d6/2015_0410_Chicken_feet_dim_sum.jpg" label=""/>
+        <picture url="https://upload.wikimedia.org/wikipedia/commons/b/be/Chicken_feet_packaged.jpg" label=""/>
+        <picture url="https://upload.wikimedia.org/wikipedia/commons/f/f5/Soto_Ceker_1.jpg" label=""/>
+        <picture url="https://upload.wikimedia.org/wikipedia/commons/5/5a/Chicken_feet_snack.jpg" label=""/>
+        <picture url="https://upload.wikimedia.org/wikipedia/commons/e/e7/Khanom_chin_kaeng_kiao_wan_kai.jpg" label=""/>
+        <picture url="https://upload.wikimedia.org/wikipedia/commons/8/8e/Racitura_Meat_Jelly_Moldavian_Cuisine.JPG" label=""/>
+        <picture url="https://upload.wikimedia.org/wikipedia/en/4/4a/Commons-logo.svg" label=""/>
+        <picture url="https://upload.wikimedia.org/wikipedia/commons/3/32/Ela_huevos_rancheros.jpg" label="Huevos rancheros"/>
+        <picture url="https://upload.wikimedia.org/wikipedia/commons/0/07/MojarraFritoJanitizio.JPG" label="Mojarra frita"/>
+        <picture url="https://upload.wikimedia.org/wikipedia/commons/e/e7/Mole_in_Puebla.JPG" label="Mole poblano"/>
+      </pictures>
+      <speak>Chicken feet are a part of the chicken that is cooked in China, Indonesia, Korea, Thailand, Laos, Malaysia, Trinidad and Tobago, Ukraine, Russia, Romania, Moldova, Jamaica, South Africa, Peru, Mexico, Philippines and Vietnam.  Most of the edible tissue on the feet consists of skin and tendons, with no muscle. This gives the feet a distinct texture different from the rest of the chicken's meat. Their many small bones make them difficult to eat for some; these are often picked before serving.</speak>
+      <zh-speak/>
+      <description>Chicken feet are a part of the chicken that is cooked in China, Indonesia, Korea, Thailand, Laos, Malaysia, Trinidad and Tobago, Ukraine, Russia, Romania, Moldova, Jamaica, South Africa, Peru, Mexico, Philippines and Vietnam.  Most of the edible tissue on the feet consists of skin and tendons, with no muscle. This gives the feet a distinct texture different from the rest of the chicken's meat. Their many small bones make them difficult to eat for some; these are often picked before serving. Being mostly skin, chicken feet are very gelatinous.</description>
+      <zh-data/>
+      <thumbnail>http://commons.wikimedia.org/wiki/Special:FilePath/Chicken_feet.jpg?width=300</thumbnail>
+    </Feature>
+    <Feature data="Crab in oyster sauce" zh-data="" id="14" uri="http://dbpedia.org/resource/Crab_in_oyster_sauce">
+      <neighbors>
+        <neighbor dest="3" relationship="creator of dish" weight="0"/>
+      </neighbors>
+      <geodata/>
+      <timedata/>
+      <pictures>
+        <picture url="https://upload.wikimedia.org/wikipedia/commons/0/0a/Kepiting_Saus_Tiram_2.JPG" label="Kepiting Saus Tiram 2.JPG"/>
+        <picture url="https://upload.wikimedia.org/wikipedia/commons/d/df/Wikibooks-logo-en-noslogan.svg" label=""/>
+        <picture url="https://upload.wikimedia.org/wikipedia/en/4/4a/Commons-logo.svg" label=""/>
+        <picture url="https://upload.wikimedia.org/wikipedia/commons/d/d6/Foodlogo2.svg" label="icon"/>
+        <picture url="https://upload.wikimedia.org/wikipedia/en/4/4a/Commons-logo.svg" label=""/>
+      </pictures>
+      <speak>Crab in oyster sauce or oyster sauce crab is a Chinese seafood dish of crab served in savoury oyster sauce. It is a popular dish in Asia, that can be found from China, Singapore, Indonesia to the Philippines.</speak>
+      <zh-speak/>
+      <description>Crab in oyster sauce or oyster sauce crab is a Chinese seafood dish of crab served in savoury oyster sauce. It is a popular dish in Asia, that can be found from China, Singapore, Indonesia to the Philippines.</description>
+      <zh-data/>
+      <thumbnail>http://commons.wikimedia.org/wiki/Special:FilePath/Kepiting_Saus_Tiram_2.JPG?width=300</thumbnail>
+    </Feature>
+  </Features>
+</AIMind>
