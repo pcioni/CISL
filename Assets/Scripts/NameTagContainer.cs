@@ -135,6 +135,8 @@ public class NameTagContainer : MonoBehaviour
 			container.m_nameTags.Add(container.m_originalNameTag);
 		}
 
+        ResizeGroupCollisionBox();
+        container.ResizeGroupCollisionBox();
         updateLabelPositions();
     }
 
@@ -206,11 +208,16 @@ public class NameTagContainer : MonoBehaviour
         }
         else
         {
-            Vector2 size = new Vector2(2.5f, 2.0f);
-            m_groupCollisionBox.size = size;
+            ResizeGroupCollisionBox();
 
         }
         updateLabelPositions();
+    }
+
+    public void ResizeGroupCollisionBox()
+    {
+        Vector2 size = new Vector2(2.5f, 2.0f);
+        m_groupCollisionBox.size = size;
     }
 
     public void updateLabelPositions()
