@@ -55,10 +55,11 @@ public class NameTagContainer : MonoBehaviour
     void initialize()
     {
         // stretch / shrink width of collider to size of text panel
-        //Vector3 scale = m_labelPanel.transform.lossyScale;
-        //float w = m_labelPanel.GetComponent<RectTransform>().rect.width * scale.x; // TODO: why isn't this working as 
-        //float h = m_nodeCollisionBox.size.y;
-        //m_nodeCollisionBox.size = new Vector2(w, h);
+        Vector3 scale = m_labelPanel.transform.lossyScale;
+        float w = m_labelPanel.GetComponent<RectTransform>().rect.width * 0.05f; // TODO: figure out a way to make lossy scale more accurate
+        //float w = m_labelPanel.GetComponent<RectTransform>().rect.width * scale.x; // TODO: why isn't "* scale.x" working as desired?
+        float h = m_nodeCollisionBox.size.y;
+        m_nodeCollisionBox.size = new Vector2(w, h);
 
         updateLabelPositions();
 
