@@ -72,6 +72,20 @@ public class NameTagContainer : MonoBehaviour
         m_groupOiginalPosition = m_groupCollider.transform.position;
     }
 
+    void FixedUpdate()
+    {
+        m_nodeCollider.transform.position = m_nodeOriginalPosition;
+        m_groupCollider.transform.position = m_groupOiginalPosition;
+
+    }
+
+    void LateUpdate()
+    {
+        m_nodeCollider.transform.position = m_nodeOriginalPosition;
+        m_groupCollider.transform.position = m_groupOiginalPosition;
+
+    }
+
     // Update is called once per frame
     void Update()
 	{
