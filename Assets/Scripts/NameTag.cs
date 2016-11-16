@@ -35,8 +35,13 @@ public class NameTag : MonoBehaviour {
 		follow.transform.position = targetPosition;
 	}
 
-    public Vector3 getMarkerPosition()
+    public Vector3? getMarkerPosition()
     {
+        if(m_marker == null)
+        {
+            return null;
+        }
+
         return m_marker.position;
     }
 

@@ -47,10 +47,10 @@ public class NameTagContainer : MonoBehaviour
     void initialize()
     {
         // stretch / shrink width of collider to size of text panel
-        Vector3 scale = m_labelPanel.transform.lossyScale;
-        float w = m_labelPanel.GetComponent<RectTransform>().rect.width * scale.x; // TODO: why isn't this working as 
-        float h = m_nodeCollisionBox.size.y;
-        m_nodeCollisionBox.size = new Vector2(w, h);
+        //Vector3 scale = m_labelPanel.transform.lossyScale;
+        //float w = m_labelPanel.GetComponent<RectTransform>().rect.width * scale.x; // TODO: why isn't this working as 
+        //float h = m_nodeCollisionBox.size.y;
+        //m_nodeCollisionBox.size = new Vector2(w, h);
 
         updateLabelPositions();
 
@@ -58,9 +58,19 @@ public class NameTagContainer : MonoBehaviour
     }
 
     void captureOriginalPositions () {
-		m_nodeOriginalPosition = m_nodeCollider.transform.position;
-		m_groupOiginalPosition = m_groupCollider.transform.position;
-	}
+        //m_nodeOriginalPosition = m_nodeCollider.transform.position;
+        //m_groupOiginalPosition = m_groupCollider.transform.position;
+        Vector3? markerPos = m_originalNameTag.getMarkerPosition();//Camera.main.WorldToScreenPoint(m_originalNameTag.getMarkerPosition());
+
+
+        if(markerPos == null)
+        {
+            //do nothing
+            return;
+        }
+        m_nodeOriginalPosition = (Vector3)markerPos;
+        m_groupOiginalPosition = m_groupCollider.transform.position;
+    }
 
     // Update is called once per frame
     void Update()
@@ -228,7 +238,7 @@ public class NameTagContainer : MonoBehaviour
         p.z = 0f;
 
         //sort the nametags by y value
-        foreach (NameTag nt in m_nameTags.OrderBy(go => -go.getMarkerPosition().y))
+        foreach (NameTag nt in m_nameTags.OrderBy(go => -((Vector3)go.getMarkerPosition()).y))
         {
             nt.SetNewTarget(p);
             p.y -= (m_labelPanel.GetComponent<RectTransform>().rect.height + m_labelVPadding) * scale.y;
