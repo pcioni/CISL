@@ -178,8 +178,15 @@ public class NameTagContainer : MonoBehaviour
 			container.m_nameTags.Remove(nt);
 		}
 
+        ResizeGroupCollisionBox();
+        updateLabelPositions();
+    }
+
+    public void ResizeGroupCollisionBox()
+    {
         //Now we calculate the maximum and minimum based on our contained nametags
-        if (m_nameTags.Count > 0) {
+        if (m_nameTags.Count == 1)
+        {
 
             Vector2 max = new Vector2(0, 0);
             Vector2 min = new Vector2(Mathf.Infinity, Mathf.Infinity);
@@ -187,7 +194,7 @@ public class NameTagContainer : MonoBehaviour
             foreach (NameTag nt in m_nameTags)
             {
                 float xMax = nt.m_curContainer.m_nodeCollisionBox.transform.position.x + nt.m_curContainer.m_nodeCollisionBox.offset.x + nt.m_curContainer.m_nodeCollisionBox.size.x / 2;
-                if ( xMax> max.x)
+                if (xMax > max.x)
                 {
                     max.x = xMax;
                 }
@@ -218,16 +225,10 @@ public class NameTagContainer : MonoBehaviour
         }
         else
         {
-            ResizeGroupCollisionBox();
-
+            Vector2 size = new Vector2(2.5f, 2.0f);
+            m_groupCollisionBox.size = size;
         }
-        updateLabelPositions();
-    }
 
-    public void ResizeGroupCollisionBox()
-    {
-        Vector2 size = new Vector2(2.5f, 2.0f);
-        m_groupCollisionBox.size = size;
     }
 
     public void updateLabelPositions()
