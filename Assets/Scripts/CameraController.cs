@@ -164,6 +164,8 @@ public class CameraController : MonoBehaviour
                     continue;
                 }
 
+                //TODO: print out what collision check is happening here.
+
                 if (containerA.m_nodeCollisionBox.bounds.Intersects(containerB.m_nodeCollisionBox.bounds) && NoContainment(containerA, containerB))
                 {
                     collisionDetected = true;
