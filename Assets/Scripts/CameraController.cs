@@ -165,6 +165,8 @@ public class CameraController : MonoBehaviour
                 }
 
                 //TODO: print out what collision check is happening here.
+                // we suspect that the last container is somehow being 
+                // ignored in container collision checks 
 
                 if (containerA.m_nodeCollisionBox.bounds.Intersects(containerB.m_nodeCollisionBox.bounds) && NoContainment(containerA, containerB))
                 {
@@ -179,7 +181,6 @@ public class CameraController : MonoBehaviour
                         containerB.CollisionStart(containerA);
                     }
                 }
-
             }
         }
 

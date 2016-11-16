@@ -40,6 +40,14 @@ public class NameTagContainer : MonoBehaviour
     void Start()
     {
 		captureOriginalPositions ();
+        if (m_nameTags.Contains(m_originalNameTag) == false)
+        {
+            m_nameTags.Add(m_originalNameTag);
+            // TODO: debug this
+            // adding this without "if" check fixes "diocletian" 
+            // but results in null nodes being added as well
+            // why is the currently focused node different then all the rest?
+        }
 
     }
 
