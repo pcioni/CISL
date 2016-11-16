@@ -219,14 +219,16 @@ public class ViewModeController : MonoBehaviour {
 	}
 
 	private Queue<KeyValuePair<int, timelineNode>> q = new Queue<KeyValuePair<int, timelineNode>>();
+    private List<timelineNode> previousNodes = new List<timelineNode>();
 	private List<Vector3> positions = new List<Vector3>();
 	private List<long> dateTicks = new List<long>();
 	private int max_depth = 30;
     private int min_data = 10;
 	private bool reconstruct_data(timelineNode start, data_type dtype, bool use_interpolated = false, bool use_incoming = false) {
-		positions.Clear();
+        previousNodes.Clear();
+        positions.Clear();
 		dateTicks.Clear();
-		q.Clear();
+        q.Clear();
 		q.Enqueue(new KeyValuePair<int, timelineNode>(0,start));
 		while (q.Count > 0) {
 			KeyValuePair<int, timelineNode> current = q.Dequeue();
@@ -248,17 +250,30 @@ public class ViewModeController : MonoBehaviour {
 				//break;
 			}
 			if(current.Key < max_depth) {
+                // TODO: make sure we're not repeat enqueuing
                 if (!use_incoming)
                 {
                     foreach (KeyValuePair<string, timelineNode> kvp in current.Value.neighbors)
                     {
-                        q.Enqueue(new KeyValuePair<int, timelineNode>(current.Key + 1, kvp.Value));
+                        // check previously queued nodes list and ignore this node if it was already queued at some point in the past
+                        if (!previousNodes.Contains(kvp.Value))
+                        {
+                            q.Enqueue(new KeyValuePair<int, timelineNode>(current.Key + 1, kvp.Value));
+                            // store node in list of previuosly queued nodes
+                            previousNodes.Add(kvp.Value);
+                        }
                     }
                 } else
                 {
                     foreach (timelineNode tn in current.Value.neighbors_incoming)
                     {
-                        q.Enqueue(new KeyValuePair<int, timelineNode>(current.Key + 1, tn));
+                        // check previously queued nodes list and ignore this node if it was already queued at some point in the past
+                        if (!previousNodes.Contains(tn))
+                        {
+                            q.Enqueue(new KeyValuePair<int, timelineNode>(current.Key + 1, tn));
+                            // store node in list of previuosly queued nodes
+                            previousNodes.Add(tn);
+                        }
                     }
                 }
                 if (dtype == data_type.LOC && positions.Count >= min_data) break; // break if we found enough location data
