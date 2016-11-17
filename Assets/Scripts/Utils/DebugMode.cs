@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class DebugMode : MonoBehaviour {
     public static bool MS_ACTIVE = false;
@@ -18,5 +19,22 @@ public class DebugMode : MonoBehaviour {
 
         MS_ACTIVE = m_active;
 
+    }
+
+    private static Dictionary<string, float> timers = new Dictionary<string, float>();
+    public static void startTimer(string name)
+    {
+        timers[name] = Time.realtimeSinceStartup;
+    }
+
+    public static void stopTimer(string name)
+    {
+        if (timers.ContainsKey(name))
+        {
+            float totalTime = Time.realtimeSinceStartup - timers[name];
+            print(string.Format("{0} -- totalTime = {1} seconds", name, totalTime));
+
+            timers.Remove(name);
+        }
     }
 }
