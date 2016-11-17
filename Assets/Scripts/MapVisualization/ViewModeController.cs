@@ -57,7 +57,10 @@ public class ViewModeController : MonoBehaviour {
 	}
 
 	IEnumerator Start() {
-		lx = GetComponent<LoadXML>();
+        DebugMode.startTimer("ViewModeController.Start()");
+        DebugMode.startTimer("ViewModeController.Start() :: initilizing");
+
+        lx = GetComponent<LoadXML>();
 		dummynodes = new List<mapNode>();
 		dummynodemap = new Dictionary<int, Vector2>();
 		crossmap = new Dictionary<timelineNode, mapNode>();
@@ -66,7 +69,10 @@ public class ViewModeController : MonoBehaviour {
 			yield return new WaitForEndOfFrame ();
 		}
 
-		bool result = false;
+        DebugMode.stopTimer("ViewModeController.Start() :: initilizing");
+        DebugMode.startTimer("ViewModeController.Start() :: reconstructing data based on incoming connections");
+
+        bool result = false;
 		//find all of the appropriate positions for the current map
 		foreach (timelineNode tn in lx.nodeList) {
 			if (!tn.known_location && reconstructGeolocationData) {
@@ -97,8 +103,13 @@ public class ViewModeController : MonoBehaviour {
 			}
 		}
 
+        DebugMode.stopTimer("ViewModeController.Start() :: reconstructing data based on incoming connections");
+        DebugMode.startTimer("ViewModeController.Start() :: instantiating nodes and reconstructing data based on incoming connections");
+
         foreach (timelineNode tn in lx.nodeList)
         {
+            //DebugMode.startTimer("ViewModeController.Start() :: reconstructing data based on outgoing connections");
+
             if (!tn.known_location && !tn.location_interpolated && reconstructGeolocationData)
             {
 				result = reconstruct_data(tn, data_type.LOC, true);
@@ -131,21 +142,40 @@ public class ViewModeController : MonoBehaviour {
                     }
                 }
             }
+
+            //DebugMode.stopTimer("ViewModeController.Start() :: reconstructing data based on outgoing connections");
+            //DebugMode.startTimer("ViewModeController.Start() :: instantiating map nodes");
+
             GameObject dummy = Instantiate(mapNodePrefab) as GameObject;
+
+            //DebugMode.stopTimer("ViewModeController.Start() :: instantiating map nodes");
+            //DebugMode.startTimer("ViewModeController.Start() :: initializing some map node properties");
+
             mapNode mn = dummy.GetComponent<mapNode>();
             mn.master = tn;
             dummy.layer = LayerMask.NameToLayer("MapLayer");
             mn.transform.SetParent(current_map.transform, false);
 
+            //DebugMode.stopTimer("ViewModeController.Start() :: initializing some map node properties");
+            //DebugMode.startTimer("ViewModeController.Start() :: setting coord2local for map node");
+
             mn.transform.localPosition = current_map.coord2local(tn.location);
+
+            //DebugMode.stopTimer("ViewModeController.Start() :: setting coord2local for map node");
+            //DebugMode.startTimer("ViewModeController.Start() :: seeting remaining map node properties");
 
             dummynodemap[tn.node_id] = mn.transform.position;
             dummynodes.Add(mn);
             crossmap[tn] = mn;
 
             yield return null;
+            //DebugMode.stopTimer("ViewModeController.Start() :: seeting remaining map node properties");
         }
 
+        DebugMode.stopTimer("ViewModeController.Start() :: instantiating nodes and reconstructing data based on incoming connections");
+        DebugMode.startTimer("ViewModeController.Start() :: assigning neighbors");
+
+        // TODO: optimize this
         //assign corresponding neighbors
         foreach (timelineNode tn in lx.nodeList) {
 			mapNode tmp = crossmap[tn];
@@ -155,6 +185,8 @@ public class ViewModeController : MonoBehaviour {
 			yield return null;
 		}
 
+        DebugMode.stopTimer("ViewModeController.Start() :: assigning neighbors");
+        DebugMode.stopTimer("ViewModeController.Start()");
 
 		print("Done finding positions");
 		//disabling auto move because it interrupts demo
@@ -250,7 +282,6 @@ public class ViewModeController : MonoBehaviour {
 				//break;
 			}
 			if(current.Key < max_depth) {
-                // TODO: make sure we're not repeat enqueuing
                 if (!use_incoming)
                 {
                     foreach (KeyValuePair<string, timelineNode> kvp in current.Value.neighbors)

@@ -48,8 +48,10 @@ public class LoadXML : MonoBehaviour {
 
 	// Use this for initialization
 	public void Initialize() {
-		//load default file if not specified
-		if (string.IsNullOrEmpty(xml_location)) {
+        DebugMode.startTimer("LoadXML.Initialize()");
+
+        //load default file if not specified
+        if (string.IsNullOrEmpty(xml_location)) {
 			 xml_location = Application.streamingAssetsPath + AppConfig.Settings.Frontend.xml_location;
 		}
 
@@ -178,9 +180,11 @@ public class LoadXML : MonoBehaviour {
 		}
 
 		loaded = true;
-	}
 
-	long map(long x, long in_min, long in_max, long out_min, long out_max) {
+        DebugMode.stopTimer("LoadXML.Initialize()");
+    }
+
+    long map(long x, long in_min, long in_max, long out_min, long out_max) {
 		return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
 	}
 

@@ -43,7 +43,9 @@ public class NarrationManager : MonoBehaviour {
 	}
 
 	IEnumerator Start() {
-		lxml.Initialize();
+        DebugMode.startTimer("NarrationManager.Start()");
+
+        lxml.Initialize();
 		Reset_Narration();
         while(!narration_reset) {
             yield return null;
@@ -73,6 +75,9 @@ public class NarrationManager : MonoBehaviour {
         Narrate(13, 9); // "Roman Empire: Diocletian (node 13)" narration start
         //Narrate(17, 9); // "WWII: American Theater (node 17)" narration start
         //Narrate(495, 9); // "WWII: Linden Cameron (node 495)" narration start
+
+        DebugMode.stopTimer("NarrationManager.Start()");
+
     }
 
     public void Update() {
