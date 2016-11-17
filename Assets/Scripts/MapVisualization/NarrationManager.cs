@@ -68,10 +68,14 @@ public class NarrationManager : MonoBehaviour {
             tn.Unfocus();
         }//end foreach
 
-        Narrate(13, 9);
-	}
+        // TODO: make this selection UI-driven
+        // for now: comment out all lines exept the one you'd like to have execute
+        Narrate(13, 9); // "Roman Empire: Diocletian (node 13)" narration start
+        //Narrate(17, 9); // "WWII: American Theater (node 17)" narration start
+        //Narrate(495, 9); // "WWII: Linden Cameron (node 495)" narration start
+    }
 
-	public void Update() {
+    public void Update() {
 		if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.Return)) {
 			if (!user_can_take_turn) {
 				progressNarration();
