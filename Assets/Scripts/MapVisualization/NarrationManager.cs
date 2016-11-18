@@ -113,7 +113,7 @@ public class NarrationManager : MonoBehaviour {
         if (loadDataSet && levelID >= 0)
         {
             //TODO: could this possibly be spammed? Should we figure out a way to only do this once every x seconds?
-            Reset_Narration(); //TODO: how do we pause the narrative when we re-load a scene? Re-loading a scene seems to start off from the first node.
+            first_flag = true;
             SceneManager.LoadScene(levelID);
         }
 
