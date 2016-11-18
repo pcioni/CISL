@@ -206,7 +206,7 @@ public class NameTagContainer : MonoBehaviour
             Vector2 max = new Vector2(-Mathf.Infinity, -Mathf.Infinity);
             Vector2 min = new Vector2(Mathf.Infinity, Mathf.Infinity);
             Vector2 scale = m_labelPanel.GetComponent<Transform>().lossyScale;
-
+            float height = m_nameTags.Count * m_labelPanel.GetComponent<RectTransform>().rect.height + (m_nameTags.Count - 1) * m_labelVPadding;
 
             foreach (NameTag nt in m_nameTags)
             {
@@ -245,6 +245,7 @@ public class NameTagContainer : MonoBehaviour
             tempCenter += min;
             m_center = tempCenter - new Vector2(m_nodeOriginalPosition.x / scale.x, m_nodeOriginalPosition.y / scale.y);
 
+            m_size.y = height;
         }
         else
         {
