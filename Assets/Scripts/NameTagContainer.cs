@@ -56,8 +56,7 @@ public class NameTagContainer : MonoBehaviour
     {
         // stretch / shrink width of collider to size of text panel
         Vector3 scale = m_labelPanel.transform.lossyScale;
-        float w = m_labelPanel.GetComponent<RectTransform>().rect.width; // TODO: figure out a way to make lossy scale more accurate
-        //float w = m_labelPanel.GetComponent<RectTransform>().rect.width * scale.x; // TODO: why isn't "* scale.x" working as desired?
+        float w = m_labelPanel.GetComponent<RectTransform>().rect.width + m_labelXOffset;
         float h = m_nodeCollisionBox.size.y;
         m_nodeCollisionBox.size = new Vector2(w, h);
 
@@ -208,7 +207,7 @@ public class NameTagContainer : MonoBehaviour
             Vector2 max = new Vector2(-Mathf.Infinity, -Mathf.Infinity);
             Vector2 min = new Vector2(Mathf.Infinity, Mathf.Infinity);
             Vector2 scale = m_labelPanel.GetComponent<Transform>().lossyScale;
-            float height = m_nameTags.Count * m_labelPanel.GetComponent<RectTransform>().rect.height + (m_nameTags.Count - 1) * m_labelVPadding;
+            float height = m_nameTags.Count * m_labelPanel.GetComponent<RectTransform>().rect.height + (m_nameTags.Count - 1) * m_labelVPadding / scale.y;
 
             foreach (NameTag nt in m_nameTags)
             {
@@ -263,28 +262,32 @@ public class NameTagContainer : MonoBehaviour
 
     public void updateLabelPositions()
     {
-        Vector2 scale = m_labelPanel.GetComponent<Transform>().lossyScale;
-        Vector3 p;
-        p.z = 0f;
+        Vector2 scale = new Vector2(1f,1f);
+        Vector2 size = new Vector2(0f,0f);
+        Vector3 p = new Vector3(m_nodeOriginalPosition.x, m_nodeOriginalPosition.y, 0f);
+        Vector3 pScaled;
 
         if (m_nameTags.Count > 1)
         {
-            p = m_groupCollider.transform.position;
-            p.x += (m_groupCollisionBox.size.x / 2 + m_labelXOffset) * scale.x;
-            p.y += m_groupCollisionBox.size.y * scale.y / 2;
+            scale = m_groupCollider.GetComponent<Transform>().lossyScale;
+            size = new Vector2(m_groupCollisionBox.size.x, m_groupCollisionBox.size.y);
+            p += new Vector3(m_groupCollisionBox.offset.x * scale.x, m_groupCollisionBox.offset.y * scale.y, 0f);
         }
         else
         {
-            p = m_nodeCollider.transform.position;
-            p.x += (m_nodeCollisionBox.size.x/2 + m_labelXOffset) * scale.x;
-            p.y += m_nodeCollisionBox.size.y * scale.y / 2;
+            scale = m_nodeCollider.GetComponent<Transform>().lossyScale;
+            size = new Vector2(0f, m_nodeCollisionBox.size.y);
         }
+
+        pScaled = new Vector3(p.x, p.y, 0f);
+        pScaled.x += size.x * scale.x / 2 + m_labelXOffset;
+        pScaled.y += size.y * scale.y / 2;
 
         //sort the nametags by y value
         foreach (NameTag nt in m_nameTags.OrderBy(go => -((Vector3)go.getMarkerPosition()).y))
         {
-            nt.SetNewTarget(p);
-            p.y -= (m_labelPanel.GetComponent<RectTransform>().rect.height + m_labelVPadding) * scale.y;
+            nt.SetNewTarget(pScaled);
+            pScaled.y -= (m_labelPanel.GetComponent<RectTransform>().rect.height) * scale.y + m_labelVPadding;
         }
     }
 }
