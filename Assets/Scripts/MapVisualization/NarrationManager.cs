@@ -5,6 +5,7 @@ using System.Text;
 using JsonConstructs;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 
 [RequireComponent(typeof(LoadXML))]
 public class NarrationManager : MonoBehaviour {
@@ -72,9 +73,24 @@ public class NarrationManager : MonoBehaviour {
 
         // TODO: make this selection UI-driven
         // for now: comment out all lines exept the one you'd like to have execute
-        Narrate(13, 9); // "Roman Empire: Diocletian (node 13)" narration start
-        //Narrate(17, 9); // "WWII: American Theater (node 17)" narration start
-        //Narrate(495, 9); // "WWII: Linden Cameron (node 495)" narration start
+        Scene scene = SceneManager.GetActiveScene();
+        Debug.Log("NarrationManager.Start() :: Active scene is '" + scene.name + "'.");
+        switch (scene.name)
+        {
+            case "timelineTest4_RomanEmpire":
+                Narrate(13, 9); // "Roman Empire: Diocletian (node 13)" narration start
+                break;
+            case "timelineTest4_WWII":
+                Narrate(17, 9); // "WWII: American Theater (node 17)" narration start
+                //Narrate(495, 9); // "WWII: Linden Cameron (node 495)" narration start
+                break;
+            case "timelineTest4_Roman_WWII_Analogy":
+                Narrate(1, 2); // "Roman_WWII_Analogy: <nodeName?> (node number?)" narration start
+                break;
+            default:
+                Debug.Log("NarrationManager.Start() :: unhandled scene name");
+                break;
+        }
 
         DebugMode.stopTimer("NarrationManager.Start()");
 
