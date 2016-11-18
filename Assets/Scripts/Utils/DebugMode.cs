@@ -9,12 +9,17 @@ public class DebugMode : MonoBehaviour {
 	// Use this for initialization
 	void Awake () {
     }
-	
+
+    private bool current = false;
 	// Update is called once per frame
 	void Update () {
-        if (Input.GetKeyDown(KeyCode.D))
+        if (Input.GetKey(KeyCode.D) && (Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl)))
         {
-            m_active = !m_active;
+            if (!current) m_active = !m_active;
+            current = true;
+        } else
+        {
+            current = false;
         }
 
         MS_ACTIVE = m_active;

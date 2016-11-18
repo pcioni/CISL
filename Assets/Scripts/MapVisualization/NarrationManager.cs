@@ -104,6 +104,19 @@ public class NarrationManager : MonoBehaviour {
 			
 		}
 
+        // handle Data Loading keypresses
+        bool shiftDown = (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift));
+        // SHIFT + D + L
+        bool loadDataSet = (shiftDown && Input.GetKey(KeyCode.D) && Input.GetKey(KeyCode.L));
+        // map keys 1, 2, and 3 to level indexes 0, 1, and 2
+        int levelID = Input.GetKey(KeyCode.Alpha1) ? 0 : Input.GetKey(KeyCode.Alpha2) ? 1 : Input.GetKey(KeyCode.Alpha3) ? 2 : -1;
+        if (loadDataSet && levelID >= 0)
+        {
+            //TODO: could this possibly be spammed? Should we figure out a way to only do this once every x seconds?
+            Reset_Narration(); //TODO: how do we pause the narrative when we re-load a scene? Re-loading a scene seems to start off from the first node.
+            SceneManager.LoadScene(levelID);
+        }
+
         labelCollisionCheck();
     }
 
