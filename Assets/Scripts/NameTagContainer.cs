@@ -10,7 +10,7 @@ public class NameTagContainer : MonoBehaviour
 	[SerializeField]
 	public NameTag m_originalNameTag;
 	[SerializeField]
-	public List<NameTag> m_nameTags;
+	public List<NameTag> m_nameTags = new List<NameTag>();
 	[SerializeField]
 	private GameObject m_slot;
 
@@ -40,7 +40,7 @@ public class NameTagContainer : MonoBehaviour
     void Start()
     {
 		captureOriginalPositions ();
-        if (m_nameTags.Contains(m_originalNameTag) == false)
+        if (!m_nameTags.Contains(m_originalNameTag))
         {
             m_nameTags.Add(m_originalNameTag);
             // TODO: debug this
@@ -157,10 +157,6 @@ public class NameTagContainer : MonoBehaviour
 			return;
 		}
 
-        //remove null items
-        m_nameTags.RemoveAll(item => item == null);
-		container.m_nameTags.RemoveAll(item => item == null);
-
 		m_nameTags.Remove(container.m_originalNameTag);
 
 		if (container.m_nameTags.Contains(container.m_originalNameTag) == false)
@@ -170,7 +166,6 @@ public class NameTagContainer : MonoBehaviour
 
         ResizeGroupCollisionBox();
         container.ResizeGroupCollisionBox();
-        updateLabelPositions();
     }
 
     public void CollisionStart(NameTagContainer container)
@@ -179,12 +174,6 @@ public class NameTagContainer : MonoBehaviour
 		{
 			return;
 		}
-
-
-        // remove null items in m_nametags for both containers
-        m_nameTags.RemoveAll(item => item == null);
-		container.m_nameTags.RemoveAll(item => item == null);
-
 
         // adopt the other nametags
         for (int i = 0; i < container.m_nameTags.Count; i++)
@@ -266,6 +255,7 @@ public class NameTagContainer : MonoBehaviour
         m_groupCollisionBox.size = size;
         m_groupCollisionBox.offset = center;
 
+        updateLabelPositions();
     }
 
     public void updateLabelPositions()

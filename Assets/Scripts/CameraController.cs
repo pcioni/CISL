@@ -143,14 +143,9 @@ public class CameraController : MonoBehaviour
         bool collisionDetected = false;
         for (int i = 0; i < containers.Length; i++)
         {
-            for (int j = 0; j < containers.Length; j++)
+            for (int j = i + 1; j < containers.Length; j++)
             {
-                if (i == j)
-                {
-                    continue;
-                }
 
-                //check for 
                 NameTagContainer containerA = containers[i];
                 NameTagContainer containerB = containers[j];
 
