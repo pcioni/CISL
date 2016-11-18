@@ -196,8 +196,8 @@ public class NameTagContainer : MonoBehaviour
 
     public void ResizeGroupCollisionBox()
     {
-        Vector2 center;
-        Vector2 size;
+        Vector2 m_center = new Vector2(0f, 0f);
+        Vector2 m_size = new Vector2(1f,1f);
 
         //Now we calculate the maximum and minimum based on our contained nametags
         if (m_nameTags.Count > 1)
@@ -238,22 +238,22 @@ public class NameTagContainer : MonoBehaviour
             }
 
 
-            size = max -  min;
-            
-            Vector2 tempCenter = new Vector2(size.x,size.y);
+            m_size = max -  min;
+
+            Vector2 tempCenter = new Vector2(m_size.x, m_size.y);
             tempCenter /= 2;
             tempCenter += min;
-            center = tempCenter - new Vector2(m_nodeOriginalPosition.x,m_nodeOriginalPosition.y);
+            m_center = tempCenter - new Vector2(m_nodeOriginalPosition.x, m_nodeOriginalPosition.y);
 
         }
         else
         {
-            size = new Vector2(2.5f, 2.0f);
-            center = new Vector2(0, 0);
+            m_size = new Vector2(2.5f, 2.0f);
+            m_center = new Vector2(0, 0);
         }
 
-        m_groupCollisionBox.size = size;
-        m_groupCollisionBox.offset = center;
+        m_groupCollisionBox.size = m_size;
+        m_groupCollisionBox.offset = m_center;
 
         updateLabelPositions();
     }
