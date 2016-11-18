@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -284,7 +285,7 @@ public class ViewModeController : MonoBehaviour {
                     foreach (KeyValuePair<string, timelineNode> kvp in current.Value.neighbors)
                     {
                         // check previously queued nodes list and ignore this node if it was already queued at some point in the past
-                        if (!previousNodes.Contains(kvp.Value))
+                        if (!previousNodes.Contains(kvp.Value) || SceneManager.GetActiveScene().name == "timelineTest4_RomanEmpire")
                         {
                             q.Enqueue(new KeyValuePair<int, timelineNode>(current.Key + 1, kvp.Value));
                             // store node in list of previuosly queued nodes
@@ -296,7 +297,7 @@ public class ViewModeController : MonoBehaviour {
                     foreach (timelineNode tn in current.Value.neighbors_incoming)
                     {
                         // check previously queued nodes list and ignore this node if it was already queued at some point in the past
-                        if (!previousNodes.Contains(tn))
+                        if (!previousNodes.Contains(tn) || SceneManager.GetActiveScene().name == "timelineTest4_RomanEmpire")
                         {
                             q.Enqueue(new KeyValuePair<int, timelineNode>(current.Key + 1, tn));
                             // store node in list of previuosly queued nodes
