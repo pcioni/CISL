@@ -1,0 +1,227 @@
+
+ Titus is like Yevgeny Shaposhnikov. This is because 'Titus' <title> 'List of Roman emperors' in the 
+ same way that 'Yevgeny Shaposhnikov' <office> 'Minister of Defence (Soviet Union)', 
+ 'Legio XV Apollinaris' <notable commanders> 'Titus' in the same way that 'Soviet Armed Forces' 
+ <minister> 'Yevgeny Shaposhnikov', 'Titus' <SHORT DESCRIPTION> 'Roman emperor' in the same way that 
+ 'Yevgeny Shaposhnikov' <nationality> 'Russians', 'Simon bar Giora' <opponent> 'Titus' in the same 
+ way that 'Yevgeny Shaposhnikov' <otherparty> 'Communist Party of the Soviet Union', 'Marcus Arrecinus 
+ Clemens (prefect 70)' <after> 'Titus' in the same way that 'Dmitry Yazov' <after> 'Yevgeny Shaposhnikov',
+ and 'Titus' <birth place> 'Rome' in the same way that 'Yevgeny Shaposhnikov' <birth place> 'Soviet Union'.
+
+("\tTitus is like Yevgeny Shaposhnikov. This is because 'Titus' <title> 'List "
+ "of Roman emperors' in the same way that 'Yevgeny Shaposhnikov' <office> "
+ "'Minister of Defence (Soviet Union)', 'Legio XV Apollinaris' <notable "
+ "commanders> 'Titus' in the same way that 'Soviet Armed Forces' <minister> "
+ "'Yevgeny Shaposhnikov', 'Titus' <SHORT DESCRIPTION> 'Roman emperor' in the "
+ "same way that 'Yevgeny Shaposhnikov' <nationality> 'Russians', 'Simon bar "
+ "Giora' <opponent> 'Titus' in the same way that 'Yevgeny Shaposhnikov' "
+ "<otherparty> 'Communist Party of the Soviet Union', 'Marcus Arrecinus "
+ "Clemens (prefect 70)' <after> 'Titus' in the same way that 'Dmitry Yazov' "
+ "<after> 'Yevgeny Shaposhnikov', and 'Titus' <birth place> 'Rome' in the same "
+ "way that 'Yevgeny Shaposhnikov' <birth place> 'Soviet Union'.\n")
+
+
+Nazi Germany is like Roman Empire. This is because 'German submarine U-58 (1938)' <Ship country> 'Nazi Germany' 
+in the same way that 'Pontius Pilate' <citizenship> 'Roman Empire', 'Chris Strachwitz' <home town> 'Nazi Germany' 
+in the same way that 'Ulpian' <nationality> 'Roman Empire', 'Berthe de Rohan' <PLACE OF DEATH> 'Nazi Germany' 
+in the same way that 'Pope Sixtus I' <birth place> 'Roman Empire', 'Hegra Fortress' <controlledby> 'Nazi Germany' 
+in the same way that 'Lupercalia' <observedby> 'Roman Empire', 'Wolf's Lair' <used> 'Nazi Germany' in the same 
+way that 'Gladius' <used in war> 'Roman Empire', 'Johann Reichhart' <state of origin> 'Nazi Germany' in the same 
+way that 'Concordius of Spoleto' <PLACE OF BIRTH> 'Roman Empire', 'Pilot/Observer Badge' <awarded by> 'Nazi Germany' 
+in the same way that 'Guisborough Helmet' <period> 'Roman Empire', 'Franz Seldte' <office> 'Nazi Germany' in the 
+same way that 'Faenius Rufus' <allegiance> 'Roman Empire', 'Model 39 grenade' <origin> 'Nazi Germany' in the same 
+way that 'Pagans Hill Roman temple' <cultures> 'Roman Empire', 'Luger pistol' <service> 'Nazi Germany' in the same 
+way that 'Late Latin' <spoken in> 'Roman Empire', 'Utah prisoner of war massacre' <target> 'Nazi Germany' in the 
+same way that 'Trabzon Castle' <builder> 'Roman Empire', 'Great Britain Olympic football team' <location> 'Nazi Germany' 
+in the same way that 'Ankara Castle' <controlledby> 'Roman Empire', 'Gau Westfalen-Nord' <nation> 'Nazi Germany' in the 
+same way that 'Demography of the Roman Empire' <population place> 'Roman Empire', 'Zuzanna Ginczanka' <death place> 'Nazi Germany' 
+in the same way that 'Quirinus of Sescia' <death place> 'Roman Empire', 'Reichsmark' <using country> 'Nazi Germany' in the same 
+way that 'Vulgar Latin' <states> 'Roman Empire', 'Ernst Volckheim' <allegiance> 'Nazi Germany' in the same way that 
+'Asterius of Ostia' <PLACE OF DEATH> 'Roman Empire', 'Nazi Germany' <title leader> 'President of Germany (1919–45)' 
+in the same way that 'Roman Empire' <title leader> 'Roman emperor', 'Operation Weserübung' <combatant> 'Nazi Germany' 
+in the same way that 'Cantabrian Wars' <combatant> 'Roman Empire', 'Nazi Germany' <leader> 'Karl Dönitz' in the same way 
+that 'Roman Empire' <leader> 'Theodosius I', 'Nazi Germany' <government type> 'Totalitarianism' in the same way that 
+'Roman Empire' <government type> 'Absolute monarchy', 'Christfried Berger' <birth place> 'Nazi Germany' in the same way 
+that 'Pope Linus' <birth place> 'Roman Empire', 'Pact of Steel' <location signed> 'Nazi Germany' in the same way that 
+'Battle of Barbalissos' <combatant> 'Roman Empire', and 'Nazi Germany' <house> 'Reichsrat (Germany)' in the same way that 
+'Roman Empire' <religion> 'State church of the Roman Empire'.
+
+("\tNazi Germany is like Roman Empire. This is because 'German submarine U-58 "
+ "(1938)' <Ship country> 'Nazi Germany' in the same way that 'Pontius Pilate' "
+ "<citizenship> 'Roman Empire', 'Chris Strachwitz' <home town> 'Nazi Germany' "
+ "in the same way that 'Ulpian' <nationality> 'Roman Empire', 'Berthe de "
+ "Rohan' <PLACE OF DEATH> 'Nazi Germany' in the same way that 'Pope Sixtus I' "
+ "<birth place> 'Roman Empire', 'Hegra Fortress' <controlledby> 'Nazi Germany' "
+ "in the same way that 'Lupercalia' <observedby> 'Roman Empire', 'Wolf's Lair' "
+ "<used> 'Nazi Germany' in the same way that 'Gladius' <used in war> 'Roman "
+ "Empire', 'Johann Reichhart' <state of origin> 'Nazi Germany' in the same way "
+ "that 'Concordius of Spoleto' <PLACE OF BIRTH> 'Roman Empire', "
+ "'Pilot/Observer Badge' <awarded by> 'Nazi Germany' in the same way that "
+ "'Guisborough Helmet' <period> 'Roman Empire', 'Franz Seldte' <office> 'Nazi "
+ "Germany' in the same way that 'Faenius Rufus' <allegiance> 'Roman Empire', "
+ "'Model 39 grenade' <origin> 'Nazi Germany' in the same way that 'Pagans Hill "
+ "Roman temple' <cultures> 'Roman Empire', 'Luger pistol' <service> 'Nazi "
+ "Germany' in the same way that 'Late Latin' <spoken in> 'Roman Empire', 'Utah "
+ "prisoner of war massacre' <target> 'Nazi Germany' in the same way that "
+ "'Trabzon Castle' <builder> 'Roman Empire', 'Great Britain Olympic football "
+ "team' <location> 'Nazi Germany' in the same way that 'Ankara Castle' "
+ "<controlledby> 'Roman Empire', 'Gau Westfalen-Nord' <nation> 'Nazi Germany' "
+ "in the same way that 'Demography of the Roman Empire' <population place> "
+ "'Roman Empire', 'Zuzanna Ginczanka' <death place> 'Nazi Germany' in the same "
+ "way that 'Quirinus of Sescia' <death place> 'Roman Empire', 'Reichsmark' "
+ "<using country> 'Nazi Germany' in the same way that 'Vulgar Latin' <states> "
+ "'Roman Empire', 'Ernst Volckheim' <allegiance> 'Nazi Germany' in the same "
+ "way that 'Asterius of Ostia' <PLACE OF DEATH> 'Roman Empire', 'Nazi Germany' "
+ "<title leader> 'President of Germany (1919–45)' in the same way that 'Roman "
+ "Empire' <title leader> 'Roman emperor', 'Operation Weserübung' <combatant> "
+ "'Nazi Germany' in the same way that 'Cantabrian Wars' <combatant> 'Roman "
+ "Empire', 'Nazi Germany' <leader> 'Karl Dönitz' in the same way that 'Roman "
+ "Empire' <leader> 'Theodosius I', 'Nazi Germany' <government type> "
+ "'Totalitarianism' in the same way that 'Roman Empire' <government type> "
+ "'Absolute monarchy', 'Christfried Berger' <birth place> 'Nazi Germany' in "
+ "the same way that 'Pope Linus' <birth place> 'Roman Empire', 'Pact of Steel' "
+ "<location signed> 'Nazi Germany' in the same way that 'Battle of "
+ "Barbalissos' <combatant> 'Roman Empire', and 'Nazi Germany' <house> "
+ "'Reichsrat (Germany)' in the same way that 'Roman Empire' <religion> 'State "
+ "church of the Roman Empire'.\n")
+ 
+Pope Linus is like Nauman Scott. This is because 'Pope Linus' <venerated> 'Eastern Orthodox Church'
+in the same way that 'Nauman Scott' <religion> 'Catholic Church', 'Pope Linus' <death place> 'Rome'
+in the same way that 'Nauman Scott' <birth place> 'United States', 'Pope Anacletus' <predecessor>
+'Pope Linus' in the same way that 'Tom Stagg' <preceded> 'Nauman Scott', 'Pope Linus' <successor> 
+'Pope Anacletus' in the same way that 'Nauman Scott' <after> 'Tom Stagg', and 'Pope Linus' 
+<ordained by> 'Paul the Apostle' in the same way that 'Nauman Scott' <battles> 'World War II'.
+
+("\tPope Linus is like Nauman Scott. This is because 'Pope Linus' <venerated> "
+ "'Eastern Orthodox Church' in the same way that 'Nauman Scott' <religion> "
+ "'Catholic Church', 'Pope Linus' <death place> 'Rome' in the same way that "
+ "'Nauman Scott' <birth place> 'United States', 'Pope Anacletus' <predecessor> "
+ "'Pope Linus' in the same way that 'Tom Stagg' <preceded> 'Nauman Scott', "
+ "'Pope Linus' <successor> 'Pope Anacletus' in the same way that 'Nauman "
+ "Scott' <after> 'Tom Stagg', and 'Pope Linus' <ordained by> 'Paul the "
+ "Apostle' in the same way that 'Nauman Scott' <battles> 'World War II'.\n")
+
+ 
+ 
+Battle of Actium is like Mediterranean and Middle East theatre of World War II. 
+This is because 'Battle of Actium' <combatant> 'Ptolemaic Kingdom' in the same way 
+that 'World War II' <place of military conflict> 'Mediterranean and Middle East theatre 
+of World War II', 'Roman Republic' <event> 'Battle of Actium' in the same way that 
+'Mediterranean and Middle East theatre of World War II' <partof> 'World War II', 
+'Battle of Actium' <commander> 'Marcus Vipsanius Agrippa' in the same way that 
+'Mediterranean and Middle East theatre of World War II' <commander> 'Benito Mussolini',
+'Legio XI Claudia' <battle> 'Battle of Actium' in the same way that 'North African 
+Campaign' <is part of military conflict> 'Mediterranean and Middle East theatre of 
+World War II', and 'Legio X Fretensis' <battles> 'Battle of Actium' in the same way 
+that 'Charles Crombie' <battle> 'Mediterranean and Middle East theatre of World War II'.
+
+('\tBattle of Actium is like Mediterranean and Middle East theatre of World '
+ "War II. This is because 'Battle of Actium' <combatant> 'Ptolemaic Kingdom' "
+ "in the same way that 'World War II' <place of military conflict> "
+ "'Mediterranean and Middle East theatre of World War II', 'Roman Republic' "
+ "<event> 'Battle of Actium' in the same way that 'Mediterranean and Middle "
+ "East theatre of World War II' <partof> 'World War II', 'Battle of Actium' "
+ "<commander> 'Marcus Vipsanius Agrippa' in the same way that 'Mediterranean "
+ "and Middle East theatre of World War II' <commander> 'Benito Mussolini', "
+ "'Legio XI Claudia' <battle> 'Battle of Actium' in the same way that 'North "
+ "African Campaign' <is part of military conflict> 'Mediterranean and Middle "
+ "East theatre of World War II', and 'Legio X Fretensis' <battles> 'Battle of "
+ "Actium' in the same way that 'Charles Crombie' <battle> 'Mediterranean and "
+ "Middle East theatre of World War II'.\n")
+ 
+ 
+ 
+("\tAugustus is like Adolf Hitler. This is because 'Roman emperor' <first "
+ "monarch> 'Augustus' in the same way that 'Führer' <first> 'Adolf Hitler', "
+ "'Augustus' <birth place> 'Roman Republic' in the same way that 'Nazi "
+ "Germany' <deputy> 'Adolf Hitler', 'Legio II Augusta' <patron> 'Augustus' in "
+ "the same way that 'Tag der Freiheit: Unsere Wehrmacht' <starring> 'Adolf "
+ "Hitler', 'Mark Antony' <associate> 'Augustus' in the same way that "
+ "'Wehrmacht' <ceremonial chief> 'Adolf Hitler', 'Augustus' <years> 'Mark "
+ "Antony' in the same way that 'Adolf Hitler' <unit> 'Reichswehr', 'Legio XI "
+ "Claudia' <notable commanders> 'Augustus' in the same way that 'Gottfried "
+ "Feder' <influenced> 'Adolf Hitler', 'Cantabrian Wars' <commander> 'Augustus' "
+ "in the same way that 'Sebastian Haffner' <subject> 'Adolf Hitler', 'Roman "
+ "Republic' <leader> 'Augustus' in the same way that 'Julius Schreck' <leader> "
+ "'Adolf Hitler', 'Augustus' <successor> 'Tiberius' in the same way that "
+ "'Adolf Hitler' <spouse> 'Eva Braun', and 'Tiberius' <predecessor> 'Augustus' "
+ "in the same way that 'Herbert Backe' <chancellor> 'Adolf Hitler'.\n")
+ 
+ 
+("\tAugustus is like Léon Blum. This is because 'Roman Republic' <leader> "
+ "'Augustus' in the same way that 'Albert François Lebrun' <primeminister> "
+ "'Léon Blum', 'Roman emperor' <first monarch> 'Augustus' in the same way that "
+ "'Léon Blum' <office> 'President of France', 'Legio XI Claudia' <notable "
+ "commanders> 'Augustus' in the same way that 'Vincent Auriol' <1namedata> "
+ "'Léon Blum', 'Tiberius' <predecessor> 'Augustus' in the same way that 'Léon "
+ "Blum' <before> 'Georges Bidault', 'Legio II Augusta' <patron> 'Augustus' in "
+ "the same way that 'Édouard Daladier' <after> 'Léon Blum', and 'Augustus' "
+ "<birth place> 'Rome' in the same way that 'Léon Blum' <death place> 'French "
+ "Third Republic'.\n")
+
+
+Augustus is like Pierre Messmer. This is because 'Roman Republic' <leader> 'Augustus' in the same way that 
+'Georges Pompidou' <primeminister> 'Pierre Messmer', 'Augustus' <birth place> 'Roman Republic' in the same 
+way that 'Pierre Messmer' <birth place> 'French Third Republic', 'Tiberius' <predecessor> 'Augustus' in the 
+same way that 'Pierre Messmer' <successor> 'Jacques Chirac', 'Battle of Alexandria (30 BC)' <commander> 'Augustus' 
+in the same way that 'Pierre Messmer' <president> 'Georges Pompidou', 'Roman emperor' <first monarch> 'Augustus' 
+in the same way that 'Pierre Messmer' <after> 'Michel Debré', and 'Augustus' <years> 'Marcus Vipsanius Agrippa' 
+in the same way that 'Pierre Messmer' <PLACE OF DEATH> 'Paris'.
+
+
+Legio V Macedonica is like 197th (Lancashire Fusiliers) Brigade. This is because 
+'Legio V Macedonica' <garrison> 'Moesia' in the same way that '197th (Lancashire Fusiliers) 
+Brigade' <type> 'Infantry', 'Legio V Macedonica' <country> 'Byzantine Empire' in the same way 
+that '197th (Lancashire Fusiliers) Brigade' <country> 'United Kingdom', and 'Legio V Macedonica' 
+<battles> 'Trajan's Dacian Wars' in the same way that '197th (Lancashire Fusiliers) 
+Brigade' <battles> 'World War I'.
+
+('\tLegio V Macedonica is like 197th (Lancashire Fusiliers) Brigade. This is '
+ "because 'Legio V Macedonica' <garrison> 'Moesia' in the same way that '197th "
+ "(Lancashire Fusiliers) Brigade' <type> 'Infantry', 'Legio V Macedonica' "
+ "<country> 'Byzantine Empire' in the same way that '197th (Lancashire "
+ "Fusiliers) Brigade' <country> 'United Kingdom', and 'Legio V Macedonica' "
+ "<battles> 'Trajan's Dacian Wars' in the same way that '197th (Lancashire "
+ "Fusiliers) Brigade' <battles> 'World War I'.\n")
+
+
+Agnes of Rome is like Lin Biao. This is because 'Agnes of Rome' <venerated in> 
+'Anglican Communion' in the same way that 'Lin Biao' <branch/unit> 'Special forces', 
+and 'Agnes of Rome' <death place> 'Rome' in the same way that 'Lin Biao' <death place> 
+'Mongolian People's Republic'.
+
+("\tAgnes of Rome is like Lin Biao. This is because 'Agnes of Rome' <venerated "
+ "in> 'Anglican Communion' in the same way that 'Lin Biao' <branch/unit> "
+ "'Special forces', and 'Agnes of Rome' <death place> 'Rome' in the same way "
+ "that 'Lin Biao' <death place> 'Mongolian People's Republic'.\n")
+ 
+ 
+Sextus Attius Suburanus is like Free Corps Denmark. This is because 'Sextus Attius Suburanus' 
+<occupation> 'Roman consul' in the same way that 'Free Corps Denmark' <type> 'Infantry', 
+'Sextus Attius Suburanus' <allegiance> 'Roman Empire' in the same way that 'Free Corps 
+Denmark' <country> 'Nazi Germany'.
+
+ ('\tSextus Attius Suburanus is like Free Corps Denmark. This is because '
+ "'Sextus Attius Suburanus' <occupation> 'Roman consul' in the same way that "
+ "'Free Corps Denmark' <type> 'Infantry', 'Sextus Attius Suburanus' "
+ "<allegiance> 'Roman Empire' in the same way that 'Free Corps Denmark' "
+ "<country> 'Nazi Germany'.\n")
+ 
+
+ ("\tByzantine army is like Maquis des Glières. This is because 'Byzantine "
+ "army' <headquarters> 'Constantinople' in the same way that 'Maquis des "
+ "Glières' <commander> 'Tom Morel', 'Byzantine army' <area> 'Balkans' in the "
+ "same way that 'Tom Morel' <battle> 'Maquis des Glières', and 'Byzantine "
+ "army' <partof> 'Byzantine Empire' in the same way that 'Maquis des Glières' "
+ "<is part of military conflict> 'World War II'.\n")
+ 
+
+ ('\tBattle of the Catalaunian Plains is like Battle of Montcornet. This is '
+ "because 'Battle of the Catalaunian Plains' <combatant> 'Western Roman "
+ "Empire' in the same way that 'Battle of Montcornet' <is part of military "
+ "conflict> 'World War II', 'Battle of the Catalaunian Plains' <commander> "
+ "'Flavius Aetius' in the same way that 'Battle of Montcornet' <commander> "
+ "'Charles de Gaulle', and 'Flavius Aetius' <battle> 'Battle of the "
+ "Catalaunian Plains' in the same way that 'Charles de Gaulle' <battles> "
+ "'Battle of Montcornet'.\n")
+ 
