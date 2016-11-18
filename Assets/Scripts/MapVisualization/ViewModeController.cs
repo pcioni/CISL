@@ -70,12 +70,14 @@ public class ViewModeController : MonoBehaviour {
 		}
 
         DebugMode.stopTimer("ViewModeController.Start() :: initilizing");
-        DebugMode.startTimer("ViewModeController.Start() :: reconstructing data based on incoming connections");
+        DebugMode.startTimer("ViewModeController.Start() :: reconstructing data based on existing data");
 
         bool result = false;
 		//find all of the appropriate positions for the current map
 		foreach (timelineNode tn in lx.nodeList) {
-			if (!tn.known_location && reconstructGeolocationData) {
+            //DebugMode.startTimer(string.Format("ViewModeController.Start() :: reconstructed \"{0}\" data based on existing data", tn.name));
+
+            if (reconstructGeolocationData && !tn.known_location) {
 				result = reconstruct_data(tn, data_type.LOC);
 				if (!result) {
 					//print ("ViewModeController.Start() :: location from outgoing connection data not found for " + tn.node_name + ": location = " + tn.location);
@@ -88,7 +90,7 @@ public class ViewModeController : MonoBehaviour {
 					}
 				}
 			}
-			if (!tn.known_date && reconstructDateData) {
+			if (reconstructDateData && !tn.known_date) {
                 result = reconstruct_data(tn, data_type.DATE);
                 if (!result) {
 					//print ("ViewModeController.Start() :: date from outgoing connection data not found for " + tn.node_name + ": dateticks = " + tn.dateticks);
@@ -101,16 +103,19 @@ public class ViewModeController : MonoBehaviour {
 					}
 				}
 			}
-		}
 
-        DebugMode.stopTimer("ViewModeController.Start() :: reconstructing data based on incoming connections");
-        DebugMode.startTimer("ViewModeController.Start() :: instantiating nodes and reconstructing data based on incoming connections");
+            //DebugMode.stopTimer(string.Format("ViewModeController.Start() :: reconstructed \"{0}\" data based on existing data", tn.name));
+
+        }
+
+        DebugMode.stopTimer("ViewModeController.Start() :: reconstructing data based on existing data");
+        DebugMode.startTimer("ViewModeController.Start() :: instantiating nodes and reconstructing data based on interpolated data");
 
         foreach (timelineNode tn in lx.nodeList)
         {
-            //DebugMode.startTimer("ViewModeController.Start() :: reconstructing data based on outgoing connections");
+            //DebugMode.startTimer(string.Format("ViewModeController.Start() :: reconstructed map node \"{0}\" data based on interpolated data", tn.name));
 
-            if (!tn.known_location && !tn.location_interpolated && reconstructGeolocationData)
+            if (reconstructGeolocationData && !tn.known_location && !tn.location_interpolated)
             {
 				result = reconstruct_data(tn, data_type.LOC, true);
                 if (!result)
@@ -126,7 +131,7 @@ public class ViewModeController : MonoBehaviour {
                     }
                 }
             }
-            if (!tn.known_date && !tn.date_interpolated && reconstructDateData)
+            if (reconstructDateData && !tn.known_date && !tn.date_interpolated)
             {
                 result = reconstruct_data(tn, data_type.DATE, true);
                 if (!result)
@@ -143,36 +148,28 @@ public class ViewModeController : MonoBehaviour {
                 }
             }
 
-            //DebugMode.stopTimer("ViewModeController.Start() :: reconstructing data based on outgoing connections");
-            //DebugMode.startTimer("ViewModeController.Start() :: instantiating map nodes");
+            //DebugMode.stopTimer(string.Format("ViewModeController.Start() :: reconstructed map node \"{0}\" data based on interpolated data", tn.name));
+            //DebugMode.startTimer(string.Format("ViewModeController.Start() :: instantiated map node \"{0}\" and set properties", tn.name));
 
             GameObject dummy = Instantiate(mapNodePrefab) as GameObject;
-
-            //DebugMode.stopTimer("ViewModeController.Start() :: instantiating map nodes");
-            //DebugMode.startTimer("ViewModeController.Start() :: initializing some map node properties");
 
             mapNode mn = dummy.GetComponent<mapNode>();
             mn.master = tn;
             dummy.layer = LayerMask.NameToLayer("MapLayer");
             mn.transform.SetParent(current_map.transform, false);
 
-            //DebugMode.stopTimer("ViewModeController.Start() :: initializing some map node properties");
-            //DebugMode.startTimer("ViewModeController.Start() :: setting coord2local for map node");
-
             mn.transform.localPosition = current_map.coord2local(tn.location);
-
-            //DebugMode.stopTimer("ViewModeController.Start() :: setting coord2local for map node");
-            //DebugMode.startTimer("ViewModeController.Start() :: seeting remaining map node properties");
 
             dummynodemap[tn.node_id] = mn.transform.position;
             dummynodes.Add(mn);
             crossmap[tn] = mn;
 
+            //DebugMode.stopTimer(string.Format("ViewModeController.Start() :: instantiated map node \"{0}\" and set properties", tn.name));
+
             yield return null;
-            //DebugMode.stopTimer("ViewModeController.Start() :: seeting remaining map node properties");
         }
 
-        DebugMode.stopTimer("ViewModeController.Start() :: instantiating nodes and reconstructing data based on incoming connections");
+        DebugMode.stopTimer("ViewModeController.Start() :: instantiating nodes and reconstructing data based on interpolated data");
         DebugMode.startTimer("ViewModeController.Start() :: assigning neighbors");
 
         // TODO: optimize this
