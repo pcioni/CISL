@@ -149,25 +149,45 @@ public class CameraController : MonoBehaviour
                 NameTagContainer containerA = containers[i];
                 NameTagContainer containerB = containers[j];
 
-                if (containerA.m_nameTags.Count == 0)
+                BoxCollider2D aCollider;
+                BoxCollider2D bCollider;
+
+                switch (containerA.m_nameTags.Count)
                 {
-                    continue;
+                    case 0:
+                        continue;
+                        //break;  // unreachable code
+                    case 1:
+                        aCollider = containerA.m_nodeCollisionBox;
+                        break;
+                    default:
+                        aCollider = containerA.m_groupCollisionBox;
+                        break;
                 }
 
-                if (containerB.m_nameTags.Count == 0)
+                switch (containerB.m_nameTags.Count)
                 {
-                    continue;
+                    case 0:
+                        continue;
+                        //break; // unreachable code
+                    case 1:
+                        bCollider = containerB.m_nodeCollisionBox;
+                        break;
+                    default:
+                        bCollider = containerB.m_groupCollisionBox;
+                        break;
                 }
 
-                //TODO: print out what collision check is happening here.
-                // we suspect that the last container is somehow being 
-                // ignored in container collision checks 
+                //TODO: zero out z of center? might be missing collision detection if objects are not at same depth
+                //Vector3 centerTMP = bCollider.bounds.center;
+                //centerTMP.z = 0;
+                //bCollider.bounds.center = centerTMP;
 
-                if (containerA.m_nodeCollisionBox.bounds.Intersects(containerB.m_nodeCollisionBox.bounds) && NoContainment(containerA, containerB))
+                if (aCollider.bounds.Intersects(bCollider.bounds) && NoContainment(containerA, containerB))
                 {
                     collisionDetected = true;
                     //merge the two colliders
-                    if (containerA.m_groupCollisionBox.size.magnitude > containerB.m_groupCollisionBox.size.magnitude)
+                    if (containerA.m_nameTags.Count > containerB.m_nameTags.Count)
                     {
                         containerA.CollisionStart(containerB);
                     }

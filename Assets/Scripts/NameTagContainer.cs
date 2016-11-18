@@ -78,7 +78,9 @@ public class NameTagContainer : MonoBehaviour
             return;
         }
         m_nodeOriginalPosition = (Vector3)markerPos;
+        m_nodeOriginalPosition.z = 0f;
         m_groupOiginalPosition = m_groupCollider.transform.position;
+        m_groupOiginalPosition.z = 0f;
     }
 
     void FixedUpdate()
