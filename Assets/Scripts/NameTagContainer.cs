@@ -56,7 +56,7 @@ public class NameTagContainer : MonoBehaviour
     {
         // stretch / shrink width of collider to size of text panel
         Vector3 scale = m_labelPanel.transform.lossyScale;
-        float w = m_labelPanel.GetComponent<RectTransform>().rect.width * 0.05f; // TODO: figure out a way to make lossy scale more accurate
+        float w = m_labelPanel.GetComponent<RectTransform>().rect.width; // TODO: figure out a way to make lossy scale more accurate
         //float w = m_labelPanel.GetComponent<RectTransform>().rect.width * scale.x; // TODO: why isn't "* scale.x" working as desired?
         float h = m_nodeCollisionBox.size.y;
         m_nodeCollisionBox.size = new Vector2(w, h);
@@ -205,32 +205,32 @@ public class NameTagContainer : MonoBehaviour
 
             Vector2 max = new Vector2(-Mathf.Infinity, -Mathf.Infinity);
             Vector2 min = new Vector2(Mathf.Infinity, Mathf.Infinity);
-
+            Vector2 scale = m_labelPanel.GetComponent<Transform>().lossyScale;
 
 
             foreach (NameTag nt in m_nameTags)
             {
-                float xMax = nt.m_curContainer.m_nodeCollisionBox.transform.position.x + nt.m_curContainer.m_nodeCollisionBox.size.x / 2;
+                float xMax = nt.m_curContainer.m_nodeCollisionBox.transform.position.x / scale.x + nt.m_curContainer.m_nodeCollisionBox.size.x / 2;
                 if (xMax > max.x)
                 {
                     max.x = xMax;
                 }
 
 
-                float yMax = nt.m_curContainer.m_nodeCollisionBox.transform.position.y + nt.m_curContainer.m_nodeCollisionBox.size.y / 2;
+                float yMax = nt.m_curContainer.m_nodeCollisionBox.transform.position.y / scale.y + nt.m_curContainer.m_nodeCollisionBox.size.y / 2;
                 if (yMax > max.y)
                 {
                     max.y = yMax;
                 }
 
-                float xMin = nt.m_curContainer.m_nodeCollisionBox.transform.position.x  - nt.m_curContainer.m_nodeCollisionBox.size.x / 2;
+                float xMin = nt.m_curContainer.m_nodeCollisionBox.transform.position.x / scale.x - nt.m_curContainer.m_nodeCollisionBox.size.x / 2;
                 if (xMin < min.x)
                 {
                     min.x = xMin;
                 }
 
 
-                float yMin = nt.m_curContainer.m_nodeCollisionBox.transform.position.y - nt.m_curContainer.m_nodeCollisionBox.size.y / 2;
+                float yMin = nt.m_curContainer.m_nodeCollisionBox.transform.position.y / scale.y - nt.m_curContainer.m_nodeCollisionBox.size.y / 2;
                 if (yMin < min.y)
                 {
                     min.y = yMin;
@@ -243,12 +243,12 @@ public class NameTagContainer : MonoBehaviour
             Vector2 tempCenter = new Vector2(m_size.x, m_size.y);
             tempCenter /= 2;
             tempCenter += min;
-            m_center = tempCenter - new Vector2(m_nodeOriginalPosition.x, m_nodeOriginalPosition.y);
+            m_center = tempCenter - new Vector2(m_nodeOriginalPosition.x / scale.x, m_nodeOriginalPosition.y / scale.y);
 
         }
         else
         {
-            m_size = new Vector2(2.5f, 2.0f);
+            m_size = new Vector2(30f, 30f);
             m_center = new Vector2(0, 0);
         }
 
@@ -261,9 +261,21 @@ public class NameTagContainer : MonoBehaviour
     public void updateLabelPositions()
     {
         Vector2 scale = m_labelPanel.GetComponent<Transform>().lossyScale;
-        Vector3 p = m_groupCollider.transform.position;
-        p.x += (m_groupCollisionBox.size.x + m_labelXOffset) * scale.x;
+        Vector3 p;
         p.z = 0f;
+
+        if (m_nameTags.Count > 1)
+        {
+            p = m_groupCollider.transform.position;
+            p.x += (m_groupCollisionBox.size.x / 2 + m_labelXOffset) * scale.x;
+            p.y += m_groupCollisionBox.size.y * scale.y / 2;
+        }
+        else
+        {
+            p = m_nodeCollider.transform.position;
+            p.x += (m_nodeCollisionBox.size.x/2 + m_labelXOffset) * scale.x;
+            p.y += m_nodeCollisionBox.size.y * scale.y / 2;
+        }
 
         //sort the nametags by y value
         foreach (NameTag nt in m_nameTags.OrderBy(go => -((Vector3)go.getMarkerPosition()).y))
