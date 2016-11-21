@@ -18033,9 +18033,7 @@
       <geodata>
         <coordinates lat="16.9667" lon="121.217"/>
       </geodata>
-      <timedata>
-        <timeobj label="date" value="--07-26"/>
-      </timedata>
+      <timedata/>
       <pictures>
         <picture url="https://upload.wikimedia.org/wikipedia/en/a/ad/Mayoyao_Ifugao.png" label="Official seal of Mayoyao"/>
         <picture url="https://upload.wikimedia.org/wikipedia/commons/4/4e/Ph_locator_ifugao_mayoyao.png" label="Map of Ifugao showing the location of Mayoyao"/>
