@@ -8,6 +8,9 @@
   * ≥10.10  — https://www.xamarin.com/download
   * 10.9 — use same installer as above, then replace Xamarin Studio in Applications directory with http://download.xamarin.com/studio/Mac/XamarinStudio-5.9.8.0-0.dmg
 
+## tools
+* Knowledge explorer — (creates new data sets for other knowledge domains)* https://github.com/smiled0g/knowledge-explorer/releases
+
 ## build
 
 * RPI Backend
@@ -24,7 +27,14 @@
   * open & run "CISL/Assets/Scenes/timelineTest3.unity"
 
 ## notes
-* press enter to minimize map at start
-* buttons and nodes can be used to navigate narrative data
-* map scales and zooms to selected data
-* press "SHIFT + C + S" to capture screenshots
+* navigation
+  * press enter to minimize map at start
+  * buttons and nodes can be used to navigate narrative data
+  * map will scale and zoom to selected data
+* debug key bindings
+  * "SHIFT + D + L + 1|2|3" to load "Roman Empire|WWII|Analogy" domains
+  * map
+    * "SHIFT + M + L + N|E|K" to load cached "Terrain|Satelite|SateliteDark" map images
+    * "SHIFT + M + S" to save currently displayed map as "Resources\maps\google_staticmap_lastSaved.png"
+  * "SHIFT + C + S" to capture screenshots
+  * "CTRL + D" show debug gismos
