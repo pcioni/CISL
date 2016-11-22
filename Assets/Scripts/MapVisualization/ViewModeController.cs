@@ -58,7 +58,9 @@ public class ViewModeController : MonoBehaviour {
 	}
 
 	IEnumerator Start() {
+        Debug.Log("ViewModeController.Start()");
         DebugMode.startTimer("ViewModeController.Start()");
+        Debug.Log("ViewModeController.Start() :: initilizing");
         DebugMode.startTimer("ViewModeController.Start() :: initilizing");
 
         lx = GetComponent<LoadXML>();
@@ -71,6 +73,7 @@ public class ViewModeController : MonoBehaviour {
 		}
 
         DebugMode.stopTimer("ViewModeController.Start() :: initilizing");
+        Debug.Log("ViewModeController.Start() :: reconstructing data based on existing data");
         DebugMode.startTimer("ViewModeController.Start() :: reconstructing data based on existing data");
 
         bool result = false;
@@ -110,6 +113,7 @@ public class ViewModeController : MonoBehaviour {
         }
 
         DebugMode.stopTimer("ViewModeController.Start() :: reconstructing data based on existing data");
+        Debug.Log("ViewModeController.Start() :: instantiating nodes and reconstructing data based on interpolated data");
         DebugMode.startTimer("ViewModeController.Start() :: instantiating nodes and reconstructing data based on interpolated data");
 
         foreach (timelineNode tn in lx.nodeList)
@@ -171,6 +175,7 @@ public class ViewModeController : MonoBehaviour {
         }
 
         DebugMode.stopTimer("ViewModeController.Start() :: instantiating nodes and reconstructing data based on interpolated data");
+        Debug.Log("ViewModeController.Start() :: assigning neighbors");
         DebugMode.startTimer("ViewModeController.Start() :: assigning neighbors");
 
         // TODO: optimize this
@@ -186,7 +191,8 @@ public class ViewModeController : MonoBehaviour {
         DebugMode.stopTimer("ViewModeController.Start() :: assigning neighbors");
         DebugMode.stopTimer("ViewModeController.Start()");
 
-		print("Done finding positions");
+        Debug.Log("ViewModeController.Start() :: done finding positions");
+
 		//disabling auto move because it interrupts demo
 		//panToPoint(dummynodemap[13]);//start off on rome
 	}

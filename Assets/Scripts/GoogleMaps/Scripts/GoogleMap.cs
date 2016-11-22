@@ -138,16 +138,14 @@ public class GoogleMap : MonoBehaviour
 	}
 
 	public void calcExtents (int _zoom) {
-		if (_zoom == 4) {
-			// TODO: make these calculations respond to different zoom levels
-			m_minLatitude = centerLocation.latitude - (lattidudeRange/2) * width/height; 
-			m_maxLatitude = centerLocation.latitude + (lattidudeRange/2) * width/height; 
-			m_maxLongitude = centerLocation.longitude + (longitudeRange/2);
-			m_minLongitude = centerLocation.longitude - (longitudeRange/2);
-		}
-	}
+        // TODO: make these calculations respond to different zoom levels
+        m_minLatitude = centerLocation.latitude - (lattidudeRange / 2) * width / height;
+        m_maxLatitude = centerLocation.latitude + (lattidudeRange / 2) * width / height;
+        m_maxLongitude = centerLocation.longitude + (longitudeRange / 2);
+        m_minLongitude = centerLocation.longitude - (longitudeRange / 2);
+    }
 
-	public void loadMap (string _filePath) {
+    public void loadMap (string _filePath) {
 		//TODO: load the texture from last saved map by default
 		Texture2D texture = LoadPNG(_filePath);
 		//if a texture was loaded, apply it to in-game object
