@@ -105,7 +105,7 @@ public class GoogleMap : MonoBehaviour
 			// write to a file in the project folder
 			File.WriteAllBytes (Application.dataPath + "/Resources/" + saveFilePath + ".png", bytes);
 
-			Debug.Log ("GoogleMap.update() :: saved image filePath = " + filePath);
+			Debug.Log ("GoogleMap.update() :: saved image filePath = " + saveFilePath);
 
 			saved = true;
 		} else {
