@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -24,6 +25,20 @@ public class DebugMode : MonoBehaviour {
 
         MS_ACTIVE = m_active;
 
+        if (MS_ACTIVE && Input.anyKeyDown)
+        {
+            detectPressedKeyOrButton();
+        }
+
+    }
+
+    public void detectPressedKeyOrButton() // from http://answers.unity3d.com/answers/996043/view.html
+    {
+        foreach (KeyCode kcode in Enum.GetValues(typeof(KeyCode)))
+        {
+            if (Input.GetKeyDown(kcode))
+                Debug.Log("DebugMode.detectKeyPressedKeyOrButton() :: KeyCode down: " + kcode);
+        }
     }
 
     private static Dictionary<string, float> timers = new Dictionary<string, float>();
