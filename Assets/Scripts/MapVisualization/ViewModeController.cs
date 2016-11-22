@@ -164,6 +164,8 @@ public class ViewModeController : MonoBehaviour {
             mn.transform.SetParent(current_map.transform, false);
 
             mn.transform.localPosition = current_map.coord2local(tn.location);
+            //TODO: should mapposition be updated here? i.e: 
+            // mn.mapPosition = mn.transform.localPosition;
 
             dummynodemap[tn.node_id] = mn.transform.position;
             dummynodes.Add(mn);
