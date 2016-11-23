@@ -4,7 +4,9 @@
   <Features>
     <Feature data="Axis powers" zh-data="" id="2" uri="http://dbpedia.org/resource/Axis_powers">
       <neighbors/>
-      <geodata/>
+      <geodata>
+		<coordinates lat="52.52" lon="13.405"/>
+	  </geodata>
       <timedata>
         <timeobj label="dissolution date" value="1945-09-02"/>
         <timeobj label="dissolution year" value="1945"/>
@@ -184,7 +186,9 @@
         <neighbor dest="19" relationship="commander" weight="0"/>
         <neighbor dest="22" relationship="place of military conflict" weight="0"/>
       </neighbors>
-      <geodata/>
+      <geodata>
+		<coordinates lat="49.2402" lon="6.9969"/>
+	  </geodata>
       <timedata>
         <timeobj label="date" value="1945-09-02"/>
         <timeobj label="date" value="1939-09-01"/>
@@ -245,7 +249,9 @@
     </Feature>
     <Feature data="Allies of World War II" zh-data="" id="5" uri="http://dbpedia.org/resource/Allies_of_World_War_II">
       <neighbors/>
-      <geodata/>
+      <geodata>
+		<coordinates lat="48.8566" lon="2.3522"/>
+	  </geodata>
       <timedata>
         <timeobj label="dissolution year" value="1945"/>
         <timeobj label="founding year" value="1939"/>
@@ -307,7 +313,9 @@
     </Feature>
     <Feature data="Adolf Hitler" zh-data="" id="4" uri="http://dbpedia.org/resource/Adolf_Hitler">
       <neighbors/>
-      <geodata/>
+      <geodata>
+		<coordinates lat="48.3069" lon="14.2858"/>
+	  </geodata>
       <timedata>
         <timeobj label="service start year" value="1914"/>
         <timeobj label="death date" value="1945-04-30"/>
@@ -426,7 +434,9 @@
         <neighbor dest="1" relationship="is part of military conflict" weight="0"/>
         <neighbor dest="8" relationship="is part of military conflict" weight="0"/>
       </neighbors>
-      <geodata/>
+      <geodata>
+		<coordinates lat="14.5595" lon="120.9842"/>
+	  </geodata>
       <timedata>
         <timeobj label="date" value="1941-12-08"/>
         <timeobj label="date" value="--12-08"/>
@@ -740,7 +750,9 @@
         <neighbor dest="4" relationship="commander" weight="0"/>
         <neighbor dest="1" relationship="is part of military conflict" weight="0"/>
       </neighbors>
-      <geodata/>
+      <geodata>
+		<coordinates lat="50.5039" lon="4.4699"/>
+	  </geodata>
       <timedata>
         <timeobj label="date" value="1939-09-01"/>
         <timeobj label="date" value="--09-01"/>
@@ -6271,7 +6283,9 @@
         <neighbor dest="21" relationship="battle" weight="0"/>
         <neighbor dest="6" relationship="battle" weight="0"/>
       </neighbors>
-      <geodata/>
+      <geodata>
+		<coordinates lat="36.5" lon="15.0"/>
+	  </geodata>
       <timedata>
         <timeobj label="date of birth" value="1914-03-16"/>
         <timeobj label="DATE OF DEATH" value="1945-08-26"/>
@@ -24855,7 +24869,9 @@
         <neighbor dest="996" relationship="commander" weight="0"/>
         <neighbor dest="997" relationship="commander" weight="0"/>
       </neighbors>
-      <geodata/>
+      <geodata>
+		<coordinates lat="38.56" lon="20.44"/>
+	  </geodata>
       <timedata>
         <timeobj label="date" value="-031-09-02"/>
       </timedata>
@@ -24876,7 +24892,9 @@
     </Feature>
     <Feature data="Final War of the Roman Republic" zh-data="" id="993" uri="http://dbpedia.org/resource/Final_War_of_the_Roman_Republic">
       <neighbors/>
-      <geodata/>
+      <geodata>
+		<coordinates lat="37.58" lon="23.43"/>
+	  </geodata>
       <timedata>
         <timeobj label="date" value="--08-30"/>
         <timeobj label="date" value="The Senate's declaration of war against Cleopatra VII of Egypt to the naming of Octavian as Pharaoh of Egypt"/>
@@ -24894,7 +24912,9 @@
     </Feature>
     <Feature data="Ptolemaic Kingdom" zh-data="" id="994" uri="http://dbpedia.org/resource/Ptolemaic_Kingdom">
       <neighbors/>
-      <geodata/>
+      <geodata>
+		<coordinates lat="26.8206" lon="30.8025"/>
+	  </geodata>
       <timedata>
         <timeobj label="year end" value="30"/>
         <timeobj label="year leader" value="51"/>
@@ -24935,7 +24955,9 @@
       <neighbors>
         <neighbor dest="992" relationship="battle" weight="0"/>
       </neighbors>
-      <geodata/>
+      <geodata>
+		<coordinates lat="41.1099" lon="14.8475"/>
+	  </geodata>
       <timedata>
         <timeobj label="death date" value="-012"/>
         <timeobj label="birth date" value="--10-23"/>
@@ -24977,7 +24999,9 @@
       <neighbors>
         <neighbor dest="992" relationship="battle" weight="0"/>
       </neighbors>
-      <geodata/>
+      <geodata>
+		<coordinates lat="31.2001" lon="29.9187"/>
+	  </geodata>
       <timedata>
         <timeobj label="death date" value="-030-08-01"/>
         <timeobj label="death date" value="-030"/>
@@ -25033,7 +25057,9 @@
     </Feature>
     <Feature data="Cleopatra" zh-data="" id="997" uri="http://dbpedia.org/resource/Cleopatra">
       <neighbors/>
-      <geodata/>
+      <geodata>
+		<coordinates lat="31.2001" lon="29.9187"/>
+	  </geodata>
       <timedata>
         <timeobj label="death date" value="1930-08-12"/>
         <timeobj label="birth date" value="0069"/>
