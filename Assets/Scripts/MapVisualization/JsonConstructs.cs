@@ -14,7 +14,16 @@ namespace JsonConstructs {
 		public int id;
 		public int turns;
 	}
-	[Serializable]
+    [Serializable]
+    public class LoadXMLRequest
+    {
+        public LoadXMLRequest(string url)
+        {
+            this.url = url;
+        }
+        public string url;
+    }
+    [Serializable]
 	public class StoryNode {
 		public int graph_node_id;
 		public List<StoryAct> story_acts;

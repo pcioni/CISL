@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
+using System.IO;
 using JsonConstructs;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
@@ -19,6 +20,7 @@ public class NarrationManager : MonoBehaviour {
     private IEnumerator current_narration;
 	private bool user_can_take_turn = true;
     private bool narration_reset = false;
+    private bool loaded_xml_backend = false;
 
     public static bool progressNarrationSwitch = false;
 	public static bool firstPassNarration = true;
@@ -47,11 +49,26 @@ public class NarrationManager : MonoBehaviour {
         DebugMode.startTimer("NarrationManager.Start()");
 
         lxml.Initialize();
-		Reset_Narration();
+
+        print("NarrationManager.Reset_Narration() :: started");
+
+        Reset_Narration();
         while(!narration_reset) {
             yield return null;
         }
         narration_reset = false;
+
+        print("NarrationManager.Reset_Narration() :: ended");
+        print("NarrationManager.Load_XML() :: started");
+
+        Load_XML();
+        while (!loaded_xml_backend)
+        {
+            yield return null;
+        }
+        loaded_xml_backend = false;
+
+        print("NarrationManager.Load_XML() :: ended");
 
         EventManager.StartListening(EventManager.EventType.INTERFACE_NODE_SELECT, narrationNodeSelectListener);
         EventManager.StartListening(EventManager.EventType.LABEL_COLLISION_CHECK, labelCollisionCheckListener);
@@ -146,15 +163,52 @@ public class NarrationManager : MonoBehaviour {
 		StartCoroutine(_Reset_Narration());
 	}
 
-	//Call this to progress the story turn
-	public void progressNarration() {
+    public void Load_XML()
+    {
+        //loads a new file
+        StartCoroutine(_Load_XML());
+    }
+
+    //Call this to progress the story turn
+    public void progressNarration() {
 		progressNarrationSwitch = true;
 		Debug.Log("progressing narration from event manager");
 	}
 
-	IEnumerator _Reset_Narration() {
-		string url = "http://" + AppConfig.Settings.Backend.ip_address + ":" + AppConfig.Settings.Backend.port + "/chronology/reset";
-		WWW www = new WWW(url);
+    IEnumerator _Load_XML (string url = "")
+    {
+        if (url == "")
+        {
+            //url = "http://" + AppConfig.Settings.Backend.ip_address + ":" + AppConfig.Settings.Backend.port + "/load_xml:" + lxml.xml_location;
+            url = "http://" + AppConfig.Settings.Backend.ip_address + ":" + AppConfig.Settings.Backend.port + "/load_xml";
+        }
+
+
+        string data = JsonUtility.ToJson(new LoadXMLRequest(Path.GetFileName(lxml.xml_location)));
+
+        WWW www = new WWW(url, Encoding.UTF8.GetBytes(data));
+
+        print("NarrationManager._Load_XML() :: url = " + url);
+        print("                               data = " + data);
+
+        yield return new WaitForSeconds(5);
+        loaded_xml_backend = true;
+
+        //yield return www;
+        //if (www.error == null)
+        //{
+        //    print("LOADED NEW XML IN BACKEND");
+        //    print(url);
+        //    loaded_xml_backend = true;
+        //}
+    }
+
+    IEnumerator _Reset_Narration() {
+        string url = "http://" + AppConfig.Settings.Backend.ip_address + ":" + AppConfig.Settings.Backend.port + "/chronology/reset";
+
+        print("NarrationManager._Reset_Narration() :: url =  " + url);
+
+        WWW www = new WWW(url);
 		yield return www;
 		if (www.error == null) {
 			print("NARRATION RESET");

@@ -176,7 +176,8 @@ public class LoadXML : MonoBehaviour {
 		foreach(GraphNodeLight gn in response.graph_nodes) {
 			string e_type = (gn.entity_type.Count == 0) ? "unknown" : ((gn.entity_type.Count > 1) ? gn.entity_type[1] : gn.entity_type[0]);
 
-			idMap [gn.id].setCategory (e_type);
+            if (idMap.ContainsKey(gn.id))
+			    idMap [gn.id].setCategory (e_type);
 		}
 
 		loaded = true;
