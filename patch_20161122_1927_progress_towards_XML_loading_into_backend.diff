@@ -1,0 +1,113 @@
+diff --git a/Assets/Scripts/MapVisualization/NarrationManager.cs b/Assets/Scripts/MapVisualization/NarrationManager.cs
+index d0d1970..b9f23f9 100644
+--- a/Assets/Scripts/MapVisualization/NarrationManager.cs
++++ b/Assets/Scripts/MapVisualization/NarrationManager.cs
+@@ -19,6 +19,7 @@ public class NarrationManager : MonoBehaviour {
+     private IEnumerator current_narration;
+ 	private bool user_can_take_turn = true;
+     private bool narration_reset = false;
++    private bool loaded_xml_backend = false;
+ 
+     public static bool progressNarrationSwitch = false;
+ 	public static bool firstPassNarration = true;
+@@ -47,12 +48,20 @@ public class NarrationManager : MonoBehaviour {
+         DebugMode.startTimer("NarrationManager.Start()");
+ 
+         lxml.Initialize();
+-		Reset_Narration();
++
++        Reset_Narration();
+         while(!narration_reset) {
+             yield return null;
+         }
+         narration_reset = false;
+ 
++        Load_XML();
++        while (!loaded_xml_backend)
++        {
++            yield return null;
++        }
++        loaded_xml_backend = false;
++
+         EventManager.StartListening(EventManager.EventType.INTERFACE_NODE_SELECT, narrationNodeSelectListener);
+         EventManager.StartListening(EventManager.EventType.LABEL_COLLISION_CHECK, labelCollisionCheckListener);
+         EventManager.StartListening(EventManager.EventType.INTERFACE_ZOOM_OUT, labelCollisionCheckListener);
+@@ -112,15 +121,25 @@ public class NarrationManager : MonoBehaviour {
+         // SHIFT + D + L
+         bool loadDataSet = (shiftDown && Input.GetKey(KeyCode.D) && Input.GetKey(KeyCode.L));
+         // map keys 1, 2, and 3 to level indexes 0, 1, and 2
+-        int levelID = Input.GetKey(KeyCode.Alpha1) ? 0 : Input.GetKey(KeyCode.Alpha2) ? 1 : Input.GetKey(KeyCode.Alpha3) ? 2 : -1;
++        int levelID = 
++            Input.GetKey(KeyCode.Alpha1) || Input.GetKey(KeyCode.Keypad1) ? 0 : 
++            Input.GetKey(KeyCode.Alpha2) || Input.GetKey(KeyCode.Keypad2) ? 1 : 
++            Input.GetKey(KeyCode.Alpha3) || Input.GetKey(KeyCode.Keypad3) ? 2 : -1;
+         if (loadDataSet && levelID >= 0)
+         {
+             //TODO: could this possibly be spammed? Should we figure out a way to only do this once every x seconds?
+             first_flag = true;
++            Debug.Log("NarrationManager.Update() :: loading loadDataSet = " + loadDataSet);
++            Debug.Log("NarrationManager.Update() :: loading levelID = " + levelID);
+             SceneManager.LoadScene(levelID);
++        } else if (loadDataSet)
++        {
++            Debug.Log("NarrationManager.Update() :: loading loadDataSet = " + loadDataSet);
++            Debug.Log("NarrationManager.Update() :: loading levelID = " + levelID);
+         }
+ 
+         labelCollisionCheck();
++
+     }
+ 
+     private int labelCollisionCheckCount = 0;
+@@ -141,19 +160,43 @@ public class NarrationManager : MonoBehaviour {
+     }
+ 
+ 
+-    public void Reset_Narration() {
+-		//resets narration history
+-		StartCoroutine(_Reset_Narration());
+-	}
++    public void Reset_Narration()
++    {
++        //resets narration history
++        StartCoroutine(_Reset_Narration());
++    }
+ 
+-	//Call this to progress the story turn
+-	public void progressNarration() {
++    public void Load_XML()
++    {
++        //loads a new file
++        StartCoroutine(_Load_XML());
++    }
++
++    //Call this to progress the story turn
++    public void progressNarration() {
+ 		progressNarrationSwitch = true;
+ 		Debug.Log("progressing narration from event manager");
+ 	}
+ 
+-	IEnumerator _Reset_Narration() {
+-		string url = "http://" + AppConfig.Settings.Backend.ip_address + ":" + AppConfig.Settings.Backend.port + "/chronology/reset";
++    IEnumerator _Load_XML (string url = "")
++    {
++        if (url == "")
++        {
++            url = "http://" + AppConfig.Settings.Backend.ip_address + ":" + AppConfig.Settings.Backend.port + "/load_xml:" + AppConfig.Settings.Frontend.xml_location;
++        }
++        WWW www = new WWW(url);
++        yield return www;
++        if (www.error == null)
++        {
++            print("LOADED NEW XML IN BACKEND");
++            print(url);
++            loaded_xml_backend = true;
++        }
++    }
++
++    IEnumerator _Reset_Narration() {
++        string url = "http://" + AppConfig.Settings.Backend.ip_address + ":" + AppConfig.Settings.Backend.port + "/load_xml:" + AppConfig.Settings.Frontend.xml_location;
++        //string url = "http://" + AppConfig.Settings.Backend.ip_address + ":" + AppConfig.Settings.Backend.port + "/chronology/reset";
+ 		WWW www = new WWW(url);
+ 		yield return www;
+ 		if (www.error == null) {
