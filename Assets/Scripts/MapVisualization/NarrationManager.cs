@@ -85,9 +85,10 @@ public class NarrationManager : MonoBehaviour {
                 //Narrate(495, 9); // "WWII: Linden Cameron (node 495)" narration start
                 break;
             case "timelineTest4_Roman_WWII_Analogy":
-                Narrate(1, 2); // "Roman_WWII_Analogy: <nodeName?> (node number?)" narration start
+                //Narrate(1, 2); // "Roman_WWII_Analogy: WW II (node 1)" narration start
                 //Narrate(44, 102); // "Roman_WWII_Analogy: Battle of Actium (node 44) :: Mediterranean and Middle East theatre of World War II (node 102)" narration start
                 //Narrate(129, 33); // "Roman_WWII_Analogy: Adolf Hitler (node 129) :: Augustus (node 33)" narration start
+                Narrate(1, 216); // "Roman_WWII_Analogy: WW II (node 1) :: Charles Crombie (node 216)" narration start
                 break;
             default:
                 Debug.Log("NarrationManager.Start() :: unhandled scene name");
