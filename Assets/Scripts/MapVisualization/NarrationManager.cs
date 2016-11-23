@@ -184,7 +184,7 @@ public class NarrationManager : MonoBehaviour {
         }
 
 
-        string data = JsonUtility.ToJson(new LoadXMLRequest(Path.GetFileName(lxml.xml_location)));
+        string data = JsonUtility.ToJson(new LoadXMLRequest(lxml.xml_location));
 
         WWW www = new WWW(url, Encoding.UTF8.GetBytes(data));
 
