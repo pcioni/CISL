@@ -1,0 +1,80 @@
+diff --git a/Assets/Scripts/GoogleMaps/Scripts/GoogleMap.cs b/Assets/Scripts/GoogleMaps/Scripts/GoogleMap.cs
+index 3c79660..d520ddb 100644
+--- a/Assets/Scripts/GoogleMaps/Scripts/GoogleMap.cs
++++ b/Assets/Scripts/GoogleMaps/Scripts/GoogleMap.cs
+@@ -137,8 +137,10 @@ public class GoogleMap : MonoBehaviour
+ 		}
+ 	}
+ 
+-	public void calcExtents (int _zoom) {
+-        // TODO: make these calculations respond to different zoom levels
++    //public void calcExtents(Vector2 min, Vector2 max, int _zoom = 4)
++    public void calcExtents(int _zoom = 4)
++    {
++        // TODO: make latitude range respond to different zoom levels & data extents
+         m_minLatitude = centerLocation.latitude - (lattidudeRange / 2) * width / height;
+         m_maxLatitude = centerLocation.latitude + (lattidudeRange / 2) * width / height;
+         m_maxLongitude = centerLocation.longitude + (longitudeRange / 2);
+diff --git a/Assets/Scripts/MapVisualization/LoadXML.cs b/Assets/Scripts/MapVisualization/LoadXML.cs
+index f21e98d..95c41f1 100644
+--- a/Assets/Scripts/MapVisualization/LoadXML.cs
++++ b/Assets/Scripts/MapVisualization/LoadXML.cs
+@@ -64,7 +64,10 @@ public class LoadXML : MonoBehaviour {
+ 
+ 		GameObject timeLineNodes = new GameObject("TimeLineNodes");
+ 
+-		foreach (Feature f in container.features) {
++        Vector2 locationMin = new Vector2(Mathf.Infinity, Mathf.Infinity);
++        Vector2 locationMax = new Vector2(Mathf.NegativeInfinity, Mathf.NegativeInfinity);
++
++        foreach (Feature f in container.features) {
+ 			GameObject tmp_obj = (GameObject) Instantiate(timelineNodePref, UnityEngine.Random.insideUnitCircle * 50, transform.rotation);
+ 			tmp_obj.name = "Node<"+f.data+">";
+ 			timelineNode tn = tmp_obj.GetComponent<timelineNode>();
+@@ -113,13 +116,24 @@ public class LoadXML : MonoBehaviour {
+ 				//check if node has geodata associated with it
+ 				tn.location = new Vector2(f.geodata[0].lat, f.geodata[0].lon);
+ 				tn.known_location = true;
+-			}
+-			catch {
++
++                locationMin.x = tn.location.x < locationMin.x ? tn.location.x : locationMin.x;
++                locationMin.y = tn.location.y < locationMin.y ? tn.location.y : locationMin.y;
++                locationMax.x = tn.location.x > locationMax.x ? tn.location.x : locationMax.x;
++                locationMax.y = tn.location.y > locationMax.y ? tn.location.y : locationMax.y;
++
++                //Debug.Log("LoadXML.Initialize() :: known_location = " + tn.known_location);
++                //Debug.Log("LoadXML.Initialize() ::       location = " + tn.location);
++                //Debug.Log("LoadXML.Initialize() ::    locationMin = " + locationMin);
++                //Debug.Log("LoadXML.Initialize() ::    locationMax = " + locationMax);
++            }
++            catch {
+ 				//otherwise set location to unknown
+ 				tn.location = new Vector2();
+ 				tn.known_location = false;
+ 			}
+-			tn.datevalue = tn.date.ToShortDateString();
++
++            tn.datevalue = tn.date.ToShortDateString();
+ 			tn.dateticks = tn.date.Ticks;
+             tn.known_date = tn.dateticks == 0 ? false : true;
+             nodeList.Add(tn);
+@@ -130,8 +144,16 @@ public class LoadXML : MonoBehaviour {
+ 			tmp_obj.transform.SetParent(timeLineNodes.transform);
+ 
+ 		}
+-		//TODO pass this a reference to the list so we dont have to manually assign it afterwards
+-		foreach (timelineNode tn in nodeList) {
++
++        Debug.Log("LoadXML.Initialize() ::    locationMin = " + locationMin);
++        Debug.Log("LoadXML.Initialize() ::    locationMax = " + locationMax);
++
++        // TODO: print this, update latiduge ranges based on it
++        Vector2 locRange = locationMax - locationMin;
++        Debug.Log("LoadXML.Initialize() ::       locRange = " + locRange);
++
++        //TODO pass this a reference to the list so we dont have to manually assign it afterwards
++        foreach (timelineNode tn in nodeList) {
+ 			tn.allNodes = nodeList;
+ 		}
+ 
