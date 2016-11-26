@@ -157,6 +157,16 @@ public class LoadXML : MonoBehaviour {
 		TimeLineBar.minDays = mindays;
 		TimeLineBar.maxDays = maxdays;
 
+        //TODO: Hack for timeline scaling in demo, remove later!
+        if (xml_location.Substring(xml_location.LastIndexOf("/") + 1).Equals("roman_ww2_analogy_2.xml"))
+        {
+            //Min days is 1860
+            TimeLineBar.minDays = 678900;
+            //Max days is 1980
+            TimeLineBar.maxDays = 722700;
+            //Make sure the granularity of the timeline bar is sufficient. Divide the normal zoom level by 16.
+            TimeLineBar.zoomDivisor = 16;
+        }//end if
 
 		string url = "http://" + AppConfig.Settings.Backend.ip_address + ":" + AppConfig.Settings.Backend.port + "/getgraph";
 		WWW www = new WWW(url);

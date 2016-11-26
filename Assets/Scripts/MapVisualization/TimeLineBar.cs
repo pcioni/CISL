@@ -11,6 +11,7 @@ public class TimeLineBar : MonoBehaviour {
 
 	public static long minDays = 0;
 	public static long maxDays = 1095000;
+    public static long zoomDivisor = 1;
 
 	public static float maxTimelineWidth = 100;
 
@@ -21,7 +22,8 @@ public class TimeLineBar : MonoBehaviour {
 
 	public static float dateToPosition(long totaldays) {
 		//given a date in total days, give the x position
-
+        print("min days: " + minDays);
+        print("max days: " + maxDays);
 		//return map(totaldays, minDays, maxDays, -maxTimelineWidth, maxTimelineWidth);
 		return (totaldays - minDays) * (maxTimelineWidth + maxTimelineWidth) / (maxDays - minDays) - maxTimelineWidth;
 
@@ -29,7 +31,8 @@ public class TimeLineBar : MonoBehaviour {
 
 	public static long positionToDate(float xpos) {
 		//given the x position, give a date in total days
-
+        print("min days: " + minDays);
+        print("max days: " + maxDays);
 		//return (long)map(xpos, -maxTimelineWidth, maxTimelineWidth, minDays, maxDays);
 		return (long)((xpos + maxTimelineWidth) * (maxDays - minDays) / (maxTimelineWidth + maxTimelineWidth) + minDays);
 
@@ -55,7 +58,9 @@ public class TimeLineBar : MonoBehaviour {
 		setData(Camera.main.orthographicSize);
 	}
 
-	void setData(float zoomlevel) {
+	public void setData(float zoomlevel) {
+        //TODO: Hack for variable zoom level during demo, remove later!
+        zoomlevel = zoomlevel / zoomDivisor;
 
 		foreach(GameObject g in sections) {
 			Destroy(g);
