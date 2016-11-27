@@ -194,8 +194,12 @@ public class NarrationManager : MonoBehaviour {
         print("                               data = " + data);
 
         yield return new WaitForSeconds(5);
+		print("NarrationManager._Load_XML(), done waiting for backend.");
         loaded_xml_backend = true;
 
+		//Now that the XML is done loading in the backend, categorize nodes.
+		lxml.CategorizeNodes();
+		
         //yield return www;
         //if (www.error == null)
         //{

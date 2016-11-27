@@ -290,6 +290,11 @@ public class timelineNode : MonoBehaviour
 		}
 		Moveable = true;
 		startPosition = transform.position;
+		
+		//TODO: Part of hack for demo for rescalable timeline. Remove later!
+		//Center labels again.
+		ntContainer.UpdateTarget(this.transform);
+		ntContainer.ReCenter();
 	}
 
 	private void Float()
@@ -476,16 +481,15 @@ public class timelineNode : MonoBehaviour
 			ms_curvedLineParent.transform.SetParent(ms_curvedLineParent.transform);
 			yield return null;
 		}
-
+		
 		tmplcr = null;
 	}
 
     public void drawPastNarrationLines() {
         //Uses a public list of transforms from NarrationManager. Focus() adds a node to the list.
 		
-		//TODO: Part of demo hack for rescalable timeline
-		//Center labels again.
-		//ntContainer.ReCenter();
+		//TODO: Part of demo hack for rescalable timeline. Remove later!
+		//nametag.GetComponent<NameTag>().reCenter();
 		//Redo past narration lines
 		pastNarrationNodePositions = GameObject.Find("loader").GetComponent<NarrationManager>().pastNarrationNodeTransforms;
 		if (this.node_name.Equals("Battle of Actium"))

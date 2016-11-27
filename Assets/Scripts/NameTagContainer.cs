@@ -127,7 +127,7 @@ public class NameTagContainer : MonoBehaviour
 
         // TODO: this seems to duplicate functionality of updateLabelPositions();
         for (int i = 0; i < m_nameTags.Count; i++)
-		{
+		{			
 			m_nameTags[i].setTarget((GameObject.Instantiate(
 				m_slot, 
 				target.position, 
@@ -141,6 +141,18 @@ public class NameTagContainer : MonoBehaviour
 
     }
 
+	//TODO: Part of demo hack for rescalable timeline, remove later!
+	public void UpdateTarget(Transform target)
+	{
+		follow = target;
+		captureOriginalPositions ();
+		for (int i = 0; i < m_nameTags.Count; i++)
+		{			
+			m_nameTags[i].SetNewTarget(target.position);
+		}
+		EventManager.TriggerEvent(EventManager.EventType.LABEL_COLLISION_CHECK, "");
+	}//end method UpdateTarget
+	
     public void ReCenter()
 	{
 		transform.position = new Vector3(follow.position.x, follow.position.y, 0);

@@ -168,11 +168,18 @@ public class LoadXML : MonoBehaviour {
             TimeLineBar.zoomDivisor = 16;
         }//end if
 
+		loaded = true;
+
+        DebugMode.stopTimer("LoadXML.Initialize()");
+    }
+	
+	public void CategorizeNodes()
+	{
 		string url = "http://" + AppConfig.Settings.Backend.ip_address + ":" + AppConfig.Settings.Backend.port + "/getgraph";
 		WWW www = new WWW(url);
 		float start = Time.time;
 		while (!www.isDone) {//wait for request
-			if(Time.time > start + 10) {//time out after 10s
+			if(Time.time > start + 5) {//time out after 10s
 				break;
 			}
 		}
@@ -189,11 +196,7 @@ public class LoadXML : MonoBehaviour {
             if (idMap.ContainsKey(gn.id))
 			    idMap [gn.id].setCategory (e_type);
 		}
-
-		loaded = true;
-
-        DebugMode.stopTimer("LoadXML.Initialize()");
-    }
+	}//end method CategorizeNodes
 
     long map(long x, long in_min, long in_max, long out_min, long out_max) {
 		return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
