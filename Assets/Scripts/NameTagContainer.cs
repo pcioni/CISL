@@ -59,6 +59,7 @@ public class NameTagContainer : MonoBehaviour
         float w = m_labelPanel.GetComponent<RectTransform>().rect.width + m_labelXOffset;
         float h = m_nodeCollisionBox.size.y;
         m_nodeCollisionBox.size = new Vector2(w, h);
+        m_nodeCollisionBox.offset = new Vector2(-w / 2, 0f);
 
         updateLabelPositions();
 
@@ -223,27 +224,29 @@ public class NameTagContainer : MonoBehaviour
 
             foreach (NameTag nt in m_nameTags)
             {
-                float xMax = nt.m_curContainer.m_nodeCollisionBox.transform.position.x / scale.x + nt.m_curContainer.m_nodeCollisionBox.size.x / 2;
+                Transform ntTRNS = nt.m_curContainer.m_nodeCollisionBox.transform;
+                BoxCollider2D ntCLDR = nt.m_curContainer.m_nodeCollisionBox;
+                float xMax = ntTRNS.position.x / scale.x + ntCLDR.offset.x + ntCLDR.size.x / 2;
                 if (xMax > max.x)
                 {
                     max.x = xMax;
                 }
 
 
-                float yMax = nt.m_curContainer.m_nodeCollisionBox.transform.position.y / scale.y + nt.m_curContainer.m_nodeCollisionBox.size.y / 2;
+                float yMax = ntTRNS.position.y / scale.y + ntCLDR.offset.y + ntCLDR.size.y / 2;
                 if (yMax > max.y)
                 {
                     max.y = yMax;
                 }
 
-                float xMin = nt.m_curContainer.m_nodeCollisionBox.transform.position.x / scale.x - nt.m_curContainer.m_nodeCollisionBox.size.x / 2;
+                float xMin = ntTRNS.position.x / scale.x + ntCLDR.offset.x - ntCLDR.size.x / 2;
                 if (xMin < min.x)
                 {
                     min.x = xMin;
                 }
 
 
-                float yMin = nt.m_curContainer.m_nodeCollisionBox.transform.position.y / scale.y - nt.m_curContainer.m_nodeCollisionBox.size.y / 2;
+                float yMin = ntTRNS.position.y / scale.y + ntCLDR.offset.y - ntCLDR.size.y / 2;
                 if (yMin < min.y)
                 {
                     min.y = yMin;

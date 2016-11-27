@@ -275,6 +275,7 @@ public class timelineNode : MonoBehaviour
 		StartCoroutine(moveCoroutine);
 	}
 
+    public AnimationCurve ease = new AnimationCurve();
 	private IEnumerator _move(float movetime)
 	{
 		Vector3 currentPos = transform.position;
@@ -282,13 +283,17 @@ public class timelineNode : MonoBehaviour
 		while (t < 1)
 		{
 			t += Time.deltaTime / movetime;
-			transform.position = Vector3.Lerp(currentPos, target_position, t);
+
+			transform.position = Vector3.Lerp(currentPos, target_position, ease.Evaluate(t));
 			//Each time this node moves, if it is in an appropriate state, re-draw its lines
 			if (state == focusState.IN || state == focusState.PAST)
 				drawLines();
 			yield return null;
 		}
-		Moveable = true;
+        //Each time this node moves, if it is in an appropriate state, re-draw its lines
+        if (state == focusState.IN || state == focusState.PAST) drawLines();
+        
+        Moveable = true;
 		startPosition = transform.position;
 		
 		//TODO: Part of hack for demo for rescalable timeline. Remove later!
