@@ -22,8 +22,6 @@ public class TimeLineBar : MonoBehaviour {
 
 	public static float dateToPosition(long totaldays) {
 		//given a date in total days, give the x position
-        print("min days: " + minDays);
-        print("max days: " + maxDays);
 		//return map(totaldays, minDays, maxDays, -maxTimelineWidth, maxTimelineWidth);
 		return (totaldays - minDays) * (maxTimelineWidth + maxTimelineWidth) / (maxDays - minDays) - maxTimelineWidth;
 
@@ -31,8 +29,6 @@ public class TimeLineBar : MonoBehaviour {
 
 	public static long positionToDate(float xpos) {
 		//given the x position, give a date in total days
-        print("min days: " + minDays);
-        print("max days: " + maxDays);
 		//return (long)map(xpos, -maxTimelineWidth, maxTimelineWidth, minDays, maxDays);
 		return (long)((xpos + maxTimelineWidth) * (maxDays - minDays) / (maxTimelineWidth + maxTimelineWidth) + minDays);
 

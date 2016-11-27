@@ -27,7 +27,10 @@ public class timelineNode : MonoBehaviour
 	public Vector3 baseSize;
 	public Vector3 timelinePosition; //where the node should be on the timeline
 	public Vector3 mapPosition; //where the node should be on the map
-    public List<Vector3> pastNarrationNodes;
+	
+    public List<Vector3> pastNarrationNodePositions;
+	public List<timelineNode> pastNarrationNodes;
+	
 	private Vector3 target_position;
 	public Vector3 startPosition;
 	public List<KeyValuePair<string, timelineNode>> neighbors = new List<KeyValuePair<string, timelineNode>>();//use kvp because no tuple support in unity
@@ -39,7 +42,7 @@ public class timelineNode : MonoBehaviour
 	public GameObject nametagprefab;
 	public GameObject nametag;
 	private NameTagContainer ntContainer;
-    private LineRenderer pastNarrationLineRenderer;
+    public LineRenderer pastNarrationLineRenderer;
 	private IEnumerator moveCoroutine;//reference to movement
 	public nodeCategory category = nodeCategory.UNKNOWN;
 
@@ -307,8 +310,12 @@ public class timelineNode : MonoBehaviour
 	//Bring this node into focus.
 	public void Focus()
 	{
-        pastNarrationNodes = GameObject.Find("loader").GetComponent<NarrationManager>().pastNarrationNodeTransforms;
-        pastNarrationNodes.Add(transform.position);
+        pastNarrationNodePositions = GameObject.Find("loader").GetComponent<NarrationManager>().pastNarrationNodeTransforms;
+        pastNarrationNodePositions.Add(transform.position);
+		
+		//TODO: Part of hack for demo.
+		pastNarrationNodes = GameObject.Find("loader").GetComponent<NarrationManager>().pastNarrationNodes;
+		pastNarrationNodes.Add(this);
 
 		//particle.Play();
 
@@ -425,8 +432,9 @@ public class timelineNode : MonoBehaviour
 	//Assign Line Renderer vertcies
 	private IEnumerator _drawLines()
 	{
-        drawPastNarrationLines();
 
+	    drawPastNarrationLines();
+	
         foreach (LineRenderer lr in m_renderers)
 		{//need to clear old lines
 			Destroy(lr.gameObject);
@@ -469,14 +477,29 @@ public class timelineNode : MonoBehaviour
 			yield return null;
 		}
 
-
 		tmplcr = null;
 	}
 
-    private void drawPastNarrationLines() {
+    public void drawPastNarrationLines() {
         //Uses a public list of transforms from NarrationManager. Focus() adds a node to the list.
-        pastNarrationLineRenderer.SetVertexCount(pastNarrationNodes.Count);
-        pastNarrationLineRenderer.SetPositions(pastNarrationNodes.ToArray());
+		
+		//TODO: Part of demo hack for rescalable timeline
+		//Center labels again.
+		//ntContainer.ReCenter();
+		//Redo past narration lines
+		pastNarrationNodePositions = GameObject.Find("loader").GetComponent<NarrationManager>().pastNarrationNodeTransforms;
+		if (this.node_name.Equals("Battle of Actium"))
+		{
+			pastNarrationNodes = GameObject.Find("loader").GetComponent<NarrationManager>().pastNarrationNodes;
+			pastNarrationNodePositions = new List<Vector3>();
+			foreach (timelineNode tn in pastNarrationNodes)
+			{
+				pastNarrationNodePositions.Add(tn.transform.position);
+			}//end foreach
+		}//end if
+		
+		pastNarrationLineRenderer.SetVertexCount(pastNarrationNodePositions.Count);
+		pastNarrationLineRenderer.SetPositions(pastNarrationNodePositions.ToArray());
 
         // Old, clunky method. 
         /*//straight-line rendering for past story nodes

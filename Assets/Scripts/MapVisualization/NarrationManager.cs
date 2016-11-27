@@ -16,6 +16,8 @@ public class NarrationManager : MonoBehaviour {
     private UnityAction<string> labelCollisionCheckListener;
 
     public List<Vector3> pastNarrationNodeTransforms = new List<Vector3>();
+	//TODO: Part of hack for demo. Remove later?
+	public List<timelineNode> pastNarrationNodes = new List<timelineNode>();
 
     private IEnumerator current_narration;
 	private bool user_can_take_turn = true;
@@ -319,12 +321,38 @@ public class NarrationManager : MonoBehaviour {
 			}
 			KeyValuePair<timelineNode, string> kvp = sequence_by_node[ix];
 			timelineNode node_to_present = kvp.Key;
+			
 			//Bring the previous node into past-focus
 			if (node_history.Count >= 1) {
 				node_to_present.pastStoryNodeTransform = node_history[node_history.Count - 1].transform;
 			}
+			
 			//Present this node
 			Present(node_to_present, node_history);
+			
+			//TODO: Hack for timeline scaling during demo, remove later!
+			if (node_to_present.node_name.Equals("Battle of Actium"))
+			{
+				TimeLineBar.minDays = 0;
+				TimeLineBar.maxDays = 722700;
+				TimeLineBar.zoomDivisor = 1;
+				//Reset timeline positions of all timeline nodes and redo all past narration lines.
+				this.pastNarrationNodeTransforms = new List<Vector3>();
+				foreach (timelineNode tn in lxml.nodeList)
+				{
+					tn.pastNarrationLineRenderer.SetVertexCount(0);
+					tn.reset_timeline_position();
+					//Reset past narration node positions
+					//pastNarrationNodeTransforms = new List<Vector3>();
+					//foreach (timelineNode tn2 in pastNarrationNodes)
+					//{
+					//	pastNarrationNodeTransforms.Add(tn2.transform.position);
+					//}//end foreach
+					
+					//if (tn.state == timelineNode.focusState.PAST)
+					//	tn.drawLines();
+				}//end foreach
+			}//end if
 
 			NodeData dataObj = new NodeData(node_to_present.node_id, kvp.Value, node_to_present.pic_urls, node_to_present.pic_labels);
 
