@@ -116,19 +116,18 @@ public class NameTag : MonoBehaviour {
     {
         //i dont know how on earth the z position screws up when you zoom
         //but it needs to be constantly set to 0 or else it goes out of camera cull
-        Vector3 tmp = transform.position;
-        tmp.z = 0;
-        transform.position = tmp;
+        Vector3 tmp0 = transform.position;
+        tmp0.z = 0;
+        transform.position = tmp0;
 
-        //		tmp = m_marker.position;
-        tmp = follow.transform.position;
-        tmp.z = 0;
-        //		tmp.y += .5f;
-        sj.connectedAnchor = tmp;
+        Vector3 tmp1 = follow.transform.position;
+        //		tmp1 = m_marker.position;
+        tmp1.z = 0;
+        //		tmp1.y += .5f;
+        sj.connectedAnchor = tmp1;
 
         Vector3 tmp2 = m_marker.position;
         tmp2.z = 0;
-
 
         lr.SetPosition(0, tmp2);
         lr.SetPosition(1, new Vector3(

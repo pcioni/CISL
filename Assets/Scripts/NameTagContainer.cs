@@ -123,7 +123,6 @@ public class NameTagContainer : MonoBehaviour
 	public void SetTarget(Transform target, string name)
 	{
 		follow = target;
-
 		captureOriginalPositions ();
 
         // TODO: this seems to duplicate functionality of updateLabelPositions();
@@ -139,7 +138,6 @@ public class NameTagContainer : MonoBehaviour
 
         updateLabelPositions(); // TODO: check placement of these calls
         EventManager.TriggerEvent(EventManager.EventType.LABEL_COLLISION_CHECK, "");
-
     }
 
 	//TODO: Part of demo hack for rescalable timeline, remove later!
@@ -147,11 +145,9 @@ public class NameTagContainer : MonoBehaviour
 	{
 		follow = target;
 		captureOriginalPositions ();
-		for (int i = 0; i < m_nameTags.Count; i++)
-		{			
-			m_nameTags[i].SetNewTarget(target.position);
-		}
-		EventManager.TriggerEvent(EventManager.EventType.LABEL_COLLISION_CHECK, "");
+
+        updateLabelPositions(); // TODO: check placement of these calls
+        EventManager.TriggerEvent(EventManager.EventType.LABEL_COLLISION_CHECK, "");
 	}//end method UpdateTarget
 	
     public void ReCenter()
@@ -205,7 +201,6 @@ public class NameTagContainer : MonoBehaviour
 		}
 
         ResizeGroupCollisionBox();
-        updateLabelPositions();
     }
 
     public void ResizeGroupCollisionBox()
