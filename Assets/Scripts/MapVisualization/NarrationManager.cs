@@ -153,9 +153,14 @@ public class NarrationManager : MonoBehaviour {
             CameraController.CollisionDetection();
             labelCollisionCheckCount += 1;
         }
+        else if (labelCollisionCheckCount < labelCollisionCheckMax * 2)
+        {
+            labelCollisionCheckCount += 1;
+        }
         else
         {
-            labelCollisionCheckCount = -1;
+            CameraController.CollisionDetection();
+            labelCollisionCheckCount = labelCollisionCheckMax;
         }
     }
 
