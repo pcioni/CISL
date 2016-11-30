@@ -2,6 +2,8 @@
 using UnityEngine.Events;
 using UnityEngine.UI;
 using System.Collections.Generic;
+using System.Collections;
+
 
 //[RequireComponent(typeof(Text))]
 public class TimeLineBar : MonoBehaviour {
@@ -13,7 +15,7 @@ public class TimeLineBar : MonoBehaviour {
 	public static long maxDays = 1095000;
     public static long zoomDivisor = 1;
 
-	public static float maxTimelineWidth = 100;
+    public static float maxTimelineWidth = 100;
 
 	private RectTransform rt;
 
@@ -44,6 +46,8 @@ public class TimeLineBar : MonoBehaviour {
 		listener = delegate (string data) {
 			setData(float.Parse(data));
 		};
+
+
 	}
 
 	// Use this for initialization

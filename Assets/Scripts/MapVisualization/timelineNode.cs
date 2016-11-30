@@ -181,7 +181,7 @@ public class timelineNode : MonoBehaviour
 		reset_timeline_position ();
 	}
 
-	public void reset_timeline_position()
+	public void reset_timeline_position(float moveTime = 1.5f)
 	{
 		int totaldays = 365 * date.Year + date.DayOfYear;
 		float ypos = 0;
@@ -219,7 +219,7 @@ public class timelineNode : MonoBehaviour
         // Is this where I would interpolate XPosition?
 		//timelinePosition = new Vector3(TimeLineBar.dateToPosition(totaldays), ypos + (node_id % 5)-5, 0); //deterministic random for horizontal stretch
 		timelinePosition = new Vector3(TimeLineBar.dateToPosition(totaldays), ypos + (node_id % 15) - 15, 0); //deterministic random for horizontal stretch
-		moveToPosition(timelinePosition);
+		moveToPosition(timelinePosition, moveTime);
 	}
 
 	public void enable_tag()
@@ -267,10 +267,10 @@ public class timelineNode : MonoBehaviour
         EventManager.TriggerEvent(EventManager.EventType.LABEL_COLLISION_CHECK, "");
     }
 
-	public void moveToPosition(Vector3 position)
+	public void moveToPosition(Vector3 position, float moveTime)
 	{
 		if (moveCoroutine != null) StopCoroutine(moveCoroutine);
-		moveCoroutine = _move(1.5f);
+		moveCoroutine = _move(moveTime);
 		target_position = position;
 		StartCoroutine(moveCoroutine);
 	}

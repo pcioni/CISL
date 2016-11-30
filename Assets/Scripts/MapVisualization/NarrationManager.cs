@@ -29,8 +29,11 @@ public class NarrationManager : MonoBehaviour {
 
 	private static bool first_flag = true;//set to false after first node has been expanded
 
-	void Awake() {
-		progressNarrationSwitch = false;
+    public TimeLineBar tlb;
+
+    void Awake() {
+        tlb = GameObject.Find("TimeLine").GetComponent<TimeLineBar>();
+        progressNarrationSwitch = false;
 		narrationNodeSelectListener = delegate (string data){
 			if (user_can_take_turn) {
 
@@ -272,8 +275,8 @@ public class NarrationManager : MonoBehaviour {
 
 	}//end method Present
 
-	//Narrate a sequence of nodes
-	IEnumerator _Narrate(int node_id, int turns) {
+    //Narrate a sequence of nodes
+    IEnumerator _Narrate(int node_id, int turns) {
 		print("===== NEW NARRATION =====");
 
 		//Ask the backend for a node sequence
@@ -362,6 +365,7 @@ public class NarrationManager : MonoBehaviour {
 					//	tn.drawLines();
 				}//end foreach
 			}//end if
+
 
 			NodeData dataObj = new NodeData(node_to_present.node_id, kvp.Value, node_to_present.pic_urls, node_to_present.pic_labels);
 

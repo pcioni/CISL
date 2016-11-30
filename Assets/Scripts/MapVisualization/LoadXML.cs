@@ -167,6 +167,10 @@ public class LoadXML : MonoBehaviour {
             //Make sure the granularity of the timeline bar is sufficient. Divide the normal zoom level by 16.
             TimeLineBar.zoomDivisor = 16;
         }//end if
+        else
+        {
+            TimeLineBar.zoomDivisor = 1;
+        }
 
 		loaded = true;
 
