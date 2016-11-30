@@ -46,8 +46,15 @@ public class LoadXML : MonoBehaviour {
 
 	public bool loaded = false;
 
-	// Use this for initialization
-	public void Initialize() {
+    public TimeLineBar tlb;
+
+    void Awake()
+    {
+        tlb = GameObject.Find("TimeLine").GetComponent<TimeLineBar>();
+    }
+
+    // Use this for initialization
+    public void Initialize() {
         DebugMode.startTimer("LoadXML.Initialize()");
 
         //load default file if not specified
@@ -154,23 +161,14 @@ public class LoadXML : MonoBehaviour {
 			if (totaldays < mindays) mindays = totaldays;
 		}
 
-		TimeLineBar.minDays = mindays;
-		TimeLineBar.maxDays = maxdays;
+        tlb.setData(mindays, maxdays, 1);
 
         //TODO: Hack for timeline scaling in demo, remove later!
         if (xml_location.Substring(xml_location.LastIndexOf("/") + 1).Equals("roman_ww2_analogy_2.xml"))
         {
-            //Min days is 1860
-            TimeLineBar.minDays = 678900;
-            //Max days is 1980
-            TimeLineBar.maxDays = 722700;
-            //Make sure the granularity of the timeline bar is sufficient. Divide the normal zoom level by 16.
-            TimeLineBar.zoomDivisor = 16;
+            tlb.setData(678900, 722700, 16);
         }//end if
-        else
-        {
-            TimeLineBar.zoomDivisor = 1;
-        }
+
 
 		loaded = true;
 

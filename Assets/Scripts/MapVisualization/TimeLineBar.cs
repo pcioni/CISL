@@ -14,6 +14,9 @@ public class TimeLineBar : MonoBehaviour {
 	public static long minDays = 0;
 	public static long maxDays = 1095000;
     public static long zoomDivisor = 1;
+    private static long minDaysTarget = 0;
+    private static long maxDaysTarget = 0;
+    private static long zoomDivisorTarget = 1;
 
     public static float maxTimelineWidth = 100;
 
@@ -47,26 +50,85 @@ public class TimeLineBar : MonoBehaviour {
 			setData(float.Parse(data));
 		};
 
-
-	}
+    }
 
 	// Use this for initialization
 	void Start () {
 		EventManager.StartListening(EventManager.EventType.INTERFACE_ZOOM_OUT, listener);
 		EventManager.StartListening(EventManager.EventType.INTERFACE_ZOOM_IN, listener);
 		EventManager.StartListening(EventManager.EventType.INTERFACE_PAN, listener);
-		setData(Camera.main.orthographicSize);
+        setData();
+//        setData(Camera.main.orthographicSize);
 	}
 
-	public void setData(float zoomlevel) {
+    private IEnumerator animateTimeLineBarCoroutine = null;
+
+    public void setData(long _minDays = 0, long _maxDays = 0, long _zoomDivisor = 0, float seconds = 0)
+    {
+        if (_minDays == 0) _minDays = minDays;
+        if (_maxDays == 0) _maxDays = maxDays;
+        if (_zoomDivisor == 0) _zoomDivisor = zoomDivisor;
+
+        minDaysTarget = _minDays;
+        maxDaysTarget = _maxDays;
+        zoomDivisorTarget = _zoomDivisor;
+
+        if (animateTimeLineBarCoroutine != null) StopCoroutine(animateTimeLineBarCoroutine);
+
+        if (seconds > 0)
+        {
+            animateTimeLineBarCoroutine = _animateTimeLineBar(seconds, _minDays, _maxDays, _zoomDivisor);
+            StartCoroutine(animateTimeLineBarCoroutine);
+        } else
+        {
+            minDays = minDaysTarget;
+            maxDays = maxDaysTarget;
+            zoomDivisor = zoomDivisorTarget;
+
+            setData(Camera.main.orthographicSize);
+        }
+    }
+
+    public AnimationCurve easeInOut;
+    private Vector3 dataFrom;
+    private Vector3 dataTo;
+    private Vector3 currentData;
+
+    public IEnumerator _animateTimeLineBar (float _secs, long _minDaysTo, long _maxDaysTo, long _zoomDivisorTo)
+    {
+        float t = 0f;
+        dataFrom = new Vector3(minDays, maxDays, zoomDivisor);
+        dataTo = new Vector3(_minDaysTo, _maxDaysTo, _zoomDivisorTo);
+        //currentData = new Vector3(minDays, maxDays, zoomDivisor);
+        while (t < 1)
+        {
+            t += Time.deltaTime / _secs;
+
+            currentData = Vector3.Lerp(dataFrom, dataTo, easeInOut.Evaluate(t));
+             
+            minDays = (long) currentData.x;
+            maxDays = (long) currentData.y;
+            zoomDivisor = (long) currentData.z;
+
+            setData(Camera.main.orthographicSize);
+
+            yield return null;
+        }
+
+        yield return null;
+    }
+
+    public void setData (float zoomlevel) {
         //TODO: Hack for variable zoom level during demo, remove later!
         zoomlevel = zoomlevel / zoomDivisor;
 
+        // Clear previous tick marks
 		foreach(GameObject g in sections) {
 			Destroy(g);
 		}
 		sections.Clear();
 
+        // create new tick marks based on granularity
 		int granularity = (int)(zoomlevel % 2 == 0 ? zoomlevel : (zoomlevel + 1));
 		granularity = granularity == 0 ? 1 : granularity;
 

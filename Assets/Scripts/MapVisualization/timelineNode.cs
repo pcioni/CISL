@@ -217,7 +217,6 @@ public class timelineNode : MonoBehaviour
 			break;
 		}
         // Is this where I would interpolate XPosition?
-		//timelinePosition = new Vector3(TimeLineBar.dateToPosition(totaldays), ypos + (node_id % 5)-5, 0); //deterministic random for horizontal stretch
 		timelinePosition = new Vector3(TimeLineBar.dateToPosition(totaldays), ypos + (node_id % 15) - 15, 0); //deterministic random for horizontal stretch
 		moveToPosition(timelinePosition, moveTime);
 	}

@@ -341,19 +341,27 @@ public class NarrationManager : MonoBehaviour {
 			
 			//Present this node
 			Present(node_to_present, node_history);
-			
+
 			//TODO: Hack for timeline scaling during demo, remove later!
 			if (node_to_present.node_name.Equals("Battle of Actium"))
 			{
+                float moveTime = 1.5f;
+                /*
+                tlb.setData(0, 722700, 1, moveTime);
+                //*/
+
+                //TODO: create a function in TimeLineBar to animate these
+                ///*
 				TimeLineBar.minDays = 0;
 				TimeLineBar.maxDays = 722700;
 				TimeLineBar.zoomDivisor = 1;
+                //*/
 				//Reset timeline positions of all timeline nodes and redo all past narration lines.
 				this.pastNarrationNodeTransforms = new List<Vector3>();
 				foreach (timelineNode tn in lxml.nodeList)
 				{
 					tn.pastNarrationLineRenderer.SetVertexCount(0);
-					tn.reset_timeline_position();
+					tn.reset_timeline_position(moveTime);
 					//Reset past narration node positions
 					//pastNarrationNodeTransforms = new List<Vector3>();
 					//foreach (timelineNode tn2 in pastNarrationNodes)
