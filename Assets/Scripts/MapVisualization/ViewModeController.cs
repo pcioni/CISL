@@ -58,6 +58,8 @@ public class ViewModeController : MonoBehaviour {
 	}
 
 	IEnumerator Start() {
+        UnitySlippyMap.Map.MapBehaviour mapBehavior = GameObject.Find("[Map]").GetComponent<UnitySlippyMap.Map.MapBehaviour>();
+
         Debug.Log("ViewModeController.Start()");
         DebugMode.startTimer("ViewModeController.Start()");
         Debug.Log("ViewModeController.Start() :: initilizing");
@@ -163,7 +165,8 @@ public class ViewModeController : MonoBehaviour {
             dummy.layer = LayerMask.NameToLayer("MapLayer");
             mn.transform.SetParent(current_map.transform, false);
 
-            mn.transform.localPosition = current_map.coord2local(tn.location);
+            mapBehavior.CreateMarker<UnitySlippyMap.Markers.MarkerBehaviour>(tn.name, new double[2] {  tn.location.y, tn.location.x }, mn.gameObject);
+            //mn.transform.localPosition = current_map.coord2local(tn.location);
             //TODO: should mapposition be updated here? i.e: 
             // mn.mapPosition = mn.transform.localPosition;
 
