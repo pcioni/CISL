@@ -37,7 +37,7 @@ public class timelineNode : MonoBehaviour
     public List<timelineNode> neighbors_incoming = new List<timelineNode>();
 	public List<timelineNode> allNodes;
 	public SpriteRenderer sr;
-	public UnityAction<string> callback = null;
+	public List<UnityAction<string>> callback = null;
 	public Transform pastStoryNodeTransform;
 	public GameObject nametagprefab;
 	public GameObject nametag;
@@ -132,7 +132,8 @@ public class timelineNode : MonoBehaviour
 
 	void Start()
 	{
-		particle = GetComponent<ParticleSystem>();
+        callback = new List<UnityAction<string>>();
+        particle = GetComponent<ParticleSystem>();
 		sr = GetComponent<SpriteRenderer>();
 		Moveable = false;
 		//transform.Rotate(Vector3.forward * UnityEngine.Random.Range(0f, 80f)); //add some random initial rotation to offset angle from other nodes
@@ -356,7 +357,7 @@ public class timelineNode : MonoBehaviour
 				neighbor_node.Value.HalfFocus();
 		}//end foreach
 
-		if (callback != null) callback("IN");
+		if (callback != null) callback.ForEach(action => action("IN"));
         EventManager.TriggerEvent(EventManager.EventType.LABEL_COLLISION_CHECK, "");
     }//end method Focus
 
@@ -377,7 +378,7 @@ public class timelineNode : MonoBehaviour
 		List<object> halfFocus = new List<object>();
 		halfFocus.AddRange(new object[] { gameObject.transform.position.y, gameObject.transform.position.x });
 		OSCHandler.Instance.SendMessageToClient("MaxServer", "/halfFocus/", halfFocus);
-		if (callback != null) callback("HALF");
+		if (callback != null) callback.ForEach(action => action("HALF"));
 
         EventManager.TriggerEvent(EventManager.EventType.LABEL_COLLISION_CHECK, "");
     }//end method HalfFocus
@@ -395,7 +396,7 @@ public class timelineNode : MonoBehaviour
 			, gameObject.transform.position.y
 			, gameObject.transform.position.z - 3);
 		ColorLines(line_out_focus_color);
-		if (callback != null) callback("PAST");
+		if (callback != null) callback.ForEach(action => action("PAST"));
 
         disable_tag(true);
     }//end method PastFocus
@@ -418,7 +419,7 @@ public class timelineNode : MonoBehaviour
 			, gameObject.transform.position.y
 			, gameObject.transform.position.z + 5);
 		ColorLines(line_out_focus_color);
-		if (callback != null) callback("OUT");
+		if (callback != null) callback.ForEach(action => action("OUT"));
 
         EventManager.TriggerEvent(EventManager.EventType.LABEL_COLLISION_CHECK, "");
     }//end method Unfocus
@@ -644,7 +645,7 @@ public class timelineNode : MonoBehaviour
 
             ChangeSize(new Vector3(baseSize.x * 2f, baseSize.y * 2f, baseSize.z));
 			ChangeColor(Color.cyan);
-			if (callback != null) callback("RE");
+			if (callback != null) callback.ForEach(action => action("RE"));
 
 			//Send OSC packet of posiion.x and position.y of moused over node
 			List<object> moused = new List<object>();
@@ -671,7 +672,7 @@ public class timelineNode : MonoBehaviour
 			}
 			mouseOver = false;
 			ChangeColor(base_color);
-			if (callback != null) callback("BACK");
+			if (callback != null) callback.ForEach(action => action("BACK"));
 		}//end if
 
 		if (state != focusState.IN)

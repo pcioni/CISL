@@ -17,7 +17,7 @@ public class mapNode : MonoBehaviour {
 	void Start () {
 		lr = GetComponent<LineRenderer>();
 		img = GetComponent<Image>();
-		master.callback = OnStateChange;
+		master.callback.Add(OnStateChange);
 		name = "mapNode(" + master.name + ")";
         OnStateChange(master.state.ToString());
 	}
@@ -89,13 +89,13 @@ public class mapNode : MonoBehaviour {
 		//yield return new WaitForSeconds(1);
 		Vector3 centralNodePos = transform.position;
 		centralNodePos.z = 1;
-		Vector3[] points = new Vector3[Mathf.Max(neighbors.Count * 2, 1)];
+		Vector3[] points = new Vector3[Mathf.Max(neighbors.Count * 2, 1)]; //TODO: why is this empty, this is a discrepency between the two versions
 		points[0] = centralNodePos;
 		int nCount = 0;
 		for (int i = 1; i < points.Length; i += 2) {
 			points[i - 1] = centralNodePos;
 			points[i] = neighbors[nCount].transform.position;
-			points[i].z = 1;
+			//points[i].z = 1;
 			nCount++;
 			yield return null;
 		}

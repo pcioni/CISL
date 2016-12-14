@@ -21,7 +21,7 @@ public class ViewModeController : MonoBehaviour {
 	public GameObject mapNodePrefab;
 	public List<mapNode> dummynodes;
 	public Dictionary<int, Vector2> dummynodemap;
-	public Dictionary<timelineNode, mapNode> crossmap;
+	public Dictionary<timelineNode, List<mapNode>> crossmap;
 
     public bool reconstructGeolocationData = true;
     public bool reconstructDateData = true;
@@ -68,7 +68,7 @@ public class ViewModeController : MonoBehaviour {
         lx = GetComponent<LoadXML>();
 		dummynodes = new List<mapNode>();
 		dummynodemap = new Dictionary<int, Vector2>();
-		crossmap = new Dictionary<timelineNode, mapNode>();
+		crossmap = new Dictionary<timelineNode, List<mapNode> >();
 
 		while (GoogleMap.m_maxLatitude == 0) {
 			yield return new WaitForEndOfFrame ();
@@ -161,18 +161,31 @@ public class ViewModeController : MonoBehaviour {
             GameObject dummy = Instantiate(mapNodePrefab) as GameObject;
 
             mapNode mn = dummy.GetComponent<mapNode>();
+            mn.GetComponent<LineRenderer>().SetWidth(.15f, .15f);
             mn.master = tn;
             dummy.layer = LayerMask.NameToLayer("MapLayer");
             mn.transform.SetParent(current_map.transform, false);
 
-            mapBehavior.CreateMarker<UnitySlippyMap.Markers.MarkerBehaviour>(tn.name, new double[2] {  tn.location.y, tn.location.x }, mn.gameObject);
-            //mn.transform.localPosition = current_map.coord2local(tn.location);
+            GameObject copy = GameObject.Instantiate(mn.gameObject);
+            mapNode copyMn = copy.GetComponent<mapNode>();
+            copyMn.master = tn;
+            copyMn.GetComponent<LineRenderer>().SetWidth(2.0f, 2.0f);
+
+
+            mapBehavior.CreateMarker<UnitySlippyMap.Markers.MarkerBehaviour>(tn.name, new double[2] {  tn.location.y, tn.location.x }, copy);
+            copy.GetComponentInChildren<RectTransform>().Rotate(new Vector3(-90, 0, -90));
+            copy.transform.localScale = new Vector3(0.001f, 0.001f, 0.001f);
+            mn.transform.localPosition = current_map.coord2local(tn.location);
             //TODO: should mapposition be updated here? i.e: 
             // mn.mapPosition = mn.transform.localPosition;
 
             dummynodemap[tn.node_id] = mn.transform.position;
             dummynodes.Add(mn);
-            crossmap[tn] = mn;
+            dummynodes.Add(copyMn);
+            crossmap[tn] = new List<mapNode>();
+
+            crossmap[tn].Add(mn);
+            crossmap[tn].Add(copyMn);
 
             //DebugMode.stopTimer(string.Format("ViewModeController.Start() :: instantiated map node \"{0}\" and set properties", tn.name));
 
@@ -186,12 +199,19 @@ public class ViewModeController : MonoBehaviour {
         // TODO: optimize this
         //assign corresponding neighbors
         foreach (timelineNode tn in lx.nodeList) {
-			mapNode tmp = crossmap[tn];
+			mapNode tmp = crossmap[tn][0];
 			foreach(KeyValuePair<string,timelineNode> tn2 in tn.neighbors) {
-				tmp.neighbors.Add(crossmap[tn2.Value]);
+				tmp.neighbors.Add(crossmap[tn2.Value][0]);
 			}
 			yield return null;
-		}
+
+            tmp = crossmap[tn][1];
+            foreach (KeyValuePair<string, timelineNode> tn2 in tn.neighbors)
+            {
+                tmp.neighbors.Add(crossmap[tn2.Value][1]);
+            }
+            yield return null;
+        }
 
         DebugMode.stopTimer("ViewModeController.Start() :: assigning neighbors");
         DebugMode.stopTimer("ViewModeController.Start()");
