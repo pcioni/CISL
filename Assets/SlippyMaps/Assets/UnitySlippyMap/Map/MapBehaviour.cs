@@ -1313,6 +1313,23 @@ namespace UnitySlippyMap.Map
 			IsDirty = true;
 		}
 
+        private const int mapQuality = 4;
+
+        public void SubZoom()
+        {
+
+            // move the camera
+            // FIXME: the camera jumps on the first zoom when tilted, because the cam altitude and zoom value are unsynced by the rotation
+            Transform cameraTransform = currentCamera.transform;
+
+            float tmp = GeoHelpers.MapScaleToOsmZoomLevel(cameraTransform.position.y, 0.0f, tileResolution, 72)/mapQuality;
+            CurrentZoom = Mathf.Clamp(tmp, minZoom,maxZoom);
+            
+            // set the update flag to tell the behaviour the user is manipulating the map
+            hasMoved = true;
+            IsDirty = true;
+        }
+
         #endregion
 
     }

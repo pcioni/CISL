@@ -293,6 +293,8 @@ public class ViewModeController : MonoBehaviour {
 
             yield return null;
         }
+
+        TestMapCISLCustom.SubZoom();
     }
 
     IEnumerator _pan(Vector2 _dest) {

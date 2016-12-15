@@ -35,7 +35,7 @@ using System.Collections.Generic;
 
 public class TestMapCISLCustom : MonoBehaviour
 {
-    private MapBehaviour map;
+    private static MapBehaviour map;
 
     public Texture LocationTexture;
     public Texture MarkerTexture;
@@ -55,6 +55,11 @@ public class TestMapCISLCustom : MonoBehaviour
 
     private List<LayerBehaviour> layers;
     private int currentLayerIndex = 0;
+
+    public static void SubZoom()
+    {
+        map.SubZoom();
+    }
 
     bool Toolbar(MapBehaviour map)
     {
