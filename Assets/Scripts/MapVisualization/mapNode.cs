@@ -88,7 +88,6 @@ public class mapNode : MonoBehaviour {
 	private IEnumerator _drawLines() {
 		//yield return new WaitForSeconds(1);
 		Vector3 centralNodePos = transform.position;
-		centralNodePos.z = 1;
 		Vector3[] points = new Vector3[Mathf.Max(neighbors.Count * 2, 1)]; //TODO: why is this empty, this is a discrepency between the two versions
 		points[0] = centralNodePos;
 		int nCount = 0;
