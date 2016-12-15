@@ -7,6 +7,8 @@ public class DebugMaps : MonoBehaviour {
     [SerializeField]
     private GameObject m_slippyCamera;
 
+    public static bool SLIPPY_MAPS = false;
+
 	// Use this for initialization
 	void Start () {
 	
@@ -15,7 +17,7 @@ public class DebugMaps : MonoBehaviour {
     // Update is called once per frame
     void Update()
     {
-        if (DebugMode.MS_ACTIVE)
+        if (SLIPPY_MAPS)
         {
             m_slippyCamera.SetActive(true);
             m_camera.SetActive(false);

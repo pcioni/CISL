@@ -85,11 +85,14 @@ public class GoogleMap : MonoBehaviour
 		//check for shift keypress
 		bool shiftDown = (Input.GetKey (KeyCode.LeftShift) || Input.GetKey (KeyCode.RightShift));
 
-		//check for refresh map kepress (SHIFT + M + R)
-		bool refresh = (shiftDown && Input.GetKey (KeyCode.M) && Input.GetKey (KeyCode.R));
+		//check for load google maps map kepress (SHIFT + M + E)
+		bool loadGoogleMaps = (shiftDown && Input.GetKey (KeyCode.M) && Input.GetKey (KeyCode.E));
 
-		//check for load map kepress (SHIFT + M + L)
-		bool load = (shiftDown && Input.GetKey (KeyCode.M) && Input.GetKey (KeyCode.L));
+        //check for show slippy maps keypress (SHIFT + M + E)
+        bool showSlippyMaps = (shiftDown && Input.GetKey(KeyCode.M) && Input.GetKeyDown(KeyCode.Y));
+
+        //check for load map kepress (SHIFT + M + L)
+        bool load = (shiftDown && Input.GetKey (KeyCode.M) && Input.GetKey (KeyCode.L));
 		// check for map to load keypresses
 		bool terrain = (load && Input.GetKey (KeyCode.N));
 		bool satellite = (load && Input.GetKey (KeyCode.E));
@@ -112,7 +115,15 @@ public class GoogleMap : MonoBehaviour
 			saved = false;
 		}
 
-		if (refresh && !refreshed) {
+        if (showSlippyMaps && !refreshed)
+        {
+            DebugMaps.SLIPPY_MAPS = !DebugMaps.SLIPPY_MAPS;
+            refreshed = true;
+        }
+        else {
+            refreshed = false;
+        }
+        if (loadGoogleMaps && !refreshed) {
 			Refresh ();
 			refreshed = true;
 			Debug.Log ("GoogleMap.update() :: refreshed image.");

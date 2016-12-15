@@ -243,7 +243,7 @@ public class ViewModeController : MonoBehaviour {
 		if (location.Equals( mapCam.transform.position)) return;
 		if (currentPan != null) StopCoroutine(currentPan);
         if (currentSlippyPan != null) StopCoroutine(currentSlippyPan);
-        currentSlippyPan = _panSlippy(new Vector3(mn.transform.position.x,mn.transform.position.y + 1000, mn.transform.position.z));
+        currentSlippyPan = _panSlippy(new Vector3(mn.transform.position.x,mn.transform.position.y + 500, mn.transform.position.z));
         currentPan = _pan(location);
         StartCoroutine(currentSlippyPan);
 		StartCoroutine(currentPan);
