@@ -180,6 +180,7 @@ public class TestMapCISLCustom : MonoBehaviour
 
         // create the map singleton
         map = MapBehaviour.Instance;
+        map.gameObject.layer = LayerMask.NameToLayer("MapLayer2");
         map.CurrentCamera = m_camera;//Camera.main;
         map.InputDelegate += UnitySlippyMap.Input.MapInput.BasicTouchAndKeyboard;
         map.CurrentZoom = 15.0f;

@@ -4,24 +4,29 @@ using System.Collections;
 public class DebugMaps : MonoBehaviour {
     [SerializeField]
     private GameObject m_camera;
+    [SerializeField]
+    private GameObject m_slippyCamera;
+
 	// Use this for initialization
 	void Start () {
 	
 	}
 
     // Update is called once per frame
-    void Update() {
+    void Update()
+    {
         if (DebugMode.MS_ACTIVE)
         {
-            RecursivelySetLayer(GameObject.Find("[Map]"), 14);
-            m_camera.active = false;
+            m_slippyCamera.SetActive(true);
+            m_camera.SetActive(false);
         }
         else
         {
-            RecursivelySetLayer(GameObject.Find("[Map]"), 0);
-            m_camera.active = true;
+            m_slippyCamera.SetActive(false);
+            m_camera.SetActive(true);
+
         }
-	}
+    }
 
     void RecursivelySetLayer(GameObject go, int layer)
     {

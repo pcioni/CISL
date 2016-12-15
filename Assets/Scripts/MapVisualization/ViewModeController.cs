@@ -19,7 +19,6 @@ public class ViewModeController : MonoBehaviour {
 	private LoadXML lx;
 
 	public GameObject mapNodePrefab;
-	public List<mapNode> dummynodes;
 	public Dictionary<int, Vector2> dummynodemap;
     public Dictionary<int, mapNode> dummynodeSlippyMap;
     public Dictionary<timelineNode, List<mapNode>> crossmap;
@@ -70,7 +69,6 @@ public class ViewModeController : MonoBehaviour {
         DebugMode.startTimer("ViewModeController.Start() :: initilizing");
 
         lx = GetComponent<LoadXML>();
-		dummynodes = new List<mapNode>();
 		dummynodemap = new Dictionary<int, Vector2>();
         dummynodeSlippyMap = new Dictionary<int, mapNode>();
         crossmap = new Dictionary<timelineNode, List<mapNode> >();
@@ -84,8 +82,9 @@ public class ViewModeController : MonoBehaviour {
         DebugMode.startTimer("ViewModeController.Start() :: reconstructing data based on existing data");
 
         bool result = false;
-		//find all of the appropriate positions for the current map
-		foreach (timelineNode tn in lx.nodeList) {
+
+        //find all of the appropriate positions for the current map
+        foreach (timelineNode tn in lx.nodeList) {
             //DebugMode.startTimer(string.Format("ViewModeController.Start() :: reconstructed \"{0}\" data based on existing data", tn.name));
 
             if (reconstructGeolocationData && !tn.known_location) {
@@ -122,6 +121,8 @@ public class ViewModeController : MonoBehaviour {
         DebugMode.stopTimer("ViewModeController.Start() :: reconstructing data based on existing data");
         Debug.Log("ViewModeController.Start() :: instantiating nodes and reconstructing data based on interpolated data");
         DebugMode.startTimer("ViewModeController.Start() :: instantiating nodes and reconstructing data based on interpolated data");
+
+        float t = Time.realtimeSinceStartup;
 
         foreach (timelineNode tn in lx.nodeList)
         {
@@ -171,23 +172,22 @@ public class ViewModeController : MonoBehaviour {
             dummy.layer = LayerMask.NameToLayer("MapLayer");
             mn.transform.SetParent(current_map.transform, false);
 
-            GameObject copy = GameObject.Instantiate(mn.gameObject);
-            mapNode copyMn = copy.GetComponent<mapNode>();
-            copyMn.master = tn;
-            copyMn.GetComponent<LineRenderer>().SetWidth(2.0f, 2.0f);
-
-
-            mapBehavior.CreateMarker<UnitySlippyMap.Markers.MarkerBehaviour>(tn.name, new double[2] {  tn.location.y, tn.location.x }, copy);
-            copy.GetComponentInChildren<RectTransform>().Rotate(new Vector3(-90, 0, -90));
-            copy.transform.localScale = new Vector3(0.001f, 0.001f, 0.001f);
             mn.transform.localPosition = current_map.coord2local(tn.location);
             //TODO: should mapposition be updated here? i.e: 
             // mn.mapPosition = mn.transform.localPosition;
 
+            GameObject copy = GameObject.Instantiate(mn.gameObject);
+            mapNode copyMn = copy.GetComponent<mapNode>();
+            copyMn.GetComponent<LineRenderer>().SetWidth(2.0f, 2.0f);
+            copyMn.master = tn;
+            copy.layer = LayerMask.NameToLayer("MapLayer2");
+
+            mapBehavior.CreateMarker<UnitySlippyMap.Markers.MarkerBehaviour>(tn.name, new double[2] {  tn.location.y, tn.location.x }, copy);
+            copy.GetComponentInChildren<RectTransform>().Rotate(new Vector3(-90, 0, -90));
+            copy.transform.localScale = new Vector3(0.001f, 0.001f, 0.001f);
+
             dummynodemap[tn.node_id] = mn.transform.position;
             dummynodeSlippyMap[tn.node_id] = copyMn;
-            dummynodes.Add(mn);
-            dummynodes.Add(copyMn);
             crossmap[tn] = new List<mapNode>();
 
             crossmap[tn].Add(mn);
@@ -195,7 +195,11 @@ public class ViewModeController : MonoBehaviour {
 
             //DebugMode.stopTimer(string.Format("ViewModeController.Start() :: instantiated map node \"{0}\" and set properties", tn.name));
 
-            yield return null;
+            if (t -  Time.realtimeSinceStartup < Time.fixedDeltaTime)
+            {
+                t = Time.realtimeSinceStartup;
+                yield return null;
+            }
         }
 
         DebugMode.stopTimer("ViewModeController.Start() :: instantiating nodes and reconstructing data based on interpolated data");
@@ -209,14 +213,18 @@ public class ViewModeController : MonoBehaviour {
 			foreach(KeyValuePair<string,timelineNode> tn2 in tn.neighbors) {
 				tmp.neighbors.Add(crossmap[tn2.Value][0]);
 			}
-			yield return null;
 
             tmp = crossmap[tn][1];
             foreach (KeyValuePair<string, timelineNode> tn2 in tn.neighbors)
             {
                 tmp.neighbors.Add(crossmap[tn2.Value][1]);
             }
-            yield return null;
+
+            if (t - Time.realtimeSinceStartup < Time.fixedDeltaTime)
+            {
+                t = Time.realtimeSinceStartup;
+                yield return null;
+            }
         }
 
         DebugMode.stopTimer("ViewModeController.Start() :: assigning neighbors");

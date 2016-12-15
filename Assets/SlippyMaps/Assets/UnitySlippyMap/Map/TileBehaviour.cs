@@ -280,9 +280,10 @@ namespace UnitySlippyMap.Map
 #endif
 			
 			tile.material = meshRenderer.material = new Material (shader);
-			
-			// setup the collider
-			boxCollider.size = new Vector3 (1.0f, 0.0f, 1.0f);
+            tile.gameObject.layer = LayerMask.NameToLayer("MapLayer2");
+
+            // setup the collider
+            boxCollider.size = new Vector3 (1.0f, 0.0f, 1.0f);
 		
 			return tile;
 		}
