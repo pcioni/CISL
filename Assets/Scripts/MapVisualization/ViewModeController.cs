@@ -21,14 +21,16 @@ public class ViewModeController : MonoBehaviour {
 	public GameObject mapNodePrefab;
 	public List<mapNode> dummynodes;
 	public Dictionary<int, Vector2> dummynodemap;
-	public Dictionary<timelineNode, List<mapNode>> crossmap;
+    public Dictionary<int, mapNode> dummynodeSlippyMap;
+    public Dictionary<timelineNode, List<mapNode>> crossmap;
 
     public bool reconstructGeolocationData = true;
     public bool reconstructDateData = true;
 
 	public Camera mapCam;
+    public Camera slippyMapCam;
 
-	void Awake() {
+    void Awake() {
 		listener = delegate (string data) {
 			// don't respond to repeated requests to pan to the same node
 			if (data == lastPanNodeData) return;
@@ -36,8 +38,10 @@ public class ViewModeController : MonoBehaviour {
 			NodeData nd = JsonUtility.FromJson<NodeData>(data);
 			Vector2 mappoint;
 			if(dummynodemap.TryGetValue(nd.id, out mappoint)) {
-				print("== loc change: " + nd.id + " ==");
-				panToPoint(mappoint);
+                mapNode mn;
+                dummynodeSlippyMap.TryGetValue(nd.id, out mn);
+                print("== loc change: " + nd.id + " ==");
+				panToPoint(mappoint,mn);
 				lastPanNodeData = data;
 			}else {
 				Debug.LogWarning("WARNING: attempted to pan to nonexistant map node with id: " + nd.id);
@@ -68,7 +72,8 @@ public class ViewModeController : MonoBehaviour {
         lx = GetComponent<LoadXML>();
 		dummynodes = new List<mapNode>();
 		dummynodemap = new Dictionary<int, Vector2>();
-		crossmap = new Dictionary<timelineNode, List<mapNode> >();
+        dummynodeSlippyMap = new Dictionary<int, mapNode>();
+        crossmap = new Dictionary<timelineNode, List<mapNode> >();
 
 		while (GoogleMap.m_maxLatitude == 0) {
 			yield return new WaitForEndOfFrame ();
@@ -180,6 +185,7 @@ public class ViewModeController : MonoBehaviour {
             // mn.mapPosition = mn.transform.localPosition;
 
             dummynodemap[tn.node_id] = mn.transform.position;
+            dummynodeSlippyMap[tn.node_id] = copyMn;
             dummynodes.Add(mn);
             dummynodes.Add(copyMn);
             crossmap[tn] = new List<mapNode>();
@@ -224,10 +230,14 @@ public class ViewModeController : MonoBehaviour {
 
 
 	private IEnumerator currentPan = null;
-	void panToPoint(Vector2 location) {
+    private IEnumerator currentSlippyPan = null;
+    void panToPoint(Vector2 location,mapNode mn) {
 		if (location.Equals( mapCam.transform.position)) return;
 		if (currentPan != null) StopCoroutine(currentPan);
-		currentPan = _pan(location);
+        if (currentSlippyPan != null) StopCoroutine(currentSlippyPan);
+        currentSlippyPan = _panSlippy(new Vector2(mn.transform.position.x,mn.transform.position.z+1000));
+        currentPan = _pan(location);
+        StartCoroutine(currentSlippyPan);
 		StartCoroutine(currentPan);
 	}
 		
@@ -238,7 +248,54 @@ public class ViewModeController : MonoBehaviour {
 	public float maxOrthoSize = 25;
 	public AnimationCurve panCurve;
 
-	IEnumerator _pan(Vector2 _dest) {
+    IEnumerator _panSlippy(Vector2 _dest)
+    {
+        Vector2 startPos = slippyMapCam.transform.position;
+        float startOrtho = slippyMapCam.orthographicSize;
+        float t = 0f;
+        float orthoT = 0f;
+
+        // calc panDuration and orthoPeak directly proportional to distance traveled on map
+        // yet clamped to min & max values
+        Vector2 d = startPos - _dest;
+        float dist = d.magnitude;
+        float panDuration = minPanTime + (maxPanTime - minPanTime) * Mathf.Clamp01(dist * panSpeed);
+        float orthoPeak = minOrthoSize + (maxOrthoSize - minOrthoSize) * panDuration / maxPanTime;
+
+        while (t < 1)
+        {
+            t += Time.deltaTime / panDuration;
+
+            if (orthoPeak > startOrtho)
+            {
+                if (t < .5f)
+                {//zoom out when panning a long distance
+                    orthoT = panCurve.Evaluate(t * 2);
+                    slippyMapCam.orthographicSize = startOrtho + (orthoPeak - startOrtho) * orthoT;
+                }
+                else {//zoom back in at end	
+                    orthoT = panCurve.Evaluate(1 - (t * 2 - 1));
+                    slippyMapCam.orthographicSize = minOrthoSize + (orthoPeak - minOrthoSize) * orthoT;
+                }
+            }
+            else {
+                orthoT = panCurve.Evaluate(1 - t);
+                slippyMapCam.orthographicSize = minOrthoSize + (startOrtho - minOrthoSize) * orthoT;
+            }
+
+            slippyMapCam.transform.position = Vector2.Lerp(startPos, _dest, panCurve.Evaluate(t));
+
+
+            //			Debug.Log ("ViewModeController._pan()");
+            //			Debug.Log ("               t = " + t);
+            //			Debug.Log ("           halfT = " + orthoT);
+            //			Debug.Log ("orthographicSize = " + mapCam.orthographicSize);
+
+            yield return null;
+        }
+    }
+
+    IEnumerator _pan(Vector2 _dest) {
 		Vector2 startPos = mapCam.transform.position;
 		float startOrtho = mapCam.orthographicSize;
 		float t = 0f;
