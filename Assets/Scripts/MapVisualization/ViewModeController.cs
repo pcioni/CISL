@@ -243,7 +243,7 @@ public class ViewModeController : MonoBehaviour {
 		if (location.Equals( mapCam.transform.position)) return;
 		if (currentPan != null) StopCoroutine(currentPan);
         if (currentSlippyPan != null) StopCoroutine(currentSlippyPan);
-        currentSlippyPan = _panSlippy(new Vector2(mn.transform.position.x,mn.transform.position.z+1000));
+        currentSlippyPan = _panSlippy(new Vector3(mn.transform.position.x,mn.transform.position.y + 1000, mn.transform.position.z));
         currentPan = _pan(location);
         StartCoroutine(currentSlippyPan);
 		StartCoroutine(currentPan);
@@ -256,16 +256,16 @@ public class ViewModeController : MonoBehaviour {
 	public float maxOrthoSize = 25;
 	public AnimationCurve panCurve;
 
-    IEnumerator _panSlippy(Vector2 _dest)
+    IEnumerator _panSlippy(Vector3 _dest)
     {
-        Vector2 startPos = slippyMapCam.transform.position;
+        Vector3 startPos = slippyMapCam.transform.position;
         float startOrtho = slippyMapCam.orthographicSize;
         float t = 0f;
         float orthoT = 0f;
 
         // calc panDuration and orthoPeak directly proportional to distance traveled on map
         // yet clamped to min & max values
-        Vector2 d = startPos - _dest;
+        Vector3 d = startPos - _dest;
         float dist = d.magnitude;
         float panDuration = minPanTime + (maxPanTime - minPanTime) * Mathf.Clamp01(dist * panSpeed);
         float orthoPeak = minOrthoSize + (maxOrthoSize - minOrthoSize) * panDuration / maxPanTime;
@@ -291,7 +291,7 @@ public class ViewModeController : MonoBehaviour {
                 slippyMapCam.orthographicSize = minOrthoSize + (startOrtho - minOrthoSize) * orthoT;
             }
 
-            slippyMapCam.transform.position = Vector2.Lerp(startPos, _dest, panCurve.Evaluate(t));
+            slippyMapCam.transform.position = Vector3.Lerp(startPos, _dest, panCurve.Evaluate(t));
 
 
             //			Debug.Log ("ViewModeController._pan()");
