@@ -100,7 +100,7 @@ public class NarrationManager : MonoBehaviour {
         switch (scene.name)
         {
             case "timelineTest4_RomanEmpire":
-                Narrate(13, 9); // "Roman Empire: Diocletian (node 13)" narration start
+                Narrate(1, 9); // "Roman Empire: Diocletian (node 13)" narration start
                 break;
             case "timelineTest4_WWII":
                 Narrate(17, 9); // "WWII: American Theater (node 17)" narration start
@@ -193,6 +193,7 @@ public class NarrationManager : MonoBehaviour {
             url = "http://" + AppConfig.Settings.Backend.ip_address + ":" + AppConfig.Settings.Backend.port + "/load_xml";
         }
 
+		print("NarrationManager._Load_XML(), xml location: " + lxml.xml_location);
 
         string data = JsonUtility.ToJson(new LoadXMLRequest(lxml.xml_location));
 
