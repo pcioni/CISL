@@ -14,6 +14,11 @@
         <neighbor dest="9" relationship="athletics" weight="0"/>
         <neighbor dest="10" relationship="athletics" weight="0"/>
         <neighbor dest="11" relationship="athletics" weight="0"/>
+        <neighbor dest="502" relationship="has structure" weight="0"/>
+        <neighbor dest="503" relationship="place of" weight="0"/>
+        <neighbor dest="504" relationship="has structure" weight="0"/>
+        <neighbor dest="505" relationship="has structure" weight="0"/>
+        <neighbor dest="506" relationship="funded by" weight="0"/>
       </neighbors>
       <geodata/>
       <timedata/>
@@ -11052,6 +11057,96 @@
       <description>Kathmandu University (KU)(काठमाण्डौ विश्वविद्यालय) is an independent non-government, public institution. It is the third oldest university in Nepal, located in Dhulikhel, Kavrepalanchok District, about 30 km east of Kathmandu. KU was established in 1991 with the motto \"Quality Education for Leadership\". This university operates through its six schools and from premises in Dhulikhel, Lalitpur and Bhaktapur.The university provides undergraduate and postgraduate programs in the fields of engineering, science, management, arts, education and medical sciences. It provides undergraduate courses in engineering (civil,computer, electrical &amp; electronics, and mechanical), science (Biotechnology,environmental science, pharmacy, human biology &amp; applied physics), management (Bachelors in Business Administration), arts (music, media, and economics).  Graduate courses in environment science, engineering, pharmacy, development and business administration are also offered.</description>
       <zh-data/>
       <thumbnail>http://en.wikipedia.org/wiki/Special:FilePath/Kuhs.jpg?width=300</thumbnail>
+    </Feature>
+    <Feature data="Main Building" zh-data="" id="502" uri="http://www.lib.rpi.edu/Archives/buildings/main_building.html">
+      <neighbors>
+        <neighbor dest="1" relationship="part of" weight="0"/>
+        <neighbor dest="503" relationship="event" weight="0"/>
+		<neighbor dest="504" relationship="precursor" weight="0"/>
+		<neighbor dest="505" relationship="neighbor" weight="0"/>
+      </neighbors>
+      <geodata/>
+      <timedata/>
+      <pictures>
+        <picture url="http://archives.lib.rpi.edu/InmagicGenie/documentfolder/64.jpg" label="main_building_png"/>
+      </pictures>
+      <speak>The Main Building was the first building designed and built for the Rensselaer Institute. The four-story brick building, erected on land given by the Warren family, was completed in 1864 at a cost of $44,000. The facility included a library, assembly hall, lecture and recitation rooms, drawing rooms, cabinets of natural history specimens and laboratories. In 1874, the year of the semicentennial, stained glassed windows were installed in memory of Amos Eaton, Civil War veterans and former professors.</speak>
+      <zh-speak/>
+      <description>The Main Building was the first building designed and built for the Rensselaer Institute. The four-story brick building, erected on land given by the Warren family, was completed in 1864 at a cost of $44,000. The facility included a library, assembly hall, lecture and recitation rooms, drawing rooms, cabinets of natural history specimens and laboratories. In 1874, the year of the semicentennial, stained glassed windows were installed in memory of Amos Eaton, Civil War veterans and former professors.</description>
+      <zh-data/>
+      <thumbnail/>
+    </Feature>
+    <Feature data="The Main Building Fire" zh-data="" id="503" uri="http://www.lib.rpi.edu/Archives/buildings/main_building.html">
+      <neighbors>
+        <neighbor dest="1" relationship="event in" weight="0"/>
+        <neighbor dest="502" relationship="event in" weight="0"/>
+		<neighbor dest="504" relationship="precursor" weight="0"/>
+      </neighbors>
+      <geodata/>
+      <timedata>
+        <timeobj label="date" value="1904-06-09"/>
+      </timedata>
+      <pictures>
+        <picture url="http://archives.lib.rpi.edu/InmagicGenie/documentfolder/1209.jpg" label="main_building_fire_jpg"/>
+      </pictures>
+      <speak>The Main Building was gutted by a fire on June 9, 1904. Plans to rebuild a main building in the same location were abandoned and the property was turned over to the City of Troy.</speak>
+      <zh-speak/>
+      <description>The Main Building was gutted by a fire on June 9, 1904. Plans to rebuild a main building in the same location were abandoned and the property was turned over to the City of Troy. The Approach, a massive granite staircase, was completed on the site in 1907.</description>
+      <zh-data/>
+      <thumbnail/>
+    </Feature>
+    <Feature data="The Approach" zh-data="" id="504" uri="http://www.lib.rpi.edu/Archives/buildings/main_building.html">
+      <neighbors>
+        <neighbor dest="1" relationship="part of" weight="0"/>
+        <neighbor dest="502" relationship="successor" weight="0"/>
+		<neighbor dest="503" relationship="successor" weight="0"/>
+		<neighbor dest="505" relationship="neighbor" weight="0"/>
+      </neighbors>
+      <geodata/>
+      <timedata/>
+      <pictures>
+        <picture url="http://archives.lib.rpi.edu/InmagicGenie/documentfolder/82.jpg" label="approach_header"/>
+        <picture url="http://archives.lib.rpi.edu/InmagicGenie/documentfolder/4651.jpg" label="approach_class_of_1916"/>
+      </pictures>
+      <speak>The Approach, a massive granite staircase, was completed on the site in 1907.</speak>
+      <zh-speak/>
+      <description>The Approach, a massive granite staircase, was completed on the site in 1907. Class of 1916 at the approach.</description>
+      <zh-data/>
+      <thumbnail/>
+    </Feature>
+	    <Feature data="Winslow" zh-data="" id="505" uri="http://www.lib.rpi.edu/Archives/buildings/winslow.html">
+      <neighbors>
+        <neighbor dest="1" relationship="part of" weight="0"/>
+        <neighbor dest="502" relationship="neighbor" weight="0"/>
+		<neighbor dest="504" relationship="neighbor" weight="0"/>
+		<neighbor dest="506" relationship="named for" weight="0"/>
+      </neighbors>
+      <geodata/>
+      <timedata/>
+      <pictures>
+        <picture url="http://archives.lib.rpi.edu/InmagicGenie/documentfolder/65.jpg" label="winslow_1900_jpg"/>
+      </pictures>
+      <speak>The Winslow Chemical Laboratory was opened in 1866. The building of brick with stone trimmings was finished inside with butternut, chestnut and black walnut. The library of chemical books was established by a donation of several sets of journals and a gift of three hundred dollars from John F. Winslow for whom the laboratory was named.</speak>
+      <zh-speak/>
+      <description>The Winslow Chemical Laboratory was opened in 1866. The building of brick with stone trimmings was finished inside with butternut, chestnut and black walnut. The whole building was fitted for complete courses in general and analytical chemistry. The laboratory was planned and built under the direction of Prof. H.B. Nason, who was head of the department of chemistry in the Institute. The first story contained the metallurgical laboratory. The second story contained the chemical laboratory, store rooms and work rooms. The laboratory could accommodate forty students. The third story contained a lecture room, a private study, the library and a recitation room. The library of chemical books was established by a donation of several sets of journals and a gift of three hundred dollars from John F. Winslow for whom the laboratory was named. The Winslow Laboratory was damaged by a fire in the upper story in 1884. The building was rebuilt and enlarged in 1885. The building was damaged by fire again in 1904. It was used as a laboratory until 1907 and then converted into a shop. The building, falling into disrepair, was boarded up in the early 1970's and targeted for demolition. An effort to save the building resulted in Rensselaer donating the building to the City of Troy. The city in turn agreed to lease the building to the Junior Museum, which occupied the building from 2000 to 2004. RPI then repossessed the building for use as departmental office space.</description>
+      <zh-data/>
+      <thumbnail/>
+    </Feature>
+	<Feature data="John Flack Winslow" zh-data="" id="506" uri="http://archives.rpi.edu/rensselaer-president-john-flack-winslow/">
+      <neighbors>
+        <neighbor dest="1" relationship="donor" weight="0"/>
+        <neighbor dest="505" relationship="donor" weight="0"/>
+      </neighbors>
+      <geodata/>
+      <timedata/>
+      <pictures>
+        <picture url="http://archives.lib.rpi.edu/InmagicGenie/documentfolder/2816.jpg" label="winslow_portrait_jpg"/>
+      </pictures>
+      <speak>John Flack Winslow was a trustee of RPI, and later president. The Winslow Chemical Laboratory, was named in honor of Winslow due to his donation of half the construction cost and his enterprise on behalf of the Institute.</speak>
+      <zh-speak/>
+      <description>John Flack Winslow was born in 1810 in Bennington, VT. He was a descendent of Governor Winslow of Plymouth Colony. Winslow was a Troy iron and steel manufacturer and one of the nation’s most active industrialists during the Civil War. He joined Erastus Corning, head of an extensive hardware enterprise in Albany, and under their direction, Corning and Winslow became the largest producer of railroad and other iron in the United States. Winslow designed and built Troy’s Bessemer steel plant, the first in America. Seeing merit in the design of ironclad war vessels, Winslow appeared in 1861 before President Lincoln and the naval board and secured a contract for the construction of the Monitor, which proved the effectiveness of ironclad ships in its Civil War engagement with the Merrimac. Winslow was a progressive trustee of Rensselaer who enabled the Institute to emerge from the great Troy fire of 1862 and the Civil War in better physical condition than ever before. In 1865 he was the first businessman elected president (chair of the Board of Trustees) of Rensselaer, after a succession of ministers. The Winslow Chemical Laboratory, was named in honor of Winslow due to his donation of half the construction cost and his enterprise on behalf of the Institute. Winslow died in Poughkeepsie, N.Y., in 1892. </description>
+      <zh-data/>
+      <thumbnail/>
     </Feature>
   </Features>
 </AIMind>

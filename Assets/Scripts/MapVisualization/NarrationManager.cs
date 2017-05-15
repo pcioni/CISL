@@ -100,7 +100,7 @@ public class NarrationManager : MonoBehaviour {
         switch (scene.name)
         {
             case "timelineTest4_RomanEmpire":
-                Narrate(1, 9); // "Roman Empire: Diocletian (node 13)" narration start
+                Narrate(17, 9); // "Roman Empire: Diocletian (node 13)" narration start
                 break;
             case "timelineTest4_WWII":
                 Narrate(17, 9); // "WWII: American Theater (node 17)" narration start
