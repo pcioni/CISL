@@ -8,7 +8,7 @@
           <neighbor dest="22" relationship="is part of" weight="0"/>
         </neighbors>
          <geodata>
-           <coordinates lat="42.7290349" lon="-73.6783284"/>
+           <coordinates lat="42.729210" lon="-73.678245"/>
          </geodata>
          <timedata>
            <timeobj label="date" value="1946"/>
@@ -310,7 +310,7 @@
           <neighbor dest="22" relationship="is part of" weight="0"/>
         </neighbors>
          <geodata>
-           <coordinates lat="42.7327176" lon="-73.6793671"/>
+           <coordinates lat="42.733626" lon="-73.679377"/>
          </geodata>
          <timedata>
            <timeobj label="date" value="1878"/>
@@ -332,7 +332,7 @@
           <neighbor dest="22" relationship="is part of" weight="0"/>
         </neighbors>
          <geodata>
-           <coordinates lat="42.7307606" lon="-73.6838107"/>
+           <coordinates lat="42.730917" lon="-73.684308"/>
          </geodata>
          <timedata>
            <timeobj label="date" value="1866"/>
@@ -406,7 +406,7 @@
           <neighbor dest="43" relationship="is part of" weight="0"/>
       </neighbors>
          <geodata>
-           <coordinates lat="42.7313875" lon="-73.6826666"/>
+           <coordinates lat="42.730455" lon="-73.683205"/>
          </geodata>
          <timedata>
            <timeobj label="date" value="1906-09-01"/>
@@ -465,7 +465,7 @@
 <!--  NOTE:  I'm not sure why a "location" relationship exists for these particular nodes.  TAG  -->
         </neighbors>
          <geodata>
-           <coordinates lat="42.7448399" lon="73.7121914"/>
+           <coordinates lat="42.728389" lon="-73.692021"/>
          </geodata>
          <timedata>
            <timeobj label="date" value="1789-01-01"/>
@@ -525,7 +525,7 @@
           <neighbor dest="42" relationship="includes" weight="0"/>
         </neighbors>
          <geodata>
-           <coordinates lat="42.7279274" lon="-73.6873465"/>
+           <coordinates lat="42.730145" lon="-73.678840"/>
          </geodata>
          <timedata>
            <timeobj label="date" value="1824-11-05"/>
@@ -548,7 +548,7 @@
           <neighbor dest="8" relationship="is replacement of" weight="0"/>
         </neighbors>
          <geodata>
-           <coordinates lat="42.73065" lon="-73.6839125"/>
+           <coordinates lat="42.730603" lon="-73.684357"/>
          </geodata>
          <timedata>
            <timeobj label="date" value="1907-01-01"/>
@@ -756,7 +756,7 @@
           <neighbor dest="31" relationship="is part of" weight="0"/>
         </neighbors>
          <geodata>
-           <coordinates lat="42.730113" lon="-73.6786903"/>
+           <coordinates lat="42.729812" lon="-73.678246"/>
          </geodata>
          <timedata>
            <timeobj label="date" value="1916-01-01"/>
@@ -779,7 +779,7 @@
           <neighbor dest="40" relationship="designed by" weight="0"/>
         </neighbors>
          <geodata>
-           <coordinates lat="42.730113" lon="-73.6786903"/>
+           <coordinates lat="42.731013" lon="-73.680521"/>
          </geodata>
          <timedata>
            <timeobj label="date" value="1925-01-01"/>

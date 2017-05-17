@@ -1,0 +1,17 @@
+center
+Lat 42.730145
+Long -73.678840
+
+Image is 1520 (width) by 1080 (height)
+Latitude is north-south.
+Longitude is east-west.
+1080 north-south, 1520 east-west
+540, 760
+
+Lat Range: 0.00844
+Long Range: 0.01552
+
+x2
+Lat Range: 0.01768
+Long Range: 0.03104
+
