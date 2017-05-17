@@ -38,8 +38,7 @@
          <pictures>
             <picture label="" url="http://www.lib.rpi.edu/Archives/buildings/images/alumni_bldg.jpg" />
          </pictures>
-         <speak>During the 1889 mid-winter alumni meeting in Pittsburgh, New York State geologist James Hall (Class of 1832) announced the gift of his fossil collection to the alumni association. An alumni house was immediately
-        conceived of to house the collection. The trustees proceeded to secure "one of the most eligible locations in Troy - the Roberts property on Second Street just north of the Savings Bank Building" (The Polytechnic, February 22, 1890). The building, designed by alums Wilson Brothers and Co. of Philadelphia, was completed in 1893. The lower portion of the structure was faced with brownstone and the upper with yellow brick and terra-cotta. It contained offices, lecture rooms, a library and cabinet rooms for Hall's collection. The building was sold in 1915 to the Young Men's Hebrew Association. It now houses offices of the First Niagara Bank.</speak>
+         <speak>During the 1889 mid-winter alumni meeting in Pittsburgh, New York State geologist James Hall (Class of 1832) announced the gift of his fossil collection to the alumni association. An alumni house was immediately conceived of to house the collection. The trustees proceeded to secure "one of the most eligible locations in Troy - the Roberts property on Second Street just north of the Savings Bank Building" (The Polytechnic, February 22, 1890). The building, designed by alums Wilson Brothers and Co. of Philadelphia, was completed in 1893. The lower portion of the structure was faced with brownstone and the upper with yellow brick and terra-cotta. It contained offices, lecture rooms, a library and cabinet rooms for Hall's collection. The building was sold in 1915 to the Young Men's Hebrew Association. It now houses offices of the First Niagara Bank.</speak>
          <zh-speak />
          <description />
          <zh-data />
@@ -152,10 +151,10 @@
          <thumbnail />
       </Feature>
       <Feature data="Main Building" id="8">
-         <neighbors>
-           <neighbor dest="22" relationship="is part of" weight="0"/>
-           <neighbor dest="23" relationship="replaced by" weight="0"/>
-         </neighbors>
+        <neighbors>
+          <neighbor dest="22" relationship="is part of" weight="0"/>
+          <neighbor dest="23" relationship="replaced by" weight="0"/>
+        </neighbors>
          <geodata>
            <coordinates lat="42.7306641" lon="-73.6841899"/>
          </geodata>
@@ -168,9 +167,7 @@
             <picture label="" url="https://s-media-cache-ak0.pinimg.com/originals/46/d1/a4/46d1a4700756eae6114d75fa9029eead.jpg" />
             <picture label="" url="http://archives.lib.rpi.edu/InmagicGenie/documentfolder/2141.jpg" />
          </pictures>
-         <speak>The Main Building was the first building designed and built for the Rensselaer Institute. The four-story brick building, erected on land given by the Warren family, was completed in 1864 at a cost of $44,000. The facility
-        included a library, assembly hall, lecture and recitation rooms, drawing rooms, cabinets of natural history specimens and laboratories. In 1874, the year of the semicentennial, stained glassed windows were installed in memory of Amos Eaton, Civil War veterans and former professors. The Main Building was gutted by a fire on June 9, 1904. Plans to rebuild a main building in the same location were abandoned and the property was turned over to the City of Troy. The
-        Approach, a massive granite staircase, was completed on the site in 1907.</speak>
+         <speak>The Main Building was the first building designed and built for the Rensselaer Institute. The four-story brick building, erected on land given by the Warren family, was completed in 1864 at a cost of $44,000. The facility included a library, assembly hall, lecture and recitation rooms, drawing rooms, cabinets of natural history specimens and laboratories. In 1874, the year of the semicentennial, stained glassed windows were installed in memory of Amos Eaton, Civil War veterans and former professors. The Main Building was gutted by a fire on June 9, 1904. Plans to rebuild a main building in the same location were abandoned and the property was turned over to the City of Troy. The Approach, a massive granite staircase, was completed on the site in 1907.</speak>
          <zh-speak />
          <description />
          <zh-data />
@@ -354,10 +351,12 @@
          <zh-data />
          <thumbnail />
       </Feature>
-      <Feature data="Palmer Chamberlain Ricketts" id="17">
+      <Feature data="Palmer Chamberlain Ricketts, Student" id="17">
         <neighbors>
           <neighbor dest="18" relationship="is the eponym of" weight="0"/>
-          <neighbor dest="22" relationship="as president" weight="0"/>
+          <neighbor dest="22" relationship="is part of" weight="0"/>
+          <neighbor dest="44" relationship="will become" weight="0"/>
+          <neighbor dest="45" relationship="will become" weight="0"/>
 <!-- I'm not sure about these relationships, but what the heck...  TAG  -->
       </neighbors>
          <geodata>
@@ -365,14 +364,14 @@
          </geodata>
          <timedata>
            <timeobj label="birth date" value="1856-01-17"/>
-           <timeobj label="death date" value="1934-12-09"/>
+           <timeobj label="end date" value="1875-06-01"/>
          </timedata>
          <pictures>
-            <picture label="" url="http://archives.rpi.edu/wp-content/uploads/2014/06/1918-e1401886025115.jpg" />
-            <picture label="" url="http://archives.lib.rpi.edu/InmagicGenie/documentfolder/399.jpg" />
-            <picture label="" url="http://archives.lib.rpi.edu/InmagicGenie/documentfolder/1921.jpg" />
+            <picture label="" url="http://www.lib.rpi.edu/dept/library/html/Archives/gallery/ricketts/student/grade_card.jpg" />
+            <picture label="" url="http://archives.lib.rpi.edu/InmagicGenie/documentfolder/1919.jpg" />
+            <picture label="" url="http://www.lib.rpi.edu/dept/library/html/Archives/gallery/ricketts/student/1916.jpg" />
          </pictures>
-         <speak>Palmer C. Ricketts was born in Elkton, MD., on January 17, 1856. He entered Rensselaer in 1871 to study civil engineering. Shortly after graduating in 1875 he was appointed as an assistant in math and astronomy. In 1882, he was promoted to assistant professor and in 1884 he was named the William H. Hart Professor of Rational and Technical Mechanics. This was the first endowed faculty chair at Rensselaer. Ricketts was appointed Director of the Institute in 1892. In 1901 the director position was expanded to encompass all administrative duties and Ricketts was appointed as the first administrative president. Ten academic buildings (referred to as the green roof campus) and twenty-nine dormitory units were constructed under his supervision.  Ricketts died while in office on December 9, 1934. A laboratory completed in 1935 was named the Ricketts Building in his honor.</speak>
+         <speak>Palmer C. Ricketts was born in Elkton, MD on Jan. 17, 1856 and later moved to New Jersey. He prepared under a private tutor at Princeton, NJ and entered Rensselaer Polytechnic Institute in 1871 at the age of fifteen. Ricketts was an average student. One of his few activities was the 1874 Transit (yearbook) editorial board. His graduating thesis was titled, Review of the Substructure of the Wrought Iron Girder Bridge over the Hudson River at Troy. </speak>
          <zh-speak />
          <description />
          <zh-data />
@@ -380,10 +379,11 @@
       </Feature>
       <Feature data="Ricketts Building" id="18">
         <neighbors>
-          <neighbor dest="17" relationship="is the namesake of" weight="0"/>
-          <neighbor dest="22" relationship="on campus" weight="0"/>
+          <neighbor dest="45" relationship="is the namesake of" weight="0"/>
+          <neighbor dest="22" relationship="is part of" weight="0"/>
           <neighbor dest="43" relationship="is part of" weight="0"/>
           <neighbor dest="20" relationship="designed by" weight="0"/>
+          <neighbor dest="45" relationship="was commissioned by" weight="0"/>
         </neighbors>
          <geodata>
            <coordinates lat="42.7309182" lon="-73.6799957"/>
@@ -425,8 +425,8 @@
       </Feature>
       <Feature data="Joseph M. Lawlor" id="20">
         <neighbors>
-          <neighbor dest="17" relationship="designed" weight="0"/>
-          <neighbor dest="22" relationship="and his alma mater" weight="0"/>
+          <neighbor dest="45" relationship="was commissioned by" weight="0"/>
+          <neighbor dest="22" relationship="graduated from" weight="0"/>
           <neighbor dest="27" relationship="designed" weight="0"/>
           <neighbor dest="28" relationship="designed" weight="0"/>
           <neighbor dest="34" relationship="designed" weight="0"/>
@@ -699,7 +699,7 @@
          <speak>In 1909, at the mid-winter alumni dinner in Pittsburgh, the Alumni Association of Pittsburgh pledged $125,000 to build an administration building. The building, made of Harvard brick and Indiana limestone, was designed by W. G. Wilkins, a Pittsburgh alumnus, who donated his services. The structure was formally presented and dedicated on Alumni Day, June 13, 1911 though it was not completed until February, 1912. </speak>
          <zh-speak />
          <speak>
-         </speak>
+         </speak>  
          <description />
          <zh-data />
          <thumbnail />
@@ -941,7 +941,7 @@
          </timedata>
          <pictures>
            <picture label="" url="http://archives.lib.rpi.edu/InmagicGenie/documentfolder/3809.jpg"/>
-           <picture label="" url="https://cdn.loc.gov/service/pnp/det/4a10000/4a17000/4a17800/4a17827v.jpg#h=814&amp;w=1024"/>
+           <picture label="" url="https://cdn.loc.gov/service/pnp/det/4a10000/4a17000/4a17800/4a17827v.jpg#h=814&#38;w=1024"/>
            <picture label="" url="http://www.lib.rpi.edu/Archives/gallery/postcards/troy/public/court_house1_pc.jpg"/>
          </pictures>
          <speak>Frederick Marcus Cummings graduated from Rensselaer Polytechnic Institute in 1886 with a degree in civil engineering, though never really practiced. Rather Cummings worked with his father, an architect. Cummings became an architect himself but continued to work with his father, dareMsc ayette Cummings. The firm, M.F . Cummings &amp; Sons designed many notable buildings in the city of Troy, NY. Early examples are the Rensselaer County Courthouse, the which weighboring buildings of Russell Sage College, many of the Troy schools, Emma Willard schoal on Pawling Avenue, and the Troy Building, on the Rensselaer campus, whchi was completed in 1925.
@@ -964,6 +964,8 @@
          </timedata>
          <pictures>
             <picture label="" url="http://www.lib.rpi.edu/Archives/buildings/images/old_bank_place.jpg"/>
+            <picture label="" url="http://archives.lib.rpi.edu/InmagicGenie/documentfolder/3998.jpg"/>
+            <picture label="" url="http://archives.lib.rpi.edu/InmagicGenie/documentfolder/3997.jpg"/>
          </pictures>
          <speak>The Rensselaer School began its existence in a single building known as the Old Bank Place on the northwest corner of River and Middleburgh Streets. The structure was erected in 1801 at a cost of $11,000 to house Troy's first bank, the Farmer's Bank. Amos Eaton acquired the building on a lease in 1821. The Rensselaer School opened at the Old Bank Place on January 5, 1825 and remained there until 1834. The building housed laboratories with scientific instruments and specimens, an observatory, a library, lecture rooms and living quarters for the students and the Eaton family. The school leased the Van der Heyden Mansion from 1834-1841 then returned to the Old Bank Place in 1841. An 1841 catalog describes the site as "airy, healthy, and rural, surrounded by fields, hills and groves." Rensselaer remained at the Old Bank Place until 1844.</speak>
          <zh-speak />
@@ -1012,7 +1014,7 @@
            <coordinates lat="42.728761" lon="-73.6921239"/>
          </geodata>
          <timedata>
-           <timeobj label="date" value="1906"/>
+           <timeobj label="date" value=""/>
          </timedata>
          <pictures>
             <picture label="" url="http://www.lib.rpi.edu/Archives/buildings/images/ricketts_house.jpg"/>
@@ -1023,5 +1025,57 @@
          <zh-data />
          <thumbnail />
       </Feature>
+       <Feature data="Palmer Chamberlain Ricketts, Faculty Member" id="44">
+        <neighbors>
+          <neighbor dest="18" relationship="is the eponym of" weight="0"/>
+          <neighbor dest="22" relationship="is part of" weight="0"/>
+          <neighbor dest="17" relationship="was a" weight="0"/>
+          <neighbor dest="45" relationship="will become" weight="0"/>
+<!-- I'm not sure about these relationships, but what the heck...  TAG  -->
+      </neighbors>
+         <geodata>
+           <coordinates lat="42.7317" lon="-73.6925"/>
+         </geodata>
+         <timedata>
+           <timeobj label="start date" value="1875-01-01"/>
+           <timeobj label="end date" value="1891-12-31"/>
+         </timedata>
+         <pictures>
+            <picture label="" url="http://archives.lib.rpi.edu/InmagicGenie/documentfolder/1922.jpg" />
+            <picture label="" url="http://archives.lib.rpi.edu/InmagicGenie/documentfolder/1920.jpg" />
+            <picture label="" url="http://www.lib.rpi.edu/dept/library/html/Archives/gallery/ricketts/professor/chair_cartoon.jpg" />
+         </pictures>
+         <speak> Immediately following his graduation in 1875, Ricketts was appointed as Assistant in Mathematics and Astronomy at RPI. During his first year in that role, he was invited to become an alumni member of Theta Xi (a fraternity founded at RPI in 1864). Ricketts was promoted to Assistant Professor in 1882 and became the William H. Hart Professor of Rational &#38; Technical Mechanics in 1884 (the first endowed chair established at Rensselaer).  This was the first endowed faculty chair at Rensselaer. </speak>
+         <zh-speak />
+         <description />
+         <zh-data />
+         <thumbnail />
+         </Feature>
+          <Feature data="Palmer Chamberlain Ricketts, President" id="45">
+        <neighbors>
+          <neighbor dest="18" relationship="is the eponym of" weight="0"/>
+          <neighbor dest="22" relationship="is part of" weight="0"/>
+          <neighbor dest="17" relationship="was a" weight="0"/>
+          <neighbor dest="44" relationship="was a" weight="0"/>
+<!-- I'm not sure about these relationships, but what the heck...  TAG  -->
+      </neighbors>
+         <geodata>
+           <coordinates lat="42.7317" lon="-73.6925"/>
+         </geodata>
+         <timedata>
+           <timeobj label="start date" value="1892-01-01"/>
+           <timeobj label="end date" value="1934-12-09"/>
+         </timedata>
+         <pictures>
+            <picture label="" url="http://archives.rpi.edu/wp-content/uploads/2014/06/1918-e1401886025115.jpg" />
+            <picture label="" url="http://archives.lib.rpi.edu/InmagicGenie/documentfolder/1924.jpg" />
+            <picture label="" url="http://archives.lib.rpi.edu/InmagicGenie/documentfolder/1921.jpg" />
+         </pictures>
+         <speak>Ricketts was appointed Director of the Institute in 1892. In 1901 the director position was expanded to encompass all administrative duties and Ricketts was appointed as the first administrative president. Ten academic buildings (referred to as the green roof campus) and twenty-nine dormitory units were constructed under his supervision.  Ricketts died while in office on December 9, 1934. A laboratory completed in 1935 was named the Ricketts Building in his honor.</speak>
+         <zh-speak />
+         <description />
+         <zh-data />
+         <thumbnail />
+         </Feature>
    </Features>
 </AIMind>
