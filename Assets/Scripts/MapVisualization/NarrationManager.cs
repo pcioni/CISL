@@ -41,6 +41,12 @@ public class NarrationManager : MonoBehaviour {
 				user_can_take_turn = false;
 				Narrate(nd.id, 9);
 			}
+			else {
+				NodeData nd = JsonUtility.FromJson<NodeData>(data);
+				// Call narrative with turns = 0 to request that the given
+				// node be added to the existing story.
+				Narrate(nd.id, 0);
+			}
 		};
 
         labelCollisionCheckListener = delegate (string data) {
@@ -126,7 +132,7 @@ public class NarrationManager : MonoBehaviour {
 			if (!user_can_take_turn) {
 				progressNarration();
 			}
-			
+
 		}
 
         // handle Data Loading keypresses
@@ -207,7 +213,7 @@ public class NarrationManager : MonoBehaviour {
 
 		//Now that the XML is done loading in the backend, categorize nodes.
 		lxml.CategorizeNodes();
-		
+
         //yield return www;
         //if (www.error == null)
         //{
@@ -227,7 +233,7 @@ public class NarrationManager : MonoBehaviour {
 		if (www.error == null) {
 			print("NARRATION RESET");
             narration_reset = true;
-        }		
+        }
 	}
 
 	public void Narrate(int node_id, int turns) {
@@ -239,8 +245,8 @@ public class NarrationManager : MonoBehaviour {
 		current_narration = _Narrate(node_id, turns);
 		StartCoroutine(current_narration);
 	}
-	
-	
+
+
 
 	//Present the given node given the previous nodes presented
 	void Present(timelineNode node_to_present, List<timelineNode> node_history) {
@@ -274,14 +280,27 @@ public class NarrationManager : MonoBehaviour {
 		}//end while*/
 
 	}//end method Present
-
+	int previous_node_id = -1;
     //Narrate a sequence of nodes
     IEnumerator _Narrate(int node_id, int turns) {
-		print("===== NEW NARRATION =====");
-
-		//Ask the backend for a node sequence
-		string url = "http://" + AppConfig.Settings.Backend.ip_address + ":" + AppConfig.Settings.Backend.port + "/chronology";
-		string data = JsonUtility.ToJson(new ChronologyRequest(node_id, turns));
+			string url = "http://" + AppConfig.Settings.Backend.ip_address + ":" + AppConfig.Settings.Backend.port + "/chronology";
+			string data = JsonUtility.ToJson(new ChronologyRequest(node_id, turns));
+			// If we are starting a new narration, check if the turn count is 0.
+			// If so, then the user has clicked on a node outside of the allotted switch point.
+			// Instead of the normal url, call for an add_to_chronology request with the node_id to add
+			// and the previous node id in the story.
+			if (turns == 0) {
+				//Ask the backend for a node sequence
+				print("===== ADD TO NARRATION =====");
+				url = "http://" + AppConfig.Settings.Backend.ip_address + ":" + AppConfig.Settings.Backend.port + "/add_to_chronology";
+				data = JsonUtility.ToJson(new AddToChronologyRequest(node_id, previous_node_id));
+			}//end if
+			else {
+				//Ask the backend for a node sequence
+				print("===== NEW NARRATION =====");
+				url = "http://" + AppConfig.Settings.Backend.ip_address + ":" + AppConfig.Settings.Backend.port + "/chronology";
+				data = JsonUtility.ToJson(new ChronologyRequest(node_id, turns));
+			}//end else
 
 		//string url = "http://" + AppConfig.Settings.Backend.ip_address + ":" + AppConfig.Settings.Backend.port + "/test";
 
@@ -333,12 +352,12 @@ public class NarrationManager : MonoBehaviour {
 			}
 			KeyValuePair<timelineNode, string> kvp = sequence_by_node[ix];
 			timelineNode node_to_present = kvp.Key;
-			
+
 			//Bring the previous node into past-focus
 			if (node_history.Count >= 1) {
 				node_to_present.pastStoryNodeTransform = node_history[node_history.Count - 1].transform;
 			}
-			
+
 			//Present this node
 			Present(node_to_present, node_history);
 
@@ -373,7 +392,7 @@ public class NarrationManager : MonoBehaviour {
 					//{
 					//	pastNarrationNodeTransforms.Add(tn2.transform.position);
 					//}//end foreach
-					
+
 					//if (tn.state == timelineNode.focusState.PAST)
 					//	tn.drawLines();
 				}//end foreach
@@ -423,7 +442,11 @@ public class NarrationManager : MonoBehaviour {
 
 			//Add it to the history
 			node_history.Add(node_to_present);
-			
+
+			// Note the node that was just presented as the previous node id in the global variable,
+			// in case this function is stopped and we need to know where in the story we are.
+			previous_node_id = node_history[node_history.Count - 1].node_id;
+
 			progressNarrationSwitch = false;
 			tmp_flag = false;
 

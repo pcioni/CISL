@@ -6278,10 +6278,10 @@
     </Feature>
     <Feature data="Charles Crombie" zh-data="" id="216" uri="http://dbpedia.org/resource/Charles_Crombie">
       <neighbors>
-        <neighbor dest="7" relationship="battle" weight="0"/>
-        <neighbor dest="1" relationship="battle" weight="0"/>
-        <neighbor dest="21" relationship="battle" weight="0"/>
-        <neighbor dest="6" relationship="battle" weight="0"/>
+        <neighbor dest="7" relationship="fought in" weight="0"/>
+        <neighbor dest="1" relationship="fought in" weight="0"/>
+        <neighbor dest="21" relationship="fought in" weight="0"/>
+        <neighbor dest="6" relationship="participated in the" weight="0"/>
       </neighbors>
       <geodata>
 		<coordinates lat="36.5" lon="15.0"/>

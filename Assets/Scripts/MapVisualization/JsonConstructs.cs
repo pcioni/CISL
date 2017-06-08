@@ -14,6 +14,17 @@ namespace JsonConstructs {
 		public int id;
 		public int turns;
 	}
+
+	[Serializable]
+	public class AddToChronologyRequest {
+		public AddToChronologyRequest(int id, int previous_id) {
+			this.id = id;
+			this.turns = previous_id;
+		}
+		public int id;
+		public int turns;
+	}
+
     [Serializable]
     public class LoadXMLRequest
     {
@@ -45,7 +56,7 @@ namespace JsonConstructs {
 	[Serializable]
 	class GraphNodeLight {
 		public int id;
-		public List<string> entity_type; 
+		public List<string> entity_type;
 	}
 
 	[Serializable]
