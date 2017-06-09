@@ -5,7 +5,7 @@
     <Feature data="Roman Empire" zh-data="" id="1" uri="http://dbpedia.org/resource/Roman_Empire">
       <neighbors>
         <neighbor dest="2" relationship="event pre" weight="0"/>
-        <neighbor dest="3" relationship="event start" weight="0"/>
+        <neighbor dest="3" relationship="founding event" weight="0"/>
         <neighbor dest="4" relationship="religion" weight="0"/>
         <neighbor dest="5" relationship="title leader" weight="0"/>
         <neighbor dest="6" relationship="government type" weight="0"/>
@@ -214,7 +214,7 @@
     <Feature data="Roman emperor" zh-data="" id="5" uri="http://dbpedia.org/resource/Roman_emperor">
       <neighbors>
         <neighbor dest="24" relationship="last monarch" weight="0"/>
-        <neighbor dest="49" relationship="first monarch" weight="0"/>
+        <neighbor dest="49" relationship="as the first monarch" weight="0"/>
         <neighbor dest="399" relationship="last monarch" weight="0"/>
         <neighbor dest="400" relationship="last monarch" weight="0"/>
         <neighbor dest="401" relationship="last monarch" weight="0"/>
@@ -10031,7 +10031,7 @@
         <neighbor dest="2" relationship="battle" weight="0"/>
         <neighbor dest="38" relationship="child" weight="0"/>
         <neighbor dest="388" relationship="death place" weight="0"/>
-        <neighbor dest="49" relationship="associate" weight="0"/>
+        <neighbor dest="49" relationship="was an associate of" weight="0"/>
         <neighbor dest="15" relationship="birth place" weight="0"/>
         <neighbor dest="392" relationship="birth place" weight="0"/>
         <neighbor dest="397" relationship="battle" weight="0"/>
@@ -10094,7 +10094,7 @@
     </Feature>
     <Feature data="Roman Republic" zh-data="" id="392" uri="http://dbpedia.org/resource/Roman_Republic">
       <neighbors>
-        <neighbor dest="49" relationship="leader" weight="0"/>
+        <neighbor dest="49" relationship="was led by" weight="0"/>
         <neighbor dest="390" relationship="leader" weight="0"/>
         <neighbor dest="15" relationship="capital" weight="0"/>
         <neighbor dest="397" relationship="event" weight="0"/>
