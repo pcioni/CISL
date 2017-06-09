@@ -360,7 +360,7 @@
 <!-- I'm not sure about these relationships, but what the heck...  TAG  -->
       </neighbors>
          <geodata>
-           <coordinates lat="42.7317" lon="-73.6925"/>
+           <coordinates lat="42.730145" lon="-73.678840"/>
          </geodata>
          <timedata>
            <timeobj label="birth date" value="1856-01-17"/>
@@ -956,7 +956,7 @@
           <neighbor dest="22" relationship="is part of" weight="0"/>
         </neighbors>
          <geodata>
-           <coordinates lat="42.7449047" lon="-73.6825799"/>
+           <coordinates lat="42.7345375" lon="-73.6825240"/>
          </geodata>
          <timedata>
            <timeobj label="date" value="1825-01-05"/>
@@ -1011,10 +1011,11 @@
 <!-- Note: I added the "includes" neighbors here.  TAG  -->
         </neighbors>
          <geodata>
-           <coordinates lat="42.728761" lon="-73.6921239"/>
+           <coordinates lat="42.7308928" lon="-73.6825264"/>
          </geodata>
          <timedata>
-           <timeobj label="date" value=""/>
+           <timeobj label="start date" value="1875-01-01"/>
+           <timeobj label="end date" value="1891-12-31"/>
          </timedata>
          <pictures>
             <picture label="" url="http://www.lib.rpi.edu/Archives/buildings/images/ricketts_house.jpg"/>
