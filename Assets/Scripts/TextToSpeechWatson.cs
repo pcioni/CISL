@@ -11,6 +11,14 @@ public class TextToSpeechWatson : MonoBehaviour
 		m_TextToSpeech.ToSpeech(TextToSynth, HandleToSpeechCallback);
 
 	}
+
+	public void StopSpeaking() {
+		if (clipisplaying && clipobj!= null) {
+			GameObject.Destroy(clipobj);
+			clipobj = null;
+			clipisplaying = false;
+		}
+	}//end method StopSpeaking
 		
 	public void HandleToSpeechCallback(AudioClip clip){
 
