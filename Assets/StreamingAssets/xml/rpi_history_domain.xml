@@ -18,7 +18,7 @@
             <picture label="" url="http://www.lib.rpi.edu/Archives/buildings/images/rpi_playhouse_large.jpg" />
             <picture label="" url="http://www.lib.rpi.edu/Archives/gallery/performance_spaces/img/multiuse/1948lounge.jpg" />
          </pictures>
-         <speak>This former U.S.O. building was moved from Windsor Locks, Connecticut to Rensselaer in 1946. The building was acquired by the Institute to accommodate a library extension, study space and social activities. The structure was placed along 15th St. and thus dubbed the 15th Street Lounge or Lounge 15. In 1972, the lounge became the RPI Playhouse. The building underwent a major renovation in 1983.</speak>
+         <speak>This former U.S.O. building was moved from Windsor Locks, Connecticut to Rensselaer in 1946. The building was acquired by the Institute to accommodate a library extension, study space and social activities. The structure was placed along 15th St. and thus dubbed the 15th Street Lounge or Lounge 15. In 1972, the lounge became the RPI Playhouse.</speak>
          <zh-speak />
          <description />
          <zh-data />
@@ -38,7 +38,7 @@
          <pictures>
             <picture label="" url="http://www.lib.rpi.edu/Archives/buildings/images/alumni_bldg.jpg" />
          </pictures>
-         <speak>During the 1889 mid-winter alumni meeting in Pittsburgh, New York State geologist James Hall (Class of 1832) announced the gift of his fossil collection to the alumni association. An alumni house was immediately conceived of to house the collection. The trustees proceeded to secure "one of the most eligible locations in Troy - the Roberts property on Second Street just north of the Savings Bank Building" (The Polytechnic, February 22, 1890). The building, designed by alums Wilson Brothers and Co. of Philadelphia, was completed in 1893. The lower portion of the structure was faced with brownstone and the upper with yellow brick and terra-cotta. It contained offices, lecture rooms, a library and cabinet rooms for Hall's collection. The building was sold in 1915 to the Young Men's Hebrew Association. It now houses offices of the First Niagara Bank.</speak>
+         <speak> New York State geologist James Hall (Class of 1832)  gifted his fossil collection to the alumni association in 1889. An alumni house was immediately conceived of to house the collection. The house was built on the Roberts property on Second Street and was designed by alums Wilson Brothers and Co. of Philadelphia. The completed building in 1893 was faced with brownstone, yellow brick and terra-cotta. It contained offices, lecture rooms, a library and cabinet rooms for Hall's collection. The building was sold in 1915 to the Young Men's Hebrew Association.</speak>
          <zh-speak />
          <description />
          <zh-data />
@@ -58,7 +58,7 @@
             <picture label="" url="http://www.lib.rpi.edu/Archives/buildings/images/ato_large.jpg" />
             <picture label="" url="http://www.lib.rpi.edu/Archives/buildings/images/delta_tau_delta_large.jpg" />
          </pictures>
-         <speak>An Auxiliary Dormitory Plan was initiated in 1945 as part of a planned expansion of campus facilities. The Institute offered to assume the mortgages and deeds of existing fraternity houses and construct new houses for fraternities who were able to raise forty percent of the total cost. According to the plan, the houses would be considered the property of the Institute and would therefore be tax exempt, cared for as part of the physical plant, rented to students on an individual basis and subject to the rules of the Institute. Four auxiliary dormitories were constructed under the plan.</speak>
+         <speak>An Auxiliary Dormitory Plan was initiated in 1945 as part of a planned expansion of campus facilities. The Institute offered to assume the mortgages and deeds of existing fraternity houses and construct new houses for fraternities who were able to raise forty percent of the total cost. The houses would be considered Institute property, would be tax exempt, cared for as part of the physical plant, rented to students on an individual basis and subject to Institue rules. Four auxiliary dormitories were constructed under the plan.</speak>
          <zh-speak />
          <description />
          <zh-data />
@@ -69,7 +69,7 @@
           <neighbor dest="22" relationship="is part of" weight="0"/>
         </neighbors>
          <geodata>
-           <coordinates lat="42.7305446" lon="-73.6784926"/>
+           <coordinates lat="42.729329" lon="-73.678571"/>
          </geodata>
          <timedata>
            <timeobj label="date" value="1987"/>
@@ -79,7 +79,7 @@
             <picture label="" url="http://www.lib.rpi.edu/Archives/buildings/images/cii_construction.jpg" />
             <picture label="" url="http://archives.lib.rpi.edu/InmagicGenie/documentfolder/4475.jpg" />
          </pictures>
-         <speak>George M. Low, with the support of Walter Fallon of Eastman Kodak, John Opel of IBM, George Strichman of Colt Industries and John Welch of General Electric, made a proposal to Governor Hugh Carey to jointly sponsor a research and teaching center to promote industrial innovation. In July 1982, the State of New York selected Rensselaer as the site for a $60 million Center for Industrial Innovation (CII). President Low stated that the State had "taken a giant step in its efforts to attract, nurture and keep advanced technology business in the state, a step that is certain to make a substantial impact on New York 's economy." The nine-story, 200,000 sq. ft. building, was designed to house three centers: the Center for Manufacturing Productivity, the Center for Interactive Computer Graphics, and the Center for Integrated Electronics.</speak>
+         <speak>George M. Low, with the support from Eastman Kodak, IBM, Colt Industries and General Electric, made a proposal to Governor Hugh Carey to jointly sponsor a research and teaching center to promote industrial innovation. In July 1982, the State of New York selected Rensselaer as the site for a $60 million Center for Industrial Innovation (CII). The nine-story, 200,000 sq. ft. building, was designed to house three centers: the Center for Manufacturing Productivity, the Center for Interactive Computer Graphics, and the Center for Integrated Electronics.</speak>
          <zh-speak />
          <description />
          <zh-data />
@@ -90,7 +90,7 @@
           <neighbor dest="22" relationship="is part of" weight="0"/>
         </neighbors>
          <geodata>
-           <coordinates lat="42.7300979" lon="-73.6798898"/>
+           <coordinates lat="42.728545" lon="-73.678330"/>
          </geodata>
          <timedata>
            <timeobj label="date" value="1947"/>
@@ -99,7 +99,7 @@
          <pictures>
             <picture label="" url="http://www.lib.rpi.edu/Archives/buildings/images/infirmary_large.jpg" />
          </pictures>
-         <speak>The F. E. Gallagher Memorial Infirmary was built on the site of the former Snack Bar next to the 15th Street Lounge. The Snack Bar was constructed from surplus barracks in 1947 to ease overcrowding in campus dining halls.        The structure was gutted and converted into an infirmary in 1955. The infirmary featured a fifteen bed ward, examination rooms, isolation rooms, offices, kitchen facilities and a solarium. The Manning-Gallagher Foundation provided funding for the building which was named in memory of Francis E. Gallagher, a Rensselaer trustee who died in 1950. The infirmary structure was removed to make way for the Biotechnology Research Center opened in 2004. The F. E. Gallagher Health Center was relocated to Academy Hall in 2003.</speak>
+         <speak>The F. E. Gallagher Memorial Infirmary was built on the site of the former Snack Bar next to the 15th Street Lounge. The infirmary featured a fifteen bed ward, examination rooms, isolation rooms, offices, kitchen facilities and a solarium. The infirmary structure was removed to make way for the Biotechnology Research Center opened in 2004. The Health Center was relocated to Academy Hall in 2003.</speak>
          <zh-speak />
          <description />
          <zh-data />
@@ -144,7 +144,7 @@
             <picture label="" url="http://www.lib.rpi.edu/Archives/buildings/images/chain_cutting.jpg" />
             <picture label="" url="http://archives.lib.rpi.edu/InmagicGenie/documentfolder/4323.jpg" />
          </pictures>
-         <speak>Construction of the Jonsson-Rowland Science Center marked the first step in a plan to develop institutional research, increase graduate enrollment and modernize the RPI campus. The Science Center was dedicated along with the new Linear Accelerator on October 21, 1961. Instead of a traditional ribbon cutting, the building was opened with a chain cutting with the use of a blow torch. The first phase of the proposed science center complex included two laboratories designed as modular units with movable metal walls for flexible lab space. The Jonsson Laboratory for the Study and Teaching of Science was named for J. Erik Jonsson, Class of 1922, who provided the funds to build and equip the laboratory. The Rowland Physics Laboratory was named in memory of Henry A. Rowland, Class of 1870, a distinguished physicist and first president of the American Physical Society. In addition to laboratories, the new building housed offices for the school of science and physics and mechanics departments. The four story building, joined at right angles, was designed by architects Voorhees, Walker, Smith and Smith at a cost of $3,003,000.</speak>
+         <speak>Construction of the Jonsson-Rowland Science Center marked the first step in a plan to develop institutional research, increase graduate enrollment and modernize the RPI campus. The Science Center was dedicated along with the new Linear Accelerator on October 21, 1961. The Jonsson Laboratory for the Study and Teaching of Science was named for J. Erik Jonsson, Class of 1922. The Rowland Physics Laboratory was named in memory of Henry A. Rowland, Class of 1870, a distinguished physicist and first president of the American Physical Society. The four story building, joined at right angles, was designed by architects Voorhees, Walker, Smith and Smith.</speak>
          <zh-speak />
          <description />
          <zh-data />
@@ -167,7 +167,7 @@
             <picture label="" url="https://s-media-cache-ak0.pinimg.com/originals/46/d1/a4/46d1a4700756eae6114d75fa9029eead.jpg" />
             <picture label="" url="http://archives.lib.rpi.edu/InmagicGenie/documentfolder/2141.jpg" />
          </pictures>
-         <speak>The Main Building was the first building designed and built for the Rensselaer Institute. The four-story brick building, erected on land given by the Warren family, was completed in 1864 at a cost of $44,000. The facility included a library, assembly hall, lecture and recitation rooms, drawing rooms, cabinets of natural history specimens and laboratories. In 1874, the year of the semicentennial, stained glassed windows were installed in memory of Amos Eaton, Civil War veterans and former professors. The Main Building was gutted by a fire on June 9, 1904. Plans to rebuild a main building in the same location were abandoned and the property was turned over to the City of Troy. The Approach, a massive granite staircase, was completed on the site in 1907.</speak>
+         <speak>The Main Building was the first building designed and built for the Rensselaer Institute. The four-story brick building, erected on land given by the Warren family, was completed in 1864. The facility included a library, assembly hall, lecture and recitation rooms, drawing rooms, cabinets of natural history specimens and laboratories. In 1874, the year of the semicentennial, stained glassed windows were installed in memory of Amos Eaton, Civil War veterans and former professors. The Main Building was gutted by a fire on June 9, 1904. The property was turned over to the City of Troy and the Approach, a massive granite staircase, was completed on the site in 1907.</speak>
          <zh-speak />
          <description />
          <zh-data />
@@ -190,9 +190,7 @@
             <picture label="" url="http://archives.lib.rpi.edu/InmagicGenie/documentfolder/1030.jpg" />
          </pictures>
          <speak>The Institute purchased this property, located on the southeast corner of Eighth St. and Peoples Ave., from the Daughters of Charity of St. Vincent de Paul in 1946. The four-story building and adjacent chapel were built
-        in 1886 to house the St. Vincent's Female Orphan Asylum. Rensselaer named the building Mason House in honor of William Pitt Mason, head of the chemistry department for many years. It was purchased to provide postwar housing
-        for 230 students, but the plan changed when construction of emergency housing was begun in Rensselaerwyck and Rendael. The structure was altered into small apartments for faculty and administration
-        staff, with a cafeteria on the ground floor. Mason Laboratory was closed in 1973 and demolished "for the good of the community," according to RPI President Richard Grosh in May of 1975. An inspection of the building found it to be "a hazard to life and property."</speak>
+        in 1886 to house the St. Vincent's Female Orphan Asylum. Rensselaer named the building Mason House in honor of William Pitt Mason, head of the chemistry department for many years. Mason Laboratory was closed in 1973 and demolished "for the good of the community," according to RPI President Richard Grosh in May of 1975. An inspection of the building found it to be "a hazard to life and property."</speak>
          <zh-speak />
          <description />
          <zh-data />
@@ -258,7 +256,7 @@
             <picture label="" url="http://archives.lib.rpi.edu/InmagicGenie/documentfolder/2384.jpg" />
          </pictures>
          <speak>The Rendael dormitories housed single students during the surge in post-war enrollment. Metal barracks, which had been prepared to house troops overseas, were obtained from the federal government in 1946-1947. The buildings
-        were placed along Peoples Avenue East and Peck Drive between Georgian Terrace and Sunset Terrace. Rendael or "Tin Town" consisted of fifty, one-story structures, 88 x 20 feet. Each structure contained ten double rooms. Between each pair of dormitories there was a service building that contained showers, a boiler room and service facilities. Most of the dormitories were removed by 1954, though some were retained for use as storage and service buildings. The area is now the location of the Rensselaer Apartment Housing Project.</speak>
+        were placed along Peoples Avenue East and Peck Drive between Georgian Terrace and Sunset Terrace. Rendael or "Tin Town" consisted of fifty, one-story structures, with each structure containing ten double rooms. Most of the dormitories were removed by 1954, though some were retained for use as storage and service buildings. The area is now the location of the Rensselaer Apartment Housing Project.</speak>
          <zh-speak />
          <description />
          <zh-data />
@@ -280,8 +278,7 @@
             <picture label="" url="http://archives.lib.rpi.edu/InmagicGenie/documentfolder/3204.jpg" />
          </pictures>
          <speak>Rensselaerwyck was the name given to a post-war housing development for married students constructed in 1946. Approximately 1000 married veterans attended RPI that year. The development consisted of surplus housing units
-        brought in from U.S. military centers. At its maximum capacity, Rensselaerwyck included 88 buildings and a total of 387 family units. The development had a site manager and included a co-op store, laundry, and nursery school.
-        The community also had its own newsletter called the "Ren'wyck News." The number of units dwindled to about 170 by the 1960's. The remaining units were remodeled in the late 1970's. By 1993, the "temporary" houses began to be demolished by the Institute. Much of the area once occupied by Rensselaerwyck was developed into athletic fields.</speak>
+        brought in from U.S. military centers. At its maximum capacity, Rensselaerwyck included 88 buildings and a total of 387 family units. The number of units dwindled to about 170 by the 1960's. The remaining units were remodeled in the late 1970's. By 1993, the "temporary" houses began to be demolished by the Institute. Much of the area once occupied by Rensselaerwyck was developed into athletic fields.</speak>
          <zh-speak />
          <description />
          <zh-data />
@@ -298,8 +295,7 @@
            <timeobj label="date" value="1948"/>
          </timedata>
          <pictures />
-         <speak>The Service Building, located on the north edge of the campus off of Peoples Avenue, was built in 1948. The yellow brick, steel-frame structure contained 16,044 feet of space and cost $113,480. The building was doubled
-        in size in 1959 with a two-story addition on the north side. The building has housed the facilities that service and support the Institute's physical plant.</speak>
+         <speak>The Service Building, located on the north edge of the campus off of Peoples Avenue, was built in 1948. The yellow brick, steel-frame structure was doubled in size in 1959 with a two-story addition on the north side. The building has housed the facilities that service and support the Institute's physical plant.</speak>
          <zh-speak />
          <description />
          <zh-data />
@@ -321,7 +317,7 @@
             <picture label="" url="http://www.lib.rpi.edu/Archives/buildings/images/proudfit_2.jpg" />
             <picture label="" url="http://archives.lib.rpi.edu/InmagicGenie/documentfolder/4343.jpg" />
          </pictures>
-         <speak>The Williams Proudfit Astronomical Observatory was built in 1878 at a cost of $15,000. It was presented to the Institute by Mr. and Mrs. Ebenezer Proudfit of Troy as a memorial to their son Williams Proudfit, a student in the class of 1877, who was fatally injured by being thrown from his carriage in 1875. The Observatory, known as Proudfit Building, was built on the Rankin property that had been purchased in January 1877. The observatory dome was constructed in Troy by Elisha Waters &amp; Sons. It was made of Crane Brothers linen fiber, molded in sections and bolted together. The dome revolved on cannon balls placed on grooved iron tracks.The building was eventually razed in 1959. The engraved arched stone that was over the doorway was saved and placed in the south wall of the Jonsson-Rowland Science Center dedicated in 1961.</speak>
+         <speak>The Williams Proudfit Astronomical Observatory was built in 1878 and was presented to the Institute by Mr. and Mrs. Ebenezer Proudfit of Troy as a memorial to their son Williams Proudfit, a student in the class of 1877, who was fatally injured by being thrown from his carriage in 1875. The Observatory, known as Proudfit Building, was built on the Rankin property that had been purchased in January 1877. The building was eventually razed in 1959. The engraved arched stone that was over the doorway was saved and placed in the south wall of the Jonsson-Rowland Science Center dedicated in 1961.</speak>
          <zh-speak />
          <description />
          <zh-data />
@@ -342,10 +338,7 @@
             <picture label="" url="http://www.lib.rpi.edu/Archives/buildings/images/winslow_lab.jpg" />
             <picture label="" url="http://archives.lib.rpi.edu/InmagicGenie/documentfolder/804.jpg" />
          </pictures>
-         <speak>The Winslow Chemical Laboratory was opened in 1866. The building of brick with stone trimmings was finished inside with butternut, chestnut and black walnut. The whole building was fitted for complete courses in general
-        and analytical chemistry. The laboratory was planned and built under the direction of Prof. H.B. Nason, who was head of the department of chemistry in the Institute. The first story contained the metallurgical laboratory.
-        The second story contained the chemical laboratory, store rooms and work rooms. The laboratory could accommodate forty students. The third story contained a lecture room, a private study, the library and a recitation
-        room. The library of chemical books was established by a donation of several sets of journals and a gift of three hundred dollars from John F. Winslow for whom the laboratory was named.</speak>
+         <speak>The Winslow Chemical Laboratory was opened in 1866. The whole building was fitted for complete courses in general and analytical chemistry. The laboratory was planned and built under the direction of Prof. H.B. Nason, who was head of the department of chemistry in the Institute. The building contained the metallurgical laboratory, the chemical laboratory, store rooms and work rooms, a lecture room, a private study, the library and a recitation     room. The laboratory could accommodate forty students.</speak>
          <zh-speak />
          <description />
          <zh-data />
@@ -416,8 +409,7 @@
             <picture label="" url="http://archives.lib.rpi.edu/InmagicGenie/documentfolder/1214.jpg" />
             <picture label="" url="http://archives.lib.rpi.edu/InmagicGenie/documentfolder/1213.jpg" />
          </pictures>
-         <speak>The Institute acquired the ten-acre Walter Phelps Warren estate in 1905 making it possible to establish a real campus. The first building erected on this parcel was the Carnegie Building. In 1905 an announcement was
-        made that Andrew Carnegie was to give the school $125,000 for the erection of a building to take the place of the Main Building. It was to provide recitation and drawing rooms. The four-story building, designed by Whitfield &amp; King, was made of Harvard brick and Indiana Limestone. It was finished in September 1906 at a cost of $133,000. The Carnegie Building was dedicated along with the Walker Laboratory on June 12, 1907.</speak>
+         <speak>The Institute acquired the ten-acre Walter Phelps Warren estate in 1905 making it possible to establish a real campus. The first building erected on this parcel was the Carnegie Building. Andrew Carnegie gave the school $125,000 for the erection of a building to take the place of the Main Building. It was to provide recitation and drawing rooms. The four-story building, was finished in September 1906. The Carnegie Building was dedicated along with the Walker Laboratory on June 12, 1907.</speak>
          <zh-speak />
          <description />
          <zh-data />
@@ -535,7 +527,7 @@
             <picture label="" url="http://www.lib.rpi.edu/dept/library/html/Archives/gallery/symbols/old_seal.jpg" />
             <picture label="" url="http://archives.lib.rpi.edu/InmagicGenie/documentfolder/3151.jpg" />
          </pictures>
-         <speak>The Rensselaer School was established in Troy, New York, in 1824 by Stephen Van Rensselaer, along with educator and scientist Amos Eaton, “for the purpose of instructing persons ... in the application of science to the common purposes of life.” It is “...the first school of science and school of civil engineering, which has had a continuous existence, to be established in any English-speaking country” according to Palmer C. Ricketts in his preface to the second edition of his History of Rensselaer Polytechnic Institute (1914). In 1833 the school became the Rensselaer Institute, and in the 1850s its purpose was broadened to become a polytechnic institution. The Institute’s name was changed in 1861 to Rensselaer Polytechnic Institute. Rensselaer maintains an online archive of five rare books covering the Institute’s early history. Published between 1855 and 1968, the books detail Rensselaer’s founding and development, and places the school in the context of scientific and technological education in the 19th and 20th centuries. </speak>
+         <speak>The Rensselaer School was established in Troy, New York, in 1824 by Stephen Van Rensselaer, along with educator and scientist Amos Eaton, “for the purpose of instructing persons ... in the application of science to the common purposes of life.” It is “...the first school of science and school of civil engineering, which has had a continuous existence, to be established in any English-speaking country.”  In 1833 the school became the Rensselaer Institute, and in the 1850s its purpose was broadened to become a polytechnic institution. The Institute’s name was changed in 1861 to Rensselaer Polytechnic Institute. </speak>
          <zh-speak />
          <description />
          <zh-data />
@@ -558,7 +550,7 @@
             <picture label="" url="http://www.lib.rpi.edu/dept/library/html/Archives/gallery/approach/graphics/19oct6.jpg" />
             <picture label="" url="http://archives.lib.rpi.edu/InmagicGenie/documentfolder/1204.jpg" />
          </pictures>
-         <speak>The Approach is a massive granite staircase between Rensselaer Polytechnic Institute and downtown Troy. It was completed in 1907 on the former site of Rensselaer's Main Building, just West of 8th Street overlooking the city and the Hudson River. The staircase was constructed by the City of Troy to emphasize the interdependence of this industrial city and the polytechnic school for which it is known. After devastating fires ravaged Rensselaer's Winslow Chemical Laboratory and destroyed the Main Building in 1904, trustees and administrators considered a variety of rebuilding alternatives, including a proposal to merge with the Columbia University School of Mines in New York City. Institute officials decided to stay in Troy, but to move further East up the hill. The city responded by spending $40,000 to extend Broadway to the new campus in the form of a grand staircase. </speak>
+         <speak>The Approach is a massive granite staircase between Rensselaer Polytechnic Institute and downtown Troy. It was completed in 1907 on the former site of Rensselaer's Main Building. The staircase was constructed by the City of Troy to emphasize the interdependence of this industrial city and the polytechnic school for which it is known. After devastating fires ravaged Rensselaer's Winslow Chemical Laboratory and destroyed the Main Building in 1904, trustees and administrators considered a proposal to merge with the Columbia University School of Mines in New York City. Institute officials decided to stay in Troy, but to move further East up the hill. The city responded by spending $40,000 to extend Broadway to the new campus in the form of a grand staircase. </speak>
          <zh-speak />
          <description />
          <zh-data />
@@ -581,7 +573,7 @@
             <picture label="" url="http://www.lib.rpi.edu/Archives/buildings/images/walker_lab_interior.jpg" />
             <picture label="" url="http://archives.rpi.edu/blog/wp-content/uploads/2017/01/Untitled-1-e1484835727703.jpg" />
          </pictures>
-         <speak>The Walker Chemical Laboratory was financed by a $200,000 gift from Mrs. R. J. Walker in memory of her son Dr. William Weightman Walker, Class of 1886. The building, designed by Lawlor &amp; Haase, was completed in 1907 and dedicated along with the Carnegie Building on June 12, 1907. Walker Laboratory has housed the undergraduate chemistry program since it opened. An addition was made in 1919. A two-year renovation was completed in 1996 to incorporate 21st century innovations in the teaching of chemistry, including state-of-the-art wet labs and the most advanced studio classrooms.</speak>
+         <speak>The Walker Chemical Laboratory was financed by Mrs. R. J. Walker in memory of her son Dr. William Weightman Walker, Class of 1886. The building, designed by Lawlor &amp; Haase, was completed in 1907 and dedicated along with the Carnegie Building on June 12, 1907. Walker Laboratory has housed the undergraduate chemistry program since it opened. An addition was made in 1919. A two-year renovation was completed in 1996 to incorporate 21st century innovations in the teaching of chemistry.</speak>
          <zh-speak />
          <description />
          <zh-data />
@@ -603,7 +595,7 @@
             <picture label="" url="http://cdn.loc.gov/service/pnp/stereo/1s00000/1s01000/1s01500/1s01533v.jpg" />
             <picture label="" url="http://archives.rpi.edu/blog/wp-content/uploads/2014/06/warren.jpg" />
          </pictures>
-         <speak>The Warren house, named “Mount Airy”, was built in the Italianate style in 1862 by Joseph Warren (1813-1896), a successful local businessman. After being sold to Rensselaer by Joseph’s son Walter Phelps Warren, the house was converted into a student dormitory in 1907 and remained the only campus housing until 1916. The house was officially named the Campus Dormitory by a resolution of the Warren house, now student dormitory with Russell Sage Laboratory to the left, circa 1909 Board of Trustees in 1916. The Institute rented rooms to about thirty students. A caterer supplied meals and was paid directly by the students. In 1935, after the construction of two new dormitories, the Board of Trustees decided to dismantle and remove the old Warren House.</speak>
+         <speak>The Warren house, named “Mount Airy”, was built in 1862 by Joseph Warren (1813-1896), a successful local businessman. After being sold to Rensselaer by Joseph’s son Walter Phelps Warren, the house was converted into a student dormitory in 1907 and remained the only campus housing until 1916. The house was officially named the Campus Dormitory. The Institute rented rooms to about thirty students. A caterer supplied meals and was paid directly by the students. In 1935, after the construction of two new dormitories, the Board of Trustees decided to dismantle and remove the old Warren House.</speak>
          <zh-speak />
          <description />
          <zh-data />
@@ -648,7 +640,7 @@
             <picture label="" url="http://www.lib.rpi.edu/Archives/buildings/images/sage_lab_interior.jpg" />
             <picture label="" url="http://archives.lib.rpi.edu/InmagicGenie/documentfolder/913.jpg" />
          </pictures>
-         <speak>In 1907, Mrs. Russell Sage gave Rensselaer $1,000,000 as a memorial to Russell Sage, who, for ten years prior to his death, was a trustee of the Institute. Of this amount, $300,000 was used in erecting and equipping a laboratory for the use of the departments of Mechanical and Electrical Engineering. The balance was laid aside as an endowment. The Russell Sage Laboratory, built and equipped at a cost of $405,000, was designed by Lawlor &amp; Haase and constructed of Harvard brick with limestone trimmings. There were three principal sections of the building: the west wing devoted to Mechanical Engineering, the east wing for the Electrical department and the central section used by both departments. The central portion contained a lecture room seating 400 persons, a large drawing room and a laboratory for a 600,000 pound machine for testing materials of construction. The building was opened for use in 1909. The increase in the number of students necessitated an addition to the Sage Laboratory which was built to the north and east of the existing building. The four story addition was finished in 1923 at a cost of $235,000. </speak>
+         <speak>In 1907, Mrs. Russell Sage donated to Rensselaer as a memorial to Russell Sage, who, for ten years prior to his death, was a trustee of the Institute. Some of the money was used in erecting and equipping a laboratory for the use of the departments of Mechanical and Electrical Engineering. The Russell Sage Laboratory was designed by Lawlor &amp; Haase. There are three principal building sections: the west wing devoted to Mechanical Engineering, the east wing for the Electrical department and the central section used by both departments. The central portion contained a lecture room seating 400 persons, a large drawing room and a laboratory for a 600,000 pound machine for testing materials of construction. The building was opened for use in 1909. The increase in the number of students necessitated an addition which was built to the north and east of the existing building. The four story addition was finished in 1923. </speak>
          <zh-speak />
          <description />
          <zh-data />
@@ -662,7 +654,7 @@
           <neighbor dest="20" relationship="designed by" weight="0"/>
         </neighbors>
          <geodata>
-           <coordinates lat="42.730836" lon="-73.6816767"/>
+           <coordinates lat="42.730809" lon="-73.678799"/>
          </geodata>
          <timedata>
            <timeobj label="date" value="1912-06-11"/>
@@ -672,7 +664,7 @@
             <picture label="" url="http://www.lib.rpi.edu/Archives/buildings/images/87_gymnasium.jpg"/>
             <picture label="" url="http://www.lib.rpi.edu/Archives/buildings/images/87_gym_int.jpg" />
          </pictures>
-         <speak>Once the campus was established on the hill, students began to complain about the location and inadequacy of the old gymnasium. The Alumni Association led a movement to raise money to build a new building near the athletic field. The Class of 1887 took up the cause and presented $150,000 to the Institute in 1911 to build and equip a new gymnasium. The building was designed by Lawlor &amp; Haase of New York and built of Harvard brick and Indiana limestone. The Class of 1887 formally presented the building to the Board of Trustees on Alumni Day, June 11, 1912.  </speak>
+         <speak>Once the campus was established on the hill, students began to complain about the location and inadequacy of the old gymnasium. The Alumni Association led a movement to raise money to build a new building near the athletic field. The Class of 1887 took up the cause and presented $150,000 to the Institute in 1911 to build and equip a new gymnasium. The building was designed by Lawlor &amp; Haase of New York.  The Class of 1887 formally presented the building to the Board of Trustees on Alumni Day, June 11, 1912.  </speak>
          <zh-speak />
          <description />
          <zh-data />
@@ -696,7 +688,7 @@
             <picture label="" url="http://www.lib.rpi.edu/Archives/buildings/images/pittsburgh_interior.jpg" />
             <picture label="" url="http://archives.lib.rpi.edu/InmagicGenie/documentfolder/26.jpg" />
          </pictures>
-         <speak>In 1909, at the mid-winter alumni dinner in Pittsburgh, the Alumni Association of Pittsburgh pledged $125,000 to build an administration building. The building, made of Harvard brick and Indiana limestone, was designed by W. G. Wilkins, a Pittsburgh alumnus, who donated his services. The structure was formally presented and dedicated on Alumni Day, June 13, 1911 though it was not completed until February, 1912. </speak>
+         <speak>In 1909, at the mid-winter alumni dinner in Pittsburgh, the Alumni Association of Pittsburgh pledged $125,000 to build an administration building. The building was designed by W. G. Wilkins, a Pittsburgh alumnus, who donated his services. The structure was formally presented and dedicated on Alumni Day, June 13, 1911 though it was not completed until February, 1912. </speak>
          <zh-speak />
          <speak>
          </speak>  
@@ -719,7 +711,7 @@
             <picture label="" url="http://www.lib.rpi.edu/Archives/buildings/images/tillinghast_gate_new2.jpg" />
             <picture label="" url="http://archives.lib.rpi.edu/InmagicGenie/documentfolder/4293.jpg" />
          </pictures>
-         <speak>Mrs. C. Whitney Tillinghast presented the Institute with a gateway to be placed where the road from the '86 Athletic Field met Sage Ave. on the east side of the '87 Gymnasium. The gateway was made of columns and walls of Harvard brick and limestone trimmings and gates of ornamental iron. It was erected in 1914 at a cost of $4,300. The gate was removed in 1937 to make way for an addition to the '87 Gymnasium. A new entrance from Sage Ave. was made between the '87 Gym and Ricketts Building. The Tillinghast Gate was redesigned and rebuilt, retaining the original iron side gates. </speak>
+         <speak>Mrs. C. Whitney Tillinghast presented the Institute with a gateway to be placed where the road from the '86 Athletic Field met Sage Ave. on the east side of the '87 Gymnasium. The gateway was erected in 1914 and later removed in 1937 to make way for an addition to the '87 Gymnasium. A new entrance from Sage Ave. was made between the '87 Gym and Ricketts Building. The Tillinghast Gate was redesigned and rebuilt, retaining the original iron side gates. </speak>
          <zh-speak />
          <description />
          <zh-data />
@@ -733,7 +725,7 @@
           <neighbor dest="20" relationship="designed by" weight="0"/>
         </neighbors>
          <geodata>
-           <coordinates lat="42.730113" lon="-73.6786903"/>
+           <coordinates lat="42.730413" lon="-73.677893"/>
          </geodata>
          <timedata>
            <timeobj label="date" value="1916-01-01"/>
@@ -743,7 +735,7 @@
             <picture label="" url="http://www.lib.rpi.edu/Archives/buildings/images/quad_proposed.jpg" />
             <picture label="" url="http://archives.lib.rpi.edu/InmagicGenie/documentfolder/4340.jpg"/>
          </pictures>
-         <speak>Alfred T. White, Class of 1865, expressed the desire to celebrate the fiftieth anniversary of his graduation by presenting the Institute with a dormitory. Plans were made for a dormitory quadrangle of separate houses joined together. Each house would be three stories in height with two suites of rooms on each floor, each suite generally consisting of a study and two bedrooms. Mr. White provided for four of these units (White Dormitories) along Fifteenth St. at a cost of $67,500. Captain Robert W. Hunt, a trustee of the Institute, built the next three dormitories at a cost of $57,200. The White and Hunt Dormitories were completed in 1916. Four additional dormitory units were completed in 1923 with contributions raised from alumni. </speak>
+         <speak>Alfred T. White, Class of 1865, expressed the desire to celebrate the fiftieth anniversary of his graduation by presenting the Institute with a dormitory. The dormitory quadrangle is actually separate houses joined together. Each house is three stories with two suites of rooms on each floor, each suite generally consisting of a study and two bedrooms. Mr. White provided for four of these units (White Dormitories) along Fifteenth St. Captain Robert W. Hunt, a trustee of the Institute, built the next three dormitories. The White and Hunt Dormitories were completed in 1916. Four additional dormitory units were completed in 1923 with contributions raised from alumni. </speak>
          <zh-speak />
          <description />
          <zh-data />
@@ -789,7 +781,7 @@
             <picture label="" url="http://archives.lib.rpi.edu/InmagicGenie/documentfolder/35.jpg"/>
             <picture label="" url="http://archives.lib.rpi.edu/InmagicGenie/documentfolder/13.jpg"/>
          </pictures>
-         <speak>The Troy Building was built with funds raised by the citizens of Troy to commemorate the centennial of the Institute in 1924. The brick and limestone building, designed by Frederick Marcus Cummings, Class of 1886, was completed in 1925. It housed the civil engineering department. Over the years the building became home to several other functions including the Dean of Students office other student life functions. </speak>
+         <speak>The Troy Building was built with funds raised by the citizens of Troy to commemorate the centennial of the Institute in 1924. The building, designed by Frederick Marcus Cummings, Class of 1886, was completed in 1925. It housed the civil engineering department. Over the years the building became home to several other functions including the Dean of Students office and other student life functions. </speak>
          <zh-speak />
          <description />
          <zh-data />
@@ -802,7 +794,7 @@
           <neighbor dest="20" relationship="designed by" weight="0"/>
         </neighbors>
          <geodata>
-           <coordinates lat="42.7302588" lon="-73.6810882"/>
+           <coordinates lat="42.730149" lon="-73.682648"/>
          </geodata>
          <timedata>
            <timeobj label="date" value="1928-01-01"/>
@@ -825,7 +817,7 @@
           <neighbor dest="20" relationship="designed by" weight="0"/>
         </neighbors>
          <geodata>
-           <coordinates lat="42.7302588" lon="-73.6810882"/>
+           <coordinates lat="42.730043" lon="-73.681253"/>
          </geodata>
          <timedata>
            <timeobj label="date" value="1931-01-01"/>
@@ -835,7 +827,7 @@
             <picture label="" url="http://archives.lib.rpi.edu/InmagicGenie/documentfolder/42.jpg"/>
             <picture label="" url="http://archives.lib.rpi.edu/InmagicGenie/documentfolder/431.jpg"/>
          </pictures>
-         <speak>The establishment of the School of Architecture in 1929 necessitated a building for that purpose. The five-story structure was built with money accumulated in the Bankers Trust Fund. Joseph Lawlor was once again hired as architect, but this time, Ralph Gulley, the new head of architecture, provided consultation on design. The building was completed in 1931 at a cost of $400,000. It was named in memory of Benjamin Franklin Greene, Director of Rensselaer, 1847 -1859. The names of fifteen of the most renowned deceased American architects were cut in stone above the second-story windows: Bulfinch, Burnham, Goodhue, Hooker, Hunt, Jefferson, Latrobe, McComb, McIntyre, McKim, Mills, Renwick, Richardson, Sullivan, and Upjohn. The three upper stories were devoted to the architectural department, including an architecture library. The first two stories were used for general recitation purposes and provided temporary quarters for the English department and ROTC. Today the building is entirely occupied by the School of Architecture.</speak>
+         <speak>With the establishment of the School of Architecture in 1929, a new five-story structure was built with money accumulated in the Bankers Trust Fund. Joseph Lawlor was once again hired as architect, but this time, Ralph Gulley, the new head of architecture, provided consultation on design. The building was completed in 1931 and named in memory of Benjamin Franklin Greene, Director of Rensselaer, 1847 -1859. The names of fifteen of the most renowned deceased American architects were cut in stone above the second-story windows. The three upper stories were devoted to the architectural department, including an architecture library. The first two stories were used for general recitation purposes and provided temporary quarters for the English department and ROTC. Today the building is entirely occupied by the School of Architecture.</speak>
          <zh-speak />
          <description />
          <zh-data />
@@ -857,7 +849,7 @@
             <picture label="" url="http://archives.lib.rpi.edu/InmagicGenie/documentfolder/19.jpg"/>
             <picture label="" url="http://archives.lib.rpi.edu/InmagicGenie/documentfolder/1963.jpg"/>
          </pictures>
-         <speak>The new club house was erected between the Greene and Amos Eaton buildings in 1932. It was made of the same materials as the other buildings on the Ricketts campus and cost $125,000. The building, which served as headquarters for the Rensselaer Union, housed the Rensselaer Polytechnic newspaper, The Transit committee and book committee. There was also a student lounge, billiard room, reading room, and a large hall for general meetings and dances.</speak>
+         <speak>The new club house was erected between the Greene and Amos Eaton buildings in 1932. The building, which served as headquarters for the Rensselaer Union, housed the Rensselaer Polytechnic newspaper, The Transit committee and book committee. There was also a student lounge, billiard room, reading room, and a large hall for general meetings and dances.</speak>
          <zh-speak />
          <description />
          <zh-data />
@@ -869,7 +861,7 @@
           <neighbor dest="20" relationship="designed by" weight="0"/>
         </neighbors>
          <geodata>
-           <coordinates lat="42.7307355" lon="-73.6813299"/>
+           <coordinates lat="42.731367" lon="-73.679558"/>
          </geodata>
          <timedata>
            <timeobj label="date" value="1932-01-01"/>
@@ -900,7 +892,7 @@
             <picture label="" url="http://www.alpha6294.com/History/Alpha_Chapter_House_Sketch_1932.jpg"/>
             <picture label="" url="http://www.alpha6294.com/History/Alpha_Chapter_House_1932.jpg"/>
          </pictures>
-         <speak>The Theta Xi Fraternity Chapter House, an excellent local example of the Tudor Revival architectural style in the City of Troy, is located at 1490 Sage Avenue at the northern edge of Rensselaer Polytechnic Institute. Built in 1931 from the design of architect Joseph M. Lawlor of the New York firm of Lawlor and Haase, the two-and-one-half story chapter house is Flemish bond brick veneer over hollow tile with a poured concrete foundation/basement.  The building embodies characteristic features of the fraternity house type, as expressed in its various social spaces, its industrial kitchen, and its large number of small bedrooms. The Theta Xi houses historic integrity has been maintained over the years and the building continues to look and function much the way it did when completed. The period of significance for this nomination is 1931, the year in which the house was built.</speak>
+         <speak>The Theta Xi Fraternity Chapter House is located at 1490 Sage Avenue at the northern edge of Rensselaer Polytechnic Institute. Built in 1931 by the firm of Lawlor and Haase, the two-and-one-half story chapter house  embodies characteristic features of the fraternity house type, as expressed in its various social spaces, its industrial kitchen, and its large number of small bedrooms. The Theta Xi house's historic integrity has been maintained over the years and the building continues to look and function much the way it did when completed. </speak>
          <zh-speak />
          <description />
          <zh-data />
@@ -921,7 +913,7 @@
             <picture label="" url="http://archives.lib.rpi.edu/InmagicGenie/documentfolder/3379.jpg"/>
             <picture label="" url="http://archives.lib.rpi.edu/InmagicGenie/documentfolder/3378.jpg"/>
          </pictures>
-         <speak>William Glyde Wilkins entered Rensselaer Polytechnic Institute in 1872, but left briefly prior to graduating. From 1873-1874 he went to Lake Superior to work for the Munising Iron Company and from 1874-1875 he was in the engineering corps for the Penssylvania railroad in Pittsburgh, PA. Wilkins completed his degree at the Institute in 1879. In 1909, the Alumni Association of Pittsburgh, for which Wilkins was a member, pledged $125,000 to build an administration building on the Rensselaer campus. Mr. Wilkins, donated his services as the designer. The structure was formally presented and dedicated on Alumni Day, June 13, 1911 though it was not completed until February, 1912.
+         <speak>William Glyde Wilkins entered Rensselaer Polytechnic Institute in 1872, but left briefly prior to graduating. From 1873-1874 he went to Lake Superior to work for the Munising Iron Company and from 1874-1875 he was in the engineering corps for the Penssylvania railroad in Pittsburgh, PA. Wilkins completed his degree at the Institute in 1879. In 1909, the Alumni Association of Pittsburgh funded an administration building on the Rensselaer campus. Mr. Wilkins, donated his services as the designer. The structure was formally presented and dedicated on Alumni Day, June 13, 1911 though it was not completed until February, 1912.
          </speak>
          <zh-speak />
          <description />
@@ -944,7 +936,7 @@
            <picture label="" url="https://cdn.loc.gov/service/pnp/det/4a10000/4a17000/4a17800/4a17827v.jpg#h=814&#38;w=1024"/>
            <picture label="" url="http://www.lib.rpi.edu/Archives/gallery/postcards/troy/public/court_house1_pc.jpg"/>
          </pictures>
-         <speak>Frederick Marcus Cummings graduated from Rensselaer Polytechnic Institute in 1886 with a degree in civil engineering, though never really practiced. Rather Cummings worked with his father, an architect. Cummings became an architect himself but continued to work with his father, dareMsc ayette Cummings. The firm, M.F . Cummings &amp; Sons designed many notable buildings in the city of Troy, NY. Early examples are the Rensselaer County Courthouse, the which weighboring buildings of Russell Sage College, many of the Troy schools, Emma Willard schoal on Pawling Avenue, and the Troy Building, on the Rensselaer campus, whchi was completed in 1925.
+         <speak>Frederick Marcus Cummings graduated from Rensselaer Polytechnic Institute in 1886 with a degree in civil engineering, but worked with his father, an architect. Cummings became an architect himself but continued to work with his father. The firm, M.F . Cummings &amp; Sons designed many notable buildings in the city of Troy, NY. Early examples are the Rensselaer County Courthouse, the which weighboring buildings of Russell Sage College, many of the Troy schools, Emma Willard schoal on Pawling Avenue, and the Troy Building, on the Rensselaer campus, which was completed in 1925.
          </speak>
          <zh-speak />
          <description />
@@ -967,7 +959,7 @@
             <picture label="" url="http://archives.lib.rpi.edu/InmagicGenie/documentfolder/3998.jpg"/>
             <picture label="" url="http://archives.lib.rpi.edu/InmagicGenie/documentfolder/3997.jpg"/>
          </pictures>
-         <speak>The Rensselaer School began its existence in a single building known as the Old Bank Place on the northwest corner of River and Middleburgh Streets. The structure was erected in 1801 at a cost of $11,000 to house Troy's first bank, the Farmer's Bank. Amos Eaton acquired the building on a lease in 1821. The Rensselaer School opened at the Old Bank Place on January 5, 1825 and remained there until 1834. The building housed laboratories with scientific instruments and specimens, an observatory, a library, lecture rooms and living quarters for the students and the Eaton family. The school leased the Van der Heyden Mansion from 1834-1841 then returned to the Old Bank Place in 1841. An 1841 catalog describes the site as "airy, healthy, and rural, surrounded by fields, hills and groves." Rensselaer remained at the Old Bank Place until 1844.</speak>
+         <speak>The Rensselaer School began its existence in a single building known as the Old Bank Place on the northwest corner of River and Middleburgh Streets. The structure was erected in 1801 to house Troy's first bank, the Farmer's Bank. Amos Eaton acquired the building on a lease in 1821. The Rensselaer School opened at the Old Bank Place on January 5, 1825 and remained there until 1834. The building housed laboratories with scientific instruments and specimens, an observatory, a library, lecture rooms and living quarters for the students and the Eaton family. The school leased the Van der Heyden Mansion from 1834-1841 then returned to the Old Bank Place in 1841. An 1841 catalog describes the site as "airy, healthy, and rural, surrounded by fields, hills and groves." Rensselaer remained at the Old Bank Place until 1844.</speak>
          <zh-speak />
          <description />
          <zh-data />
@@ -1011,7 +1003,7 @@
 <!-- Note: I added the "includes" neighbors here.  TAG  -->
         </neighbors>
          <geodata>
-           <coordinates lat="42.7308928" lon="-73.6825264"/>
+            <coordinates lat="42.7309182" lon="-73.6799957"/>
          </geodata>
          <timedata>
            <timeobj label="start date" value="1875-01-01"/>
@@ -1035,7 +1027,7 @@
 <!-- I'm not sure about these relationships, but what the heck...  TAG  -->
       </neighbors>
          <geodata>
-           <coordinates lat="42.7317" lon="-73.6925"/>
+           <coordinates lat="42.7309183" lon="-73.6799958"/>
          </geodata>
          <timedata>
            <timeobj label="start date" value="1875-01-01"/>
@@ -1061,7 +1053,7 @@
 <!-- I'm not sure about these relationships, but what the heck...  TAG  -->
       </neighbors>
          <geodata>
-           <coordinates lat="42.7317" lon="-73.6925"/>
+           <coordinates lat="42.731014" lon="-73.680522"/>
          </geodata>
          <timedata>
            <timeobj label="start date" value="1892-01-01"/>

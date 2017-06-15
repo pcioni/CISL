@@ -118,6 +118,9 @@ public class NarrationManager : MonoBehaviour {
                 //Narrate(129, 33); // "Roman_WWII_Analogy: Adolf Hitler (node 129) :: Augustus (node 33)" narration start
                 Narrate(1, 216); // "Roman_WWII_Analogy: WW II (node 1) :: Charles Crombie (node 216)" narration start
                 break;
+			case "rpi_history":
+				Narrate (17, 9);
+				break;
             default:
                 Debug.Log("NarrationManager.Start() :: unhandled scene name");
                 break;

@@ -9,7 +9,10 @@ using System.IO;
 using System.Text.RegularExpressions;
 
 
+
 public class NarrationJournal : MonoBehaviour {
+
+	public Camera main_camera;
 
 	public Texture2D default_image;
 	public Text journaltext;
@@ -19,6 +22,12 @@ public class NarrationJournal : MonoBehaviour {
 	private UnityAction<string> listener2;
 	public List<Text> imageLabels;
 	private List<List<Texture2D>> prev_images;
+
+	public AudioClip clip_17;
+	public AudioClip clip_22;
+	public AudioClip clip_41;
+	//public List<AudioClip> voice_clips;
+	public Dictionary<int, AudioClip> audio_clips_by_id;
 
 	public GameObject ui1;
 	public GameObject ui2;
@@ -34,6 +43,11 @@ public class NarrationJournal : MonoBehaviour {
 	private TextToSpeechWatson TTS;
 
 	void Awake() {
+		audio_clips_by_id = new Dictionary<int, AudioClip> ();
+		audio_clips_by_id.Add (17, clip_17);
+		audio_clips_by_id.Add (22, clip_22);
+		audio_clips_by_id.Add (41, clip_41);
+
 		cachePath = Path.Combine(Application.dataPath, "cache");
 
 		TTS = GetComponent<TextToSpeechWatson>();
@@ -46,7 +60,24 @@ public class NarrationJournal : MonoBehaviour {
 			NodeData nd = JsonUtility.FromJson<NodeData>(data);
 			add_entry(nd.text);
 			load_image(nd.imgUrl, nd.imgLabel);
-			readText(nd.text);
+
+			// Stop any ongoing audio.
+			if (main_camera.GetComponent<AudioSource>().isPlaying)
+				main_camera.GetComponent<AudioSource>().Stop();
+			TTS.StopSpeaking();
+
+			// Before reading the text, check to see if the node has an associated mp3 file.
+			string potential_file_name = Application.dataPath + "/Resources/voice_files/" + nd.id.ToString() + ".mp3";
+			if (System.IO.File.Exists(potential_file_name))
+			{
+				Debug.Log("NarrationJournal.NARRATION_MACHINE_TURN listener() :: mp3 voice file found");
+				Vector3 audio_source_location = main_camera.transform.position;
+				Debug.Log("NarrationJournal.NARRATION_MACHINE_TURN listener() :: playing clip for " + nd.id.ToString());
+				AudioClip clip_to_play = audio_clips_by_id[nd.id];
+				main_camera.GetComponent<AudioSource>().PlayOneShot(clip_to_play, 1.5f);
+			}//end if
+			else
+				readText(nd.text);
 			ui1.SetActive(true);
 			ui2.SetActive(false);
 		};
@@ -219,7 +250,6 @@ public class NarrationJournal : MonoBehaviour {
 
 
 	public void readText(string data){
-
 		//remove rich text tags
 		string result = Regex.Replace(data, @"<[^>]*>", string.Empty);
 
